@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лепесток — цветы в Вуктыле</title>
+<style>
+:root{--bg:#FBF6F2;--card:#fff;--ink:#221a20;--gray:#9a8a90;--rose:#D96C8A;--rose2:#C14E70;--gold:#C9971C;--grn:#2E9E5B;--red:#D33A2C}
+body.night{--bg:#151218;--card:#211c24;--ink:#EDE7EC;--gray:#8d8391}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--ink);transition:background .3s}
+.hidden{display:none!important}
+header{position:sticky;top:0;z-index:20;background:var(--bg)}
+.tick{overflow:hidden;white-space:nowrap;background:linear-gradient(90deg,var(--rose),var(--rose2));color:#fff;font-size:11px;font-weight:700;padding:6px 0}
+.tickTrack{display:inline-block;animation:tick 30s linear infinite}
+.tickHalf{display:inline-block;padding-right:40px}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.hRow{display:flex;align-items:center;gap:10px;padding:12px 16px}
+.brand{display:flex;flex-direction:column;cursor:pointer}
+.brand b{font-size:19px;letter-spacing:2px;color:var(--rose2)}
+.brand span{font-size:10px;color:var(--gray)}
+.city{border:1.5px solid var(--rose);color:var(--rose2);border-radius:999px;padding:5px 10px;font-size:11px;font-weight:700;background:var(--card)}
+.spacer{flex:1}
+.hero{border:none;border-radius:999px;padding:12px 18px;font-weight:800;font-size:14px;color:#fff;background:linear-gradient(90deg,var(--rose),var(--rose2));cursor:pointer;box-shadow:0 8px 20px rgba(217,108,138,.35)}
+.ava{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--gold));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;cursor:pointer}
+main{max-width:760px;margin:0 auto;padding:0 16px 60px}
+.secHead{display:flex;align-items:center;gap:8px;font-weight:800;font-size:16px;margin:18px 0 10px}
+.day{border-radius:22px;overflow:hidden;background:var(--card);box-shadow:0 12px 30px rgba(0,0,0,.12);margin-bottom:16px;cursor:pointer}
+.day img{width:100%;height:220px;object-fit:cover;display:block}
+.dayBody{padding:12px 14px}
+.tag{display:inline-block;border-radius:999px;padding:4px 10px;font-size:10px;font-weight:800}
+.tag.day{background:rgba(217,108,138,.14);color:var(--rose2)}
+.tag.stock{background:rgba(46,158,91,.14);color:var(--grn)}
+.tag.out{background:rgba(211,58,44,.12);color:var(--red)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.bCard{border-radius:18px;overflow:hidden;background:var(--card);box-shadow:0 8px 22px rgba(0,0,0,.08);cursor:pointer}
+.bCard img,.ph{width:100%;height:150px;object-fit:cover;display:block}
+.ph{display:flex;align-items:center;justify-content:center;font-size:52px;background:linear-gradient(160deg,#fdeef2,#f7e3ea)}
+.bBody{padding:10px}
+.bTitle{font-weight:700;font-size:13px}
+.bPrice{color:var(--rose2);font-weight:800;font-size:14px;margin-top:2px}
+.like{border:none;background:rgba(217,108,138,.12);color:var(--rose2);border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;margin-top:6px}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;display:flex;align-items:flex-end}
+.sheetIn{background:var(--card);width:100%;max-height:88vh;overflow:auto;border-radius:24px 24px 0 0;padding:16px}
+.sheetIn img{width:100%;max-height:320px;object-fit:cover;border-radius:16px}
+.btn{border:none;border-radius:999px;padding:13px 16px;font-weight:800;font-size:14px;cursor:pointer;width:100%}
+.btn.rose{background:linear-gradient(90deg,var(--rose),var(--rose2));color:#fff}
+.btn.soft{background:rgba(217,108,138,.12);color:var(--rose2);margin-top:8px}
+.inp{width:100%;border:1.5px solid #eee;border-radius:14px;padding:12px;font-size:14px;margin-top:8px;background:var(--card);color:var(--ink)}
+label.chk{display:flex;gap:8px;align-items:center;font-size:13px;margin-top:10px}
+.row{display:flex;gap:8px}
+.row .btn{margin-top:0}
+.opt{flex:1;border:1.5px solid #eee;border-radius:14px;padding:10px;font-size:12px;font-weight:700;text-align:center;cursor:pointer;color:var(--gray);background:var(--card)}
+.opt.on{border-color:var(--rose);color:var(--rose2)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#221a20;color:#fff;padding:11px 18px;border-radius:999px;font-size:13px;z-index:99}
+</style>
+</head>
+<body>
+<header>
+  <div class="tick"><div class="tickTrack" id="tick"></div></div>
+  <div class="hRow">
+    <div class="brand" onclick="brandTap()"><b>лепесток</b><span>цветы · Вуктыл</span></div>
+    <button class="city" onclick="openCity()">📍 Вуктыл ▾</button>
+    <div class="spacer"></div>
+    <button class="hero" onclick="openQuiz()">собери мне</button>
+    <div class="ava" id="ava" onclick="me?openProfile():openAuth()">👤</div>
+  </div>
+</header>
+<main>
+  <div class="secHead">🌸 Букет дня</div>
+  <div id="dayBox"></div>
+  <div class="secHead">💐 Витрина</div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<div class="sheet hidden" id="cardSheet"><div class="sheetIn" id="cardBody"></div></div>
+<div class="sheet hidden" id="orderSheet"><div class="sheetIn" id="orderBody"></div></div>
+<div class="sheet hidden" id="quizSheet"><div class="sheetIn" id="quizBody"></div></div>
+<div class="sheet hidden" id="authSheet"><div class="sheetIn">
+  <h3 style="margin-bottom:8px">Вход</h3>
+  <input class="inp" id="aEmail" type="email" placeholder="email">
+  <input class="inp" id="aPass" type="password" placeholder="пароль">
+  <button class="btn rose" style="margin-top:10px" onclick="doLogin()">Войти</button>
+  <button class="btn soft" onclick="doReg()">Регистрация</button>
+  <button class="btn soft" onclick="hide('authSheet')">Закрыть</button>
+</div></div>
+<div class="sheet hidden" id="citySheet"><div class="sheetIn">
+  <h3>Город</h3>
+  <button class="btn rose" style="margin-top:10px" onclick="pickCity('Вуктыл')">Вуктыл (Республика Коми)</button>
+  <div style="color:var(--gray);font-size:12px;margin-top:10px">Другие города — скоро 🌷</div>
+  <button class="btn soft" onclick="hide('citySheet')">Закрыть</button>
+</div></div>
+<div class="toast hidden" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SB='https://tfqsyovyshheqkslsjhx.supabase.co';
+const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmcXN5b3Z5c2hoZXFrc2xzamh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MTU3MTMsImV4cCI6MjEwMzA5MTcxM30.S5-0MVJ6HLyFs2TQ5tpE7IlRXum25j7Vwhvnab1pAIY';
+const sb=supabase.createClient(SB,KEY);
+const $=id=>document.getElementById(id);
+let me=null,bouquets=[],liked=new Set(),curB=null,owner=false,taps=0,tapT=null;
+const EMO=['🌸','🌷','🌹','💐','🌼'];
+function toast(m){const t=$('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('hidden'),2600);}
+function hide(id){$(id).classList.add('hidden');}
+function show(id){$(id).classList.remove('hidden');}
+// бегущая строка
+(function(){const s='🌸 Лепесток · Вуктыл — свежие букеты каждый день · доставка по городу · соберём под ваш бюджет · заказ из другого города — привезём вашим близким · ';$('tick').innerHTML='<span class="tickHalf">'+s+'</span><span class="tickHalf">'+s+'</span>';})();
+function brandTap(){taps++;clearTimeout(tapT);tapT=setTimeout(()=>taps=0,1500);if(taps>=5){taps=0;owner=!owner;toast(owner?'Режим флориста включён 🌷':'Режим флориста выключен');load();}}
+// auth
+async function refreshMe(){const{data}=await sb.auth.getUser();me=data.user||null;$('ava').textContent=me?me.email[0].toUpperCase():'👤';}
+function openAuth(){show('authSheet');}
+async function doLogin(){const{error}=await sb.auth.signInWithPassword({email:$('aEmail').value.trim(),password:$('aPass').value});if(error)return toast(error.message);hide('authSheet');refreshMe();toast('Вы вошли 🌷');}
+async function doReg(){const{error}=await sb.auth.signUp({email:$('aEmail').value.trim(),password:$('aPass').value});if(error)return toast(error.message);hide('authSheet');toast('Проверьте почту для подтверждения');}
+function openProfile(){sb.auth.signOut().then(()=>{me=null;refreshMe();toast('Вы вышли');});}
+function openCity(){show('citySheet');}
+function pickCity(c){localStorage.setItem('lep_city',c);hide('citySheet');toast('Город: '+c);}
+// данные
+async function load(){const{data}=await sb.from('bouquets').select('*').order('created_at',{ascending:false});bouquets=data||[];render();}
+function render(){
+  const day=bouquets.find(b=>b.is_day)||bouquets[0];
+  $('dayBox').innerHTML=day?dayCard(day,true):'';
+  $('grid').innerHTML=bouquets.filter(b=>b!==day).map(b=>dayCard(b,false)).join('')||'<div style="color:var(--gray)">Пока пусто — флорист скоро добавит букеты 🌷</div>';
+}
+function dayCard(b,isDay){
+  const img=b.photo_url?'<img src="'+b.photo_url+'" loading="lazy">':'<div class="ph">'+EMO[b.id%EMO.length]+'</div>';
+  return '<div class="'+(isDay?'day':'bCard')+'" onclick="openCard('+b.id+')">'+img+
+   '<div class="'+(isDay?'dayBody':'bBody')+'">'+
+   (isDay?'<span class="tag day">🌟 букет дня</span> ':'')+
+   '<span class="tag '+(b.in_stock?'stock':'out')+'">'+(b.in_stock?'в наличии':'под заказ')+'</span>'+
+   '<div class="bTitle" style="margin-top:6px">'+esc(b.title)+'</div>'+
+   '<div class="bPrice">'+b.price+' ₽</div>'+
+   '<button class="like" onclick="event.stopPropagation();likeB('+b.id+')">❤️ '+b.likes+'</button>'+
+   '</div></div>';
+}
+function esc(s){return String(s||'').replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));}
+async function likeB(id){if(!me)return toast('Войдите, чтобы ставить ❤️');const b=bouquets.find(x=>x.id===id);if(liked.has(id))return;liked.add(id);await sb.from('bouquet_likes').insert({bouquet_id:id,user_id:me.id});b.likes++;await sb.from('bouquets').update({likes:b.likes}).eq('id',id);render();}
+// карточка
+function openCard(id){curB=bouquets.find(x=>x.id===id);if(!curB)return;
+ $('cardBody').innerHTML=(curB.photo_url?'<img src="'+curB.photo_url+'">':'<div class="ph" style="height:200px">'+EMO[curB.id%EMO.length]+'</div>')+
+  '<div style="margin-top:10px"><span class="tag '+(curB.in_stock?'stock':'out')+'">'+(curB.in_stock?'в наличии':'под заказ')+'</span>'+
+  '<h3 style="margin-top:8px">'+esc(curB.title)+'</h3><div class="bPrice" style="font-size:18px">'+curB.price+' ₽</div>'+
+  (owner?ownerBtns():'')+
+  '<button class="btn rose" style="margin-top:12px" onclick="openOrder()">💐 Заказать</button>'+
+  '<button class="btn soft" onclick="toast(\'Чат с флористом — в следующей версии 💬\')">💬 Спросить</button>'+
+  '<button class="btn soft" onclick="hide(\'cardSheet\')">Закрыть</button></div>';
+ show('cardSheet');}
+function ownerBtns(){return '<div class="row" style="margin-top:10px"><button class="btn soft" onclick="toggleDay('+curB.id+')">'+(curB.is_day?'убрать из дня':'в букет дня')+'</button><button class="btn soft" onclick="toggleStock('+curB.id+')">'+(curB.in_stock?'нет в наличии':'в наличии')+'</button></div>';}
+async function toggleDay(id){const b=bouquets.find(x=>x.id===id);b.is_day=!b.is_day;await sb.from('bouquets').update({is_day:b.is_day}).eq('id',id);render();openCard(id);}
+async function toggleStock(id){const b=bouquets.find(x=>x.id===id);b.in_stock=!b.in_stock;await sb.from('bouquets').update({in_stock:b.in_stock}).eq('id',id);render();openCard(id);}
+// заказ + доставка
+function openOrder(){if(!me)return toast('Войдите, чтобы заказать');hide('cardSheet');
+ $('orderBody').innerHTML='<h3>Заказ: '+esc(curB.title)+'</h3>'+
+  '<div class="row" style="margin-top:10px"><div class="opt on" id="kPick" onclick="setKind(\'pickup\')">самовывоз</div><div class="opt" id="kDel" onclick="setKind(\'delivery\')">доставка</div></div>'+
+  '<div id="delFields" class="hidden">'+
+    '<input class="inp" id="oAddr" placeholder="улица, дом, квартира (Вуктыл)">'+
+    '<input class="inp" id="oRName" placeholder="имя получателя">'+
+    '<input class="inp" id="oRPhone" placeholder="телефон получателя">'+
+    '<label class="chk"><input type="checkbox" id="oOther" onchange="otherToggle()"> я из другого города — заказываю для близкого человека в Вуктыле</label>'+
+    '<div id="otherFields" class="hidden"><input class="inp" id="oSName" placeholder="ваше имя (кто заказывает)"><input class="inp" id="oSPhone" placeholder="ваш телефон / whatsapp / tg"></div>'+
+  '</div>'+
+  '<input class="inp" id="oNote" placeholder="комментарий (открытка, время, пожелания)">'+
+  '<button class="btn rose" style="margin-top:12px" onclick="submitOrder()">Отправить заказ</button>'+
+  '<button class="btn soft" onclick="hide(\'orderSheet\')">Закрыть</button>';
+ show('orderSheet');orderKind='pickup';}
+let orderKind='pickup';
+function setKind(k){orderKind=k;$('kPick').classList.toggle('on',k==='pickup');$('kDel').classList.toggle('on',k==='delivery');$('delFields').classList.toggle('hidden',k!=='delivery');}
+function otherToggle(){$('otherFields').classList.toggle('hidden',!$('oOther').checked);}
+async function submitOrder(){
+  const o={user_id:me.id,bouquet_id:curB.id,kind:orderKind,note:$('oNote').value.trim()};
+  if(orderKind==='delivery'){o.address=$('oAddr').value.trim();o.recipient_name=$('oRName').value.trim();o.recipient_phone=$('oRPhone').value.trim();o.other_city=$('oOther').checked;if(o.other_city){o.sender_name=$('oSName').value.trim();o.sender_phone=$('oSPhone').value.trim();}
+    if(!o.address||!o.recipient_phone)return toast('Заполните адрес и телефон получателя');}
+  const{error}=await sb.from('orders').insert(o);
+  if(error)return toast(error.message);
+  hide('orderSheet');toast('Заказ отправлен флористу 🌷 Мы свяжемся для оплаты');}
+// квиз
+function openQuiz(){
+ $('quizBody').innerHTML='<h3>Соберём вам букет 🌸</h3>'+
+  '<div style="font-size:12px;color:var(--gray);margin-top:4px">3 вопроса — и покажу подходящие</div>'+
+  '<div class="secHead" style="font-size:13px">Повод</div><div class="row" id="q1">'+qOpts(['день рождения','свидание','просто так','извинение'])+'</div>'+
+  '<div class="secHead" style="font-size:13px">Кому</div><div class="row" id="q2">'+qOpts(['маме','подруге','девушке','жене','коллеге'])+'</div>'+
+  '<div class="secHead" style="font-size:13px">Бюджет</div><div class="row" id="q3">'+qOpts(['до 2500','2500–4000','4000+'])+'</div>'+
+  '<button class="btn rose" style="margin-top:14px" onclick="quizGo()">Показать букеты</button>'+
+  '<button class="btn soft" onclick="hide(\'quizSheet\')">Закрыть</button>';
+ show('quizSheet');}
+function qOpts(a){return a.map((o,i)=>'<div class="opt" onclick="qPick(this)">'+o+'</div>').join('');}
+function qPick(el){[...el.parentElement.children].forEach(x=>x.classList.remove('on'));el.classList.add('on');}
+function quizGo(){const b=$('q3').querySelector('.on');hide('quizSheet');let max=Infinity,min=0;if(b){const t=b.textContent;if(t.startsWith('до'))max=+t.slice(3);else if(t.endsWith('+'))min=+t;else{const[m1,m2]=t.split('–').map(x=>+x);min=m1;max=m2;}}
+ const fit=bouquets.filter(x=>x.in_stock&&x.price>=min&&x.price<=max);
+ if(!fit.length)return toast('Под бюджет пока пусто — нажмите «собери мне» и флорист соберёт вручную');
+ toast('Подобрал '+fit.length+' — листайте витрину');
+ $('grid').innerHTML=fit.map(x=>dayCard(x,false)).join('');
+ window.scrollTo({top:document.querySelector('.grid').offsetTop-80,behavior:'smooth'});}
+sb.auth.onAuthStateChange(()=>refreshMe());
+refreshMe();load();
+</script>
+</body>
+</html>
