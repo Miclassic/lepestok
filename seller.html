@@ -7,53 +7,62 @@
 <link href="https://fonts.cdnfonts.com/css/opposans" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'OPPO Sans',system-ui,sans-serif}
-body{background:#EDEEF2;color:#15181C;min-height:100vh;padding:20px}
+body{background:#F6EBDC;color:#15181C;min-height:100vh;padding:20px}
 .box{max-width:620px;margin:0 auto}
 h1{font-size:20px;margin-bottom:14px}
-.card{background:#fff;border-radius:20px;padding:16px;box-shadow:0 12px 34px rgba(20,24,32,.08);margin-bottom:12px}
-input,textarea{width:100%;background:#EDEEF2;border:none;border-radius:12px;padding:12px;font-size:15px;margin-bottom:8px;font-family:inherit}
+.card{background:#fff;border-radius:20px;padding:16px;box-shadow:0 12px 34px rgba(120,60,10,.10);margin-bottom:12px}
+input,textarea{width:100%;background:#F6EBDC;border:none;border-radius:12px;padding:12px;font-size:15px;margin-bottom:8px;font-family:inherit}
 textarea{min-height:80px;resize:vertical}
 .btn{width:100%;background:#15181C;color:#fff;border:none;border-radius:999px;padding:13px;font-weight:700;font-size:15px;cursor:pointer}
 .err{color:#D33A2C;font-size:13px;margin-top:6px}
 .tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-.tab{flex:1;background:#fff;border:none;border-radius:999px;padding:11px 8px;font-weight:600;font-size:12px;color:#8A919E;cursor:pointer}
-.tab.on{color:#15181C;box-shadow:0 6px 18px rgba(217,108,138,.25)}
-.mcat{font-size:11px;color:#8A919E;margin-bottom:6px}
+.tab{flex:1;background:#fff;border:none;border-radius:999px;padding:11px 8px;font-weight:600;font-size:12px;color:#A89380;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px}
+.tab.on{color:#15181C;box-shadow:0 6px 18px rgba(217,106,43,.25)}
+.tab .icn{width:14px;height:14px}
+.icn{width:1.05em;height:1.05em;display:inline-block;vertical-align:-.15em;flex:none}
+.mcat{font-size:11px;color:#A89380;margin-bottom:6px}
 .mtxt{font-size:14px;line-height:1.45;margin-bottom:10px}
 .mbtns{display:flex;gap:8px;flex-wrap:wrap}
 .mbtns button{flex:1;border:none;border-radius:999px;padding:11px;font-weight:700;font-size:12px;cursor:pointer}
 .ok{background:#2E9E5B;color:#fff}
-.no{background:#EDEEF2;color:#D33A2C}
-.day{background:linear-gradient(90deg,#D96C8A,#B85470);color:#fff}
-.info{background:#4C86E8;color:#fff}
-.empty{text-align:center;color:#8A919E;padding:30px}
-.out{background:none;border:none;color:#8A919E;font-size:12px;margin-top:10px;cursor:pointer}
+.no{background:#F6EBDC;color:#D33A2C}
+.day{background:linear-gradient(90deg,#D96A2B,#A65117);color:#fff}
+.info{background:#C9971C;color:#fff}
+.empty{text-align:center;color:#A89380;padding:30px}
+.out{background:none;border:none;color:#A89380;font-size:12px;margin-top:10px;cursor:pointer}
 .hidden{display:none!important}
-.who{font-size:11px;color:#8A919E;margin-bottom:10px}
+.who{font-size:11px;color:#A89380;margin-bottom:10px}
 .bouquetRow{display:flex;gap:12px;align-items:flex-start}
-.bouquetRow .photo{width:100px;height:100px;border-radius:12px;object-fit:cover;flex:none;background:#EDEEF2}
+.bouquetRow .photo{width:100px;height:100px;border-radius:12px;object-fit:cover;flex:none;background:#F6EBDC}
 .bouquetRow .info{flex:1}
 .bouquetRow .title{font-weight:800;font-size:15px}
-.bouquetRow .price{color:#D96C8A;font-weight:800;font-size:14px;margin-top:2px}
-.bouquetRow .cat{font-size:11px;color:#8A919E;margin-top:2px}
-.orderMeta{font-size:12px;color:#8A919E;line-height:1.5}
+.bouquetRow .price{color:#D96A2B;font-weight:800;font-size:14px;margin-top:2px}
+.bouquetRow .cat{font-size:11px;color:#A89380;margin-top:2px}
+.orderMeta{font-size:12px;color:#A89380;line-height:1.5}
 .orderMeta b{color:#15181C}
 .statusPill{display:inline-block;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:800;letter-spacing:.3px}
-.s-new{background:rgba(217,108,138,.14);color:#D96C8A}
+.s-new{background:rgba(217,106,43,.14);color:#D96A2B}
 .s-accepted{background:rgba(224,164,0,.14);color:#C98800}
-.s-ready{background:rgba(76,134,232,.14);color:#4C86E8}
+.s-ready{background:rgba(201,151,28,.14);color:#C9971C}
 .s-delivered{background:rgba(46,158,91,.14);color:#2E9E5B}
-.s-cancelled{background:#EDEEF2;color:#8A919E;text-decoration:line-through}
-.addForm{background:linear-gradient(180deg,rgba(217,108,138,.06),#fff);border:1.5px dashed rgba(217,108,138,.4);border-radius:20px;padding:16px;margin-bottom:12px}
+.s-cancelled{background:#F6EBDC;color:#A89380;text-decoration:line-through}
+.addForm{background:linear-gradient(180deg,rgba(217,106,43,.06),#fff);border:1.5px dashed rgba(217,106,43,.4);border-radius:20px;padding:16px;margin-bottom:12px}
 .addForm h3{font-size:14px;margin-bottom:10px}
-.notif{background:linear-gradient(90deg,#D96C8A,#B85470);color:#fff;padding:12px;border-radius:14px;font-size:13px;margin-bottom:14px;text-align:center}
+.rangeSel{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.rangeSel button{background:#fff;border:none;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:600;color:#A89380;cursor:pointer}
+.rangeSel button.on{color:#15181C;box-shadow:0 4px 12px rgba(217,106,43,.2)}
 </style>
 </head>
 <body>
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+<symbol id="i-box" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 2l9 4.5v11L12 22l-9-4.5v-11z"/><path d="M12 12l9-4.5M12 12L3 7.5M12 12v10"/></g></symbol>
+<symbol id="i-flower" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l2 3.5 4 .5-3 3 .5 4L12 11l-3.5 2 .5-4-3-3 4-.5zM4 14c0 5 4 8 8 8s8-3 8-8c0-2-2-3-4-3-2 0-4 1-4 1s-2-1-4-1-4 1-4 3z"/></symbol>
+<symbol id="i-comment" viewBox="0 0 24 24"><path fill="currentColor" d="M4 4h16v12H9l-5 4z"/></symbol>
+</svg>
 <div class="box">
-<h1>🌷 Лепесток · кабинет продавца</h1>
+<h1>🍁 Лепесток · кабинет продавца</h1>
 <div id="loginBox" class="card hidden">
-  <div class="who">Вход для продавцов цветочных магазинов. Обычные покупатели сюда не пускаются.</div>
+  <div class="who">Вход для продавцов цветочных магазинов.</div>
   <input id="email" type="email" placeholder="Email">
   <input id="pass" type="password" placeholder="Пароль">
   <button class="btn" onclick="doLogin()">Войти</button>
@@ -63,16 +72,16 @@ textarea{min-height:80px;resize:vertical}
   <div class="card" style="text-align:center">
     <div style="font-size:40px;margin-bottom:8px">🚫</div>
     <div style="font-weight:700;margin-bottom:8px">Нет доступа</div>
-    <div style="font-size:13px;color:#8A919E">Этот аккаунт не является продавцом. Обратитесь к администратору сайта, чтобы получить роль продавца.</div>
-    <button class="btn" style="margin-top:14px;background:#EDEEF2;color:#15181C" onclick="logout()">Выйти</button>
+    <div style="font-size:13px;color:#A89380">Этот аккаунт не является продавцом. Обратитесь к администратору сайта.</div>
+    <button class="btn" style="margin-top:14px;background:#F6EBDC;color:#15181C" onclick="logout()">Выйти</button>
   </div>
 </div>
 <div id="panel" class="hidden">
   <div class="who" id="who"></div>
   <div class="tabs">
-    <button class="tab on" id="tabOrders" onclick="setTab('orders')">📦 Заказы (<span id="cOrders">0</span>)</button>
-    <button class="tab" id="tabBouquets" onclick="setTab('bouquets')">💐 Мои букеты</button>
-    <button class="tab" id="tabReviews" onclick="setTab('reviews')">💬 Отзывы</button>
+    <button class="tab on" id="tabOrders" onclick="setTab('orders')"><svg class="icn"><use href="#i-box"/></svg>Заказы (<span id="cOrders">0</span>)</button>
+    <button class="tab" id="tabBouquets" onclick="setTab('bouquets')"><svg class="icn"><use href="#i-flower"/></svg>Мои букеты</button>
+    <button class="tab" id="tabReviews" onclick="setTab('reviews')"><svg class="icn"><use href="#i-comment"/></svg>Отзывы</button>
   </div>
   <div id="list"></div>
   <button class="out" onclick="logout()">Выйти</button>
@@ -80,79 +89,66 @@ textarea{min-height:80px;resize:vertical}
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const sb = supabase.createClient('https://tfqsyovyshheqkslsjhx.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmcXN5b3Z5c2hoZXFrc2xzamh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MTU3MTMsImV4cCI6MjEwMzA5MTcxM30.S5-0MVJ6HLyFs2TQ5tpE7IlRXum25j7Vwhvnab1pAIY');
-let me = null, isFlorist = false;
-let myBouquets = [], myOrders = [], myReviews = [];
-let tab = 'orders', orderFilter = 'new', pickedPhoto = null;
-
-function $(id){ return document.getElementById(id); }
-function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function whenRu(t){ try { return new Date(t).toLocaleString('ru-RU', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' }); } catch(e){ return ''; } }
-function statusRu(s){ return ({new:'🆕 новый',accepted:'⏳ принят',ready:'✅ готов',delivered:'🚚 доставлен',cancelled:'❌ отменён'})[s] || s; }
-function statusCls(s){ return 's-' + s; }
-
+const sb=supabase.createClient('https://tfqsyovyshheqkslsjhx.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmcXN5b3Z5c2hoZXFrc2xzamh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MTU3MTMsImV4cCI6MjEwMzA5MTcxM30.S5-0MVJ6HLyFs2TQ5tpE7IlRXum25j7Vwhvnab1pAIY');
+let me=null,isFlorist=false,myBouquets=[],myOrders=[],myReviews=[];
+let tab='orders',orderFilter='new',pickedPhoto=null;
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function whenRu(t){try{return new Date(t).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
+function statusRu(s){return({new:'🆕 новый',accepted:'⏳ принят',ready:'✅ готов',delivered:'🚚 доставлен',cancelled:'❌ отменён'})[s]||s;}
+function statusCls(s){return 's-'+s;}
 async function boot(){
-  const { data } = await sb.auth.getSession();
-  if (!data.session) { $('loginBox').classList.remove('hidden'); return; }
-  me = data.session.user;
-  const pr = await sb.from('profiles').select('is_florist,nick').eq('id', me.id).maybeSingle();
-  if (!pr.data || !pr.data.is_florist) {
-    $('loginBox').classList.add('hidden');
-    $('denied').classList.remove('hidden');
-    return;
-  }
-  isFlorist = true;
-  $('loginBox').classList.add('hidden');
-  $('panel').classList.remove('hidden');
-  $('who').textContent = '🌷 продавец: ' + (me.email || '');
+  const {data}=await sb.auth.getSession();
+  if(!data.session){$('loginBox').classList.remove('hidden');return;}
+  me=data.session.user;
+  const pr=await sb.from('profiles').select('is_florist,nick').eq('id',me.id).maybeSingle();
+  if(!pr.data||!pr.data.is_florist){$('loginBox').classList.add('hidden');$('denied').classList.remove('hidden');return;}
+  isFlorist=true;
+  $('loginBox').classList.add('hidden');$('panel').classList.remove('hidden');
+  $('who').textContent='🍁 продавец: '+(me.email||'');
   await refresh();
 }
 async function doLogin(){
-  const email = $('email').value.trim(), pass = $('pass').value;
-  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
-  if (error) { $('loginErr').textContent = 'Неверный email или пароль'; return; }
+  const email=$('email').value.trim(),pass=$('pass').value;
+  const {error}=await sb.auth.signInWithPassword({email,password:pass});
+  if(error){$('loginErr').textContent='Неверный email или пароль';return;}
   await boot();
 }
-async function logout(){ await sb.auth.signOut(); location.reload(); }
+async function logout(){await sb.auth.signOut();location.reload();}
 async function refresh(){
-  if (!me) return;
-  // только мои букеты
-  const b = await sb.from('bouquets').select('*').eq('user_id', me.id).order('created_at', { ascending: false });
-  myBouquets = b.data || [];
-  const myIds = myBouquets.map(x => x.id);
-  if (myIds.length) {
-    const o = await sb.from('orders').select('*').in('bouquet_id', myIds).order('created_at', { ascending: false });
-    myOrders = o.data || [];
-    const r = await sb.from('bouquet_comments').select('*').in('bouquet_id', myIds).order('created_at', { ascending: false });
-    myReviews = r.data || [];
-  } else { myOrders = []; myReviews = []; }
-  $('cOrders').textContent = myOrders.filter(o => o.status === 'new').length;
+  if(!me)return;
+  const b=await sb.from('bouquets').select('*').eq('user_id',me.id).order('created_at',{ascending:false});
+  myBouquets=b.data||[];
+  const myIds=myBouquets.map(x=>x.id);
+  if(myIds.length){
+    const o=await sb.from('orders').select('*').in('bouquet_id',myIds).order('created_at',{ascending:false});
+    myOrders=o.data||[];
+    const r=await sb.from('bouquet_comments').select('*').in('bouquet_id',myIds).order('created_at',{ascending:false});
+    myReviews=r.data||[];
+  }else{myOrders=[];myReviews=[];}
+  $('cOrders').textContent=myOrders.filter(o=>o.status==='new').length;
   renderList();
 }
-function setTab(t){ tab = t; ['Orders','Bouquets','Reviews'].forEach(k => $('tab'+k).classList.toggle('on', t === k.toLowerCase())); renderList(); }
-function setOrderFilter(f){ orderFilter = f; renderList(); }
-
+function setTab(t){tab=t;['Orders','Bouquets','Reviews'].forEach(k=>$('tab'+k).classList.toggle('on',t===k.toLowerCase()));renderList();}
+function setOrderFilter(f){orderFilter=f;renderList();}
 function renderList(){
-  const box = $('list');
-  if (tab === 'orders') renderOrders();
-  else if (tab === 'bouquets') renderBouquets();
-  else if (tab === 'reviews') renderReviews();
-  else box.innerHTML = '<div class="empty">—</div>';
+  if(tab==='orders')renderOrders();
+  else if(tab==='bouquets')renderBouquets();
+  else if(tab==='reviews')renderReviews();
 }
-
 function renderOrders(){
-  const box = $('list');
-  const filters = [['new','🆕 новые'],['accepted','⏳ приняты'],['ready','✅ готовы'],['delivered','🚚 доставлены'],['cancelled','❌ отменены']];
-  const filtered = myOrders.filter(o => o.status === orderFilter);
-  const cards = filtered.length ? filtered.map(o => {
-    const b = myBouquets.find(x => x.id === o.bouquet_id);
-    const kindRu = o.kind === 'delivery' ? '🚚 доставка' : '🏠 самовывоз';
-    const next = ({new:'accepted',accepted:'ready',ready:'delivered'})[o.status];
-    const cancelBtn = (o.status !== 'delivered' && o.status !== 'cancelled') ? '<button class="no" onclick="updateOrder('+o.id+',\'cancelled\')">отменить</button>' : '';
-    const nextBtn = next ? '<button class="ok" onclick="updateOrder('+o.id+',\''+next+'\')">→ '+statusRu(next)+'</button>' : '';
-    const back = ({delivered:'ready',ready:'accepted',accepted:'new'})[o.status];
-    const backBtn = back ? '<button class="info" onclick="updateOrder('+o.id+',\''+back+'\')">← назад</button>' : '';
-    const callBtn = o.recipient_phone ? '<button class="day" onclick="call(\''+esc(o.recipient_phone)+'\')">📞 позвонить</button>' : (o.sender_phone ? '<button class="day" onclick="call(\''+esc(o.sender_phone)+'\')">📞 позвонить (заказчик)</button>' : '');
+  const box=$('list');
+  const filters=[['new','🆕 новые'],['accepted','⏳ приняты'],['ready','✅ готовы'],['delivered','🚚 доставлены'],['cancelled','❌ отменены']];
+  const filtered=myOrders.filter(o=>o.status===orderFilter);
+  const cards=filtered.length?filtered.map(o=>{
+    const b=myBouquets.find(x=>x.id===o.bouquet_id);
+    const kindRu=o.kind==='delivery'?'🚚 доставка':'🏠 самовывоз';
+    const next=({new:'accepted',accepted:'ready',ready:'delivered'})[o.status];
+    const cancelBtn=(o.status!=='delivered'&&o.status!=='cancelled')?'<button class="no" onclick="updateOrder('+o.id+',\'cancelled\')">отменить</button>':'';
+    const nextBtn=next?'<button class="ok" onclick="updateOrder('+o.id+',\''+next+'\')">→ '+statusRu(next)+'</button>':'';
+    const back=({delivered:'ready',ready:'accepted',accepted:'new'})[o.status];
+    const backBtn=back?'<button class="info" onclick="updateOrder('+o.id+',\''+back+'\')">← назад</button>':'';
+    const callBtn=o.recipient_phone?'<button class="day" onclick="call(\''+esc(o.recipient_phone)+'\')">📞 позвонить</button>':(o.sender_phone?'<button class="day" onclick="call(\''+esc(o.sender_phone)+'\')">📞 заказчик</button>':'');
     return '<div class="card"><div class="mcat">'+whenRu(o.created_at)+' · <span class="statusPill '+statusCls(o.status)+'">'+statusRu(o.status)+'</span></div>'+
       '<div class="bouquetRow">'+(b&&b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:40px">🌷</div>')+
       '<div class="info"><div class="title">'+esc(b?b.title:'Букет удалён')+'</div><div class="price">'+(b?b.price+' ₽':'?')+'</div><div class="cat">'+kindRu+'</div></div></div>'+
@@ -163,98 +159,95 @@ function renderOrders(){
         (o.note?'<div>📝 комментарий: <i>'+esc(o.note)+'</i></div>':'')+
       '</div>'+
       '<div class="mbtns" style="margin-top:10px">'+callBtn+backBtn+nextBtn+cancelBtn+'</div></div>';
-  }).join('') : '<div class="empty">Нет заказов со статусом «'+statusRu(orderFilter)+'» 🎉</div>';
-  box.innerHTML = '<div class="rangeSel" style="display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap">'+filters.map(f=>'<button style="background:#fff;border:none;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:600;color:#8A919E;cursor:pointer;'+(orderFilter===f[0]?'color:#15181C;box-shadow:0 4px 12px rgba(217,108,138,.2)':'')+'" onclick="setOrderFilter(\''+f[0]+'\')">'+f[1]+' ('+myOrders.filter(o=>o.status===f[0]).length+')</button>').join('')+'</div>'+cards;
+  }).join(''):'<div class="empty">Нет заказов со статусом «'+statusRu(orderFilter)+'» 🎉</div>';
+  box.innerHTML='<div class="rangeSel">'+filters.map(f=>'<button class="'+(orderFilter===f[0]?'on':'')+'" onclick="setOrderFilter(\''+f[0]+'\')">'+f[1]+' ('+myOrders.filter(o=>o.status===f[0]).length+')</button>').join('')+'</div>'+cards;
 }
-function call(phone){ window.location.href = 'tel:'+phone.replace(/\s+/g,''); }
-async function updateOrder(id, status){
-  const res = await sb.from('orders').update({ status }).eq('id', id).select();
-  if (res.error) { alert('Ошибка: '+res.error.message); return; }
+function call(p){window.location.href='tel:'+p.replace(/\s+/g,'');}
+async function updateOrder(id,status){
+  const res=await sb.from('orders').update({status}).eq('id',id).select();
+  if(res.error){alert('Ошибка: '+res.error.message);return;}
   await refresh();
 }
-
 function renderBouquets(){
-  const box = $('list');
-  const addForm = '<div class="addForm"><h3>➕ Добавить новый букет</h3>'+
+  const box=$('list');
+  const addForm='<div class="addForm"><h3>➕ Добавить новый букет</h3>'+
     '<input id="fTitle" placeholder="Название (например: Нежный пион)">'+
     '<input id="fPrice" type="number" placeholder="Цена в рублях">'+
     '<textarea id="fDesc" placeholder="Описание — что входит в букет"></textarea>'+
     '<input id="fCat" placeholder="Категория (розы / полевые / лилии / тюльпаны / другое)">'+
-    '<button class="btn" style="background:#EDEEF2;color:#15181C" onclick="$(\'fPhoto\').click()">📷 Фото букета</button>'+
+    '<button class="btn" style="background:#F6EBDC;color:#15181C" onclick="$(\'fPhoto\').click()">📷 Фото букета</button>'+
     '<input type="file" id="fPhoto" accept="image/*" style="display:none" onchange="onPhotoPick(this)">'+
-    '<span id="fPhotoName" style="font-size:11px;color:#8A919E"></span>'+
+    '<span id="fPhotoName" style="font-size:11px;color:#A89380"></span>'+
     '<label style="display:flex;gap:8px;align-items:center;font-size:13px;margin-top:10px"><input type="checkbox" id="fStock" checked style="width:auto;margin:0"> В наличии</label>'+
     '<label style="display:flex;gap:8px;align-items:center;font-size:13px;margin-top:6px"><input type="checkbox" id="fDay" style="width:auto;margin:0"> Букет дня</label>'+
-    '<button class="btn" style="margin-top:10px;background:linear-gradient(90deg,#D96C8A,#B85470)" onclick="submitBouquet()">Сохранить букет</button>'+
+    '<button class="btn" style="margin-top:10px;background:linear-gradient(90deg,#D96A2B,#A65117)" onclick="submitBouquet()">Сохранить букет</button>'+
     '</div>';
-  const list = myBouquets.length ? myBouquets.map(b =>
-    '<div class="card"><div class="bouquetRow">'+(b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:40px;background:linear-gradient(135deg,#FFD3E0,#FFF0F5)">🌷</div>')+
-    '<div class="info"><div class="title">'+esc(b.title)+(b.is_day?' <span class="statusPill" style="background:rgba(217,108,138,.14);color:#D96C8A">⭐ букет дня</span>':'')+'</div>'+
+  const list=myBouquets.length?myBouquets.map(b=>
+    '<div class="card"><div class="bouquetRow">'+(b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:40px;background:linear-gradient(135deg,#FFDDBA,#FFF4E6)">🌷</div>')+
+    '<div class="info"><div class="title">'+esc(b.title)+(b.is_day?' <span class="statusPill" style="background:rgba(217,106,43,.14);color:#D96A2B">⭐ букет дня</span>':'')+'</div>'+
     '<div class="price">'+b.price+' ₽</div>'+
     '<div class="cat">'+esc(b.category||'без категории')+' · '+(b.in_stock?'<span style="color:#2E9E5B">в наличии</span>':'<span style="color:#D33A2C">под заказ</span>')+'</div>'+
     '</div></div>'+
-    (b.description?'<div class="mtxt" style="font-size:12px;color:#8A919E;margin-top:6px">'+esc(b.description)+'</div>':'')+
+    (b.description?'<div class="mtxt" style="font-size:12px;color:#A89380;margin-top:6px">'+esc(b.description)+'</div>':'')+
     '<div class="mbtns" style="margin-top:10px">'+
       (b.is_day?'<button class="no" onclick="toggleDay('+b.id+',false)">убрать из дня</button>':'<button class="day" onclick="toggleDay('+b.id+',true)">⭐ букет дня</button>')+
       '<button class="info" onclick="toggleStock('+b.id+','+(b.in_stock?'false':'true')+')">'+(b.in_stock?'в под заказ':'в наличии')+'</button>'+
       '<button class="no" onclick="delBouquet('+b.id+')">🗑 удалить</button>'+
     '</div></div>'
-  ).join('') : '<div class="empty">Пока нет букетов. Добавь первый выше 🌷</div>';
-  box.innerHTML = addForm + list;
+  ).join(''):'<div class="empty">Пока нет букетов. Добавь первый выше 🌷</div>';
+  box.innerHTML=addForm+list;
 }
-async function onPhotoPick(inp){ const f = inp.files[0]; if(!f) return; pickedPhoto = f; $('fPhotoName').textContent = '📷 '+f.name.slice(0,20); }
+async function onPhotoPick(inp){const f=inp.files[0];if(!f)return;pickedPhoto=f;$('fPhotoName').textContent='📷 '+f.name.slice(0,20);}
 async function submitBouquet(){
-  const t = $('fTitle').value.trim(), p = +$('fPrice').value, d = $('fDesc').value.trim(), c = $('fCat').value.trim();
-  if (!t || !p) { alert('Заполни название и цену'); return; }
-  let photo_url = null;
-  if (pickedPhoto) {
-    const path = me.id + '/' + Date.now() + '.jpg';
-    const up = await sb.storage.from('bouquets').upload(path, pickedPhoto, { contentType: pickedPhoto.type, upsert: false });
-    if (up.error) { alert('Фото: '+up.error.message); return; }
-    photo_url = sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
+  const t=$('fTitle').value.trim(),p=+$('fPrice').value,d=$('fDesc').value.trim(),c=$('fCat').value.trim();
+  if(!t||!p){alert('Заполни название и цену');return;}
+  let photo_url=null;
+  if(pickedPhoto){
+    const path=me.id+'/'+Date.now()+'.jpg';
+    const up=await sb.storage.from('bouquets').upload(path,pickedPhoto,{contentType:pickedPhoto.type,upsert:false});
+    if(up.error){alert('Фото: '+up.error.message);return;}
+    photo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
   }
-  if ($('fDay').checked) await sb.from('bouquets').update({ is_day: false }).eq('is_day', true);
-  const res = await sb.from('bouquets').insert({ title: t, price: p, description: d, category: c, photo_url, in_stock: $('fStock').checked, is_day: $('fDay').checked, user_id: me.id });
-  if (res.error) { alert('Ошибка: '+res.error.message); return; }
-  pickedPhoto = null;
+  if($('fDay').checked)await sb.from('bouquets').update({is_day:false}).eq('is_day',true);
+  const res=await sb.from('bouquets').insert({title:t,price:p,description:d,category:c,photo_url,in_stock:$('fStock').checked,is_day:$('fDay').checked,user_id:me.id});
+  if(res.error){alert('Ошибка: '+res.error.message);return;}
+  pickedPhoto=null;
   await refresh();
 }
-async function toggleDay(id, on){
-  if (on) await sb.from('bouquets').update({ is_day: false }).eq('user_id', me.id).eq('is_day', true);
-  const res = await sb.from('bouquets').update({ is_day: on }).eq('id', id).eq('user_id', me.id).select();
-  if (res.error) { alert('Ошибка: '+res.error.message); return; }
+async function toggleDay(id,on){
+  if(on)await sb.from('bouquets').update({is_day:false}).eq('user_id',me.id).eq('is_day',true);
+  const res=await sb.from('bouquets').update({is_day:on}).eq('id',id).eq('user_id',me.id).select();
+  if(res.error){alert('Ошибка: '+res.error.message);return;}
   await refresh();
 }
-async function toggleStock(id, on){
-  const res = await sb.from('bouquets').update({ in_stock: on }).eq('id', id).eq('user_id', me.id).select();
-  if (res.error) { alert('Ошибка: '+res.error.message); return; }
+async function toggleStock(id,on){
+  const res=await sb.from('bouquets').update({in_stock:on}).eq('id',id).eq('user_id',me.id).select();
+  if(res.error){alert('Ошибка: '+res.error.message);return;}
   await refresh();
 }
 async function delBouquet(id){
-  if (!confirm('Удалить букет? Это действие нельзя отменить.')) return;
-  const res = await sb.from('bouquets').delete().eq('id', id).eq('user_id', me.id);
-  if (res.error) { alert('Ошибка: '+res.error.message); return; }
+  if(!confirm('Удалить букет? Это действие нельзя отменить.'))return;
+  const res=await sb.from('bouquets').delete().eq('id',id).eq('user_id',me.id);
+  if(res.error){alert('Ошибка: '+res.error.message);return;}
   await refresh();
 }
-
 function renderReviews(){
-  const box = $('list');
-  const list = myReviews.length ? myReviews.map(c => {
-    const b = myBouquets.find(x => x.id === c.bouquet_id);
-    return '<div class="card"><div class="mcat">'+whenRu(c.created_at)+' · '+(c.parent_id?'↩ ответ':'💬 отзыв')+' · <b>'+esc(c.user_nick||'аноним')+'</b></div>'+
-      (b?'<div class="mcat" style="color:#D96C8A">к букету: '+esc(b.title)+'</div>':'')+
+  const box=$('list');
+  const list=myReviews.length?myReviews.map(c=>{
+    const b=myBouquets.find(x=>x.id===c.bouquet_id);
+    return '<div class="card"><div class="mcat">'+whenRu(c.created_at)+' · '+(c.parent_id?'↩ ответ':' отзыв')+' · <b>'+esc(c.user_nick||'аноним')+'</b></div>'+
+      (b?'<div class="mcat" style="color:#D96A2B">к букету: '+esc(b.title)+'</div>':'')+
       '<div class="mtxt">'+esc(c.text)+'</div>'+
       '<div class="mbtns">'+
         (c.hidden?'<button class="ok" onclick="unhideReview('+c.id+')">↩ вернуть</button>':'<button class="no" onclick="hideReview('+c.id+')">скрыть</button>')+
         '<button class="no" onclick="killReview('+c.id+')">🗑 удалить</button>'+
       '</div></div>';
-  }).join('') : '<div class="empty">Отзывов на ваши букеты пока нет 🎉</div>';
-  box.innerHTML = list;
+  }).join(''):'<div class="empty">Отзывов на ваши букеты пока нет 🎉</div>';
+  box.innerHTML=list;
 }
-async function unhideReview(id){ const res = await sb.from('bouquet_comments').update({ hidden: false }).eq('id', id).select(); if (res.error) { alert('Ошибка: '+res.error.message); return; } await refresh(); }
-async function hideReview(id){ const res = await sb.from('bouquet_comments').update({ hidden: true }).eq('id', id).select(); if (res.error) { alert('Ошибка: '+res.error.message); return; } await refresh(); }
-async function killReview(id){ if (!confirm('Удалить отзыв?')) return; const res = await sb.from('bouquet_comments').delete().eq('id', id); if (res.error) { alert('Ошибка: '+res.error.message); return; } await refresh(); }
-
+async function unhideReview(id){const res=await sb.from('bouquet_comments').update({hidden:false}).eq('id',id).select();if(res.error){alert('Ошибка: '+res.error.message);return;}await refresh();}
+async function hideReview(id){const res=await sb.from('bouquet_comments').update({hidden:true}).eq('id',id).select();if(res.error){alert('Ошибка: '+res.error.message);return;}await refresh();}
+async function killReview(id){if(!confirm('Удалить отзыв?'))return;const res=await sb.from('bouquet_comments').delete().eq('id',id);if(res.error){alert('Ошибка: '+res.error.message);return;}await refresh();}
 boot();
 </script>
 </body>
