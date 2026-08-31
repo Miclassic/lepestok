@@ -7,75 +7,86 @@
 <link href="https://fonts.cdnfonts.com/css/opposans" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'OPPO Sans',system-ui,sans-serif}
-body{background:#F6EBDC;color:#15181C;min-height:100vh;padding:20px}
-.box{max-width:620px;margin:0 auto}
-h1{font-size:20px;margin-bottom:14px}
-.card{background:#fff;border-radius:20px;padding:16px;box-shadow:0 12px 34px rgba(120,60,10,.10);margin-bottom:12px}
-input,textarea,select{width:100%;background:#F6EBDC;border:none;border-radius:12px;padding:12px;font-size:15px;margin-bottom:8px;font-family:inherit}
+body{background:linear-gradient(135deg,#FFF5F5 0%,#FFE5E5 50%,#F5E6FF 100%);color:#1A1A2E;min-height:100vh;padding:20px;position:relative;overflow-x:hidden}
+body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(circle at 20% 30%,rgba(255,107,107,0.1) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(168,85,247,0.1) 0%,transparent 50%);pointer-events:none;z-index:0}
+.box{max-width:620px;margin:0 auto;position:relative;z-index:1}
+h1{font-size:20px;margin-bottom:14px;background:linear-gradient(135deg,#FF6B6B,#A855F7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.card{background:#fff;border-radius:20px;padding:16px;box-shadow:0 8px 32px rgba(255,107,107,0.15);margin-bottom:12px;transition:all 0.3s ease}
+.card:hover{box-shadow:0 12px 48px rgba(255,107,107,0.25)}
+input,textarea,select{width:100%;background:#FFF5F5;border:2px solid transparent;border-radius:12px;padding:12px;font-size:15px;margin-bottom:8px;font-family:inherit;transition:all 0.3s ease}
+input:focus,textarea:focus,select:focus{outline:none;border-color:#FF6B6B;box-shadow:0 4px 16px rgba(255,107,107,0.2)}
 textarea{min-height:80px;resize:vertical}
-.btn{width:100%;background:#15181C;color:#fff;border:none;border-radius:999px;padding:13px;font-weight:700;font-size:15px;cursor:pointer}
-.err{color:#D33A2C;font-size:13px;margin-top:6px}
+.btn{width:100%;background:linear-gradient(135deg,#FF6B6B,#A855F7);color:#fff;border:none;border-radius:999px;padding:13px;font-weight:700;font-size:15px;cursor:pointer;transition:all 0.3s ease;position:relative;overflow:hidden}
+.btn::before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);transition:left 0.5s}
+.btn:hover::before{left:100%}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,107,107,0.4)}
+.err{color:#EF4444;font-size:13px;margin-top:6px}
 .tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-.tab{flex:1;background:#fff;border:none;border-radius:999px;padding:11px 8px;font-weight:600;font-size:12px;color:#A89380;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px}
-.tab.on{color:#15181C;box-shadow:0 6px 18px rgba(217,106,43,.25)}
+.tab{flex:1;background:#fff;border:none;border-radius:999px;padding:11px 8px;font-weight:600;font-size:12px;color:#94A3B8;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all 0.3s ease}
+.tab:hover{color:#FF6B6B;transform:translateY(-2px)}
+.tab.on{color:#1A1A2E;box-shadow:0 6px 24px rgba(255,107,107,0.3);background:linear-gradient(135deg,#FF6B6B,#FF6B9D);color:#fff}
 .tab .icn{width:14px;height:14px}
 .icn{width:1.05em;height:1.05em;display:inline-block;vertical-align:-.15em;flex:none}
-.mcat{font-size:11px;color:#A89380;margin-bottom:6px}
+.mcat{font-size:11px;color:#94A3B8;margin-bottom:6px}
 .mtxt{font-size:14px;line-height:1.45;margin-bottom:10px}
 .mbtns{display:flex;gap:8px;flex-wrap:wrap}
-.mbtns button{flex:1;border:none;border-radius:999px;padding:11px;font-weight:700;font-size:12px;cursor:pointer}
-.ok{background:#2E9E5B;color:#fff}
-.no{background:#F6EBDC;color:#D33A2C}
-.day{background:linear-gradient(90deg,#D96A2B,#A65117);color:#fff}
-.info{background:#C9971C;color:#fff}
-.empty{text-align:center;color:#A89380;padding:30px}
-.out{background:none;border:none;color:#A89380;font-size:12px;margin-top:10px;cursor:pointer}
+.mbtns button{flex:1;border:none;border-radius:999px;padding:11px;font-weight:700;font-size:12px;cursor:pointer;transition:all 0.3s ease}
+.mbtns button:hover{transform:translateY(-2px)}
+.ok{background:linear-gradient(135deg,#10B981,#059669);color:#fff}
+.no{background:#FFF5F5;color:#EF4444}
+.day{background:linear-gradient(135deg,#FF6B6B,#FF6B9D);color:#fff}
+.info{background:linear-gradient(135deg,#F59E0B,#D97706);color:#fff}
+.empty{text-align:center;color:#94A3B8;padding:30px}
+.out{background:none;border:none;color:#94A3B8;font-size:12px;margin-top:10px;cursor:pointer;transition:all 0.3s ease}
+.out:hover{color:#FF6B6B}
 .hidden{display:none!important}
-.statRow{display:flex;justify-content:space-between;font-size:14px;padding:6px 0;border-bottom:1px solid rgba(20,24,32,.05)}
-.statRow b{color:#D96A2B}
-.who{font-size:11px;color:#A89380;margin-bottom:10px}
+.statRow{display:flex;justify-content:space-between;font-size:14px;padding:6px 0;border-bottom:1px solid rgba(255,107,107,0.1)}
+.statRow b{color:#FF6B6B}
+.who{font-size:11px;color:#94A3B8;margin-bottom:10px}
 .bigStat{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.bigStat > div{flex:1;min-width:140px;background:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 6px 18px rgba(120,60,10,.08)}
-.bigStat .lbl{font-size:11px;color:#A89380;font-weight:600}
-.bigStat .val{font-size:22px;font-weight:800;color:#15181C;margin-top:2px}
-.bigStat .val b{color:#D96A2B}
-.bigStat .sub{font-size:10.5px;color:#A89380;margin-top:2px}
-.funnel{background:#fff;border-radius:16px;padding:14px;box-shadow:0 6px 18px rgba(120,60,10,.08);margin-bottom:12px}
+.bigStat > div{flex:1;min-width:140px;background:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 6px 24px rgba(255,107,107,0.12);transition:all 0.3s ease}
+.bigStat > div:hover{transform:translateY(-4px);box-shadow:0 12px 36px rgba(255,107,107,0.2)}
+.bigStat .lbl{font-size:11px;color:#94A3B8;font-weight:600}
+.bigStat .val{font-size:22px;font-weight:800;color:#1A1A2E;margin-top:2px}
+.bigStat .val b{background:linear-gradient(135deg,#FF6B6B,#A855F7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.bigStat .sub{font-size:10.5px;color:#94A3B8;margin-top:2px}
+.funnel{background:#fff;border-radius:16px;padding:14px;box-shadow:0 6px 24px rgba(255,107,107,0.12);margin-bottom:12px}
 .funnel .frow{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px}
 .funnel .fname{width:140px;font-weight:600}
-.funnel .fbar{flex:1;height:8px;background:#F6EBDC;border-radius:4px;overflow:hidden}
-.funnel .fbar i{display:block;height:100%;background:linear-gradient(90deg,#D96A2B,#FFC38A);border-radius:4px}
-.funnel .fnum{width:60px;text-align:right;font-weight:800;color:#D96A2B}
-.dayRow{display:flex;gap:8px;align-items:center;font-size:12px;padding:6px 0;border-bottom:1px solid rgba(20,24,32,.05)}
-.dayRow .dLbl{width:90px;color:#A89380}
-.dayRow .dBar{flex:1;height:6px;background:#F6EBDC;border-radius:3px;overflow:hidden}
-.dayRow .dBar i{display:block;height:100%;background:linear-gradient(90deg,#D96A2B,#FFC38A);border-radius:3px}
-.dayRow .dNum{width:48px;text-align:right;font-weight:800;color:#D96A2B}
-.usrRow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(20,24,32,.05);font-size:12.5px}
-.usrRow .pos{width:28px;font-weight:800;color:#A89380;text-align:center}
-.usrRow .av{width:30px;height:30px;border-radius:50%;font-size:12px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex:none}
+.funnel .fbar{flex:1;height:8px;background:#FFF5F5;border-radius:4px;overflow:hidden}
+.funnel .fbar i{display:block;height:100%;background:linear-gradient(90deg,#FF6B6B,#A855F7);border-radius:4px;transition:width 0.5s ease}
+.funnel .fnum{width:60px;text-align:right;font-weight:800;background:linear-gradient(135deg,#FF6B6B,#A855F7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.dayRow{display:flex;gap:8px;align-items:center;font-size:12px;padding:6px 0;border-bottom:1px solid rgba(255,107,107,0.1)}
+.dayRow .dLbl{width:90px;color:#94A3B8}
+.dayRow .dBar{flex:1;height:6px;background:#FFF5F5;border-radius:3px;overflow:hidden}
+.dayRow .dBar i{display:block;height:100%;background:linear-gradient(90deg,#FF6B6B,#A855F7);border-radius:3px;transition:width 0.5s ease}
+.dayRow .dNum{width:48px;text-align:right;font-weight:800;background:linear-gradient(135deg,#FF6B6B,#A855F7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.usrRow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,107,107,0.1);font-size:12.5px}
+.usrRow .pos{width:28px;font-weight:800;color:#94A3B8;text-align:center}
+.usrRow .av{width:30px;height:30px;border-radius:50%;font-size:12px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex:none;background:linear-gradient(135deg,#FF6B6B,#A855F7)}
 .usrRow .av img{width:100%;height:100%;object-fit:cover}
 .usrRow .nm{flex:1;font-weight:600;word-break:break-word}
-.usrRow .st{font-weight:800;color:#D96A2B}
-.pill{display:inline-block;background:#F6EBDC;border-radius:999px;padding:2px 8px;font-size:10px;font-weight:700;margin-left:4px}
-.pill.ret{background:rgba(46,158,91,.14);color:#2E9E5B}
+.usrRow .st{font-weight:800;background:linear-gradient(135deg,#FF6B6B,#A855F7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.pill{display:inline-block;background:#FFF5F5;border-radius:999px;padding:2px 8px;font-size:10px;font-weight:700;margin-left:4px}
+.pill.ret{background:rgba(16,185,129,.14);color:#10B981}
 .rangeSel{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}
-.rangeSel button{background:#fff;border:none;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:600;color:#A89380;cursor:pointer}
-.rangeSel button.on{color:#15181C;box-shadow:0 4px 12px rgba(217,106,43,.2)}
+.rangeSel button{background:#fff;border:none;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:600;color:#94A3B8;cursor:pointer;transition:all 0.3s ease}
+.rangeSel button:hover{color:#FF6B6B}
+.rangeSel button.on{color:#1A1A2E;box-shadow:0 4px 16px rgba(255,107,107,0.3);background:linear-gradient(135deg,#FF6B6B,#FF6B9D);color:#fff}
 .statusPill{display:inline-block;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:800;letter-spacing:.3px}
-.s-new{background:rgba(217,106,43,.14);color:#D96A2B}
-.s-accepted{background:rgba(224,164,0,.14);color:#C98800}
-.s-ready{background:rgba(201,151,28,.14);color:#C9971C}
-.s-delivered{background:rgba(46,158,91,.14);color:#2E9E5B}
-.s-cancelled{background:#F6EBDC;color:#A89380;text-decoration:line-through}
+.s-new{background:rgba(255,107,107,.14);color:#FF6B6B}
+.s-accepted{background:rgba(245,158,11,.14);color:#F59E0B}
+.s-ready{background:rgba(217,119,6,.14);color:#D97706}
+.s-delivered{background:rgba(16,185,129,.14);color:#10B981}
+.s-cancelled{background:#FFF5F5;color:#94A3B8;text-decoration:line-through}
 .bouquetRow{display:flex;gap:12px;align-items:flex-start}
-.bouquetRow .photo{width:100px;height:100px;border-radius:12px;object-fit:cover;flex:none;background:#F6EBDC}
+.bouquetRow .photo{width:100px;height:100px;border-radius:12px;object-fit:cover;flex:none;background:#FFF5F5}
 .bouquetRow .info{flex:1}
 .bouquetRow .title{font-weight:800;font-size:15px}
-.bouquetRow .price{color:#D96A2B;font-weight:800;font-size:14px;margin-top:2px}
-.bouquetRow .cat{font-size:11px;color:#A89380;margin-top:2px}
-.orderMeta{font-size:12px;color:#A89380;line-height:1.5}
-.orderMeta b{color:#15181C}
+.bouquetRow .price{background:linear-gradient(135deg,#FF6B6B,#A855F7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:800;font-size:14px;margin-top:2px}
+.bouquetRow .cat{font-size:11px;color:#94A3B8;margin-top:2px}
+.orderMeta{font-size:12px;color:#94A3B8;line-height:1.5}
+.orderMeta b{color:#1A1A2E}
 </style>
 </head>
 <body>
@@ -87,7 +98,7 @@ textarea{min-height:80px;resize:vertical}
 <symbol id="i-users" viewBox="0 0 24 24"><g fill="currentColor"><circle cx="9" cy="8" r="3.2"/><path d="M2.8 19c.7-3.2 3.3-4.8 6.2-4.8s5.5 1.6 6.2 4.8z"/><circle cx="17" cy="9" r="2.6"/><path d="M14.8 14.6c2.6.2 5 1.6 5.7 4.4h-4"/></g></symbol>
 </svg>
 <div class="box">
-<h1>🍁 Лепесток · админка</h1>
+<h1>🌸 Лепесток · админка</h1>
 <div id="loginBox" class="card hidden">
   <div class="who">Вход только для администратора сайта.</div>
   <input id="email" type="email" placeholder="Email админа">
@@ -109,9 +120,10 @@ textarea{min-height:80px;resize:vertical}
 </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="shared.js"></script>
 <script>
-const sb = supabase.createClient('https://tfqsyovyshheqkslsjhx.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmcXN5b3Z5c2hoZXFrc2xzamh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MTU3MTMsImV4cCI6MjEwMzA5MTcxM30.S5-0MVJ6HLyFs2TQ5tpE7IlRXum25j7Vwhvnab1pAIY');
-const ADMIN_EMAIL = 'artixz18@gmail.com';
+const sb=supabase.createClient('https://tfqsyovyshheqkslsjhx.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmcXN5b3Z5c2hoZXFrc2xzamh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MTU3MTMsImV4cCI6MjEwMzA5MTcxM30.S5-0MVJ6HLyFs2TQ5tpE7IlRXum25j7Vwhvnab1pAIY');
+const ADMIN_EMAIL='artixz18@gmail.com';
 let tab='orders',bouquets=[],orders=[],comments=[],evFull=[];
 let adminId=null,orderFilter='new',usrStatsRange='7';
 function $(id){return document.getElementById(id);}
@@ -133,7 +145,7 @@ async function doLogin(){
 }
 async function panel(){
   const u=(await sb.auth.getUser()).data.user;adminId=u?u.id:null;
-  $('adminWho').textContent='🍁 админ: '+(u?u.email:'');
+  $('adminWho').textContent='🌸 админ: '+(u?u.email:'');
   $('loginBox').classList.add('hidden');$('panel').classList.remove('hidden');
   await refresh();
 }
@@ -189,9 +201,9 @@ async function updateOrder(id,status){const res=await sb.from('orders').update({
 function renderBouquets(){
   const box=$('list');
   box.innerHTML=bouquets.length?bouquets.map(b=>
-    '<div class="card"><div class="bouquetRow">'+(b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:40px;background:linear-gradient(135deg,#FFDDBA,#FFF4E6)">🌷</div>')+
-    '<div class="info"><div class="title">'+esc(b.title)+(b.is_day?' <span class="statusPill" style="background:rgba(217,106,43,.14);color:#D96A2B">⭐ букет дня</span>':'')+'</div>'+
-    '<div class="price">'+b.price+' ₽</div><div class="cat">'+esc(b.category||'без категории')+' · '+(b.in_stock?'<span style="color:#2E9E5B">в наличии</span>':'<span style="color:#D33A2C">под заказ</span>')+'</div></div></div>'+
+    '<div class="card"><div class="bouquetRow">'+(b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:40px;background:linear-gradient(135deg,#FFE5E5,#F5E6FF)">🌷</div>')+
+    '<div class="info"><div class="title">'+esc(b.title)+(b.is_day?' <span class="statusPill" style="background:rgba(255,107,107,.14);color:#FF6B6B">⭐ букет дня</span>':'')+'</div>'+
+    '<div class="price">'+b.price+' ₽</div><div class="cat">'+esc(b.category||'без категории')+' · '+(b.in_stock?'<span style="color:#10B981">в наличии</span>':'<span style="color:#EF4444">под заказ</span>')+'</div></div></div>'+
     (b.user_id?'<div class="mcat" style="margin-top:4px">добавлен продавцом</div>':'')+
     '<div class="mbtns" style="margin-top:10px">'+
       (b.is_day?'<button class="no" onclick="toggleDay('+b.id+',false)">убрать из дня</button>':'<button class="day" onclick="toggleDay('+b.id+',true)">⭐ букет дня</button>')+
@@ -207,8 +219,8 @@ function renderComments(){
   const box=$('list');
   box.innerHTML=comments.length?comments.map(c=>{
     const b=bouquets.find(x=>x.id===c.bouquet_id);
-    return '<div class="card"><div class="mcat">'+whenRu(c.created_at)+' · '+(c.parent_id?'↩ ответ':' отзыв')+' · <b>'+esc(c.user_nick||'аноним')+'</b></div>'+
-      (b?'<div class="mcat" style="color:#D96A2B">к букету: '+esc(b.title)+'</div>':'')+
+    return '<div class="card"><div class="mcat">'+whenRu(c.created_at)+' · '+(c.parent_id?'↩ ответ':' отзыв')+' · <b>'+esc(c.user_nick||'аноним')+'</b>'+(c.rating?' · ⭐'+c.rating:'')+'</div>'+
+      (b?'<div class="mcat" style="color:#FF6B6B">к букету: '+esc(b.title)+'</div>':'')+
       '<div class="mtxt">'+esc(c.text)+'</div>'+
       '<div class="mbtns">'+(c.hidden?'<button class="ok" onclick="unhide('+c.id+')">↩ вернуть</button>':'<button class="no" onclick="hideComment('+c.id+')">скрыть</button>')+
       '<button class="no" onclick="killComment('+c.id+')">🗑 удалить</button></div></div>';
@@ -242,11 +254,11 @@ function renderStats(){
     '<div><div class="lbl">выручка</div><div class="val"><b>'+revenue.toLocaleString('ru-RU')+' ₽</b></div></div>'+
     '<div><div class="lbl">возврат</div><div class="val"><b>'+m.returners+'</b></div><div class="sub">зашли ≥2 дня</div></div></div>';
   const funnelMax=Math.max(...Object.values(m.funnel),1);
-  const funnelHtml='<div class="funnel"><div class="mcat" style="margin-bottom:8px;font-weight:700;color:#15181C">🎯 воронка: уникальные</div>'+
+  const funnelHtml='<div class="funnel"><div class="mcat" style="margin-bottom:8px;font-weight:700;color:#1A1A2E">🎯 воронка: уникальные</div>'+
     [['open','Открыли сайт'],['view','Смотрели букет'],['order','Заказали'],['comment','Оставили отзыв'],['share','Поделились'],['reg','Зарегистрировались']]
     .map(r=>{const v=m.funnel[r[0]]||0;const pct=Math.round(v*100/funnelMax);return '<div class="frow"><div class="fname">'+r[1]+'</div><div class="fbar"><i style="width:'+pct+'%"></i></div><div class="fnum">'+v+'</div></div>';}).join('')+'</div>';
   const maxEv=Math.max(...m.daysArr.map(d=>m.dayMap[d].ev),1);
-  const chart='<div class="funnel"><div class="mcat" style="margin-bottom:8px;font-weight:700;color:#15181C">📈 по дням</div>'+
+  const chart='<div class="funnel"><div class="mcat" style="margin-bottom:8px;font-weight:700;color:#1A1A2E">📈 по дням</div>'+
     m.daysArr.map(d=>{const v=m.dayMap[d];const pct=Math.round(v.ev*100/maxEv);return '<div class="dayRow"><div class="dLbl">'+d.slice(5)+'</div><div class="dBar"><i style="width:'+pct+'%"></i></div><div class="dNum">'+v.ev+'</div></div>';}).join('')+'</div>';
   box.innerHTML='<div class="rangeSel">'+[['7','7 дней'],['14','14 дней'],['30','30 дней']].map(r=>'<button class="'+(usrStatsRange===r[0]?'on':'')+'" onclick="setUsrRange(\''+r[0]+'\')">'+r[1]+'</button>').join('')+'</div>'+big+funnelHtml+chart;
 }
@@ -260,12 +272,12 @@ async function renderUsers(){
   const rows=top.map(([u,n],i)=>{
     const p=profs[u];
     const nm=p?p.nick:(u==='__anon__'?'аноним':u.slice(0,12));
-    const av=p?'<div class="av" style="'+(p.avatar_url?'':'background:linear-gradient(135deg,#D96A2B,#FFC38A)')+'">'+(p.avatar_url?'<img src="'+p.avatar_url+'">':(p.nick||'?').slice(0,1).toUpperCase())+'</div>':'<div class="av" style="background:#F6EBDC;color:#A89380">?</div>';
+    const av=p?'<div class="av" style="'+(p.avatar_url?'':'background:linear-gradient(135deg,#FF6B6B,#A855F7)')+'">'+(p.avatar_url?'<img src="'+p.avatar_url+'">':(p.nick||'?').slice(0,1).toUpperCase())+'</div>':'<div class="av" style="background:#FFF5F5;color:#94A3B8">?</div>';
     const floristBtn=p&&!p.is_florist?'<button class="day" style="margin-left:6px;padding:6px 10px;font-size:10px" onclick="makeFlorist(\''+p.id+'\')">⭐ продавец</button>':(p&&p.is_florist?'<span class="pill ret" style="margin-left:6px">⭐ продавец</span>':'');
     return '<div class="usrRow"><div class="pos">'+(i+1)+'</div>'+av+'<div class="nm">'+esc(nm)+floristBtn+'</div><div class="st">'+n+' действий</div></div>';
   });
   box.innerHTML='<div class="rangeSel">'+[['7','7 дней'],['14','14 дней'],['30','30 дней']].map(r=>'<button class="'+(usrStatsRange===r[0]?'on':'')+'" onclick="setUsrRange(\''+r[0]+'\')">'+r[1]+'</button>').join('')+'</div>'+
-    '<div class="card"><div class="mcat" style="font-weight:700;color:#15181C;margin-bottom:8px">👥 топ-15 активных</div>'+rows.join('')+'</div>';
+    '<div class="card"><div class="mcat" style="font-weight:700;color:#1A1A2E;margin-bottom:8px">👥 топ-15 активных</div>'+rows.join('')+'</div>';
 }
 async function makeFlorist(uid){if(!confirm('Сделать этого пользователя продавцом?'))return;const res=await sb.from('profiles').update({is_florist:true}).eq('id',uid);if(res.error){alert('Ошибка: '+res.error.message);return;}await refresh();}
 async function logout(){await sb.auth.signOut();location.reload();}
