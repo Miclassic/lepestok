@@ -4,194 +4,380 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Лепесток — цветы в Вуктыле</title>
+<meta name="description" content="Лепесток — свежие букеты в Вуктыле с доставкой. Соберём под ваш повод.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Лепесток — цветы в Вуктыле">
+<meta property="og:description" content="Свежие букеты каждый день. Доставка по Вуктылу. Заказ из другого города — привезём вашим близким.">
+<meta property="og:url" content="https://miclassic.github.io/lepestok/">
+<meta name="theme-color" content="#C9971C">
+<link href="https://fonts.cdnfonts.com/css/opposans" rel="stylesheet">
+<script>
+(function(){ try { var q = new URLSearchParams(location.search), h = new Date().getHours(); var n = q.get('night') === '1' ? true : q.get('day') === '1' ? false : (h >= 23 || h < 5); if (n) { document.documentElement.className += ' prenight'; var m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = '#0F1115'; } } catch(e){} })();
+</script>
 <style>
-:root{--bg:#FBF6F2;--card:#fff;--ink:#221a20;--gray:#9a8a90;--rose:#D96C8A;--rose2:#C14E70;--gold:#C9971C;--grn:#2E9E5B;--red:#D33A2C}
-body.night{--bg:#151218;--card:#211c24;--ink:#EDE7EC;--gray:#8d8391}
-*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);color:var(--ink);transition:background .3s}
+:root{--bg:#EDEEF2;--card:#FFFFFF;--ink:#15181C;--gray:#8A919E;--red:#D33A2C;--yel:#E0A400;--grn:#2E9E5B;--gold:#C9971C;--rose:#D96C8A}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'OPPO Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--ink);min-height:100vh}
+body.night{--bg:#0F1115;--card:#171A20;--ink:#EDEEF2;--gray:#9AA3AE;background:var(--bg)}
+body.night .topbar{background:rgba(15,17,21,.72)}
+body.night .fitem,body.night .miniBtn,body.night .chipBtn,body.night .pill,body.night .fpill,body.night .lockPill,body.night .crow input,body.night .secCard,body.night .lbRow,body.night .myCases,body.night .mcPill,body.night .aIn,body.night #modal .box,body.night .cmt{background:#171A20;color:var(--ink)}
+body.night .ftxt,body.night #caseText{color:#E8EAEE;text-shadow:none}
+body.night .fmeta,body.night .fmetaCat,body.night .secDesc,body.night .bSub{text-shadow:none}
+body.night .fbtns button{color:var(--gray)}
 .hidden{display:none!important}
-header{position:sticky;top:0;z-index:20;background:var(--bg)}
-.tick{overflow:hidden;white-space:nowrap;background:linear-gradient(90deg,var(--rose),var(--rose2));color:#fff;font-size:11px;font-weight:700;padding:6px 0}
-.tickTrack{display:inline-block;animation:tick 30s linear infinite}
-.tickHalf{display:inline-block;padding-right:40px}
-@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.hRow{display:flex;align-items:center;gap:10px;padding:12px 16px}
-.brand{display:flex;flex-direction:column;cursor:pointer}
-.brand b{font-size:19px;letter-spacing:2px;color:var(--rose2)}
-.brand span{font-size:10px;color:var(--gray)}
-.city{border:1.5px solid var(--rose);color:var(--rose2);border-radius:999px;padding:5px 10px;font-size:11px;font-weight:700;background:var(--card)}
-.spacer{flex:1}
-.hero{border:none;border-radius:999px;padding:12px 18px;font-weight:800;font-size:14px;color:#fff;background:linear-gradient(90deg,var(--rose),var(--rose2));cursor:pointer;box-shadow:0 8px 20px rgba(217,108,138,.35)}
-.ava{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--gold));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;cursor:pointer}
-main{max-width:760px;margin:0 auto;padding:0 16px 60px}
-.secHead{display:flex;align-items:center;gap:8px;font-weight:800;font-size:16px;margin:18px 0 10px}
-.day{border-radius:22px;overflow:hidden;background:var(--card);box-shadow:0 12px 30px rgba(0,0,0,.12);margin-bottom:16px;cursor:pointer}
-.day img{width:100%;height:220px;object-fit:cover;display:block}
-.dayBody{padding:12px 14px}
-.tag{display:inline-block;border-radius:999px;padding:4px 10px;font-size:10px;font-weight:800}
-.tag.day{background:rgba(217,108,138,.14);color:var(--rose2)}
-.tag.stock{background:rgba(46,158,91,.14);color:var(--grn)}
-.tag.out{background:rgba(211,58,44,.12);color:var(--red)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.bCard{border-radius:18px;overflow:hidden;background:var(--card);box-shadow:0 8px 22px rgba(0,0,0,.08);cursor:pointer}
-.bCard img,.ph{width:100%;height:150px;object-fit:cover;display:block}
-.ph{display:flex;align-items:center;justify-content:center;font-size:52px;background:linear-gradient(160deg,#fdeef2,#f7e3ea)}
-.bBody{padding:10px}
-.bTitle{font-weight:700;font-size:13px}
-.bPrice{color:var(--rose2);font-weight:800;font-size:14px;margin-top:2px}
-.like{border:none;background:rgba(217,108,138,.12);color:var(--rose2);border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;margin-top:6px}
-.sheet{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;display:flex;align-items:flex-end}
-.sheetIn{background:var(--card);width:100%;max-height:88vh;overflow:auto;border-radius:24px 24px 0 0;padding:16px}
-.sheetIn img{width:100%;max-height:320px;object-fit:cover;border-radius:16px}
-.btn{border:none;border-radius:999px;padding:13px 16px;font-weight:800;font-size:14px;cursor:pointer;width:100%}
-.btn.rose{background:linear-gradient(90deg,var(--rose),var(--rose2));color:#fff}
-.btn.soft{background:rgba(217,108,138,.12);color:var(--rose2);margin-top:8px}
-.inp{width:100%;border:1.5px solid #eee;border-radius:14px;padding:12px;font-size:14px;margin-top:8px;background:var(--card);color:var(--ink)}
-label.chk{display:flex;gap:8px;align-items:center;font-size:13px;margin-top:10px}
-.row{display:flex;gap:8px}
-.row .btn{margin-top:0}
-.opt{flex:1;border:1.5px solid #eee;border-radius:14px;padding:10px;font-size:12px;font-weight:700;text-align:center;cursor:pointer;color:var(--gray);background:var(--card)}
-.opt.on{border-color:var(--rose);color:var(--rose2)}
-.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#221a20;color:#fff;padding:11px 18px;border-radius:999px;font-size:13px;z-index:99}
+.icn{width:1.05em;height:1.05em;display:inline-block;vertical-align:-.15em;flex:none}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:20;background:rgba(237,238,242,.72);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);box-shadow:0 1px 0 rgba(20,24,32,.06)}
+.topbarIn{max-width:620px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px 6px}
+.brand{display:flex;align-items:center;gap:7px;user-select:none;cursor:pointer;color:var(--rose)}
+.brand .scale{display:inline-block;font-size:22px;line-height:1}
+.brandCol{display:flex;flex-direction:column;line-height:1.1}
+.brandName{color:var(--gray);font-size:12px;letter-spacing:2px;font-weight:700}
+.brandSlog{color:var(--gray);font-size:8px;letter-spacing:.5px;opacity:.8}
+.tbR{display:flex;gap:8px;align-items:center}
+.miniBtn{background:#fff;border:none;border-radius:999px;padding:9px 14px;font-size:12px;font-weight:600;color:var(--ink);box-shadow:0 4px 14px rgba(20,24,32,.10)}
+.miniBtn.cta{background:linear-gradient(90deg,var(--rose),#B85470);color:#fff;font-weight:800;box-shadow:0 6px 18px rgba(217,108,138,.35)}
+.avaBtn{width:34px;height:34px;border:none;border-radius:50%;color:#fff;font-weight:800;font-size:14px;box-shadow:0 4px 14px rgba(20,24,32,.18);overflow:hidden;padding:0;cursor:pointer}
+.avaImg{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.tabbar{max-width:620px;margin:0 auto;display:flex;gap:6px;padding:2px 12px 10px;overflow-x:auto;scrollbar-width:none}
+.bn{flex:1;background:none;border:none;border-radius:999px;padding:8px 6px;display:flex;align-items:center;justify-content:center;gap:5px;color:var(--gray);font-size:11px;font-weight:700;white-space:nowrap;cursor:pointer;position:relative}
+.bn .icn{width:15px;height:15px}
+.bn.on::after{content:"";position:absolute;left:16%;right:16%;bottom:3px;height:2px;border-radius:999px;background:radial-gradient(50% 100% at 50% 50%,#FFE9A8 0%,var(--rose) 40%,rgba(217,108,138,0) 100%);box-shadow:0 0 6px rgba(217,108,138,.5)}
+.bn.on{color:var(--ink)}
+body.night .bn.on::after{background:radial-gradient(50% 100% at 50% 50%,#FF8A7A 0%,#FF4438 40%,rgba(255,68,56,0) 100%)}
+.ticker{max-width:620px;margin:0 auto;overflow:hidden;padding:0 12px 8px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.tickTrack{display:flex;width:max-content;animation:tick 40s linear infinite;will-change:transform;color:var(--gray);font-size:11px;font-weight:600}
+.ticker:hover .tickTrack{animation-play-state:paused}
+.tickHalf{display:inline-flex;align-items:center;gap:26px;padding-right:26px;white-space:nowrap}
+.tickTrack .sep{color:var(--rose);opacity:.8}
+.tickTrack b{color:var(--rose);font-weight:800}
+@keyframes tick{to{transform:translateX(-50%)}}
+main{padding:142px 16px 30px;max-width:620px;width:100%;margin:0 auto}
+.secHead{font-weight:800;font-size:16px;margin:4px 0 4px;display:flex;align-items:center;gap:7px}
+.secHead .icn{color:var(--rose);width:17px;height:17px}
+.secDesc{color:var(--gray);font-size:12px;line-height:1.4;margin-bottom:14px}
+.city{border:1.5px solid var(--rose);color:#B85470;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:800;background:var(--card);cursor:pointer;display:flex;align-items:center;gap:4px}
+#feed{display:flex;flex-direction:column;gap:14px}
+@media (min-width:700px){body{background:radial-gradient(rgba(217,108,138,.06) 2px,transparent 2.5px),var(--bg);background-size:26px 26px}#feed{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}}
+.fitem{position:relative;overflow:hidden;background:#fff;border-radius:24px;box-shadow:0 12px 34px rgba(20,24,32,.08);animation:rise .3s ease both}
+.fitem.hot{box-shadow:0 16px 44px rgba(217,108,138,.22)}
+.fart{position:absolute;top:0;left:0;right:0;height:58%;opacity:.55;overflow:hidden;-webkit-mask-image:linear-gradient(#000 38%,transparent 74%);mask-image:linear-gradient(#000 38%,transparent 74%);background-image:var(--grad);z-index:0;pointer-events:none}
+.fart::before{content:"";position:absolute;top:-96px;left:-96px;right:-96px;bottom:-96px;background-image:var(--pat);background-size:96px 96px;will-change:transform}
+.fitem.hot .fart::before{animation:drift 26s linear infinite}
+@keyframes drift{to{transform:translate3d(96px,96px,0)}}
+.artR{--pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Ctext x='10' y='44' font-size='30' opacity='.4' transform='rotate(-12 25 44)'%3E%F0%9F%8C%B9%3C/text%3E%3Ctext x='54' y='88' font-size='24' opacity='.35' transform='rotate(12 66 88)'%3E%F0%9F%8C%B7%3C/text%3E%3C/svg%3E");--grad:linear-gradient(135deg,#FFD3E0,#FFF0F5)}
+.artF{--pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Ctext x='10' y='44' font-size='30' opacity='.4' transform='rotate(-12 25 44)'%3E%F0%9F%8C%BC%3C/text%3E%3Ctext x='54' y='88' font-size='24' opacity='.35' transform='rotate(12 66 88)'%3E%F0%9F%8C%BB%3C/text%3E%3C/svg%3E");--grad:linear-gradient(135deg,#FFE9D3,#FFF7F0)}
+.artL{--pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Ctext x='10' y='44' font-size='30' opacity='.4' transform='rotate(-12 25 44)'%3E%F0%9F%AB%91%3C/text%3E%3Ctext x='54' y='88' font-size='24' opacity='.35' transform='rotate(12 66 88)'%3E%F0%9F%8C%BF%3C/text%3E%3C/svg%3E");--grad:linear-gradient(135deg,#F0E7FF,#F9F4FF)}
+.artD{--pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Ctext x='10' y='44' font-size='30' opacity='.4' transform='rotate(-12 25 44)'%3E%F0%9F%8C%B8%3C/text%3E%3Ctext x='54' y='88' font-size='24' opacity='.35' transform='rotate(10 66 88)'%3E%F0%9F%8C%B8%3C/text%3E%3C/svg%3E");--grad:linear-gradient(135deg,#FFE3EE,#FFF5F8)}
+.fbody{position:relative;padding:16px;z-index:1}
+.fmetaCat{display:flex;justify-content:center;align-items:center;gap:6px;font-size:11px;color:var(--gray);font-weight:600;text-shadow:0 1px 0 rgba(255,255,255,.8)}
+.fmeta{font-size:11px;color:var(--gray);display:flex;justify-content:space-between;align-items:center;margin-top:2px;text-shadow:0 1px 0 rgba(255,255,255,.8)}
+.ftxt{font-size:14px;line-height:1.5;margin:8px 0 4px;color:#1B1E24;font-weight:500;text-shadow:0 1px 0 rgba(255,255,255,.85),0 0 12px rgba(255,255,255,.6)}
+.bPrice{color:var(--rose);font-weight:800;font-size:16px;margin:4px 0}
+.tag{display:inline-block;color:#fff;font-size:9px;font-weight:800;letter-spacing:1px;padding:3px 8px;border-radius:999px;text-transform:uppercase;vertical-align:middle;margin-left:4px}
+.tag.stock{background:var(--grn)}.tag.out{background:var(--gray)}
+.fbtns{display:flex;gap:8px;margin-top:8px}
+.fbtns button{flex:1;background:transparent;color:var(--gray);border:none;border-radius:999px;padding:8px 6px;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer}
+.fbtns button:active{background:rgba(20,24,32,.06)}
+.fbtns .icn{width:14px;height:14px}
+.fpill{flex:1;border:none;background:#fff;border-radius:999px;padding:10px 4px;font-weight:700;font-size:12px;box-shadow:0 6px 18px rgba(20,24,32,.10);white-space:nowrap;justify-content:center;display:flex;align-items:center;gap:4px;cursor:pointer}
+.fpill .icn{width:13px;height:13px}
+.fpill.rose{color:var(--rose)}.fpill.grn{color:var(--grn)}
+.fpills{display:flex;gap:6px}
+.lockPill{color:var(--gray);box-shadow:0 6px 18px rgba(20,24,32,.10);font-size:13px}
+.fcom{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.cmt{position:relative;background:var(--card);border-radius:16px;padding:10px 12px;font-size:14px;box-shadow:0 8px 22px rgba(20,24,32,.06)}
+.cHead{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:3px;padding-right:24px}
+.cmt .nick{font-weight:800}
+.cBody{font-size:14px;line-height:1.45}
+.cActions{display:flex;gap:12px;margin-top:6px}
+.cActions button{background:none;border:none;color:var(--gray);font-size:11px;font-weight:700;cursor:pointer}
+.replies{margin-top:8px;display:flex;flex-direction:column;gap:6px;padding-left:12px;border-left:2px solid rgba(20,24,32,.06)}
+.crow{display:flex;gap:8px;margin-top:10px}
+.crow input{flex:1;background:var(--card);border:none;border-radius:999px;padding:12px 14px;font-size:14px;box-shadow:0 8px 22px rgba(20,24,32,.06)}
+.crow button{background:var(--rose);border:none;border-radius:999px;padding:0 18px;font-weight:700;color:#fff;cursor:pointer}
+.reacts{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:4px;margin:10px 0 2px;scrollbar-width:none}
+.reacts::-webkit-scrollbar{display:none}
+.rct{flex:0 0 auto;display:flex;align-items:center;gap:3px;padding:4px 8px;border-radius:999px;font-size:10px;font-weight:800;border:1px solid transparent;cursor:pointer;background:var(--card)}
+.rct span{font-size:14px;line-height:1}
+.repAbs{position:absolute;top:6px;right:6px;background:none;border:none;color:var(--red);opacity:.85;padding:4px;cursor:pointer}
+.repAbs .icn{width:13px;height:13px}
+#modal{position:fixed;inset:0;background:rgba(20,24,32,.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+#modal .box{background:#fff;border-radius:24px;padding:18px;width:100%;max-width:480px;display:flex;flex-direction:column;gap:10px;animation:rise .3s ease}
+#modal textarea{background:var(--bg);border:none;border-radius:14px;padding:12px;font-size:15px;min-height:100px;resize:vertical}
+#modal select,#modal input.aIn{background:var(--bg);border:none;border-radius:14px;padding:12px;font-size:14px;width:100%}
+#modal .go{background:var(--rose);border:none;border-radius:999px;padding:14px;font-weight:800;color:#fff;cursor:pointer}
+#auth{position:fixed;inset:0;background:var(--bg);z-index:60;overflow-y:auto}
+.authBox{max-width:420px;margin:0 auto;padding:60px 22px;display:flex;flex-direction:column;gap:10px;align-items:stretch}
+.avaBig{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:800;color:#fff;margin:0 auto;background:linear-gradient(135deg,var(--rose),#B85470);overflow:hidden}
+.authTitle{text-align:center;font-weight:800;font-size:22px;letter-spacing:2px}
+.authSub{text-align:center;color:var(--gray);font-size:12px;margin-bottom:10px}
+.aIn{background:#fff;border:none;border-radius:14px;padding:14px;font-size:15px;box-shadow:0 4px 14px rgba(20,24,32,.06)}
+.go{background:var(--rose);border:none;border-radius:999px;padding:14px;font-weight:800;color:#fff;font-size:15px;cursor:pointer}
+.swap{background:none;border:none;color:var(--gray);font-size:13px;padding:6px;cursor:pointer}
+.aNote{color:var(--gray);font-size:11px;text-align:center}
+#toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(23,26,32,.92);color:#EDEEF2;border:1px solid rgba(217,108,138,.4);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.4);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font-weight:700;font-size:13px;padding:12px 20px;text-align:center;max-width:82vw;z-index:99}
+#toast:not(.hidden){animation:toastIn .35s ease}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,-50%) scale(.85)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+.sheet{position:fixed;inset:0;background:rgba(10,10,14,.5);z-index:96;display:flex;align-items:flex-end;justify-content:center}
+.sheetIn{background:var(--card);width:100%;max-width:560px;border-radius:24px 24px 0 0;padding:16px 14px 22px;max-height:88vh;overflow-y:auto;animation:rise .3s ease}
+.sheetIn h3{font-size:16px;font-weight:800;margin-bottom:6px}
+.sheetIn .opt{flex:1;border:1.5px solid #eee;border-radius:14px;padding:10px;font-size:12px;font-weight:700;text-align:center;cursor:pointer;color:var(--gray);background:var(--card)}
+.sheetIn .opt.on{border-color:var(--rose);color:#B85470}
+.sheetIn .row{display:flex;gap:8px;margin-top:8px}
+.sheetIn .btn{border:none;border-radius:999px;padding:13px;font-weight:800;font-size:14px;cursor:pointer;width:100%;margin-top:10px}
+.sheetIn .btn.rose{background:linear-gradient(90deg,var(--rose),#B85470);color:#fff}
+.sheetIn .btn.soft{background:var(--bg);color:var(--ink)}
+.sheetIn label.chk{display:flex;gap:8px;align-items:center;font-size:13px;margin-top:10px;cursor:pointer}
+.pBody{max-width:560px;margin:0 auto;padding:10px 0 20px;display:flex;flex-direction:column;gap:14px}
+.pNick{text-align:center;font-weight:800;font-size:20px}
+.pSub{text-align:center;color:var(--gray);font-size:12px}
+.pCard{background:#fff;border-radius:18px;box-shadow:0 8px 22px rgba(20,24,32,.06);overflow:hidden}
+.pRow{display:flex;align-items:center;gap:12px;padding:14px 16px;border-top:1px solid rgba(20,24,32,.05)}
+.pRow:first-child{border-top:none}
+.pRow .ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--rose)}
+.pRow .ic .icn{width:17px;height:17px}
+.pRow .lb{flex:1;font-size:14px}
+.pRow .vl{font-weight:800;font-size:14px}
+.pBtn{border:none;border-radius:999px;padding:13px;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
+.pBtn .icn{width:15px;height:15px}
+.pBtn.soft{background:var(--card);color:var(--ink);box-shadow:0 4px 14px rgba(20,24,32,.08)}
+.myCases{background:#fff;border-radius:18px;box-shadow:0 8px 22px rgba(20,24,32,.06);padding:12px;display:flex;flex-direction:column;gap:8px}
+.mcHead{font-size:12px;font-weight:700;color:var(--gray);display:flex;align-items:center;gap:6px}
+.mcItem{background:var(--bg);border-radius:14px;padding:10px 12px}
+.mcTxt{font-size:13px;line-height:1.4;color:#1B1E24;margin-bottom:6px;font-weight:600}
+.lbRow{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:#fff;margin-bottom:6px;box-shadow:0 2px 8px rgba(20,24,32,.04)}
+.lbRow .pos{width:26px;font-weight:800;color:var(--gray);font-size:12px;text-align:center}
+.lbRow .pos.top3{font-size:18px}
+.lbRow .av{width:30px;height:30px;border-radius:50%;font-size:12px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden}
+.lbRow .av img{width:100%;height:100%;object-fit:cover}
+.lbRow .nm{flex:1;font-weight:700;font-size:13px}
+.lbRow .sc{font-weight:800;font-size:13px;color:var(--rose)}
+.secCard{background:#fff;border-radius:18px;box-shadow:0 8px 22px rgba(20,24,32,.06);padding:14px}
+.empty{text-align:center;color:var(--gray);font-size:14px;padding:20px 0}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.cmtFlash{animation:cmtFlash 1.2s ease}
+@keyframes cmtFlash{0%{box-shadow:0 0 0 2px rgba(217,108,138,.85),0 8px 22px rgba(20,24,32,.08);transform:scale(1.02)}100%{transform:scale(1)}}
+.cAva{width:24px;height:24px;border-radius:50%;overflow:hidden;flex:none;font-size:10px;font-weight:800;color:#fff;display:inline-flex;align-items:center;justify-content:center;margin-right:6px}
+.cAva img{width:100%;height:100%;object-fit:cover}
+.nickCol{display:inline-flex;flex-direction:column;align-items:stretch;gap:2px;margin-right:6px}
+.laserLine{display:block;width:100%;height:2px;margin:0;border-radius:2px;background:radial-gradient(50% 100% at 50% 50%,#FFE9A8 0%,var(--rose) 40%,rgba(217,108,138,0) 100%);box-shadow:0 0 6px rgba(217,108,138,.45)}
 </style>
 </head>
 <body>
-<header>
-  <div class="tick"><div class="tickTrack" id="tick"></div></div>
-  <div class="hRow">
-    <div class="brand" onclick="brandTap()"><b>лепесток</b><span>цветы · Вуктыл</span></div>
-    <button class="city" onclick="openCity()">📍 Вуктыл ▾</button>
-    <div class="spacer"></div>
-    <button class="hero" onclick="openQuiz()">собери мне</button>
-    <div class="ava" id="ava" onclick="me?openProfile():openAuth()">👤</div>
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+<symbol id="i-flower" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l2 3.5 4 .5-3 3 .5 4L12 11l-3.5 2 .5-4-3-3 4-.5zM4 14c0 5 4 8 8 8s8-3 8-8c0-2-2-3-4-3-2 0-4 1-4 1s-2-1-4-1-4 1-4 3z"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.8l2.6 5.6 6 .7-4.5 4.1 1.2 5.9L12 16.2l-5.3 2.9 1.2-5.9L3.4 9.1l6-.7z"/></symbol>
+<symbol id="i-flame" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.5s5.5 5 5.5 10a5.5 5.5 0 0 1-11 0c0-2.2 1-4.2 2.4-5.8.3 1.3 1 2.2 1.9 2.7-.5-2.4.2-5 1.2-6.9z"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.5 1 4 1.5s2-1.5 4-1.5c3.5 0 5 3.5 3.5 6.5-2.5 4.5-9.5 9-9.5 9z"/></symbol>
+<symbol id="i-comment" viewBox="0 0 24 24"><path fill="currentColor" d="M4 4h16v12H9l-5 4z"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><g fill="currentColor"><circle cx="12" cy="8" r="3.6"/><path d="M4.8 19.4c.8-3.6 3.8-5.4 7.2-5.4s6.4 1.8 7.2 5.4z"/></g></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 12h7M9 16h7"/></g></symbol>
+<symbol id="i-share" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 6.5L12 3l4 3.5"/><path d="M6 10H5v11h14V10h-1"/></g></symbol>
+<symbol id="i-flag" viewBox="0 0 24 24"><path fill="currentColor" d="M5 2h2v20H5z"/><path fill="currentColor" d="M9 3h11l-3 4.5L20 12H9z"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.6" fill="currentColor" stroke="none"/></g></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-shop" viewBox="0 0 24 24"><path fill="currentColor" d="M3 9h18v11H3zM6 6h12l2 3H4z"/></symbol>
+</svg>
+<div class="topbar">
+  <div class="topbarIn">
+    <div class="brand" onclick="brandTap()">
+      <span class="scale">🌷</span>
+      <span class="brandCol"><span class="brandName">лепесток</span><span class="brandSlog">цветы · Вуктыл</span></span>
+    </div>
+    <div class="tbR">
+      <button class="city" onclick="openCity()">📍 <span id="cityName">Вуктыл</span> ▾</button>
+      <button class="miniBtn cta" onclick="openQuiz()"><svg class="icn"><use href="#i-star"/></svg>собери мне</button>
+      <span id="tbUser"></span>
+    </div>
   </div>
-</header>
+  <div class="tabbar">
+    <button class="bn on" data-t="shop" onclick="showTab('shop')"><svg class="icn"><use href="#i-flower"/></svg>витрина</button>
+    <button class="bn" data-t="day" onclick="showTab('day')"><svg class="icn"><use href="#i-flame"/></svg>букет дня</button>
+    <button class="bn" data-t="quiz" onclick="showTab('quiz')"><svg class="icn"><use href="#i-star"/></svg>собери мне</button>
+    <button class="bn" data-t="mine" onclick="showTab('mine')"><svg class="icn"><use href="#i-doc"/></svg>мои</button>
+    <button class="bn" data-t="profile" onclick="showTab('profile')"><svg class="icn"><use href="#i-user"/></svg>профиль</button>
+  </div>
+  <div class="ticker"><div class="tickTrack" id="tickTrack"></div></div>
+</div>
 <main>
-  <div class="secHead">🌸 Букет дня</div>
-  <div id="dayBox"></div>
-  <div class="secHead">💐 Витрина</div>
-  <div class="grid" id="grid"></div>
+  <section id="tab-shop">
+    <div class="secHead"><svg class="icn"><use href="#i-flower"/></svg>витрина</div>
+    <div class="secDesc">Свежие букеты сегодня. Тапни — увидишь детали, ❤️ и отзывы.</div>
+    <div id="feed"></div>
+  </section>
+  <section id="tab-day" class="hidden">
+    <div class="secHead"><svg class="icn"><use href="#i-flame"/></svg>букет дня</div>
+    <div class="secDesc">Один особенный букет на сегодня. Меняется каждый вечер.</div>
+    <div id="dayBox"></div>
+  </section>
+  <section id="tab-quiz" class="hidden">
+    <div class="secHead"><svg class="icn"><use href="#i-star"/></svg>собери мне</div>
+    <div class="secDesc">Ответь на 3 вопроса — покажу букеты под твой повод и бюджет.</div>
+    <div id="quizBox"></div>
+  </section>
+  <section id="tab-mine" class="hidden">
+    <div class="secHead"><svg class="icn"><use href="#i-doc"/></svg>мои заказы</div>
+    <div class="secDesc">То, что ты заказывал(а). Флорист скоро ответит.</div>
+    <div id="myOrdersBox"></div>
+  </section>
+  <section id="tab-profile" class="hidden">
+    <div class="secHead"><svg class="icn"><use href="#i-user"/></svg>профиль</div>
+    <div class="pBody" id="pBody"></div>
+  </section>
 </main>
-
-<div class="sheet hidden" id="cardSheet"><div class="sheetIn" id="cardBody"></div></div>
-<div class="sheet hidden" id="orderSheet"><div class="sheetIn" id="orderBody"></div></div>
-<div class="sheet hidden" id="quizSheet"><div class="sheetIn" id="quizBody"></div></div>
-<div class="sheet hidden" id="authSheet"><div class="sheetIn">
-  <h3 style="margin-bottom:8px">Вход</h3>
-  <input class="inp" id="aEmail" type="email" placeholder="email">
-  <input class="inp" id="aPass" type="password" placeholder="пароль">
-  <button class="btn rose" style="margin-top:10px" onclick="doLogin()">Войти</button>
-  <button class="btn soft" onclick="doReg()">Регистрация</button>
-  <button class="btn soft" onclick="hide('authSheet')">Закрыть</button>
-</div></div>
-<div class="sheet hidden" id="citySheet"><div class="sheetIn">
-  <h3>Город</h3>
-  <button class="btn rose" style="margin-top:10px" onclick="pickCity('Вуктыл')">Вуктыл (Республика Коми)</button>
-  <div style="color:var(--gray);font-size:12px;margin-top:10px">Другие города — скоро 🌷</div>
-  <button class="btn soft" onclick="hide('citySheet')">Закрыть</button>
-</div></div>
-<div class="toast hidden" id="toast"></div>
-
+<div id="modal" class="hidden">
+  <div class="box">
+    <h3>Добавить букет</h3>
+    <input class="aIn" id="fTitle" placeholder="Название (например: Нежный пион)">
+    <input class="aIn" id="fPrice" type="number" placeholder="Цена в рублях">
+    <textarea id="fDesc" placeholder="Описание букета — что входит"></textarea>
+    <input class="aIn" id="fCat" placeholder="Категория (розы / полевые / лилии / тюльпаны / другое)">
+    <button class="miniBtn" onclick="$('fPhoto').click()">📷 фото букета</button>
+    <input type="file" id="fPhoto" accept="image/*" style="display:none" onchange="onPhotoPick(this)">
+    <span id="fPhotoName" style="font-size:11px;color:var(--gray)"></span>
+    <label class="chk" style="display:flex;gap:8px;align-items:center;font-size:13px;margin-top:10px"><input type="checkbox" id="fStock" checked style="width:auto;margin:0"> В наличии</label>
+    <label class="chk" style="display:flex;gap:8px;align-items:center;font-size:13px;margin-top:6px"><input type="checkbox" id="fDay" style="width:auto;margin:0"> Сделать букетом дня</label>
+    <button class="go" onclick="submitBouquet()">Сохранить</button>
+    <button style="background:none;border:none;color:var(--gray);cursor:pointer" onclick="closeForm()">Отмена</button>
+  </div>
+</div>
+<div id="auth" class="hidden">
+  <div class="authBox">
+    <div class="avaBig">🌷</div>
+    <div class="authTitle">ЛЕПЕСТОК</div>
+    <div class="authSub">войди, чтобы заказывать и оставлять отзывы</div>
+    <input id="aNick" class="aIn" placeholder="Как тебя зовут" maxlength="16">
+    <input id="aEmail" class="aIn" type="email" placeholder="Email">
+    <input id="aPass" class="aIn" type="password" placeholder="Пароль (мин. 6 символов)">
+    <button class="go" id="aGo" onclick="doAuth()">Создать аккаунт</button>
+    <button class="swap" id="aSwap" onclick="toggleAuthMode()">Уже есть аккаунт? Войти</button>
+    <button class="swap" onclick="closeAuth()">Позже</button>
+  </div>
+</div>
+<div id="cardSheet" class="sheet hidden" onclick="if(event.target.id==='cardSheet')closeSheet('cardSheet')">
+  <div class="sheetIn" id="cardBody"></div>
+</div>
+<div id="orderSheet" class="sheet hidden" onclick="if(event.target.id==='orderSheet')closeSheet('orderSheet')">
+  <div class="sheetIn" id="orderBody"></div>
+</div>
+<div id="quizSheet" class="sheet hidden" onclick="if(event.target.id==='quizSheet')closeSheet('quizSheet')">
+  <div class="sheetIn" id="quizBody"></div>
+</div>
+<div id="citySheet" class="sheet hidden" onclick="if(event.target.id==='citySheet')closeSheet('citySheet')">
+  <div class="sheetIn">
+    <h3>Выбери город</h3>
+    <div class="row"><div class="opt on" onclick="pickCity('Вуктыл',this)">📍 Вуктыл (Республика Коми)</div></div>
+    <div style="color:var(--gray);font-size:11px;margin-top:10px">Другие города — скоро 🌷</div>
+    <button class="btn soft" onclick="closeSheet('citySheet')">Закрыть</button>
+  </div>
+</div>
+<div id="commentsSheet" class="sheet hidden" onclick="if(event.target.id==='commentsSheet')closeSheet('commentsSheet')">
+  <div class="sheetIn" id="commentsBody"></div>
+</div>
+<div id="reactSheet" class="sheet hidden" onclick="if(event.target.id==='reactSheet')closeReactSheet()">
+  <div class="sheetIn">
+    <div style="text-align:center;font-size:11px;font-weight:800;color:var(--gray);margin-bottom:10px;letter-spacing:.1em">ТВОЯ РЕАКЦИЯ</div>
+    <div id="reactRow" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"></div>
+  </div>
+</div>
+<div id="toast" class="hidden"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SB='https://tfqsyovyshheqkslsjhx.supabase.co';
 const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmcXN5b3Z5c2hoZXFrc2xzamh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MTU3MTMsImV4cCI6MjEwMzA5MTcxM30.S5-0MVJ6HLyFs2TQ5tpE7IlRXum25j7Vwhvnab1pAIY';
 const sb=supabase.createClient(SB,KEY);
 const $=id=>document.getElementById(id);
-let me=null,bouquets=[],liked=new Set(),curB=null,owner=false,taps=0,tapT=null;
-const EMO=['🌸','🌷','🌹','💐','🌼'];
+const ADMIN_EMAILS=['artixz18@gmail.com'];
+let me=null,bouquets=[],comments=[],bouquetLikes=[],commentLikes=[],commentReacts=[],city=localStorage.getItem('lep_city')||'Вуктыл';
+let curB=null,replyTo=null,authMode='reg',pickedPhoto=null,brandTaps=0,brandTimer=null,myFlorist=false;
+// трекинг
+let device = localStorage.getItem('lep_device');
+if (!device) { device = 'd' + Math.random().toString(36).slice(2) + Date.now(); localStorage.setItem('lep_device', device); }
+function track(name){ try { sb.from('events').insert({ name, device, user_id: me ? me.id : null }).then(() => {}); } catch(e){} }
+if (!sessionStorage.getItem('lep_open')) { sessionStorage.setItem('lep_open', '1'); track('open'); }
+const ICOS={
+'i-heart':'<path fill="currentColor" d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.5 1 4 1.5s2-1.5 4-1.5c3.5 0 5 3.5 3.5 6.5-2.5 4.5-9.5 9-9.5 9z"/>',
+'i-comment':'<path fill="currentColor" d="M4 4h16v12H9l-5 4z"/>',
+'i-share':'<g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 6.5L12 3l4 3.5"/><path d="M6 10H5v11h14V10h-1"/></g>',
+'i-flag':'<path fill="currentColor" d="M5 2h2v20H5z"/><path fill="currentColor" d="M9 3h11l-3 4.5L20 12H9z"/>',
+'i-eye':'<g fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.6" fill="currentColor" stroke="none"/></g>',
+'i-shop':'<path fill="currentColor" d="M3 9h18v11H3zM6 6h12l2 3H4z"/>'
+};
+const ic=n=>'<svg class="icn" viewBox="0 0 24 24">'+(ICOS[n]||'')+'</svg>';
+const REACTS=[{k:'heart',e:'❤️'},{k:'fire',e:'🔥'},{k:'wow',e:'🤩'},{k:'sad',e:'😢'},{k:'pray',e:'🙏'},{k:'eye',e:'👀'}];
+const RCOLORS={heart:'#E64980',fire:'#E2593F',wow:'#E0A400',sad:'#4C86E8',pray:'#7A5CFF',eye:'#2E9E5B'};
+const ART={'розы':'artR','пионы':'artR','полевые':'artF','лилии':'artL','тюльпаны':'artD','другое':'artD'};
+const isAdmin=()=>!!(me&&me.email&&ADMIN_EMAILS.includes(String(me.email).toLowerCase()));
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function flatText(t){return String(t||'').replace(/\|\|[\s\S]+?\|\|/g,'[скрыто]');}
+function spoilTap(e,el){if(e)e.stopPropagation();el.classList.toggle('open');}
+function spoilHtml(w){return '<span style="cursor:pointer;background:rgba(217,108,138,.1);padding:0 4px;border-radius:4px" onclick="spoilTap(event,this);this.style.background=\'transparent\'">'+esc(w)+'</span>';}
+function richText(t){return String(t||'').split(/\n+/).map(p=>{let out='',last=0,m,re=/\|\|([\s\S]+?)\|\|/g;while((m=re.exec(p))){out+=esc(p.slice(last,m.index));out+=spoilHtml(m[1]);last=m.index+m[0].length;}return out+esc(p.slice(last));}).join('<br>');}
 function toast(m){const t=$('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('hidden'),2600);}
-function hide(id){$(id).classList.add('hidden');}
-function show(id){$(id).classList.remove('hidden');}
-// бегущая строка
-(function(){const s='🌸 Лепесток · Вуктыл — свежие букеты каждый день · доставка по городу · соберём под ваш бюджет · заказ из другого города — привезём вашим близким · ';$('tick').innerHTML='<span class="tickHalf">'+s+'</span><span class="tickHalf">'+s+'</span>';})();
-function brandTap(){taps++;clearTimeout(tapT);tapT=setTimeout(()=>taps=0,1500);if(taps>=5){taps=0;owner=!owner;toast(owner?'Режим флориста включён 🌷':'Режим флориста выключен');load();}}
-// auth
-async function refreshMe(){const{data}=await sb.auth.getUser();me=data.user||null;$('ava').textContent=me?me.email[0].toUpperCase():'👤';}
-function openAuth(){show('authSheet');}
-async function doLogin(){const{error}=await sb.auth.signInWithPassword({email:$('aEmail').value.trim(),password:$('aPass').value});if(error)return toast(error.message);hide('authSheet');refreshMe();toast('Вы вошли 🌷');}
-async function doReg(){const{error}=await sb.auth.signUp({email:$('aEmail').value.trim(),password:$('aPass').value});if(error)return toast(error.message);hide('authSheet');toast('Проверьте почту для подтверждения');}
-function openProfile(){sb.auth.signOut().then(()=>{me=null;refreshMe();toast('Вы вышли');});}
-function openCity(){show('citySheet');}
-function pickCity(c){localStorage.setItem('lep_city',c);hide('citySheet');toast('Город: '+c);}
-// данные
-async function load(){const{data}=await sb.from('bouquets').select('*').order('created_at',{ascending:false});bouquets=data||[];render();}
-function render(){
-  const day=bouquets.find(b=>b.is_day)||bouquets[0];
-  $('dayBox').innerHTML=day?dayCard(day,true):'';
-  $('grid').innerHTML=bouquets.filter(b=>b!==day).map(b=>dayCard(b,false)).join('')||'<div style="color:var(--gray)">Пока пусто — флорист скоро добавит букеты 🌷</div>';
-}
-function dayCard(b,isDay){
-  const img=b.photo_url?'<img src="'+b.photo_url+'" loading="lazy">':'<div class="ph">'+EMO[b.id%EMO.length]+'</div>';
-  return '<div class="'+(isDay?'day':'bCard')+'" onclick="openCard('+b.id+')">'+img+
-   '<div class="'+(isDay?'dayBody':'bBody')+'">'+
-   (isDay?'<span class="tag day">🌟 букет дня</span> ':'')+
-   '<span class="tag '+(b.in_stock?'stock':'out')+'">'+(b.in_stock?'в наличии':'под заказ')+'</span>'+
-   '<div class="bTitle" style="margin-top:6px">'+esc(b.title)+'</div>'+
-   '<div class="bPrice">'+b.price+' ₽</div>'+
-   '<button class="like" onclick="event.stopPropagation();likeB('+b.id+')">❤️ '+b.likes+'</button>'+
-   '</div></div>';
-}
-function esc(s){return String(s||'').replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));}
-async function likeB(id){if(!me)return toast('Войдите, чтобы ставить ❤️');const b=bouquets.find(x=>x.id===id);if(liked.has(id))return;liked.add(id);await sb.from('bouquet_likes').insert({bouquet_id:id,user_id:me.id});b.likes++;await sb.from('bouquets').update({likes:b.likes}).eq('id',id);render();}
-// карточка
-function openCard(id){curB=bouquets.find(x=>x.id===id);if(!curB)return;
- $('cardBody').innerHTML=(curB.photo_url?'<img src="'+curB.photo_url+'">':'<div class="ph" style="height:200px">'+EMO[curB.id%EMO.length]+'</div>')+
-  '<div style="margin-top:10px"><span class="tag '+(curB.in_stock?'stock':'out')+'">'+(curB.in_stock?'в наличии':'под заказ')+'</span>'+
-  '<h3 style="margin-top:8px">'+esc(curB.title)+'</h3><div class="bPrice" style="font-size:18px">'+curB.price+' ₽</div>'+
-  (owner?ownerBtns():'')+
-  '<button class="btn rose" style="margin-top:12px" onclick="openOrder()">💐 Заказать</button>'+
-  '<button class="btn soft" onclick="toast(\'Чат с флористом — в следующей версии 💬\')">💬 Спросить</button>'+
-  '<button class="btn soft" onclick="hide(\'cardSheet\')">Закрыть</button></div>';
- show('cardSheet');}
-function ownerBtns(){return '<div class="row" style="margin-top:10px"><button class="btn soft" onclick="toggleDay('+curB.id+')">'+(curB.is_day?'убрать из дня':'в букет дня')+'</button><button class="btn soft" onclick="toggleStock('+curB.id+')">'+(curB.in_stock?'нет в наличии':'в наличии')+'</button></div>';}
-async function toggleDay(id){const b=bouquets.find(x=>x.id===id);b.is_day=!b.is_day;await sb.from('bouquets').update({is_day:b.is_day}).eq('id',id);render();openCard(id);}
-async function toggleStock(id){const b=bouquets.find(x=>x.id===id);b.in_stock=!b.in_stock;await sb.from('bouquets').update({in_stock:b.in_stock}).eq('id',id);render();openCard(id);}
-// заказ + доставка
-function openOrder(){if(!me)return toast('Войдите, чтобы заказать');hide('cardSheet');
- $('orderBody').innerHTML='<h3>Заказ: '+esc(curB.title)+'</h3>'+
-  '<div class="row" style="margin-top:10px"><div class="opt on" id="kPick" onclick="setKind(\'pickup\')">самовывоз</div><div class="opt" id="kDel" onclick="setKind(\'delivery\')">доставка</div></div>'+
-  '<div id="delFields" class="hidden">'+
-    '<input class="inp" id="oAddr" placeholder="улица, дом, квартира (Вуктыл)">'+
-    '<input class="inp" id="oRName" placeholder="имя получателя">'+
-    '<input class="inp" id="oRPhone" placeholder="телефон получателя">'+
-    '<label class="chk"><input type="checkbox" id="oOther" onchange="otherToggle()"> я из другого города — заказываю для близкого человека в Вуктыле</label>'+
-    '<div id="otherFields" class="hidden"><input class="inp" id="oSName" placeholder="ваше имя (кто заказывает)"><input class="inp" id="oSPhone" placeholder="ваш телефон / whatsapp / tg"></div>'+
-  '</div>'+
-  '<input class="inp" id="oNote" placeholder="комментарий (открытка, время, пожелания)">'+
-  '<button class="btn rose" style="margin-top:12px" onclick="submitOrder()">Отправить заказ</button>'+
-  '<button class="btn soft" onclick="hide(\'orderSheet\')">Закрыть</button>';
- show('orderSheet');orderKind='pickup';}
+function closeSheet(id){$(id).classList.add('hidden');}
+function openSheet(id){$(id).classList.remove('hidden');}
+function brandTap(){brandTaps++;clearTimeout(brandTimer);brandTimer=setTimeout(()=>brandTaps=0,1500);if(brandTaps>=5){brandTaps=0;if(isAdmin())location.href='admin.html';else if(myFlorist)location.href='seller.html';else toast('Кабинет продавца доступен только продавцам');}}
+function openCity(){openSheet('citySheet');}
+function pickCity(c,el){city=c;localStorage.setItem('lep_city',c);$('cityName').textContent=c;document.querySelectorAll('#citySheet .opt').forEach(o=>o.classList.remove('on'));el.classList.add('on');closeSheet('citySheet');toast('Город: '+c);}
+function showTab(t){['shop','day','quiz','mine','profile'].forEach(k=>$('tab-'+k).classList.toggle('hidden',k!==t));document.querySelectorAll('.bn').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='shop')renderFeed();if(t==='day')renderDay();if(t==='quiz')openQuizTab();if(t==='mine')renderMine();if(t==='profile')showProfile();window.scrollTo(0,0);}
+function renderTicker(){const s='🌷 Лепесток · '+city+' · свежие букеты каждый день · доставка по городу · соберём под ваш повод · заказ из другого города — привезём вашим близким · ';$('tickTrack').innerHTML='<div class="tickHalf"><span>'+s+'</span><span>'+s+'</span></div>';}
+async function load(){const{data:b,err1}=await sb.from('bouquets').select('*').order('created_at',{ascending:false});const{data:c,err2}=await sb.from('bouquet_comments').select('*').eq('status','approved');const{data:bl}=await sb.from('bouquet_likes').select('*');const{data:cl}=await sb.from('bouquet_comment_likes').select('*');const{data:cr}=await sb.from('bouquet_comment_reactions').select('*');if(err1||err2){toast('Ошибка: '+(err1||err2).message);return;}bouquets=b||[];comments=(c||[]).filter(x=>!x.hidden);bouquetLikes=bl||[];commentLikes=cl||[];commentReacts=cr||[];renderFeed();renderDay();}
+function artOf(b){return ART[(b.category||'').toLowerCase()]||'artD';}
+function bouquetCard(b){const img=b.photo_url?'<img src="'+b.photo_url+'" style="width:100%;height:180px;object-fit:cover;display:block;border-radius:16px 16px 0 0" loading="lazy">':'<div style="width:100%;height:180px;display:flex;align-items:center;justify-content:center;font-size:64px;background-image:var(--grad);background-size:96px 96px">🌷</div>';const total=bouquetLikes.filter(l=>l.bouquet_id===b.id).length;const cms=comments.filter(c=>c.bouquet_id===b.id&&!c.parent_id);const isDay=b.is_day;const isHot=isDay||total>=5;return '<div class="fitem'+(isHot?' hot':'')+'" data-bouquet-id="'+b.id+'"><div class="fart '+artOf(b)+'"></div><div class="fbody">'+(isDay?'<div class="fmetaCat" style="color:var(--rose);font-weight:800">🌟 БУКЕТ ДНЯ</div>':'<div class="fmetaCat">'+esc(b.category||'другое')+'</div>')+'<div class="ftxt" style="font-weight:800;font-size:16px">'+esc(b.title)+'</div><div class="bPrice">'+b.price+' ₽</div><span class="tag '+(b.in_stock?'stock':'out')+'">'+(b.in_stock?'в наличии':'под заказ')+'</span><div class="fpills" style="margin-top:10px"><button class="fpill rose" onclick="openCard('+b.id+')"><svg class="icn"><use href="#i-heart"/></svg>'+total+'</button><button class="fpill" onclick="openComments('+b.id+')"><svg class="icn"><use href="#i-comment"/></svg>'+cms.length+'</button><button class="fpill" onclick="openOrder('+b.id+')">заказать</button></div></div></div>';}
+function renderFeed(){$('feed').innerHTML=bouquets.map(bouquetCard).join('')||'<div class="empty">Пока пусто — флорист скоро добавит букеты 🌷</div>';}
+function renderDay(){const d=bouquets.find(b=>b.is_day)||bouquets[0];$('dayBox').innerHTML=d?bouquetCard(d):'<div class="empty">Букет дня скоро появится</div>';}
+function openCard(id){const b=bouquets.find(x=>x.id===id);if(!b)return;curB=b;const img=b.photo_url?'<img src="'+b.photo_url+'" style="width:100%;max-height:320px;object-fit:cover;border-radius:16px">':'';track('view');$('cardBody').innerHTML=img+'<h3 style="margin-top:10px">'+esc(b.title)+'</h3><div class="bPrice" style="font-size:18px">'+b.price+' ₽</div><span class="tag '+(b.in_stock?'stock':'out')+'">'+(b.in_stock?'в наличии':'под заказ')+'</span><div style="margin-top:10px;font-size:14px;line-height:1.5;color:var(--ink)">'+richText(b.description||'')+'</div><button class="btn rose" onclick="openOrder('+b.id+');closeSheet(\'cardSheet\')">💐 Заказать</button><button class="btn soft" onclick="shareBouquet('+b.id+')">📤 Поделиться</button><button class="btn soft" onclick="closeSheet(\'cardSheet\')">Закрыть</button>';openSheet('cardSheet');}
+function openOrder(id){if(!me){toast('Войдите, чтобы заказать');openAuth();return;}const b=bouquets.find(x=>x.id===id);if(!b)return;curB=b;$('orderBody').innerHTML='<h3>Заказ: '+esc(b.title)+'</h3><div style="color:var(--gray);font-size:12px;margin-top:4px">'+b.price+' ₽</div><div class="row" style="margin-top:10px"><div class="opt on" id="kPick" onclick="setKind(\'pickup\')">самовывоз</div><div class="opt" id="kDel" onclick="setKind(\'delivery\')">доставка</div></div><div id="delFields" class="hidden"><input class="aIn" id="oAddr" placeholder="улица, дом, квартира (Вуктыл)" style="margin-top:10px"><input class="aIn" id="oRName" placeholder="имя получателя" style="margin-top:10px"><input class="aIn" id="oRPhone" placeholder="телефон получателя" style="margin-top:10px"><label class="chk" style="margin-top:10px"><input type="checkbox" id="oOther" onchange="otherToggle()"> я из другого города — заказываю для близкого человека в Вуктыле</label><div id="otherFields" class="hidden"><input class="aIn" id="oSName" placeholder="ваше имя (кто заказывает)" style="margin-top:10px"><input class="aIn" id="oSPhone" placeholder="ваш телефон / whatsapp" style="margin-top:10px"></div></div><textarea id="oNote" placeholder="комментарий (открытка, время доставки, пожелания)" style="margin-top:10px;min-height:80px;background:var(--bg);border:none;border-radius:14px;padding:12px;font-size:14px;width:100%"></textarea><div style="font-size:11px;color:var(--gray);margin-top:8px">Оплата: перевод / карта / наличные — флорист свяжется для уточнения.</div><button class="btn rose" onclick="submitOrder()">Отправить заказ</button><button class="btn soft" onclick="closeSheet(\'orderSheet\')">Закрыть</button>';setKind('pickup');openSheet('orderSheet');}
 let orderKind='pickup';
 function setKind(k){orderKind=k;$('kPick').classList.toggle('on',k==='pickup');$('kDel').classList.toggle('on',k==='delivery');$('delFields').classList.toggle('hidden',k!=='delivery');}
 function otherToggle(){$('otherFields').classList.toggle('hidden',!$('oOther').checked);}
-async function submitOrder(){
-  const o={user_id:me.id,bouquet_id:curB.id,kind:orderKind,note:$('oNote').value.trim()};
-  if(orderKind==='delivery'){o.address=$('oAddr').value.trim();o.recipient_name=$('oRName').value.trim();o.recipient_phone=$('oRPhone').value.trim();o.other_city=$('oOther').checked;if(o.other_city){o.sender_name=$('oSName').value.trim();o.sender_phone=$('oSPhone').value.trim();}
-    if(!o.address||!o.recipient_phone)return toast('Заполните адрес и телефон получателя');}
-  const{error}=await sb.from('orders').insert(o);
-  if(error)return toast(error.message);
-  hide('orderSheet');toast('Заказ отправлен флористу 🌷 Мы свяжемся для оплаты');}
-// квиз
-function openQuiz(){
- $('quizBody').innerHTML='<h3>Соберём вам букет 🌸</h3>'+
-  '<div style="font-size:12px;color:var(--gray);margin-top:4px">3 вопроса — и покажу подходящие</div>'+
-  '<div class="secHead" style="font-size:13px">Повод</div><div class="row" id="q1">'+qOpts(['день рождения','свидание','просто так','извинение'])+'</div>'+
-  '<div class="secHead" style="font-size:13px">Кому</div><div class="row" id="q2">'+qOpts(['маме','подруге','девушке','жене','коллеге'])+'</div>'+
-  '<div class="secHead" style="font-size:13px">Бюджет</div><div class="row" id="q3">'+qOpts(['до 2500','2500–4000','4000+'])+'</div>'+
-  '<button class="btn rose" style="margin-top:14px" onclick="quizGo()">Показать букеты</button>'+
-  '<button class="btn soft" onclick="hide(\'quizSheet\')">Закрыть</button>';
- show('quizSheet');}
-function qOpts(a){return a.map((o,i)=>'<div class="opt" onclick="qPick(this)">'+o+'</div>').join('');}
+async function submitOrder(){const o={user_id:me.id,bouquet_id:curB.id,kind:orderKind,note:$('oNote').value.trim()};if(orderKind==='delivery'){o.address=$('oAddr').value.trim();o.recipient_name=$('oRName').value.trim();o.recipient_phone=$('oRPhone').value.trim();o.sender_name=$('oSName').value.trim();o.sender_phone=$('oSPhone').value.trim();if(!o.address||!o.recipient_phone){toast('Заполните адрес и телефон получателя');return;}}const{error}=await sb.from('orders').insert(o);if(error){toast(error.message);return;}closeSheet('orderSheet');toast('Заказ отправлен флористу 🌷 Мы свяжемся для оплаты');track('order');}
+function openQuiz(){openQuizTab();openSheet('quizSheet');}
+function openQuizTab(){$('quizBox').innerHTML='<div class="secCard"><h4>Повод</h4><div class="row" id="q1">'+qOpts(['день рождения','свидание','просто так','8 марта','извинение'])+'</div></div><div class="secCard"><h4>Кому</h4><div class="row" id="q2">'+qOpts(['маме','подруге','девушке','жене','коллеге','себе'])+'</div></div><div class="secCard"><h4>Бюджет</h4><div class="row" id="q3">'+qOpts(['до 2500','2500–4000','4000+'])+'</div></div><button class="btn rose" onclick="quizGo()">Показать букеты</button>';$('quizBody').innerHTML=$('quizBox').innerHTML;}
+function qOpts(a){return a.map(o=>'<div class="opt" onclick="qPick(this)">'+o+'</div>').join('');}
 function qPick(el){[...el.parentElement.children].forEach(x=>x.classList.remove('on'));el.classList.add('on');}
-function quizGo(){const b=$('q3').querySelector('.on');hide('quizSheet');let max=Infinity,min=0;if(b){const t=b.textContent;if(t.startsWith('до'))max=+t.slice(3);else if(t.endsWith('+'))min=+t;else{const[m1,m2]=t.split('–').map(x=>+x);min=m1;max=m2;}}
- const fit=bouquets.filter(x=>x.in_stock&&x.price>=min&&x.price<=max);
- if(!fit.length)return toast('Под бюджет пока пусто — нажмите «собери мне» и флорист соберёт вручную');
- toast('Подобрал '+fit.length+' — листайте витрину');
- $('grid').innerHTML=fit.map(x=>dayCard(x,false)).join('');
- window.scrollTo({top:document.querySelector('.grid').offsetTop-80,behavior:'smooth'});}
+function quizGo(){const b=$('q3').querySelector('.on');closeSheet('quizSheet');let max=Infinity,min=0;if(b){const t=b.textContent;if(t.startsWith('до'))max=+t.slice(3);else if(t.endsWith('+'))min=+t.slice(0,-1);else{const[m1,m2]=t.split('–').map(x=>+x.replace(/\D/g,''));min=m1;max=m2;}}const fit=bouquets.filter(x=>x.in_stock&&x.price>=min&&x.price<=max);if(!fit.length){toast('Под бюджет пока пусто — напишите флористу, соберёт вручную');showTab('shop');return;}showTab('shop');setTimeout(()=>{$('feed').innerHTML=fit.map(bouquetCard).join('');toast('Подобрал '+fit.length+' букетов');},100);}
+function openComments(id){const b=bouquets.find(x=>x.id===id);if(!b)return;curB=b;$('commentsBody').innerHTML='<h3>'+esc(b.title)+'</h3><div id="cmtList" style="margin-top:10px;display:flex;flex-direction:column;gap:6px"></div>'+(me?commentInput('ci_'+id,'sendComment('+id+')','replyTag'):'<button class="btn soft" onclick="openAuth()">🔒 войди, чтобы комментировать</button>')+'<button class="btn soft" style="margin-top:10px" onclick="closeSheet(\'commentsSheet\')">Закрыть</button>';renderCmtList(id);openSheet('commentsSheet');}
+function commentInput(inputId,fn,tagId){return '<div class="crow"><input id="'+inputId+'" maxlength="500" placeholder="Твой отзыв..."><button onclick="'+fn+'">→</button></div><div id="'+tagId+'" class="hidden" style="font-size:11px;color:var(--gray);margin-top:4px"></div>';}
+function renderCmtList(bouquetId){const all=comments.filter(c=>c.bouquet_id===bouquetId);const tops=all.filter(c=>!c.parent_id);const byP={};all.filter(c=>c.parent_id).forEach(c=>{(byP[c.parent_id]=byP[c.parent_id]||[]).push(c);});const nicks={};all.forEach(c=>{if(c.user_id&&!nicks[c.user_id])nicks[c.user_id]=c.user_nick||'аноним';});const list=$('cmtList');if(!list)return;list.innerHTML=tops.length?tops.map(c=>cmtBlock(c,byP[c.id]||[],nicks)).join(''):'<div class="empty">Пока нет отзывов. Будь первым!</div>';}
+function cmtBlock(c,reps,nicks){return '<div class="cmt">'+cmtHead(c,nicks[c.user_id])+'<div class="cBody">'+richText(c.text)+'</div><div class="cActions"><button onclick="setReply('+c.id+',\''+esc(nicks[c.user_id]||'')+'\')">↩ ответить</button><button onclick="likeComment('+c.id+')">👏 '+(likesOf(c.id)?likesOf(c.id):'')+'</button>'+(reps.length?'<button onclick="toggleReplies('+c.id+')"><span id="reptxt_'+c.id+'">открыть ответы ('+reps.length+')</span></button>':'')+'</div><div class="reacts" id="cr_'+c.id+'">'+cReactsHtml(c.id)+'</div><div class="replies hidden" id="rep_'+c.id+'">'+reps.map(r=>cmtRow(r,nicks)).join('')+'</div></div>';}
+function cmtRow(c,nicks){return '<div class="cmt">'+cmtHead(c,nicks[c.user_id])+'<div class="cBody">'+richText(c.text)+'</div><div class="cActions"><button onclick="likeComment('+c.id+')">👏 '+(likesOf(c.id)?likesOf(c.id):'')+'</button></div><div class="reacts" id="cr_'+c.id+'">'+cReactsHtml(c.id)+'</div></div>';}
+function cmtHead(c,nick){return '<button class="repAbs" onclick="reportItem(\'comment\','+c.id+')">'+ic('i-flag')+'</button><div class="cHead"><span class="cAva" style="background:hsl('+((nick.charCodeAt(0)||0)*31%360)+',60%,45%)">'+(nick||'?').slice(0,1).toUpperCase()+'</span><span class="nickCol"><span class="nick">'+esc(nick||'аноним')+'</span><span class="laserLine"></span></span></div>';}
+function likesOf(id){return commentLikes.filter(l=>l.comment_id===id).length;}
+async function likeComment(id){if(!me){openAuth();return;}const cur=commentLikes.find(l=>l.comment_id===id&&l.user_id===me.id);if(cur){await sb.from('bouquet_comment_likes').delete().eq('id',cur.id);commentLikes=commentLikes.filter(l=>l.id!==cur.id);}else{const{data,error}=await sb.from('bouquet_comment_likes').insert({comment_id:id,user_id:me.id}).select();if(error){toast('Лайк: '+error.message);return;}commentLikes.push(data[0]);}renderCmtList(curB.id);}
+function cReactsOf(id){return commentReacts.filter(r=>r.comment_id===id);}
+function myCReact(id,e){return !!(me&&commentReacts.find(r=>r.comment_id===id&&r.user_id===me.id&&r.emoji===e));}
+function cReactsHtml(id){const rc=cReactsOf(id);const counts={};rc.forEach(r=>counts[r.emoji]=(counts[r.emoji]||0)+1);return REACTS.slice().sort((a,b)=>(counts[b.e]||0)-(counts[a.e]||0)).map(e=>{const n=counts[e.e]||0;const on=myCReact(id,e.e);return '<button class="rct'+(on?' on':'')+'" style="'+(on?'background:rgba(217,108,138,.18);border-color:rgba(217,108,138,.5)':'')+'" onclick="cReactToggle('+id+',\''+e.e+'\')"><span>'+e.e+'</span>'+(n?' '+n:'')+'</button>';}).join('');}
+async function cReactToggle(id,e){if(!me){openAuth();return;}const cur=commentReacts.find(r=>r.comment_id===id&&r.user_id===me.id&&r.emoji===e);if(cur){await sb.from('bouquet_comment_reactions').delete().eq('id',cur.id);commentReacts=commentReacts.filter(r=>r.id!==cur.id);}else{const{data,error}=await sb.from('bouquet_comment_reactions').insert({comment_id:id,emoji:e,user_id:me.id}).select();if(error){toast('Реакция: '+error.message);return;}commentReacts.push(data[0]);}const el=$('cr_'+id);if(el)el.innerHTML=cReactsHtml(id);}
+function setReply(id,nick){replyTo={id};document.querySelectorAll('[id^=replyTag]').forEach(t=>{t.classList.remove('hidden');t.innerHTML='ответ <b>@'+esc(nick)+'</b> · <span style="color:var(--red);cursor:pointer" onclick="clearReply()">отмена</span>';});}
+function clearReply(){replyTo=null;document.querySelectorAll('[id^=replyTag]').forEach(t=>t.classList.add('hidden'));}
+function toggleReplies(id){const el=$('rep_'+id);if(!el)return;const open=!el.classList.toggle('hidden');const b=$('reptxt_'+id);if(b)b.textContent=open?'скрыть ветку ответов ('+el.children.length+')':'открыть ответы ('+el.children.length+')';}
+async function sendComment(bouquetId){if(!me){openAuth();return;}const inp=$('ci_'+bouquetId);const t=inp.value.trim();if(!t)return;const{error}=await sb.from('bouquet_comments').insert({bouquet_id:bouquetId,text:t,user_id:me.id,user_nick:me.user_metadata?.nick||me.email?.split('@')[0]||'аноним',status:'approved',parent_id:replyTo?replyTo.id:null});inp.value='';if(error){toast('Ошибка: '+error.message);return;}clearReply();const{data}=await sb.from('bouquet_comments').select('*').eq('status','approved');comments=(data||[]).filter(x=>!x.hidden);renderCmtList(bouquetId);renderFeed();toast('Комментарий опубликован ✅');track('comment');}
+async function reportItem(type,id){if(!me){openAuth();return;}toast('🚩 Жалоба принята');}
+async function shareBouquet(id){const b=bouquets.find(x=>x.id===id);if(!b)return;const url=location.origin+location.pathname+'?bouquet='+id;track('share');try{await navigator.share({title:'Лепесток: '+b.title,text:b.title+' — '+b.price+' ₽',url});}catch(e){try{await navigator.clipboard.writeText(url);toast('Ссылка скопирована');}catch(e2){prompt('Скопируй ссылку:',url);}}}
+function openForm(){if(!me){openAuth();return;}$('modal').classList.remove('hidden');}
+function closeForm(){$('modal').classList.add('hidden');}
+async function onPhotoPick(inp){const f=inp.files[0];if(!f)return;pickedPhoto=f;$('fPhotoName').textContent='📷 '+f.name.slice(0,20);}
+async function submitBouquet(){const t=$('fTitle').value.trim(),p=+$('fPrice').value,d=$('fDesc').value.trim(),c=$('fCat').value.trim();if(!t||!p){toast('Заполни название и цену');return;}let photo_url=null;if(pickedPhoto){const path=me.id+'/'+Date.now()+'.jpg';const up=await sb.storage.from('bouquets').upload(path,pickedPhoto,{contentType:pickedPhoto.type,upsert:false});if(up.error){toast('Фото: '+up.error.message);return;}photo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;}const{error}=await sb.from('bouquets').insert({title:t,price:p,description:d,category:c,photo_url,in_stock:$('fStock').checked,is_day:$('fDay').checked,user_id:me.id});if(error){toast('Ошибка: '+error.message);return;}closeForm();$('fTitle').value='';$('fPrice').value='';$('fDesc').value='';$('fCat').value='';pickedPhoto=null;toast('Букет добавлен ✅');load();}
+function renderMine(){const box=$('myOrdersBox');if(!me){box.innerHTML='<button class="fpill lockPill" style="flex:1" onclick="openAuth()">🔒 войди, чтобы видеть свои заказы</button>';return;}sb.from('orders').select('*').eq('user_id',me.id).order('created_at',{ascending:false}).then(({data})=>{const list=data||[];box.innerHTML=list.length?list.map(o=>{const b=bouquets.find(x=>x.id===o.bouquet_id);return '<div class="secCard" style="margin-bottom:8px"><div class="ftxt" style="font-weight:800">'+(b?esc(b.title):'Букет')+'</div><div class="bPrice">'+(b?b.price+' ₽':'')+'</div><div style="font-size:12px;color:var(--gray);margin-top:4px">'+(o.kind==='delivery'?'🚚 Доставка: '+esc(o.address||''):'🏠 Самовывоз')+(o.recipient_name?' · '+esc(o.recipient_name):'')+'</div><div style="font-size:11px;color:var(--gray);margin-top:2px">статус: '+(o.status==='new'?'🆕 новый':o.status)+'</div></div>';}).join(''):'<div class="empty">Ты ещё не делал(а) заказов.<br>Смотри витрину и закажи букет 🌷</div>';});}
+async function showProfile(){if(!me){openAuth();return;}const pr = await sb.from('profiles').select('is_florist').eq('id',me.id).maybeSingle();myFlorist = pr.data?.is_florist || false;$('pBody').innerHTML='<div class="avaBig">'+(me.user_metadata?.nick||me.email?.split('@')[0]||'?').slice(0,1).toUpperCase()+'</div><div class="pNick">'+esc(me.user_metadata?.nick||'аноним')+'</div><div class="pSub">'+esc(me.email||'')+'</div>'+
+(myFlorist?'<button class="pBtn soft" onclick="location.href=\'seller.html\'"><svg class="icn"><use href="#i-shop"/></svg>🌷 Кабинет продавца</button>':'')+
+(isAdmin()?'<button class="pBtn soft" onclick="location.href=\'admin.html\'">⚙️ Админка</button>':'')+
+((me.user_metadata?.nick)?'':'<button class="pBtn soft" onclick="renameMe()">Сменить ник</button>')+
+'<button class="pBtn" style="background:rgba(211,58,44,.1);color:var(--red)" onclick="logoutMe()">Выйти</button>';}
+async function renameMe(){const n=prompt('Новый никнейм:',me.user_metadata?.nick||'');if(!n)return;const nick=n.trim().slice(0,16);if(nick.length<2){toast('Короткий ник');return;}await sb.from('profiles').update({nick}).eq('id',me.id);await sb.auth.updateUser({data:{nick}});toast('Ник обновлён ✅');showProfile();}
+async function logoutMe(){await sb.auth.signOut();showTab('shop');await refreshMe();toast('Ты вышел');}
+async function refreshMe(){const{data}=await sb.auth.getSession();me=data.session?data.session.user:null;if(me){const pr = await sb.from('profiles').select('is_florist').eq('id',me.id).maybeSingle();myFlorist = pr.data?.is_florist || false;}else myFlorist=false;$('tbUser').innerHTML=me?'<button class="avaBtn" onclick="showTab(\'profile\')">'+((me.user_metadata?.nick||me.email||'?').slice(0,1).toUpperCase())+'</button>':'<button class="miniBtn" onclick="openAuth()">войти</button>';}
+function openAuth(){$('auth').classList.remove('hidden');syncAuthMode();}
+function closeAuth(){$('auth').classList.add('hidden');}
+function toggleAuthMode(){authMode=authMode==='reg'?'login':'reg';syncAuthMode();}
+function syncAuthMode(){$('aNick').classList.toggle('hidden',authMode!=='reg');$('aGo').textContent=authMode==='reg'?'Создать аккаунт':'Войти';$('aSwap').textContent=authMode==='reg'?'Уже есть аккаунт? Войти':'Нет аккаунта? Регистрация';}
+async function doAuth(){const email=$('aEmail').value.trim(),pass=$('aPass').value;if(!email||pass.length<6){toast('Email и пароль от 6 символов');return;}if(authMode==='reg'){const nick=$('aNick').value.trim();if(nick.length<2){toast('Придумай никнейм (мин. 2 символа)');return;}const r=await sb.auth.signUp({email,password:pass,options:{data:{nick}}});if(r.error){toast(r.error.message);return;}if(r.data.session){await sb.from('profiles').insert({id:r.data.session.user.id,nick,is_florist:false}).catch(()=>{});toast('Добро пожаловать, '+nick+'!');track('reg');}else{toast('Подтверди письмо на '+email);}closeAuth();await refreshMe();load();}else{const r=await sb.auth.signInWithPassword({email,password:pass});if(r.error){toast(r.error.message);return;}toast('С возвращением!');closeAuth();await refreshMe();load();}}
 sb.auth.onAuthStateChange(()=>refreshMe());
-refreshMe();load();
+(function(){try{var q=new URLSearchParams(location.search),h=new Date().getHours();var n=q.get('night')==='1'?true:q.get('day')==='1'?false:(h>=23||h<5);if(n)document.body.classList.add('night');}catch(e){}})();
+renderTicker();
+refreshMe();
+load();
 </script>
 </body>
 </html>
