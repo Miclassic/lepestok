@@ -69,6 +69,9 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 .exRow .pr{font-weight:800;color:var(--coral);font-size:13px}
 .delIco{border:none;background:#FFF1F0;color:var(--red);border-radius:999px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
 .delIco .icn{width:15px;height:15px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.chip{border:2px solid rgba(148,163,184,.25);background:var(--bg);border-radius:999px;padding:8px 12px;font-size:11.5px;font-weight:700;color:var(--gray);cursor:pointer}
+.chip.on{border-color:var(--coral);background:var(--gradient);color:#fff}
 .bqRow{display:flex;gap:10px;align-items:center;padding:10px 12px;background:var(--card);border-radius:18px;box-shadow:var(--shadow);margin-bottom:8px}
 .bqRow .ph{width:52px;height:52px;border-radius:14px;flex:none;background:linear-gradient(135deg,#FFE5E5,#F5E6FF);display:flex;align-items:center;justify-content:center;color:var(--pink);overflow:hidden}
 .bqRow .ph .icn{width:24px;height:24px}
@@ -268,12 +271,12 @@ function renderBouquets(){
   ).join(''):'<div class="empty">'+icBig('i-flower')+'Пока нет букетов.<br>Нажми ＋ чтобы добавить</div>';
 }
 function openAddBouquet(){
-  pickedPhoto=null;
+  pickedPhoto=null;pickedCat='';
   $('bouqBody').innerHTML='<h3>Новый букет</h3>'+
     '<input id="fTitle" placeholder="Название">'+
     '<input id="fPrice" type="number" placeholder="Цена в рублях">'+
     '<textarea id="fDesc" placeholder="Описание (что входит)"></textarea>'+
-    '<input id="fCat" placeholder="Категория (розы / тюльпаны / ...)">'+
+    '<div style="font-size:11px;color:var(--gray);margin:4px 0 6px">Категория</div><div class="chips" id="fCatRow">'+['сборный','розы','тюльпаны','хризантемы','пионы','лилии','композиция'].map(c=>'<button type="button" class="chip" onclick="pickCat(this,\''+c+'\')">'+c+'</button>').join('')+'</div>'+
     '<button class="btn soft" onclick="document.getElementById(\'fPhoto\').click()">'+ic('i-camera')+'Фото</button>'+
     '<input type="file" id="fPhoto" accept="image/*" style="display:none" onchange="pickPhoto(this)">'+
     '<span id="fPhotoName" style="font-size:11px;color:var(--gray)"></span>'+
@@ -282,6 +285,8 @@ function openAddBouquet(){
     '<button class="btn soft" style="margin-top:8px" onclick="closeSheet(\'bouqSheet\')">Закрыть</button>';
   $('bouqSheet').classList.remove('hidden');
 }
+let pickedCat='';
+function pickCat(el,c){pickedCat=c;document.querySelectorAll('#fCatRow .chip').forEach(x=>x.classList.toggle('on',x.textContent===c));}
 function pickPhoto(inp){const f=inp.files[0];if(!f)return;pickedPhoto=f;$('fPhotoName').textContent='Файл: '+f.name.slice(0,20);}
 async function submitBouquet(){
   const t=$('fTitle').value.trim(),p=+$('fPrice').value;
@@ -293,7 +298,7 @@ async function submitBouquet(){
     if(up.error){toast('Фото: '+up.error.message);return;}
     photo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
   }
-  const res=await sb.from('bouquets').insert({title:t,price:p,description:$('fDesc').value.trim(),category:$('fCat').value.trim(),photo_url,in_stock:$('fStock').checked,user_id:me.id});
+  const res=await sb.from('bouquets').insert({title:t,price:p,description:$('fDesc').value.trim(),category:pickedCat,photo_url,in_stock:$('fStock').checked,user_id:me.id});
   if(res.error){toast('Ошибка: '+res.error.message);return;}
   closeSheet('bouqSheet');
   await refresh();
