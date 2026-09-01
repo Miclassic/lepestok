@@ -94,6 +94,10 @@ textarea{min-height:70px;resize:vertical}
 </style>
 </head>
 <body>
+<div id="dbg" style="position:fixed;top:0;left:0;right:0;background:#111;color:#0f0;font-size:10px;font-family:monospace;padding:6px;z-index:9999;white-space:pre-wrap"></div>
+<script>
+window.onerror=function(m,s,l,c){var d=document.getElementById('dbg');d.textContent+='ERR: '+m+' (line '+l+')\n';return false;};
+</script>
 <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
 <symbol id="i-box" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 2l9 4.5v11L12 22l-9-4.5v-11z"/><path d="M12 12l9-4.5M12 12L3 7.5M12 12v10"/></g></symbol>
 <symbol id="i-flower" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l2 3.5 4 .5-3 3 .5 4L12 11l-3.5 2 .5-4-3-3 4-.5zM4 14c0 5 4 8 8 8s8-3 8-8c0-2-2-3-4-3-2 0-4 1-4 1s-2-1-4-1-4 1-4 3z"/></symbol>
@@ -253,9 +257,9 @@ function renderComments(){
       '<button class="no" onclick="killComment('+c.id+')">🗑 удалить</button></div></div>';
   }).join(''):'<div class="empty">Отзывов пока нет 🎉</div>';
 }
-async function unhide(id){const res=await sb.from('bouquet_comments').update({hidden:false}).eq('id',id).select();if(res.error){alert('Ошибка: '+res.error.message);return;}viewMode==='seller'?await refreshSeller():await refresh();}
-async function hideComment(id){const res=await sb.from('bouquet_comments').update({hidden:true}).eq('id',id).select();if(res.error){alert('Ошибка: '+res.error.message);return;}viewMode==='seller'?await refreshSeller():await refresh();}
-async function killComment(id){if(!confirm('Удалить комментарий?'))return;const res=await sb.from('bouquet_comments').delete().eq('id',id);if(res.error){alert('Ошибка: '+res.error.message);return;}viewMode==='seller'?await refreshSeller():await refresh();}
+async function unhide(id){const res=await sb.from('bouquet_comments').update({hidden:false}).eq('id',id).select();if(res.error){alert('Ошибка: '+res.error.message);return;}if(viewMode==='seller'){await refreshSeller();}else{await refresh();}}
+async function hideComment(id){const res=await sb.from('bouquet_comments').update({hidden:true}).eq('id',id).select();if(res.error){alert('Ошибка: '+res.error.message);return;}if(viewMode==='seller'){await refreshSeller();}else{await refresh();}}
+async function killComment(id){if(!confirm('Удалить комментарий?'))return;const res=await sb.from('bouquet_comments').delete().eq('id',id);if(res.error){alert('Ошибка: '+res.error.message);return;}if(viewMode==='seller'){await refreshSeller();}else{await refresh();}}
 function dayKey(t){return new Date(t).toISOString().slice(0,10);}
 function sessionsFromEvents(events){const GAP=5*60*1000;const byDev={};events.forEach(e=>{const dev=e.device||'__anon__';(byDev[dev]=byDev[dev]||[]).push(new Date(e.created_at).getTime());});const sessions=[];Object.entries(byDev).forEach(([dev,ts])=>{ts.sort((a,b)=>a-b);let start=ts[0],last=ts[0];for(let i=1;i<ts.length;i++){if(ts[i]-last>GAP){sessions.push({dev,start,end:last,len:last-start});start=ts[i];}last=ts[i];}sessions.push({dev,start,end:last,len:last-start});});return sessions;}
 function computeMetrics(days){
@@ -405,7 +409,8 @@ async function sDelBouquet(id){
 function sRenderReviews(){
   const box=$('list');
   const ids=myBouquets.map(b=>b.id);
-  const list=myReviews.filter(c=>ids.includes(c.bouquet_id)).map(c=>{
+  const filtered=myReviews.filter(c=>ids.includes(c.bouquet_id));
+  const list=filtered.length?filtered.map(c=>{
     const b=myBouquets.find(x=>x.id===c.bouquet_id);
     return '<div class="card"><div class="mcat">'+whenRu(c.created_at)+' · '+(c.parent_id?'↩ ответ':' отзыв')+' · <b>'+esc(c.user_nick||'аноним')+'</b>'+(c.rating?' · ⭐'+c.rating:'')+'</div>'+
       (b?'<div class="mcat" style="color:#FF6B6B">к букету: '+esc(b.title)+'</div>':'')+
