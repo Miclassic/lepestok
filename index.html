@@ -230,14 +230,16 @@ body.night .cityFab{color:#FFB3B3;border-color:#FFB3B3}
 .pricePlate.mini{font-size:14px;padding:6px 24px}
 /* Премиальный фон витрины */
 #tab-shop {
+  position: relative;
+  overflow: hidden;
+  border-radius: 32px;
   background:
     linear-gradient(
       180deg,
-      rgba(250,247,241,.25),
-      rgba(250,247,241,.55)
+      rgba(250, 247, 241, 0.35),
+      rgba(250, 247, 241, 0.72)
     ),
-    url('./images/flower-bg.jpg') center top / 100% auto no-repeat;
-  background-color: #F8F4EC;
+    url('./images/flower-bg.jpg') center top / cover no-repeat;
 }
 
 /* Контент поверх изображения */
