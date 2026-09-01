@@ -81,9 +81,9 @@ textarea{min-height:80px;resize:vertical}
 .s-cancelled{background:#FFF5F5;color:#94A3B8;text-decoration:line-through}
 .bouquetRow{display:flex;gap:12px;align-items:flex-start}
 .bouquetRow .photo{width:100px;height:100px;border-radius:12px;object-fit:cover;flex:none;background:#FFF5F5}
-.bouquetRow .info{flex:1}
-.bouquetRow .title{font-weight:800;font-size:15px}
-.bouquetRow .price{background:linear-gradient(135deg,#FF6B6B,#A855F7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:800;font-size:14px;margin-top:2px}
+.bouquetRow .bInfo{flex:1}
+.bouquetRow .title{font-weight:800;font-size:15px;color:#1A1A2E}
+.bouquetRow .price{color:#FF6B6B;font-weight:800;font-size:14px;margin-top:2px}
 .bouquetRow .cat{font-size:11px;color:#94A3B8;margin-top:2px}
 .orderMeta{font-size:12px;color:#94A3B8;line-height:1.5}
 .orderMeta b{color:#1A1A2E}
@@ -184,7 +184,7 @@ function renderOrders(){
     const callBtn=o.recipient_phone?'<button class="day" onclick="call(\''+esc(o.recipient_phone)+'\')">📞 позвонить</button>':(o.sender_phone?'<button class="day" onclick="call(\''+esc(o.sender_phone)+'\')">📞 заказчик</button>':'');
     return '<div class="card"><div class="mcat">'+whenRu(o.created_at)+' · <span class="statusPill '+statusCls(o.status)+'">'+statusRu(o.status)+'</span></div>'+
       '<div class="bouquetRow">'+(b&&b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:40px">🌷</div>')+
-      '<div class="info"><div class="title">'+esc(b?b.title:'Букет удалён')+'</div><div class="price">'+(b?b.price+' ₽':'?')+'</div><div class="cat">'+kindRu+'</div></div></div>'+
+      '<div class="bInfo"><div class="title">'+esc(b?b.title:'Букет удалён')+'</div><div class="price">'+(b?b.price+' ₽':'?')+'</div><div class="cat">'+kindRu+'</div></div></div>'+
       '<div class="orderMeta">'+
         (o.recipient_name?'<div>👤 получатель: <b>'+esc(o.recipient_name)+'</b>'+(o.recipient_phone?' · '+esc(o.recipient_phone):'')+'</div>':'')+
         (o.address?'<div>📍 адрес: <b>'+esc(o.address)+'</b></div>':'')+
@@ -201,7 +201,7 @@ function renderBouquets(){
   const box=$('list');
   box.innerHTML=bouquets.length?bouquets.map(b=>
     '<div class="card"><div class="bouquetRow">'+(b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:40px;background:linear-gradient(135deg,#FFE5E5,#F5E6FF)">🌷</div>')+
-    '<div class="info"><div class="title">'+esc(b.title)+(b.is_day?' <span class="statusPill" style="background:rgba(255,107,107,.14);color:#FF6B6B">⭐ букет дня</span>':'')+'</div>'+
+    '<div class="bInfo"><div class="title">'+esc(b.title)+(b.is_day?' <span class="statusPill" style="background:rgba(255,107,107,.14);color:#FF6B6B">⭐ букет дня</span>':'')+'</div>'+
     '<div class="price">'+b.price+' ₽</div><div class="cat">'+esc(b.category||'без категории')+' · '+(b.in_stock?'<span style="color:#10B981">в наличии</span>':'<span style="color:#EF4444">под заказ</span>')+'</div></div></div>'+
     (b.user_id?'<div class="mcat" style="margin-top:4px">добавлен продавцом</div>':'')+
     '<div class="mbtns" style="margin-top:10px">'+
