@@ -438,8 +438,9 @@ function editCmt(id){
 }
 function cancelEdit(){editingCmt=null;document.querySelectorAll('[id^=replyTag]').forEach(t=>t.classList.add('hidden'));}
 async function delCmt(id){
-  if(!confirm('Удалить твой отзыв?'))return;
+  if(!confirm('Удалить твой отзыв? Ответы под ним тоже удалятся.'))return;
   const c=comments.find(x=>x.id===id);if(!c)return;
+  await sb.from('bouquet_comments').delete().eq('parent_id',id);
   const{error}=await sb.from('bouquet_comments').delete().eq('id',id).eq('user_id',me.id);
   if(error){handleSBError(error,'Удаление');return;}
   await reloadComments(c.bouquet_id);toast('Отзыв удалён');
