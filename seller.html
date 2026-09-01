@@ -6,283 +6,335 @@
 <title>Лепесток · кабинет продавца</title>
 <link href="https://fonts.cdnfonts.com/css/opposans" rel="stylesheet">
 <style>
-:root{--bg:#FFF7F5;--card:#FFFFFF;--ink:#1A1A2E;--gray:#94A3B8;--red:#EF4444;--yel:#F59E0B;--grn:#10B981;--gold:#D97706;--coral:#FF6B6B;--pink:#FF6B9D;--purple:#A855F7;--gradient:linear-gradient(135deg,#FF6B6B 0%,#FF6B9D 50%,#A855F7 100%);--shadow:0 6px 20px rgba(120,60,10,.08)}
+:root{--bg:#FFF7F5;--card:#FFFFFF;--ink:#1A1A2E;--gray:#94A3B8;--red:#EF4444;--yel:#F59E0B;--grn:#10B981;--gold:#D97706;--coral:#FF6B6B;--pink:#FF6B9D;--purple:#A855F7;--gradient:linear-gradient(135deg,#FF6B6B 0%,#FF6B9D 50%,#A855F7 100%);--glass:rgba(255,255,255,.9);--shadow:0 6px 20px rgba(120,60,10,.08)}
 *{box-sizing:border-box;margin:0;padding:0;font-family:'OPPO Sans',system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
-body{background:linear-gradient(160deg,#FFF7F5 0%,#FFEDEB 45%,#F6ECFF 100%);color:var(--ink);min-height:100vh;padding:16px 14px 34px}
-.box{max-width:620px;margin:0 auto}
-.head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.headLogo{width:44px;height:44px;border-radius:15px;background:var(--gradient);display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 8px 22px rgba(255,107,107,.35);flex:none}
-.headLogo .icn{width:24px;height:24px}
-h1{font-size:17px;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.5px}
-.who{font-size:10.5px;color:var(--gray);margin-top:1px}
-.card{background:var(--card);border-radius:18px;padding:12px;box-shadow:var(--shadow);margin-bottom:10px}
-input,textarea,select{width:100%;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:11px;font-size:14px;margin-bottom:8px;font-family:inherit}
-input:focus,textarea:focus{outline:none;border-color:var(--coral)}
-textarea{min-height:70px;resize:vertical}
-.btn{width:100%;background:var(--gradient);color:#fff;border:none;border-radius:999px;padding:12px;font-weight:800;font-size:14px;cursor:pointer}
-.err{color:var(--red);font-size:12px;margin-top:6px}
-.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
-.tab{background:var(--card);border:none;border-radius:14px;padding:10px 4px;font-weight:700;font-size:10.5px;color:var(--gray);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;box-shadow:var(--shadow);white-space:nowrap;transition:.25s}
-.tab .icn{width:14px;height:14px;flex:none}
-.tab.on{background:var(--gradient);color:#fff;box-shadow:0 6px 18px rgba(255,107,107,.35)}
-.badge{min-width:17px;height:17px;padding:0 5px;border-radius:999px;font-size:9.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;background:var(--gradient);color:#fff;flex:none}
-.tab.on .badge{background:rgba(255,255,255,.28);color:#fff}
-.mcat{font-size:10.5px;color:var(--gray);margin-bottom:5px}
-.mtxt{font-size:13.5px;line-height:1.45;margin-bottom:8px}
-.mbtns{display:flex;gap:6px;flex-wrap:wrap}
-.mbtns button{flex:1;border:none;border-radius:999px;padding:9px 6px;font-weight:700;font-size:11px;cursor:pointer;white-space:nowrap}
-.ok{background:linear-gradient(135deg,#10B981,#059669);color:#fff}
-.no{background:#FFF1F0;color:var(--red)}
-.day{background:var(--gradient);color:#fff}
-.info{background:linear-gradient(135deg,#F59E0B,#D97706);color:#fff}
-.empty{text-align:center;color:var(--gray);padding:26px;font-size:13px}
-.out{background:none;border:none;color:var(--gray);font-size:12px;margin-top:10px;cursor:pointer;width:100%}
-.hidden{display:none!important}
-.who2{font-size:10.5px;color:var(--gray);margin-bottom:10px}
-.rangeSel{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
-.rangeSel button{background:var(--card);border:none;border-radius:999px;padding:7px 11px;font-size:10.5px;font-weight:700;color:var(--gray);cursor:pointer;box-shadow:var(--shadow)}
-.rangeSel button.on{background:var(--gradient);color:#fff;box-shadow:0 4px 14px rgba(255,107,107,.3)}
-.statusPill{display:inline-block;border-radius:999px;padding:3px 9px;font-size:10px;font-weight:800}
-.s-new{background:rgba(255,107,107,.14);color:var(--coral)}
+body{background:linear-gradient(160deg,#FFF7F5 0%,#FFEDEB 45%,#F6ECFF 100%);color:var(--ink);min-height:100vh}
+.top{position:fixed;top:0;left:0;right:0;z-index:20;background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 24px rgba(0,0,0,.06)}
+.topIn{max-width:620px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:12px 14px}
+.shopAva{width:44px;height:44px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:22px;flex:none;overflow:hidden;box-shadow:0 6px 18px rgba(255,107,107,.35)}
+.shopAva img{width:100%;height:100%;object-fit:cover}
+.shopName{font-weight:800;font-size:15px}
+.shopStatus{font-size:10.5px;color:var(--grn);font-weight:700;display:flex;align-items:center;gap:4px}
+.shopStatus::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--grn)}
+main{max-width:620px;margin:0 auto;padding:76px 14px 96px}
+.secTitle{font-size:15px;font-weight:800;margin:2px 0 10px;display:flex;align-items:center;gap:7px}
+.secTitle .cnt{background:var(--gradient);color:#fff;border-radius:999px;padding:2px 9px;font-size:10px;font-weight:800}
+.chatRow{display:flex;gap:10px;align-items:center;padding:10px 12px;background:var(--card);border-radius:18px;box-shadow:var(--shadow);margin-bottom:8px;cursor:pointer;transition:.2s}
+.chatRow:active{transform:scale(.98)}
+.chatRow.fresh{border:2px solid rgba(255,107,107,.4)}
+.chatAva{width:52px;height:52px;border-radius:50%;flex:none;background:linear-gradient(135deg,#FFE5E5,#F5E6FF);display:flex;align-items:center;justify-content:center;font-size:24px;overflow:hidden}
+.chatAva img{width:100%;height:100%;object-fit:cover}
+.chatBody{flex:1;min-width:0}
+.chatTop{display:flex;justify-content:space-between;gap:6px;align-items:center}
+.chatName{font-weight:800;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chatTime{font-size:10px;color:var(--gray);flex:none}
+.chatMsg{font-size:11.5px;color:var(--gray);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chatMeta{flex:none}
+.stPill{display:inline-block;border-radius:999px;padding:4px 9px;font-size:9.5px;font-weight:800}
+.s-new{background:var(--gradient);color:#fff;box-shadow:0 4px 12px rgba(255,107,107,.4)}
 .s-accepted{background:rgba(245,158,11,.14);color:var(--yel)}
 .s-ready{background:rgba(217,119,6,.14);color:var(--gold)}
 .s-delivered{background:rgba(16,185,129,.14);color:var(--grn)}
 .s-cancelled{background:rgba(148,163,184,.14);color:var(--gray);text-decoration:line-through}
-.bouquetRow{display:flex;gap:10px;align-items:flex-start}
-.bouquetRow .photo{width:76px;height:76px;border-radius:12px;object-fit:cover;flex:none;background:var(--bg)}
-.bouquetRow .bInfo{flex:1;min-width:0}
-.bouquetRow .title{font-weight:800;font-size:13.5px}
-.bouquetRow .price{color:var(--coral);font-weight:800;font-size:13px;margin-top:2px}
-.bouquetRow .cat{font-size:10.5px;color:var(--gray);margin-top:2px}
-.orderMeta{font-size:11.5px;color:var(--gray);line-height:1.5;margin-top:6px}
-.orderMeta b{color:var(--ink)}
-.addForm{background:linear-gradient(180deg,rgba(255,107,107,.06),#fff);border:2px dashed rgba(255,107,107,.4);border-radius:18px;padding:12px;margin-bottom:10px}
-.addForm h3{font-size:13px;margin-bottom:8px;font-weight:800}
-.addForm label{display:flex;gap:8px;align-items:center;font-size:12px;margin-top:6px;cursor:pointer}
-.addForm input[type=checkbox]{width:auto;margin:0}
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:20;background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;box-shadow:0 -4px 24px rgba(0,0,0,.08)}
+.bnav button{flex:1;border:none;background:none;padding:9px 2px calc(9px + env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--gray);font-size:9.5px;font-weight:700;cursor:pointer;position:relative}
+.bnav button .icn{width:20px;height:20px}
+.bnav button.on{color:var(--coral)}
+.bnav .nb{position:absolute;top:5px;right:calc(50% - 20px);min-width:15px;height:15px;border-radius:999px;background:var(--gradient);color:#fff;font-size:8.5px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.fab{position:fixed;right:16px;bottom:calc(78px + env(safe-area-inset-bottom));width:54px;height:54px;border:none;border-radius:50%;background:var(--gradient);color:#fff;font-size:26px;cursor:pointer;box-shadow:0 10px 30px rgba(255,107,107,.45);z-index:19}
+.card{background:var(--card);border-radius:18px;padding:12px;box-shadow:var(--shadow);margin-bottom:10px}
+input,textarea{width:100%;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:11px;font-size:14px;margin-bottom:8px;font-family:inherit}
+input:focus,textarea:focus{outline:none;border-color:var(--coral)}
+.btn{width:100%;background:var(--gradient);color:#fff;border:none;border-radius:999px;padding:13px;font-weight:800;font-size:14px;cursor:pointer}
+.btn.soft{background:var(--bg);color:var(--ink)}
+.btn.green{background:linear-gradient(135deg,#10B981,#059669)}
+.btn.amber{background:linear-gradient(135deg,#F59E0B,#D97706)}
+.btn.danger{background:#FFF1F0;color:var(--red)}
+.rowBtns{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.sheet{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:50;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px)}
+.sheetIn{background:var(--card);width:100%;max-width:560px;border-radius:24px 24px 0 0;padding:16px 14px 24px;max-height:88vh;overflow-y:auto;animation:rise .3s ease}
+.sheetIn h3{font-size:16px;font-weight:800;margin-bottom:8px}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.hidden{display:none!important}
+.empty{text-align:center;color:var(--gray);padding:30px;font-size:13px}
+.oLine{font-size:13px;line-height:1.6;color:var(--gray);margin-bottom:4px}
+.oLine b{color:var(--ink)}
+.exRow{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card);border-radius:16px;box-shadow:var(--shadow);margin-bottom:8px}
+.exRow .nm{flex:1;font-weight:700;font-size:13px}
+.exRow .pr{font-weight:800;color:var(--coral);font-size:13px}
+.exRow .del{border:none;background:#FFF1F0;color:var(--red);border-radius:999px;padding:7px 11px;font-weight:700;font-size:11px;cursor:pointer}
+.bqRow{display:flex;gap:10px;align-items:center;padding:10px 12px;background:var(--card);border-radius:18px;box-shadow:var(--shadow);margin-bottom:8px}
+.bqRow .ph{width:52px;height:52px;border-radius:14px;object-fit:cover;flex:none;background:linear-gradient(135deg,#FFE5E5,#F5E6FF);display:flex;align-items:center;justify-content:center;font-size:24px}
+.bqRow .inf{flex:1;min-width:0}
+.bqRow .tt{font-weight:800;font-size:13px}
+.bqRow .pp{color:var(--coral);font-weight:800;font-size:12.5px}
 .icn{width:1.05em;height:1.05em;display:inline-block;vertical-align:-.15em;flex:none}
+#toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(30,41,59,.95);color:#F1F5F9;border:2px solid rgba(255,107,107,.4);border-radius:16px;font-weight:700;font-size:13px;padding:12px 20px;text-align:center;max-width:82vw;z-index:99}
+#toast:not(.hidden){animation:toastIn .3s ease}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,-50%) scale(.85)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
 </style>
 </head>
 <body>
 <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
 <symbol id="i-box" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 2l9 4.5v11L12 22l-9-4.5v-11z"/><path d="M12 12l9-4.5M12 12L3 7.5M12 12v10"/></g></symbol>
 <symbol id="i-flower" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l2 3.5 4 .5-3 3 .5 4L12 11l-3.5 2 .5-4-3-3 4-.5zM4 14c0 5 4 8 8 8s8-3 8-8c0-2-2-3-4-3-2 0-4 1-4 1s-2-1-4-1-4 1-4 3z"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.8l2.6 5.6 6 .7-4.5 4.1 1.2 5.9L12 16.2l-5.3 2.9 1.2-5.9L3.4 9.1l6-.7z"/></symbol>
 <symbol id="i-comment" viewBox="0 0 24 24"><path fill="currentColor" d="M4 4h16v12H9l-5 4z"/></symbol>
 <symbol id="i-shop" viewBox="0 0 24 24"><path fill="currentColor" d="M3 9h18v11H3zM6 6h12l2 3H4z"/></symbol>
 </svg>
-<div class="box">
-<div class="head">
-  <div class="headLogo"><svg class="icn"><use href="#i-shop"/></svg></div>
-  <div>
-    <h1>ЛЕПЕСТОК · ПРОДАВЕЦ</h1>
-    <div class="who" id="who"></div>
+<div class="top">
+  <div class="topIn">
+    <div class="shopAva" id="shopAva">🌷</div>
+    <div>
+      <div class="shopName" id="shopName">Цветочная лавка</div>
+      <div class="shopStatus">кабинет продавца</div>
+    </div>
   </div>
 </div>
-<div id="loginBox" class="card hidden">
-  <div class="who2">Вход для продавцов цветочных магазинов.</div>
-  <input id="email" type="email" placeholder="Email">
-  <input id="pass" type="password" placeholder="Пароль">
-  <button class="btn" onclick="doLogin()">Войти</button>
-  <div class="err" id="loginErr"></div>
-</div>
-<div id="denied" class="hidden">
-  <div class="card" style="text-align:center">
-    <div style="font-size:36px;margin-bottom:6px">🚫</div>
-    <div style="font-weight:800;margin-bottom:6px">Нет доступа</div>
-    <div style="font-size:12px;color:var(--gray)">Этот аккаунт не является продавцом. Обратитесь к администратору сайта.</div>
-    <button class="btn" style="margin-top:12px;background:var(--bg);color:var(--ink)" onclick="logout()">Выйти</button>
+<main>
+  <section id="sec-orders">
+    <div class="secTitle">Заказы <span class="cnt" id="cntOrders">0</span></div>
+    <div id="orderList"></div>
+  </section>
+  <section id="sec-bouquets" class="hidden">
+    <div class="secTitle">Мои букеты <span class="cnt" id="cntBouq">0</span></div>
+    <div id="bouqList"></div>
+  </section>
+  <section id="sec-extras" class="hidden">
+    <div class="secTitle">Допы к букетам</div>
+    <div class="card"><input id="exName" placeholder="Название (Открытка с вашими словами)"><input id="exPrice" type="number" placeholder="Цена в рублях (0 = бесплатно)"><button class="btn" onclick="addExtra()">＋ Добавить доп</button></div>
+    <div id="extraList"></div>
+  </section>
+  <section id="sec-reviews" class="hidden">
+    <div class="secTitle">Отзывы <span class="cnt" id="cntRev">0</span></div>
+    <div id="revList"></div>
+  </section>
+  <section id="sec-shop" class="hidden">
+    <div class="secTitle">Мой магазин</div>
+    <div class="card">
+      <input id="shName" placeholder="Название магазина">
+      <input id="shPhone" placeholder="Телефон">
+      <input id="shAddr" placeholder="Адрес">
+      <textarea id="shDesc" placeholder="Описание"></textarea>
+      <button class="btn soft" onclick="document.getElementById('shLogo').click()">📷 Логотип</button>
+      <input type="file" id="shLogo" accept="image/*" style="display:none" onchange="pickLogo(this)">
+      <button class="btn" style="margin-top:8px" onclick="saveShop()">Сохранить</button>
+    </div>
+    <button class="btn danger" onclick="logout()">Выйти</button>
+  </section>
+</main>
+<button class="fab hidden" id="fabBouq" onclick="openAddBouquet()">＋</button>
+<nav class="bnav">
+  <button class="on" id="nvOrders" onclick="showSec('orders')"><svg class="icn"><use href="#i-box"/></svg>Заказы<span class="nb hidden" id="nbOrders"></span></button>
+  <button id="nvBouquets" onclick="showSec('bouquets')"><svg class="icn"><use href="#i-flower"/></svg>Букеты</button>
+  <button id="nvExtras" onclick="showSec('extras')"><svg class="icn"><use href="#i-star"/></svg>Допы</button>
+  <button id="nvReviews" onclick="showSec('reviews')"><svg class="icn"><use href="#i-comment"/></svg>Отзывы</button>
+  <button id="nvShop" onclick="showSec('shop')"><svg class="icn"><use href="#i-shop"/></svg>Магазин</button>
+</nav>
+<div id="orderSheet" class="sheet hidden" onclick="if(event.target.id==='orderSheet')closeSheet('orderSheet')"><div class="sheetIn" id="orderBody"></div></div>
+<div id="bouqSheet" class="sheet hidden" onclick="if(event.target.id==='bouqSheet')closeSheet('bouqSheet')"><div class="sheetIn" id="bouqBody"></div></div>
+<div id="loginBox" class="sheet" style="align-items:center;background:var(--bg)">
+  <div class="sheetIn" style="border-radius:24px;max-width:420px;margin:0 16px">
+    <h3>Вход для продавца</h3>
+    <input id="email" type="email" placeholder="Email">
+    <input id="pass" type="password" placeholder="Пароль">
+    <button class="btn" onclick="doLogin()">Войти</button>
+    <div id="loginErr" style="color:var(--red);font-size:12px;margin-top:6px"></div>
   </div>
 </div>
-<div id="panel" class="hidden">
-  <div class="tabs">
-    <button class="tab on" id="tabOrders" onclick="setTab('orders')"><svg class="icn"><use href="#i-box"/></svg>Заказы<span class="badge" id="cOrders">0</span></button>
-    <button class="tab" id="tabBouquets" onclick="setTab('bouquets')"><svg class="icn"><use href="#i-flower"/></svg>Мои букеты</button>
-    <button class="tab" id="tabReviews" onclick="setTab('reviews')"><svg class="icn"><use href="#i-comment"/></svg>Отзывы</button>
-  </div>
-  <div id="list"></div>
-  <button class="out" onclick="logout()">Выйти</button>
-</div>
-</div>
+<div id="toast" class="hidden"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const sb=supabase.createClient('https://dhwkkbtrhexywymegwoo.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRod2trYnRyaGV4eXd5bWVnd29vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMDUxODMsImV4cCI6MjEwMzc4MTE4M30.NAyY4dCeRRC2OznENuNCfvr-mKqACyMU61K-y-PkRIQ');
-let me=null,isFlorist=false,myBouquets=[],myOrders=[],myReviews=[];
-let tab='orders',orderFilter='new',pickedPhoto=null;
+let me=null,shop=null,myBouquets=[],myOrders=[],myReviews=[],myExtras=[],pickedPhoto=null,pickedLogo=null;
 function $(id){return document.getElementById(id);}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('hidden'),2400);}
+function closeSheet(id){$(id).classList.add('hidden');}
 function whenRu(t){try{return new Date(t).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
-function statusRu(s){return({new:'🆕 новый',accepted:'⏳ принят',ready:'✅ готов',delivered:'🚚 доставлен',cancelled:'❌ отменён'})[s]||s;}
-function statusCls(s){return 's-'+s;}
+function statusRu(s){return({new:'новый',accepted:'принят',ready:'готов',delivered:'доставлен',cancelled:'отменён'})[s]||s;}
 async function boot(){
   const {data}=await sb.auth.getSession();
-  if(!data.session){$('loginBox').classList.remove('hidden');return;}
+  if(!data.session){return;}
   me=data.session.user;
-  const pr=await sb.from('profiles').select('is_florist,nick').eq('id',me.id).maybeSingle();
-  if(!pr.data||!pr.data.is_florist){$('loginBox').classList.add('hidden');$('denied').classList.remove('hidden');return;}
-  isFlorist=true;
-  $('loginBox').classList.add('hidden');$('panel').classList.remove('hidden');
-  $('who').textContent='продавец: '+(me.email||'');
+  const pr=await sb.from('profiles').select('is_florist').eq('id',me.id).maybeSingle();
+  if(!pr.data||!pr.data.is_florist){return;}
+  $('loginBox').classList.add('hidden');
   await refresh();
 }
 async function doLogin(){
-  const email=$('email').value.trim(),pass=$('pass').value;
-  const {error}=await sb.auth.signInWithPassword({email,password:pass});
+  const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('pass').value});
   if(error){$('loginErr').textContent='Неверный email или пароль';return;}
-  await boot();
+  location.reload();
 }
 async function logout(){await sb.auth.signOut();location.reload();}
 async function refresh(){
-  if(!me)return;
+  const sh=await sb.from('shops').select('*').eq('owner_id',me.id).maybeSingle();
+  shop=sh.data||null;
+  if(shop){
+    $('shopName').textContent=shop.name;
+    if(shop.logo_url)$('shopAva').innerHTML='<img src="'+shop.logo_url+'">';
+    $('shName').value=shop.name||'';$('shPhone').value=shop.phone||'';$('shAddr').value=shop.address||'';$('shDesc').value=shop.description||'';
+    const ex=await sb.from('shop_extras').select('*').eq('shop_id',shop.id).order('created_at');
+    myExtras=ex.data||[];
+  }
   const b=await sb.from('bouquets').select('*').eq('user_id',me.id).order('created_at',{ascending:false});
   myBouquets=b.data||[];
-  const myIds=myBouquets.map(x=>x.id);
-  if(myIds.length){
-    const o=await sb.from('orders').select('*').in('bouquet_id',myIds).order('created_at',{ascending:false});
+  const ids=myBouquets.map(x=>x.id);
+  if(ids.length){
+    const o=await sb.from('orders').select('*').in('bouquet_id',ids).order('created_at',{ascending:false});
     myOrders=o.data||[];
-    const r=await sb.from('bouquet_comments').select('*').in('bouquet_id',myIds).order('created_at',{ascending:false});
+    const r=await sb.from('bouquet_comments').select('*').in('bouquet_id',ids).order('created_at',{ascending:false});
     myReviews=r.data||[];
   }else{myOrders=[];myReviews=[];}
-  $('cOrders').textContent=myOrders.filter(o=>o.status==='new').length;
-  renderList();
+  const fresh=myOrders.filter(o=>o.status==='new').length;
+  $('cntOrders').textContent=myOrders.length;
+  $('cntBouq').textContent=myBouquets.length;
+  $('cntRev').textContent=myReviews.length;
+  if(fresh>0){$('nbOrders').classList.remove('hidden');$('nbOrders').textContent=fresh;}else{$('nbOrders').classList.add('hidden');}
+  renderOrders();renderBouquets();renderExtras();renderReviews();
 }
-function setTab(t){tab=t;['Orders','Bouquets','Reviews'].forEach(k=>$('tab'+k).classList.toggle('on',t===k.toLowerCase()));renderList();}
-function setOrderFilter(f){orderFilter=f;renderList();}
-function renderList(){
-  if(tab==='orders')renderOrders();
-  else if(tab==='bouquets')renderBouquets();
-  else if(tab==='reviews')renderReviews();
+function showSec(s){
+  ['orders','bouquets','extras','reviews','shop'].forEach(k=>$('sec-'+k).classList.toggle('hidden',k!==s));
+  ['Orders','Bouquets','Extras','Reviews','Shop'].forEach(k=>$('nv'+k).classList.toggle('on',k.toLowerCase()===s));
+  $('fabBouq').classList.toggle('hidden',s!=='bouquets');
 }
 function renderOrders(){
-  const box=$('list');
-  const filters=[['new','🆕 новые'],['accepted','⏳ приняты'],['ready','✅ готовы'],['delivered','🚚 доставлены'],['cancelled','❌ отменены']];
-  const filtered=myOrders.filter(o=>o.status===orderFilter);
-  const cards=filtered.length?filtered.map(o=>{
+  const box=$('orderList');
+  box.innerHTML=myOrders.length?myOrders.map(o=>{
     const b=myBouquets.find(x=>x.id===o.bouquet_id);
-    const kindRu=o.kind==='delivery'?'🚚 доставка':'🏠 самовывоз';
-    const next=({new:'accepted',accepted:'ready',ready:'delivered'})[o.status];
-    const cancelBtn=(o.status!=='delivered'&&o.status!=='cancelled')?'<button class="no" onclick="updateOrder('+o.id+',\'cancelled\')">отменить</button>':'';
-    const nextBtn=next?'<button class="ok" onclick="updateOrder('+o.id+',\''+next+'\')">→ '+statusRu(next)+'</button>':'';
-    const back=({delivered:'ready',ready:'accepted',accepted:'new'})[o.status];
-    const backBtn=back?'<button class="info" onclick="updateOrder('+o.id+',\''+back+'\')">← назад</button>':'';
-    const callBtn=o.recipient_phone?'<button class="day" onclick="call(\''+esc(o.recipient_phone)+'\')">📞 позвонить</button>':(o.sender_phone?'<button class="day" onclick="call(\''+esc(o.sender_phone)+'\')">📞 заказчик</button>':'');
-    return '<div class="card"><div class="mcat">'+whenRu(o.created_at)+' · <span class="statusPill '+statusCls(o.status)+'">'+statusRu(o.status)+'</span></div>'+
-      '<div class="bouquetRow">'+(b&&b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:34px">🌷</div>')+
-      '<div class="bInfo"><div class="title">'+esc(b?b.title:'Букет удалён')+'</div><div class="price">'+(b?b.price+' ₽':'?')+'</div><div class="cat">'+kindRu+'</div></div></div>'+
-      '<div class="orderMeta">'+
-        (o.recipient_name?'<div>👤 получатель: <b>'+esc(o.recipient_name)+'</b>'+(o.recipient_phone?' · '+esc(o.recipient_phone):'')+'</div>':'')+
-        (o.address?'<div>📍 адрес: <b>'+esc(o.address)+'</b></div>':'')+
-        (o.sender_name?'<div>📲 заказчик: <b>'+esc(o.sender_name)+'</b>'+(o.sender_phone?' · '+esc(o.sender_phone):'')+'</div>':'')+
-        (o.note?'<div>📝 комментарий: <i>'+esc(o.note)+'</i></div>':'')+
-      '</div>'+
-      '<div class="mbtns" style="margin-top:8px">'+callBtn+backBtn+nextBtn+cancelBtn+'</div></div>';
-  }).join(''):'<div class="empty">Нет заказов со статусом «'+statusRu(orderFilter)+'» 🎉</div>';
-  box.innerHTML='<div class="rangeSel">'+filters.map(f=>'<button class="'+(orderFilter===f[0]?'on':'')+'" onclick="setOrderFilter(\''+f[0]+'\')">'+f[1]+' ('+myOrders.filter(o=>o.status===f[0]).length+')</button>').join('')+'</div>'+cards;
+    const name=o.recipient_name||o.sender_name||'Клиент';
+    return '<div class="chatRow'+(o.status==='new'?' fresh':'')+'" onclick="openOrder('+o.id+')">'+
+      '<div class="chatAva">'+(b&&b.photo_url?'<img src="'+b.photo_url+'">':'🌷')+'</div>'+
+      '<div class="chatBody"><div class="chatTop"><span class="chatName">'+esc(name)+'</span><span class="chatTime">'+whenRu(o.created_at)+'</span></div>'+
+      '<div class="chatMsg">'+esc(b?b.title:'Букет')+' · '+((b?b.price:'?')+' ₽')+' · '+(o.kind==='delivery'?'доставка':'самовывоз')+'</div></div>'+
+      '<div class="chatMeta"><span class="stPill s-'+o.status+'">'+statusRu(o.status)+'</span></div></div>';
+  }).join(''):'<div class="empty">Пока нет заказов.<br>Как только кто-то закажет — он появится здесь 🌷</div>';
 }
-function call(p){window.location.href='tel:'+p.replace(/\s+/g,'');}
-async function updateOrder(id,status){
-  const res=await sb.from('orders').update({status}).eq('id',id).select();
-  if(res.error){alert('Ошибка: '+res.error.message);return;}
+function openOrder(id){
+  const o=myOrders.find(x=>x.id===id);if(!o)return;
+  const b=myBouquets.find(x=>x.id===o.bouquet_id);
+  let exHtml='';
+  if(o.extras&&o.extras.length){exHtml='<div class="oLine">➕ допы: <b>'+o.extras.map(e=>esc(e.name)+(e.price?' ('+e.price+' ₽)':'')).join(', ')+'</b></div>';}
+  const phone=o.recipient_phone||o.sender_phone;
+  $('orderBody').innerHTML='<h3>'+esc(b?b.title:'Букет')+' · '+(b?b.price+' ₽':'')+'</h3>'+
+    '<div class="oLine">👤 получатель: <b>'+esc(o.recipient_name||o.sender_name||'—')+'</b></div>'+
+    (phone?'<div class="oLine">📞 телефон: <b>'+esc(phone)+'</b></div>':'')+
+    (o.address?'<div class="oLine">📍 адрес: <b>'+esc(o.address)+'</b></div>':'')+
+    (o.sender_name&&o.recipient_name?'<div class="oLine">📲 заказчик: <b>'+esc(o.sender_name)+'</b>'+(o.sender_phone?' · '+esc(o.sender_phone):'')+'</div>':'')+
+    (o.note?'<div class="oLine">📝 комментарий: <i>'+esc(o.note)+'</i></div>':'')+
+    exHtml+
+    '<div class="oLine" style="margin-top:6px">статус: <span class="stPill s-'+o.status+'">'+statusRu(o.status)+'</span></div>'+
+    '<div class="rowBtns">'+
+      (phone?'<button class="btn" onclick="call(\''+esc(phone)+'\')">📞 Позвонить</button>':'')+
+      (o.status==='new'?'<button class="btn green" onclick="setStatus('+o.id+',\'accepted\')">✅ Принять заказ</button>':'')+
+      (o.status==='accepted'?'<button class="btn amber" onclick="setStatus('+o.id+',\'ready\')">💐 Готов</button>':'')+
+      (o.status==='ready'?'<button class="btn green" onclick="setStatus('+o.id+',\'delivered\')">🚚 Доставлен</button>':'')+
+      (o.status!=='delivered'&&o.status!=='cancelled'?'<button class="btn danger" onclick="setStatus('+o.id+',\'cancelled\')">Отменить</button>':'')+
+      '<button class="btn soft" onclick="closeSheet(\'orderSheet\')">Закрыть</button>'+
+    '</div>';
+  $('orderSheet').classList.remove('hidden');
+}
+function call(p){window.location.href='tel:'+p.replace(/\D/g,'');}
+async function setStatus(id,st){
+  const res=await sb.from('orders').update({status:st}).eq('id',id).select();
+  if(res.error){toast('Ошибка: '+res.error.message);return;}
+  closeSheet('orderSheet');
   await refresh();
 }
 function renderBouquets(){
-  const box=$('list');
-  const addForm='<div class="addForm"><h3>➕ Добавить новый букет</h3>'+
-    '<input id="fTitle" placeholder="Название (например: Нежный пион)">'+
-    '<input id="fPrice" type="number" placeholder="Цена в рублях">'+
-    '<textarea id="fDesc" placeholder="Описание — что входит в букет"></textarea>'+
-    '<input id="fCat" placeholder="Категория (розы / полевые / лилии / тюльпаны)">'+
-    '<button class="btn" style="background:var(--bg);color:var(--ink)" onclick="$(\'fPhoto\').click()">📷 Фото букета</button>'+
-    '<input type="file" id="fPhoto" accept="image/*" style="display:none" onchange="onPhotoPick(this)">'+
-    '<span id="fPhotoName" style="font-size:10.5px;color:var(--gray)"></span>'+
-    '<label><input type="checkbox" id="fStock" checked> В наличии</label>'+
-    '<label><input type="checkbox" id="fDay"> Букет дня</label>'+
-    '<button class="btn" style="margin-top:10px" onclick="submitBouquet()">Сохранить букет</button>'+
-    '</div>';
-  const list=myBouquets.length?myBouquets.map(b=>
-    '<div class="card"><div class="bouquetRow">'+(b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:34px;background:linear-gradient(135deg,#FFE5E5,#F5E6FF)">🌷</div>')+
-    '<div class="bInfo"><div class="title">'+esc(b.title)+(b.is_day?' <span class="statusPill s-new">⭐ букет дня</span>':'')+'</div>'+
-    '<div class="price">'+b.price+' ₽</div>'+
-    '<div class="cat">'+esc(b.category||'без категории')+' · '+(b.in_stock?'<span style="color:#10B981">в наличии</span>':'<span style="color:#EF4444">под заказ</span>')+'</div>'+
-    '</div></div>'+
-    (b.description?'<div class="mtxt" style="font-size:11.5px;color:var(--gray);margin-top:4px">'+esc(b.description)+'</div>':'')+
-    '<div class="mbtns" style="margin-top:8px">'+
-      (b.is_day?'<button class="no" onclick="toggleDay('+b.id+',false)">убрать из дня</button>':'<button class="day" onclick="toggleDay('+b.id+',true)">⭐ букет дня</button>')+
-      '<button class="info" onclick="toggleStock('+b.id+','+(b.in_stock?'false':'true')+')">'+(b.in_stock?'в под заказ':'в наличии')+'</button>'+
-      '<button class="no" onclick="delBouquet('+b.id+')">🗑 удалить</button>'+
-    '</div></div>'
-  ).join(''):'<div class="empty">Пока нет букетов. Добавь первый выше 🌷</div>';
-  box.innerHTML=addForm+list;
+  const box=$('bouqList');
+  box.innerHTML=myBouquets.length?myBouquets.map(b=>
+    '<div class="bqRow"><div class="ph">'+(b.photo_url?'<img src="'+b.photo_url+'" style="width:100%;height:100%;object-fit:cover;border-radius:14px">':'🌷')+'</div>'+
+    '<div class="inf"><div class="tt">'+esc(b.title)+(b.is_day?' ⭐':'')+'</div><div class="pp">'+b.price+' ₽ · '+(b.in_stock?'в наличии':'под заказ')+'</div></div>'+
+    '<button class="exRow del" style="flex:none" onclick="delBouquet('+b.id+')">🗑</button></div>'
+  ).join(''):'<div class="empty">Пока нет букетов. Нажми ＋ чтобы добавить</div>';
 }
-async function onPhotoPick(inp){const f=inp.files[0];if(!f)return;pickedPhoto=f;$('fPhotoName').textContent='📷 '+f.name.slice(0,20);}
+function openAddBouquet(){
+  pickedPhoto=null;
+  $('bouqBody').innerHTML='<h3>Новый букет</h3>'+
+    '<input id="fTitle" placeholder="Название">'+
+    '<input id="fPrice" type="number" placeholder="Цена в рублях">'+
+    '<textarea id="fDesc" placeholder="Описание (что входит)"></textarea>'+
+    '<input id="fCat" placeholder="Категория (розы / тюльпаны / ...)">'+
+    '<button class="btn soft" onclick="document.getElementById(\'fPhoto\').click()">📷 Фото</button>'+
+    '<input type="file" id="fPhoto" accept="image/*" style="display:none" onchange="pickPhoto(this)">'+
+    '<span id="fPhotoName" style="font-size:11px;color:var(--gray)"></span>'+
+    '<label style="display:flex;gap:8px;align-items:center;font-size:13px;margin:8px 0"><input type="checkbox" id="fStock" checked style="width:auto;margin:0"> В наличии</label>'+
+    '<button class="btn" onclick="submitBouquet()">Сохранить</button>'+
+    '<button class="btn soft" style="margin-top:8px" onclick="closeSheet(\'bouqSheet\')">Закрыть</button>';
+  $('bouqSheet').classList.remove('hidden');
+}
+function pickPhoto(inp){const f=inp.files[0];if(!f)return;pickedPhoto=f;$('fPhotoName').textContent='📷 '+f.name.slice(0,20);}
 async function submitBouquet(){
-  const t=$('fTitle').value.trim(),p=+$('fPrice').value,d=$('fDesc').value.trim(),c=$('fCat').value.trim();
-  if(!t||!p){alert('Заполни название и цену');return;}
+  const t=$('fTitle').value.trim(),p=+$('fPrice').value;
+  if(!t||!p){toast('Заполни название и цену');return;}
   let photo_url=null;
   if(pickedPhoto){
     const path=me.id+'/'+Date.now()+'.jpg';
-    const up=await sb.storage.from('bouquets').upload(path,pickedPhoto,{contentType:pickedPhoto.type,upsert:false});
-    if(up.error){alert('Фото: '+up.error.message);return;}
+    const up=await sb.storage.from('bouquets').upload(path,pickedPhoto,{contentType:pickedPhoto.type});
+    if(up.error){toast('Фото: '+up.error.message);return;}
     photo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
   }
-  if($('fDay').checked)await sb.from('bouquets').update({is_day:false}).eq('user_id',me.id).eq('is_day',true);
-  const res=await sb.from('bouquets').insert({title:t,price:p,description:d,category:c,photo_url,in_stock:$('fStock').checked,is_day:$('fDay').checked,user_id:me.id});
-  if(res.error){alert('Ошибка: '+res.error.message);return;}
-  pickedPhoto=null;
+  const res=await sb.from('bouquets').insert({title:t,price:p,description:$('fDesc').value.trim(),category:$('fCat').value.trim(),photo_url,in_stock:$('fStock').checked,user_id:me.id});
+  if(res.error){toast('Ошибка: '+res.error.message);return;}
+  closeSheet('bouqSheet');
   await refresh();
-}
-async function toggleDay(id,on){
-  if(on)await sb.from('bouquets').update({is_day:false}).eq('user_id',me.id).eq('is_day',true);
-  const res=await sb.from('bouquets').update({is_day:on}).eq('id',id).eq('user_id',me.id).select();
-  if(res.error){alert('Ошибка: '+res.error.message);return;}
-  await refresh();
-}
-async function toggleStock(id,on){
-  const res=await sb.from('bouquets').update({in_stock:on}).eq('id',id).eq('user_id',me.id).select();
-  if(res.error){alert('Ошибка: '+res.error.message);return;}
-  await refresh();
+  toast('Букет добавлен 🌷');
 }
 async function delBouquet(id){
-  if(!confirm('Удалить букет? Это действие нельзя отменить.'))return;
+  if(!confirm('Удалить букет?'))return;
   const res=await sb.from('bouquets').delete().eq('id',id).eq('user_id',me.id);
-  if(res.error){alert('Ошибка: '+res.error.message);return;}
+  if(res.error){toast('Ошибка: '+res.error.message);return;}
+  await refresh();
+}
+function renderExtras(){
+  const box=$('extraList');
+  box.innerHTML=myExtras.length?myExtras.map(e=>
+    '<div class="exRow"><div class="nm">'+esc(e.name)+'</div><div class="pr">'+(e.price?e.price+' ₽':'бесплатно')+'</div><button class="del" onclick="delExtra('+e.id+')">🗑</button></div>'
+  ).join(''):'<div class="empty">Допов пока нет. Добавь первый — например «Открытка» 🌸</div>';
+}
+async function addExtra(){
+  if(!shop){toast('Сначала заполни магазин');return;}
+  const n=$('exName').value.trim(),p=+$('exPrice').value||0;
+  if(!n){toast('Введи название допа');return;}
+  const res=await sb.from('shop_extras').insert({shop_id:shop.id,name:n,price:p});
+  if(res.error){toast('Ошибка: '+res.error.message);return;}
+  $('exName').value='';$('exPrice').value='';
+  await refresh();
+  toast('Доп добавлен ✨');
+}
+async function delExtra(id){
+  const res=await sb.from('shop_extras').delete().eq('id',id);
+  if(res.error){toast('Ошибка: '+res.error.message);return;}
   await refresh();
 }
 function renderReviews(){
-  const box=$('list');
-  const myIds=myBouquets.map(b=>b.id);
-  const list=myReviews.length?myReviews.filter(c=>myIds.includes(c.bouquet_id)).map(c=>{
+  const box=$('revList');
+  const ids=myBouquets.map(b=>b.id);
+  const list=myReviews.filter(c=>ids.includes(c.bouquet_id));
+  box.innerHTML=list.length?list.map(c=>{
     const b=myBouquets.find(x=>x.id===c.bouquet_id);
-    return '<div class="card"><div class="mcat">'+whenRu(c.created_at)+' · '+(c.parent_id?'↩ ответ':' отзыв')+' · <b>'+esc(c.user_nick||'аноним')+'</b>'+(c.rating?' · ⭐'+c.rating:'')+'</div>'+
-      (b?'<div class="mcat" style="color:#FF6B6B">к букету: '+esc(b.title)+'</div>':'')+
-      '<div class="mtxt">'+esc(c.text)+'</div>'+
-      '<div class="mbtns">'+
-        (c.hidden?'<button class="ok" onclick="unhideReview('+c.id+')">↩ вернуть</button>':'<button class="no" onclick="hideReview('+c.id+')">скрыть</button>')+
-        '<button class="no" onclick="killReview('+c.id+')">🗑 удалить</button>'+
-      '</div></div>';
-  }).join(''):'<div class="empty">Отзывов на ваши букеты пока нет 🎉</div>';
-  box.innerHTML=list;
+    return '<div class="card"><div style="font-size:11px;color:var(--gray)">'+whenRu(c.created_at)+' · <b>'+esc(c.user_nick||'аноним')+'</b>'+(c.rating?' · ⭐'+c.rating:'')+'</div>'+
+      (b?'<div style="font-size:11px;color:var(--coral);margin-top:2px">к букету: '+esc(b.title)+'</div>':'')+
+      '<div style="font-size:13.5px;margin-top:6px;line-height:1.5">'+esc(c.text)+'</div></div>';
+  }).join(''):'<div class="empty">Отзывов пока нет 🎉</div>';
 }
-async function unhideReview(id){
-  const c=myReviews.find(r=>r.id===id);
-  if(!c||!myBouquets.some(b=>b.id===c.bouquet_id)){alert('Нет доступа');return;}
-  const res=await sb.from('bouquet_comments').update({hidden:false}).eq('id',id).select();
-  if(res.error){alert('Ошибка: '+res.error.message);return;}
+function pickLogo(inp){const f=inp.files[0];if(!f)return;pickedLogo=f;toast('📷 '+f.name.slice(0,20));}
+async function saveShop(){
+  if(!shop){toast('Магазин не найден');return;}
+  let logo_url=shop.logo_url;
+  if(pickedLogo){
+    const path=me.id+'/logo_'+Date.now()+'.jpg';
+    const up=await sb.storage.from('bouquets').upload(path,pickedLogo,{contentType:pickedLogo.type});
+    if(up.error){toast('Лого: '+up.error.message);return;}
+    logo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
+  }
+  const res=await sb.from('shops').update({name:$('shName').value.trim(),phone:$('shPhone').value.trim(),address:$('shAddr').value.trim(),description:$('shDesc').value.trim(),logo_url}).eq('id',shop.id);
+  if(res.error){toast('Ошибка: '+res.error.message);return;}
+  pickedLogo=null;
   await refresh();
-}
-async function hideReview(id){
-  const c=myReviews.find(r=>r.id===id);
-  if(!c||!myBouquets.some(b=>b.id===c.bouquet_id)){alert('Нет доступа');return;}
-  const res=await sb.from('bouquet_comments').update({hidden:true}).eq('id',id).select();
-  if(res.error){alert('Ошибка: '+res.error.message);return;}
-  await refresh();
-}
-async function killReview(id){
-  const c=myReviews.find(r=>r.id===id);
-  if(!c||!myBouquets.some(b=>b.id===c.bouquet_id)){alert('Нет доступа');return;}
-  if(!confirm('Удалить отзыв?'))return;
-  const res=await sb.from('bouquet_comments').delete().eq('id',id);
-  if(res.error){alert('Ошибка: '+res.error.message);return;}
-  await refresh();
+  toast('Магазин сохранён ✅');
 }
 boot();
 </script>
