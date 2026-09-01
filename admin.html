@@ -6,87 +6,83 @@
 <title>Лепесток · админка</title>
 <link href="https://fonts.cdnfonts.com/css/opposans" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:'OPPO Sans',system-ui,sans-serif}
-body{background:linear-gradient(135deg,#FFF5F5 0%,#FFE5E5 50%,#F5E6FF 100%);color:#1A1A2E;min-height:100vh;padding:20px;position:relative;overflow-x:hidden}
-body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(circle at 20% 30%,rgba(255,107,107,0.1) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(168,85,247,0.1) 0%,transparent 50%);pointer-events:none;z-index:0}
-.box{max-width:620px;margin:0 auto;position:relative;z-index:1}
-h1{font-size:20px;margin-bottom:14px;background:linear-gradient(135deg,#FF6B6B,#A855F7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.card{background:#fff;border-radius:20px;padding:16px;box-shadow:0 8px 32px rgba(255,107,107,0.15);margin-bottom:12px;transition:all 0.3s ease}
-.card:hover{box-shadow:0 12px 48px rgba(255,107,107,0.25)}
-input,textarea,select{width:100%;background:#FFF5F5;border:2px solid transparent;border-radius:12px;padding:12px;font-size:15px;margin-bottom:8px;font-family:inherit;transition:all 0.3s ease}
-input:focus,textarea:focus,select:focus{outline:none;border-color:#FF6B6B;box-shadow:0 4px 16px rgba(255,107,107,0.2)}
-textarea{min-height:80px;resize:vertical}
-.btn{width:100%;background:linear-gradient(135deg,#FF6B6B,#A855F7);color:#fff;border:none;border-radius:999px;padding:13px;font-weight:700;font-size:15px;cursor:pointer;transition:all 0.3s ease;position:relative;overflow:hidden}
-.btn::before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);transition:left 0.5s}
-.btn:hover::before{left:100%}
-.btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,107,107,0.4)}
-.err{color:#EF4444;font-size:13px;margin-top:6px}
-.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-.tab{flex:1;background:#fff;border:none;border-radius:999px;padding:11px 8px;font-weight:600;font-size:12px;color:#94A3B8;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all 0.3s ease}
-.tab:hover{color:#FF6B6B;transform:translateY(-2px)}
-.tab.on{color:#1A1A2E;box-shadow:0 6px 24px rgba(255,107,107,0.3);background:linear-gradient(135deg,#FF6B6B,#FF6B9D);color:#fff}
-.tab .icn{width:14px;height:14px}
-.icn{width:1.05em;height:1.05em;display:inline-block;vertical-align:-.15em;flex:none}
-.mcat{font-size:11px;color:#94A3B8;margin-bottom:6px}
-.mtxt{font-size:14px;line-height:1.45;margin-bottom:10px}
-.mbtns{display:flex;gap:8px;flex-wrap:wrap}
-.mbtns button{flex:1;border:none;border-radius:999px;padding:11px;font-weight:700;font-size:12px;cursor:pointer;transition:all 0.3s ease}
-.mbtns button:hover{transform:translateY(-2px)}
+:root{--bg:#FFF7F5;--card:#FFFFFF;--ink:#1A1A2E;--gray:#94A3B8;--red:#EF4444;--yel:#F59E0B;--grn:#10B981;--gold:#D97706;--coral:#FF6B6B;--pink:#FF6B9D;--purple:#A855F7;--gradient:linear-gradient(135deg,#FF6B6B 0%,#FF6B9D 50%,#A855F7 100%);--shadow:0 6px 20px rgba(120,60,10,.08)}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'OPPO Sans',system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+body{background:linear-gradient(160deg,#FFF7F5 0%,#FFEDEB 45%,#F6ECFF 100%);color:var(--ink);min-height:100vh;padding:16px 14px 34px}
+.box{max-width:620px;margin:0 auto}
+.head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.headLogo{width:44px;height:44px;border-radius:15px;background:var(--gradient);display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 8px 22px rgba(255,107,107,.35);flex:none}
+.headLogo .icn{width:24px;height:24px}
+h1{font-size:17px;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.5px}
+.who{font-size:10.5px;color:var(--gray);margin-top:1px}
+.card{background:var(--card);border-radius:18px;padding:12px;box-shadow:var(--shadow);margin-bottom:10px}
+input,textarea,select{width:100%;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:11px;font-size:14px;margin-bottom:8px;font-family:inherit}
+input:focus,textarea:focus{outline:none;border-color:var(--coral)}
+textarea{min-height:70px;resize:vertical}
+.btn{width:100%;background:var(--gradient);color:#fff;border:none;border-radius:999px;padding:12px;font-weight:800;font-size:14px;cursor:pointer}
+.err{color:var(--red);font-size:12px;margin-top:6px}
+.tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:12px}
+@media(max-width:520px){.tabs{grid-template-columns:repeat(3,1fr)}}
+.tab{background:var(--card);border:none;border-radius:14px;padding:10px 4px;font-weight:700;font-size:10.5px;color:var(--gray);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;box-shadow:var(--shadow);white-space:nowrap;transition:.25s}
+.tab .icn{width:14px;height:14px;flex:none}
+.tab.on{background:var(--gradient);color:#fff;box-shadow:0 6px 18px rgba(255,107,107,.35)}
+.badge{min-width:17px;height:17px;padding:0 5px;border-radius:999px;font-size:9.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;background:var(--gradient);color:#fff;flex:none}
+.tab.on .badge{background:rgba(255,255,255,.28);color:#fff}
+.mcat{font-size:10.5px;color:var(--gray);margin-bottom:5px}
+.mtxt{font-size:13.5px;line-height:1.45;margin-bottom:8px}
+.mbtns{display:flex;gap:6px;flex-wrap:wrap}
+.mbtns button{flex:1;border:none;border-radius:999px;padding:9px 6px;font-weight:700;font-size:11px;cursor:pointer;white-space:nowrap}
 .ok{background:linear-gradient(135deg,#10B981,#059669);color:#fff}
-.no{background:#FFF5F5;color:#EF4444}
-.day{background:linear-gradient(135deg,#FF6B6B,#FF6B9D);color:#fff}
+.no{background:#FFF1F0;color:var(--red)}
+.day{background:var(--gradient);color:#fff}
 .info{background:linear-gradient(135deg,#F59E0B,#D97706);color:#fff}
-.empty{text-align:center;color:#94A3B8;padding:30px}
-.out{background:none;border:none;color:#94A3B8;font-size:12px;margin-top:10px;cursor:pointer;transition:all 0.3s ease}
-.out:hover{color:#FF6B6B}
+.empty{text-align:center;color:var(--gray);padding:26px;font-size:13px}
+.out{background:none;border:none;color:var(--gray);font-size:12px;margin-top:10px;cursor:pointer;width:100%}
 .hidden{display:none!important}
-.statRow{display:flex;justify-content:space-between;font-size:14px;padding:6px 0;border-bottom:1px solid rgba(255,107,107,0.1)}
-.statRow b{color:#FF6B6B}
-.who{font-size:11px;color:#94A3B8;margin-bottom:10px}
-.bigStat{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.bigStat > div{flex:1;min-width:140px;background:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 6px 24px rgba(255,107,107,0.12);transition:all 0.3s ease}
-.bigStat > div:hover{transform:translateY(-4px);box-shadow:0 12px 36px rgba(255,107,107,0.2)}
-.bigStat .lbl{font-size:11px;color:#94A3B8;font-weight:600}
-.bigStat .val{font-size:22px;font-weight:800;color:#1A1A2E;margin-top:2px}
-.bigStat .val b{background:linear-gradient(135deg,#FF6B6B,#A855F7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.bigStat .sub{font-size:10.5px;color:#94A3B8;margin-top:2px}
-.funnel{background:#fff;border-radius:16px;padding:14px;box-shadow:0 6px 24px rgba(255,107,107,0.12);margin-bottom:12px}
-.funnel .frow{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px}
-.funnel .fname{width:140px;font-weight:600}
-.funnel .fbar{flex:1;height:8px;background:#FFF5F5;border-radius:4px;overflow:hidden}
-.funnel .fbar i{display:block;height:100%;background:linear-gradient(90deg,#FF6B6B,#A855F7);border-radius:4px;transition:width 0.5s ease}
-.funnel .fnum{width:60px;text-align:right;font-weight:800;background:linear-gradient(135deg,#FF6B6B,#A855F7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.dayRow{display:flex;gap:8px;align-items:center;font-size:12px;padding:6px 0;border-bottom:1px solid rgba(255,107,107,0.1)}
-.dayRow .dLbl{width:90px;color:#94A3B8}
-.dayRow .dBar{flex:1;height:6px;background:#FFF5F5;border-radius:3px;overflow:hidden}
-.dayRow .dBar i{display:block;height:100%;background:linear-gradient(90deg,#FF6B6B,#A855F7);border-radius:3px;transition:width 0.5s ease}
-.dayRow .dNum{width:48px;text-align:right;font-weight:800;background:linear-gradient(135deg,#FF6B6B,#A855F7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.usrRow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,107,107,0.1);font-size:12.5px}
-.usrRow .pos{width:28px;font-weight:800;color:#94A3B8;text-align:center}
-.usrRow .av{width:30px;height:30px;border-radius:50%;font-size:12px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex:none;background:linear-gradient(135deg,#FF6B6B,#A855F7)}
+.who2{font-size:10.5px;color:var(--gray);margin-bottom:10px}
+.bigStat{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.bigStat>div{background:var(--card);border-radius:16px;padding:10px 12px;box-shadow:var(--shadow)}
+.bigStat .lbl{font-size:10px;color:var(--gray);font-weight:600}
+.bigStat .val{font-size:19px;font-weight:800;margin-top:2px}
+.bigStat .val b{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.bigStat .sub{font-size:9.5px;color:var(--gray);margin-top:2px}
+.funnel{background:var(--card);border-radius:16px;padding:12px;box-shadow:var(--shadow);margin-bottom:10px}
+.funnel .frow{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px}
+.funnel .fname{width:120px;font-weight:600}
+.funnel .fbar{flex:1;height:7px;background:var(--bg);border-radius:4px;overflow:hidden}
+.funnel .fbar i{display:block;height:100%;background:var(--gradient);border-radius:4px}
+.funnel .fnum{width:40px;text-align:right;font-weight:800;color:var(--coral)}
+.dayRow{display:flex;gap:8px;align-items:center;font-size:11px;padding:5px 0;border-bottom:1px solid rgba(255,107,107,.08)}
+.dayRow .dLbl{width:70px;color:var(--gray)}
+.dayRow .dBar{flex:1;height:5px;background:var(--bg);border-radius:3px;overflow:hidden}
+.dayRow .dBar i{display:block;height:100%;background:var(--gradient);border-radius:3px}
+.dayRow .dNum{width:40px;text-align:right;font-weight:800;color:var(--coral)}
+.usrRow{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,107,107,.08);font-size:12px}
+.usrRow .pos{width:22px;font-weight:800;color:var(--gray);text-align:center}
+.usrRow .av{width:28px;height:28px;border-radius:50%;font-size:11px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex:none;background:var(--gradient)}
 .usrRow .av img{width:100%;height:100%;object-fit:cover}
 .usrRow .nm{flex:1;font-weight:600;word-break:break-word}
-.usrRow .st{font-weight:800;background:linear-gradient(135deg,#FF6B6B,#A855F7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.pill{display:inline-block;background:#FFF5F5;border-radius:999px;padding:2px 8px;font-size:10px;font-weight:700;margin-left:4px}
-.pill.ret{background:rgba(16,185,129,.14);color:#10B981}
-.rangeSel{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}
-.rangeSel button{background:#fff;border:none;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:600;color:#94A3B8;cursor:pointer;transition:all 0.3s ease}
-.rangeSel button:hover{color:#FF6B6B}
-.rangeSel button.on{color:#1A1A2E;box-shadow:0 4px 16px rgba(255,107,107,0.3);background:linear-gradient(135deg,#FF6B6B,#FF6B9D);color:#fff}
-.statusPill{display:inline-block;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:800;letter-spacing:.3px}
-.s-new{background:rgba(255,107,107,.14);color:#FF6B6B}
-.s-accepted{background:rgba(245,158,11,.14);color:#F59E0B}
-.s-ready{background:rgba(217,119,6,.14);color:#D97706}
-.s-delivered{background:rgba(16,185,129,.14);color:#10B981}
-.s-cancelled{background:#FFF5F5;color:#94A3B8;text-decoration:line-through}
-.bouquetRow{display:flex;gap:12px;align-items:flex-start}
-.bouquetRow .photo{width:100px;height:100px;border-radius:12px;object-fit:cover;flex:none;background:#FFF5F5}
-.bouquetRow .bInfo{flex:1}
-.bouquetRow .title{font-weight:800;font-size:15px;color:#1A1A2E}
-.bouquetRow .price{color:#FF6B6B;font-weight:800;font-size:14px;margin-top:2px}
-.bouquetRow .cat{font-size:11px;color:#94A3B8;margin-top:2px}
-.orderMeta{font-size:12px;color:#94A3B8;line-height:1.5}
-.orderMeta b{color:#1A1A2E}
+.usrRow .st{font-weight:800;color:var(--coral);font-size:11px}
+.pill{display:inline-block;border-radius:999px;padding:2px 7px;font-size:9.5px;font-weight:700;margin-left:4px}
+.pill.ret{background:rgba(16,185,129,.14);color:var(--grn)}
+.rangeSel{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+.rangeSel button{background:var(--card);border:none;border-radius:999px;padding:7px 11px;font-size:10.5px;font-weight:700;color:var(--gray);cursor:pointer;box-shadow:var(--shadow)}
+.rangeSel button.on{background:var(--gradient);color:#fff;box-shadow:0 4px 14px rgba(255,107,107,.3)}
+.statusPill{display:inline-block;border-radius:999px;padding:3px 9px;font-size:10px;font-weight:800}
+.s-new{background:rgba(255,107,107,.14);color:var(--coral)}
+.s-accepted{background:rgba(245,158,11,.14);color:var(--yel)}
+.s-ready{background:rgba(217,119,6,.14);color:var(--gold)}
+.s-delivered{background:rgba(16,185,129,.14);color:var(--grn)}
+.s-cancelled{background:rgba(148,163,184,.14);color:var(--gray);text-decoration:line-through}
+.bouquetRow{display:flex;gap:10px;align-items:flex-start}
+.bouquetRow .photo{width:76px;height:76px;border-radius:12px;object-fit:cover;flex:none;background:var(--bg)}
+.bouquetRow .bInfo{flex:1;min-width:0}
+.bouquetRow .title{font-weight:800;font-size:13.5px}
+.bouquetRow .price{color:var(--coral);font-weight:800;font-size:13px;margin-top:2px}
+.bouquetRow .cat{font-size:10.5px;color:var(--gray);margin-top:2px}
+.orderMeta{font-size:11.5px;color:var(--gray);line-height:1.5;margin-top:6px}
+.orderMeta b{color:var(--ink)}
+.icn{width:1.05em;height:1.05em;display:inline-block;vertical-align:-.15em;flex:none}
 </style>
 </head>
 <body>
@@ -98,20 +94,25 @@ textarea{min-height:80px;resize:vertical}
 <symbol id="i-users" viewBox="0 0 24 24"><g fill="currentColor"><circle cx="9" cy="8" r="3.2"/><path d="M2.8 19c.7-3.2 3.3-4.8 6.2-4.8s5.5 1.6 6.2 4.8z"/><circle cx="17" cy="9" r="2.6"/><path d="M14.8 14.6c2.6.2 5 1.6 5.7 4.4h-4"/></g></symbol>
 </svg>
 <div class="box">
-<h1>🌸 Лепесток · админка</h1>
+<div class="head">
+  <div class="headLogo"><svg class="icn"><use href="#i-flower"/></svg></div>
+  <div>
+    <h1>ЛЕПЕСТОК · АДМИНКА</h1>
+    <div class="who" id="adminWho"></div>
+  </div>
+</div>
 <div id="loginBox" class="card hidden">
-  <div class="who">Вход только для администратора сайта.</div>
+  <div class="who2">Вход только для администратора сайта.</div>
   <input id="email" type="email" placeholder="Email админа">
   <input id="pass" type="password" placeholder="Пароль">
   <button class="btn" onclick="doLogin()">Войти</button>
   <div class="err" id="loginErr"></div>
 </div>
 <div id="panel" class="hidden">
-  <div class="who" id="adminWho"></div>
   <div class="tabs">
-    <button class="tab on" id="tabOrders" onclick="setTab('orders')"><svg class="icn"><use href="#i-box"/></svg>Заказы (<span id="cOrders">0</span>)</button>
+    <button class="tab on" id="tabOrders" onclick="setTab('orders')"><svg class="icn"><use href="#i-box"/></svg>Заказы<span class="badge" id="cOrders">0</span></button>
     <button class="tab" id="tabBouquets" onclick="setTab('bouquets')"><svg class="icn"><use href="#i-flower"/></svg>Букеты</button>
-    <button class="tab" id="tabComments" onclick="setTab('comments')"><svg class="icn"><use href="#i-comment"/></svg>Комменты</button>
+    <button class="tab" id="tabComments" onclick="setTab('comments')"><svg class="icn"><use href="#i-comment"/></svg>Отзывы</button>
     <button class="tab" id="tabStats" onclick="setTab('stats')"><svg class="icn"><use href="#i-chart"/></svg>Метрики</button>
     <button class="tab" id="tabUsers" onclick="setTab('users')"><svg class="icn"><use href="#i-users"/></svg>Клиенты</button>
   </div>
@@ -144,7 +145,7 @@ async function doLogin(){
 }
 async function panel(){
   const u=(await sb.auth.getUser()).data.user;adminId=u?u.id:null;
-  $('adminWho').textContent='🌸 админ: '+(u?u.email:'');
+  $('adminWho').textContent='админ: '+(u?u.email:'');
   $('loginBox').classList.add('hidden');$('panel').classList.remove('hidden');
   await refresh();
 }
@@ -183,7 +184,7 @@ function renderOrders(){
     const backBtn=back?'<button class="info" onclick="updateOrder('+o.id+',\''+back+'\')">← назад</button>':'';
     const callBtn=o.recipient_phone?'<button class="day" onclick="call(\''+esc(o.recipient_phone)+'\')">📞 позвонить</button>':(o.sender_phone?'<button class="day" onclick="call(\''+esc(o.sender_phone)+'\')">📞 заказчик</button>':'');
     return '<div class="card"><div class="mcat">'+whenRu(o.created_at)+' · <span class="statusPill '+statusCls(o.status)+'">'+statusRu(o.status)+'</span></div>'+
-      '<div class="bouquetRow">'+(b&&b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:40px">🌷</div>')+
+      '<div class="bouquetRow">'+(b&&b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:34px">🌷</div>')+
       '<div class="bInfo"><div class="title">'+esc(b?b.title:'Букет удалён')+'</div><div class="price">'+(b?b.price+' ₽':'?')+'</div><div class="cat">'+kindRu+'</div></div></div>'+
       '<div class="orderMeta">'+
         (o.recipient_name?'<div>👤 получатель: <b>'+esc(o.recipient_name)+'</b>'+(o.recipient_phone?' · '+esc(o.recipient_phone):'')+'</div>':'')+
@@ -191,7 +192,7 @@ function renderOrders(){
         (o.sender_name?'<div>📲 заказчик: <b>'+esc(o.sender_name)+'</b>'+(o.sender_phone?' · '+esc(o.sender_phone):'')+'</div>':'')+
         (o.note?'<div>📝 комментарий: <i>'+esc(o.note)+'</i></div>':'')+
       '</div>'+
-      '<div class="mbtns" style="margin-top:10px">'+callBtn+backBtn+nextBtn+cancelBtn+'</div></div>';
+      '<div class="mbtns" style="margin-top:8px">'+callBtn+backBtn+nextBtn+cancelBtn+'</div></div>';
   }).join(''):'<div class="empty">Нет заказов со статусом «'+statusRu(orderFilter)+'» 🎉</div>';
   box.innerHTML='<div class="rangeSel">'+filters.map(f=>'<button class="'+(orderFilter===f[0]?'on':'')+'" onclick="setOrderFilter(\''+f[0]+'\')">'+f[1]+' ('+orders.filter(o=>o.status===f[0]).length+')</button>').join('')+'</div>'+cards;
 }
@@ -200,16 +201,16 @@ async function updateOrder(id,status){const res=await sb.from('orders').update({
 function renderBouquets(){
   const box=$('list');
   box.innerHTML=bouquets.length?bouquets.map(b=>
-    '<div class="card"><div class="bouquetRow">'+(b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:40px;background:linear-gradient(135deg,#FFE5E5,#F5E6FF)">🌷</div>')+
-    '<div class="bInfo"><div class="title">'+esc(b.title)+(b.is_day?' <span class="statusPill" style="background:rgba(255,107,107,.14);color:#FF6B6B">⭐ букет дня</span>':'')+'</div>'+
+    '<div class="card"><div class="bouquetRow">'+(b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:34px;background:linear-gradient(135deg,#FFE5E5,#F5E6FF)">🌷</div>')+
+    '<div class="bInfo"><div class="title">'+esc(b.title)+(b.is_day?' <span class="statusPill s-new">⭐ букет дня</span>':'')+'</div>'+
     '<div class="price">'+b.price+' ₽</div><div class="cat">'+esc(b.category||'без категории')+' · '+(b.in_stock?'<span style="color:#10B981">в наличии</span>':'<span style="color:#EF4444">под заказ</span>')+'</div></div></div>'+
     (b.user_id?'<div class="mcat" style="margin-top:4px">добавлен продавцом</div>':'')+
-    '<div class="mbtns" style="margin-top:10px">'+
+    '<div class="mbtns" style="margin-top:8px">'+
       (b.is_day?'<button class="no" onclick="toggleDay('+b.id+',false)">убрать из дня</button>':'<button class="day" onclick="toggleDay('+b.id+',true)">⭐ букет дня</button>')+
       '<button class="info" onclick="toggleStock('+b.id+','+(b.in_stock?'false':'true')+')">'+(b.in_stock?'в под заказ':'в наличии')+'</button>'+
       '<button class="no" onclick="delBouquet('+b.id+')">🗑 удалить</button>'+
     '</div></div>'
-  ).join(''):'<div class="empty">Пока нет букетов </div>';
+  ).join(''):'<div class="empty">Пока нет букетов</div>';
 }
 async function toggleDay(id,on){if(on)await sb.from('bouquets').update({is_day:false}).eq('is_day',true);const res=await sb.from('bouquets').update({is_day:on}).eq('id',id).select();if(res.error){alert('Ошибка: '+res.error.message);return;}await refresh();}
 async function toggleStock(id,on){const res=await sb.from('bouquets').update({in_stock:on}).eq('id',id).select();if(res.error){alert('Ошибка: '+res.error.message);return;}await refresh();}
@@ -253,11 +254,11 @@ function renderStats(){
     '<div><div class="lbl">выручка</div><div class="val"><b>'+revenue.toLocaleString('ru-RU')+' ₽</b></div></div>'+
     '<div><div class="lbl">возврат</div><div class="val"><b>'+m.returners+'</b></div><div class="sub">зашли ≥2 дня</div></div></div>';
   const funnelMax=Math.max(...Object.values(m.funnel),1);
-  const funnelHtml='<div class="funnel"><div class="mcat" style="margin-bottom:8px;font-weight:700;color:#1A1A2E">🎯 воронка: уникальные</div>'+
+  const funnelHtml='<div class="funnel"><div class="mcat" style="font-weight:700;color:#1A1A2E">🎯 воронка: уникальные</div>'+
     [['open','Открыли сайт'],['view','Смотрели букет'],['order','Заказали'],['comment','Оставили отзыв'],['share','Поделились'],['reg','Зарегистрировались']]
     .map(r=>{const v=m.funnel[r[0]]||0;const pct=Math.round(v*100/funnelMax);return '<div class="frow"><div class="fname">'+r[1]+'</div><div class="fbar"><i style="width:'+pct+'%"></i></div><div class="fnum">'+v+'</div></div>';}).join('')+'</div>';
   const maxEv=Math.max(...m.daysArr.map(d=>m.dayMap[d].ev),1);
-  const chart='<div class="funnel"><div class="mcat" style="margin-bottom:8px;font-weight:700;color:#1A1A2E">📈 по дням</div>'+
+  const chart='<div class="funnel"><div class="mcat" style="font-weight:700;color:#1A1A2E">📈 по дням</div>'+
     m.daysArr.map(d=>{const v=m.dayMap[d];const pct=Math.round(v.ev*100/maxEv);return '<div class="dayRow"><div class="dLbl">'+d.slice(5)+'</div><div class="dBar"><i style="width:'+pct+'%"></i></div><div class="dNum">'+v.ev+'</div></div>';}).join('')+'</div>';
   box.innerHTML='<div class="rangeSel">'+[['7','7 дней'],['14','14 дней'],['30','30 дней']].map(r=>'<button class="'+(usrStatsRange===r[0]?'on':'')+'" onclick="setUsrRange(\''+r[0]+'\')">'+r[1]+'</button>').join('')+'</div>'+big+funnelHtml+chart;
 }
@@ -271,12 +272,12 @@ async function renderUsers(){
   const rows=top.map(([u,n],i)=>{
     const p=profs[u];
     const nm=p?p.nick:(u==='__anon__'?'аноним':u.slice(0,12));
-    const av=p?'<div class="av" style="'+(p.avatar_url?'':'background:linear-gradient(135deg,#FF6B6B,#A855F7)')+'">'+(p.avatar_url?'<img src="'+p.avatar_url+'">':(p.nick||'?').slice(0,1).toUpperCase())+'</div>':'<div class="av" style="background:#FFF5F5;color:#94A3B8">?</div>';
-    const floristBtn=p&&!p.is_florist?'<button class="day" style="margin-left:6px;padding:6px 10px;font-size:10px" onclick="makeFlorist(\''+p.id+'\')">⭐ продавец</button>':(p&&p.is_florist?'<span class="pill ret" style="margin-left:6px">⭐ продавец</span>':'');
-    return '<div class="usrRow"><div class="pos">'+(i+1)+'</div>'+av+'<div class="nm">'+esc(nm)+floristBtn+'</div><div class="st">'+n+' действий</div></div>';
+    const av=p?'<div class="av" style="'+(p.avatar_url?'':'')+'">'+(p.avatar_url?'<img src="'+p.avatar_url+'">':(p.nick||'?').slice(0,1).toUpperCase())+'</div>':'<div class="av" style="background:#F6EBDC;color:#A89380">?</div>';
+    const floristBtn=p&&!p.is_florist?'<button class="day" style="margin-left:6px;padding:5px 9px;font-size:9.5px" onclick="makeFlorist(\''+p.id+'\')">⭐ продавец</button>':(p&&p.is_florist?'<span class="pill ret">⭐ продавец</span>':'');
+    return '<div class="usrRow"><div class="pos">'+(i+1)+'</div>'+av+'<div class="nm">'+esc(nm)+floristBtn+'</div><div class="st">'+n+' действ.</div></div>';
   });
   box.innerHTML='<div class="rangeSel">'+[['7','7 дней'],['14','14 дней'],['30','30 дней']].map(r=>'<button class="'+(usrStatsRange===r[0]?'on':'')+'" onclick="setUsrRange(\''+r[0]+'\')">'+r[1]+'</button>').join('')+'</div>'+
-    '<div class="card"><div class="mcat" style="font-weight:700;color:#1A1A2E;margin-bottom:8px">👥 топ-15 активных</div>'+rows.join('')+'</div>';
+    '<div class="card"><div class="mcat" style="font-weight:700;color:#1A1A2E;margin-bottom:6px">👥 топ-15 активных</div>'+rows.join('')+'</div>';
 }
 async function makeFlorist(uid){if(!confirm('Сделать этого пользователя продавцом?'))return;const res=await sb.from('profiles').update({is_florist:true}).eq('id',uid);if(res.error){alert('Ошибка: '+res.error.message);return;}await refresh();}
 async function logout(){await sb.auth.signOut();location.reload();}
