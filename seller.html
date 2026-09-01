@@ -6,61 +6,61 @@
 <title>Лепесток · кабинет продавца</title>
 <link href="https://fonts.cdnfonts.com/css/opposans" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:'OPPO Sans',system-ui,sans-serif}
-body{background:linear-gradient(135deg,#FFF5F5 0%,#FFE5E5 50%,#F5E6FF 100%);color:#1A1A2E;min-height:100vh;padding:20px;position:relative;overflow-x:hidden}
-body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(circle at 20% 30%,rgba(255,107,107,0.1) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(168,85,247,0.1) 0%,transparent 50%);pointer-events:none;z-index:0}
-.box{max-width:620px;margin:0 auto;position:relative;z-index:1}
-h1{font-size:20px;margin-bottom:14px;background:linear-gradient(135deg,#FF6B6B,#A855F7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.card{background:#fff;border-radius:20px;padding:16px;box-shadow:0 8px 32px rgba(255,107,107,0.15);margin-bottom:12px;transition:all 0.3s ease}
-.card:hover{box-shadow:0 12px 48px rgba(255,107,107,0.25)}
-input,textarea{width:100%;background:#FFF5F5;border:2px solid transparent;border-radius:12px;padding:12px;font-size:15px;margin-bottom:8px;font-family:inherit;transition:all 0.3s ease}
-input:focus,textarea:focus{outline:none;border-color:#FF6B6B;box-shadow:0 4px 16px rgba(255,107,107,0.2)}
-textarea{min-height:80px;resize:vertical}
-.btn{width:100%;background:linear-gradient(135deg,#FF6B6B,#A855F7);color:#fff;border:none;border-radius:999px;padding:13px;font-weight:700;font-size:15px;cursor:pointer;transition:all 0.3s ease;position:relative;overflow:hidden}
-.btn::before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);transition:left 0.5s}
-.btn:hover::before{left:100%}
-.btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,107,107,0.4)}
-.err{color:#EF4444;font-size:13px;margin-top:6px}
-.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-.tab{flex:1;background:#fff;border:none;border-radius:999px;padding:11px 8px;font-weight:600;font-size:12px;color:#94A3B8;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all 0.3s ease}
-.tab:hover{color:#FF6B6B;transform:translateY(-2px)}
-.tab.on{color:#1A1A2E;box-shadow:0 6px 24px rgba(255,107,107,0.3);background:linear-gradient(135deg,#FF6B6B,#FF6B9D);color:#fff}
-.tab .icn{width:14px;height:14px}
-.icn{width:1.05em;height:1.05em;display:inline-block;vertical-align:-.15em;flex:none}
-.mcat{font-size:11px;color:#94A3B8;margin-bottom:6px}
-.mtxt{font-size:14px;line-height:1.45;margin-bottom:10px}
-.mbtns{display:flex;gap:8px;flex-wrap:wrap}
-.mbtns button{flex:1;border:none;border-radius:999px;padding:11px;font-weight:700;font-size:12px;cursor:pointer;transition:all 0.3s ease}
-.mbtns button:hover{transform:translateY(-2px)}
+:root{--bg:#FFF7F5;--card:#FFFFFF;--ink:#1A1A2E;--gray:#94A3B8;--red:#EF4444;--yel:#F59E0B;--grn:#10B981;--gold:#D97706;--coral:#FF6B6B;--pink:#FF6B9D;--purple:#A855F7;--gradient:linear-gradient(135deg,#FF6B6B 0%,#FF6B9D 50%,#A855F7 100%);--shadow:0 6px 20px rgba(120,60,10,.08)}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'OPPO Sans',system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+body{background:linear-gradient(160deg,#FFF7F5 0%,#FFEDEB 45%,#F6ECFF 100%);color:var(--ink);min-height:100vh;padding:16px 14px 34px}
+.box{max-width:620px;margin:0 auto}
+.head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.headLogo{width:44px;height:44px;border-radius:15px;background:var(--gradient);display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 8px 22px rgba(255,107,107,.35);flex:none}
+.headLogo .icn{width:24px;height:24px}
+h1{font-size:17px;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.5px}
+.who{font-size:10.5px;color:var(--gray);margin-top:1px}
+.card{background:var(--card);border-radius:18px;padding:12px;box-shadow:var(--shadow);margin-bottom:10px}
+input,textarea,select{width:100%;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:11px;font-size:14px;margin-bottom:8px;font-family:inherit}
+input:focus,textarea:focus{outline:none;border-color:var(--coral)}
+textarea{min-height:70px;resize:vertical}
+.btn{width:100%;background:var(--gradient);color:#fff;border:none;border-radius:999px;padding:12px;font-weight:800;font-size:14px;cursor:pointer}
+.err{color:var(--red);font-size:12px;margin-top:6px}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
+.tab{background:var(--card);border:none;border-radius:14px;padding:10px 4px;font-weight:700;font-size:10.5px;color:var(--gray);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;box-shadow:var(--shadow);white-space:nowrap;transition:.25s}
+.tab .icn{width:14px;height:14px;flex:none}
+.tab.on{background:var(--gradient);color:#fff;box-shadow:0 6px 18px rgba(255,107,107,.35)}
+.badge{min-width:17px;height:17px;padding:0 5px;border-radius:999px;font-size:9.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;background:var(--gradient);color:#fff;flex:none}
+.tab.on .badge{background:rgba(255,255,255,.28);color:#fff}
+.mcat{font-size:10.5px;color:var(--gray);margin-bottom:5px}
+.mtxt{font-size:13.5px;line-height:1.45;margin-bottom:8px}
+.mbtns{display:flex;gap:6px;flex-wrap:wrap}
+.mbtns button{flex:1;border:none;border-radius:999px;padding:9px 6px;font-weight:700;font-size:11px;cursor:pointer;white-space:nowrap}
 .ok{background:linear-gradient(135deg,#10B981,#059669);color:#fff}
-.no{background:#FFF5F5;color:#EF4444}
-.day{background:linear-gradient(135deg,#FF6B6B,#FF6B9D);color:#fff}
+.no{background:#FFF1F0;color:var(--red)}
+.day{background:var(--gradient);color:#fff}
 .info{background:linear-gradient(135deg,#F59E0B,#D97706);color:#fff}
-.empty{text-align:center;color:#94A3B8;padding:30px}
-.out{background:none;border:none;color:#94A3B8;font-size:12px;margin-top:10px;cursor:pointer;transition:all 0.3s ease}
-.out:hover{color:#FF6B6B}
+.empty{text-align:center;color:var(--gray);padding:26px;font-size:13px}
+.out{background:none;border:none;color:var(--gray);font-size:12px;margin-top:10px;cursor:pointer;width:100%}
 .hidden{display:none!important}
-.who{font-size:11px;color:#94A3B8;margin-bottom:10px}
-.bouquetRow{display:flex;gap:12px;align-items:flex-start}
-.bouquetRow .photo{width:100px;height:100px;border-radius:12px;object-fit:cover;flex:none;background:#FFF5F5}
-.bouquetRow .bInfo{flex:1}
-.bouquetRow .title{font-weight:800;font-size:15px}
-.bouquetRow .price{background:linear-gradient(135deg,#FF6B6B,#A855F7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:800;font-size:14px;margin-top:2px}
-.bouquetRow .cat{font-size:11px;color:#94A3B8;margin-top:2px}
-.orderMeta{font-size:12px;color:#94A3B8;line-height:1.5}
-.orderMeta b{color:#1A1A2E}
-.statusPill{display:inline-block;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:800;letter-spacing:.3px}
-.s-new{background:rgba(255,107,107,.14);color:#FF6B6B}
-.s-accepted{background:rgba(245,158,11,.14);color:#F59E0B}
-.s-ready{background:rgba(217,119,6,.14);color:#D97706}
-.s-delivered{background:rgba(16,185,129,.14);color:#10B981}
-.s-cancelled{background:#FFF5F5;color:#94A3B8;text-decoration:line-through}
-.addForm{background:linear-gradient(180deg,rgba(255,107,107,.08),#fff);border:2px dashed rgba(255,107,107,0.4);border-radius:20px;padding:16px;margin-bottom:12px}
-.addForm h3{font-size:14px;margin-bottom:10px}
-.rangeSel{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}
-.rangeSel button{background:#fff;border:none;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:600;color:#94A3B8;cursor:pointer;transition:all 0.3s ease}
-.rangeSel button:hover{color:#FF6B6B}
-.rangeSel button.on{color:#1A1A2E;box-shadow:0 4px 16px rgba(255,107,107,0.3);background:linear-gradient(135deg,#FF6B6B,#FF6B9D);color:#fff}
+.who2{font-size:10.5px;color:var(--gray);margin-bottom:10px}
+.rangeSel{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+.rangeSel button{background:var(--card);border:none;border-radius:999px;padding:7px 11px;font-size:10.5px;font-weight:700;color:var(--gray);cursor:pointer;box-shadow:var(--shadow)}
+.rangeSel button.on{background:var(--gradient);color:#fff;box-shadow:0 4px 14px rgba(255,107,107,.3)}
+.statusPill{display:inline-block;border-radius:999px;padding:3px 9px;font-size:10px;font-weight:800}
+.s-new{background:rgba(255,107,107,.14);color:var(--coral)}
+.s-accepted{background:rgba(245,158,11,.14);color:var(--yel)}
+.s-ready{background:rgba(217,119,6,.14);color:var(--gold)}
+.s-delivered{background:rgba(16,185,129,.14);color:var(--grn)}
+.s-cancelled{background:rgba(148,163,184,.14);color:var(--gray);text-decoration:line-through}
+.bouquetRow{display:flex;gap:10px;align-items:flex-start}
+.bouquetRow .photo{width:76px;height:76px;border-radius:12px;object-fit:cover;flex:none;background:var(--bg)}
+.bouquetRow .bInfo{flex:1;min-width:0}
+.bouquetRow .title{font-weight:800;font-size:13.5px}
+.bouquetRow .price{color:var(--coral);font-weight:800;font-size:13px;margin-top:2px}
+.bouquetRow .cat{font-size:10.5px;color:var(--gray);margin-top:2px}
+.orderMeta{font-size:11.5px;color:var(--gray);line-height:1.5;margin-top:6px}
+.orderMeta b{color:var(--ink)}
+.addForm{background:linear-gradient(180deg,rgba(255,107,107,.06),#fff);border:2px dashed rgba(255,107,107,.4);border-radius:18px;padding:12px;margin-bottom:10px}
+.addForm h3{font-size:13px;margin-bottom:8px;font-weight:800}
+.addForm label{display:flex;gap:8px;align-items:center;font-size:12px;margin-top:6px;cursor:pointer}
+.addForm input[type=checkbox]{width:auto;margin:0}
+.icn{width:1.05em;height:1.05em;display:inline-block;vertical-align:-.15em;flex:none}
 </style>
 </head>
 <body>
@@ -68,11 +68,18 @@ textarea{min-height:80px;resize:vertical}
 <symbol id="i-box" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 2l9 4.5v11L12 22l-9-4.5v-11z"/><path d="M12 12l9-4.5M12 12L3 7.5M12 12v10"/></g></symbol>
 <symbol id="i-flower" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l2 3.5 4 .5-3 3 .5 4L12 11l-3.5 2 .5-4-3-3 4-.5zM4 14c0 5 4 8 8 8s8-3 8-8c0-2-2-3-4-3-2 0-4 1-4 1s-2-1-4-1-4 1-4 3z"/></symbol>
 <symbol id="i-comment" viewBox="0 0 24 24"><path fill="currentColor" d="M4 4h16v12H9l-5 4z"/></symbol>
+<symbol id="i-shop" viewBox="0 0 24 24"><path fill="currentColor" d="M3 9h18v11H3zM6 6h12l2 3H4z"/></symbol>
 </svg>
 <div class="box">
-<h1>🌸 Лепесток · кабинет продавца</h1>
+<div class="head">
+  <div class="headLogo"><svg class="icn"><use href="#i-shop"/></svg></div>
+  <div>
+    <h1>ЛЕПЕСТОК · ПРОДАВЕЦ</h1>
+    <div class="who" id="who"></div>
+  </div>
+</div>
 <div id="loginBox" class="card hidden">
-  <div class="who">Вход для продавцов цветочных магазинов.</div>
+  <div class="who2">Вход для продавцов цветочных магазинов.</div>
   <input id="email" type="email" placeholder="Email">
   <input id="pass" type="password" placeholder="Пароль">
   <button class="btn" onclick="doLogin()">Войти</button>
@@ -80,16 +87,15 @@ textarea{min-height:80px;resize:vertical}
 </div>
 <div id="denied" class="hidden">
   <div class="card" style="text-align:center">
-    <div style="font-size:40px;margin-bottom:8px">🚫</div>
-    <div style="font-weight:700;margin-bottom:8px">Нет доступа</div>
-    <div style="font-size:13px;color:#94A3B8">Этот аккаунт не является продавцом. Обратитесь к администратору сайта.</div>
-    <button class="btn" style="margin-top:14px;background:#FFF5F5;color:#1A1A2E" onclick="logout()">Выйти</button>
+    <div style="font-size:36px;margin-bottom:6px">🚫</div>
+    <div style="font-weight:800;margin-bottom:6px">Нет доступа</div>
+    <div style="font-size:12px;color:var(--gray)">Этот аккаунт не является продавцом. Обратитесь к администратору сайта.</div>
+    <button class="btn" style="margin-top:12px;background:var(--bg);color:var(--ink)" onclick="logout()">Выйти</button>
   </div>
 </div>
 <div id="panel" class="hidden">
-  <div class="who" id="who"></div>
   <div class="tabs">
-    <button class="tab on" id="tabOrders" onclick="setTab('orders')"><svg class="icn"><use href="#i-box"/></svg>Заказы (<span id="cOrders">0</span>)</button>
+    <button class="tab on" id="tabOrders" onclick="setTab('orders')"><svg class="icn"><use href="#i-box"/></svg>Заказы<span class="badge" id="cOrders">0</span></button>
     <button class="tab" id="tabBouquets" onclick="setTab('bouquets')"><svg class="icn"><use href="#i-flower"/></svg>Мои букеты</button>
     <button class="tab" id="tabReviews" onclick="setTab('reviews')"><svg class="icn"><use href="#i-comment"/></svg>Отзывы</button>
   </div>
@@ -115,7 +121,7 @@ async function boot(){
   if(!pr.data||!pr.data.is_florist){$('loginBox').classList.add('hidden');$('denied').classList.remove('hidden');return;}
   isFlorist=true;
   $('loginBox').classList.add('hidden');$('panel').classList.remove('hidden');
-  $('who').textContent='🌸 продавец: '+(me.email||'');
+  $('who').textContent='продавец: '+(me.email||'');
   await refresh();
 }
 async function doLogin(){
@@ -160,7 +166,7 @@ function renderOrders(){
     const backBtn=back?'<button class="info" onclick="updateOrder('+o.id+',\''+back+'\')">← назад</button>':'';
     const callBtn=o.recipient_phone?'<button class="day" onclick="call(\''+esc(o.recipient_phone)+'\')">📞 позвонить</button>':(o.sender_phone?'<button class="day" onclick="call(\''+esc(o.sender_phone)+'\')">📞 заказчик</button>':'');
     return '<div class="card"><div class="mcat">'+whenRu(o.created_at)+' · <span class="statusPill '+statusCls(o.status)+'">'+statusRu(o.status)+'</span></div>'+
-      '<div class="bouquetRow">'+(b&&b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:40px">🌷</div>')+
+      '<div class="bouquetRow">'+(b&&b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:34px">🌷</div>')+
       '<div class="bInfo"><div class="title">'+esc(b?b.title:'Букет удалён')+'</div><div class="price">'+(b?b.price+' ₽':'?')+'</div><div class="cat">'+kindRu+'</div></div></div>'+
       '<div class="orderMeta">'+
         (o.recipient_name?'<div>👤 получатель: <b>'+esc(o.recipient_name)+'</b>'+(o.recipient_phone?' · '+esc(o.recipient_phone):'')+'</div>':'')+
@@ -168,7 +174,7 @@ function renderOrders(){
         (o.sender_name?'<div>📲 заказчик: <b>'+esc(o.sender_name)+'</b>'+(o.sender_phone?' · '+esc(o.sender_phone):'')+'</div>':'')+
         (o.note?'<div>📝 комментарий: <i>'+esc(o.note)+'</i></div>':'')+
       '</div>'+
-      '<div class="mbtns" style="margin-top:10px">'+callBtn+backBtn+nextBtn+cancelBtn+'</div></div>';
+      '<div class="mbtns" style="margin-top:8px">'+callBtn+backBtn+nextBtn+cancelBtn+'</div></div>';
   }).join(''):'<div class="empty">Нет заказов со статусом «'+statusRu(orderFilter)+'» 🎉</div>';
   box.innerHTML='<div class="rangeSel">'+filters.map(f=>'<button class="'+(orderFilter===f[0]?'on':'')+'" onclick="setOrderFilter(\''+f[0]+'\')">'+f[1]+' ('+myOrders.filter(o=>o.status===f[0]).length+')</button>').join('')+'</div>'+cards;
 }
@@ -184,22 +190,22 @@ function renderBouquets(){
     '<input id="fTitle" placeholder="Название (например: Нежный пион)">'+
     '<input id="fPrice" type="number" placeholder="Цена в рублях">'+
     '<textarea id="fDesc" placeholder="Описание — что входит в букет"></textarea>'+
-    '<input id="fCat" placeholder="Категория (розы / полевые / лилии / тюльпаны / другое)">'+
-    '<button class="btn" style="background:#FFF5F5;color:#1A1A2E" onclick="$(\'fPhoto\').click()">📷 Фото букета</button>'+
+    '<input id="fCat" placeholder="Категория (розы / полевые / лилии / тюльпаны)">'+
+    '<button class="btn" style="background:var(--bg);color:var(--ink)" onclick="$(\'fPhoto\').click()">📷 Фото букета</button>'+
     '<input type="file" id="fPhoto" accept="image/*" style="display:none" onchange="onPhotoPick(this)">'+
-    '<span id="fPhotoName" style="font-size:11px;color:#94A3B8"></span>'+
-    '<label style="display:flex;gap:8px;align-items:center;font-size:13px;margin-top:10px"><input type="checkbox" id="fStock" checked style="width:auto;margin:0"> В наличии</label>'+
-    '<label style="display:flex;gap:8px;align-items:center;font-size:13px;margin-top:6px"><input type="checkbox" id="fDay" style="width:auto;margin:0"> Букет дня</label>'+
+    '<span id="fPhotoName" style="font-size:10.5px;color:var(--gray)"></span>'+
+    '<label><input type="checkbox" id="fStock" checked> В наличии</label>'+
+    '<label><input type="checkbox" id="fDay"> Букет дня</label>'+
     '<button class="btn" style="margin-top:10px" onclick="submitBouquet()">Сохранить букет</button>'+
     '</div>';
   const list=myBouquets.length?myBouquets.map(b=>
-    '<div class="card"><div class="bouquetRow">'+(b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:40px;background:linear-gradient(135deg,#FFE5E5,#F5E6FF)">🌷</div>')+
-    '<div class="info"><div class="title">'+esc(b.title)+(b.is_day?' <span class="statusPill" style="background:rgba(255,107,107,.14);color:#FF6B6B">⭐ букет дня</span>':'')+'</div>'+
+    '<div class="card"><div class="bouquetRow">'+(b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:34px;background:linear-gradient(135deg,#FFE5E5,#F5E6FF)">🌷</div>')+
+    '<div class="bInfo"><div class="title">'+esc(b.title)+(b.is_day?' <span class="statusPill s-new">⭐ букет дня</span>':'')+'</div>'+
     '<div class="price">'+b.price+' ₽</div>'+
     '<div class="cat">'+esc(b.category||'без категории')+' · '+(b.in_stock?'<span style="color:#10B981">в наличии</span>':'<span style="color:#EF4444">под заказ</span>')+'</div>'+
     '</div></div>'+
-    (b.description?'<div class="mtxt" style="font-size:12px;color:#94A3B8;margin-top:6px">'+esc(b.description)+'</div>':'')+
-    '<div class="mbtns" style="margin-top:10px">'+
+    (b.description?'<div class="mtxt" style="font-size:11.5px;color:var(--gray);margin-top:4px">'+esc(b.description)+'</div>':'')+
+    '<div class="mbtns" style="margin-top:8px">'+
       (b.is_day?'<button class="no" onclick="toggleDay('+b.id+',false)">убрать из дня</button>':'<button class="day" onclick="toggleDay('+b.id+',true)">⭐ букет дня</button>')+
       '<button class="info" onclick="toggleStock('+b.id+','+(b.in_stock?'false':'true')+')">'+(b.in_stock?'в под заказ':'в наличии')+'</button>'+
       '<button class="no" onclick="delBouquet('+b.id+')">🗑 удалить</button>'+
