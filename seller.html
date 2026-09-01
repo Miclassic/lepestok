@@ -11,7 +11,8 @@
 body{background:linear-gradient(160deg,#FFF7F5 0%,#FFEDEB 45%,#F6ECFF 100%);color:var(--ink);min-height:100vh}
 .top{position:fixed;top:0;left:0;right:0;z-index:20;background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 24px rgba(0,0,0,.06)}
 .topIn{max-width:620px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:12px 14px}
-.shopAva{width:44px;height:44px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:22px;flex:none;overflow:hidden;box-shadow:0 6px 18px rgba(255,107,107,.35)}
+.shopAva{width:44px;height:44px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden;box-shadow:0 6px 18px rgba(255,107,107,.35);color:#fff}
+.shopAva .icn{width:22px;height:22px}
 .shopAva img{width:100%;height:100%;object-fit:cover}
 .shopName{font-weight:800;font-size:15px}
 .shopStatus{font-size:10.5px;color:var(--grn);font-weight:700;display:flex;align-items:center;gap:4px}
@@ -22,7 +23,8 @@ main{max-width:620px;margin:0 auto;padding:76px 14px 96px}
 .chatRow{display:flex;gap:10px;align-items:center;padding:10px 12px;background:var(--card);border-radius:18px;box-shadow:var(--shadow);margin-bottom:8px;cursor:pointer;transition:.2s}
 .chatRow:active{transform:scale(.98)}
 .chatRow.fresh{border:2px solid rgba(255,107,107,.4)}
-.chatAva{width:52px;height:52px;border-radius:50%;flex:none;background:linear-gradient(135deg,#FFE5E5,#F5E6FF);display:flex;align-items:center;justify-content:center;font-size:24px;overflow:hidden}
+.chatAva{width:52px;height:52px;border-radius:50%;flex:none;background:linear-gradient(135deg,#FFE5E5,#F5E6FF);display:flex;align-items:center;justify-content:center;overflow:hidden;color:var(--pink)}
+.chatAva .icn{width:24px;height:24px}
 .chatAva img{width:100%;height:100%;object-fit:cover}
 .chatBody{flex:1;min-width:0}
 .chatTop{display:flex;justify-content:space-between;gap:6px;align-items:center}
@@ -41,11 +43,13 @@ main{max-width:620px;margin:0 auto;padding:76px 14px 96px}
 .bnav button .icn{width:20px;height:20px}
 .bnav button.on{color:var(--coral)}
 .bnav .nb{position:absolute;top:5px;right:calc(50% - 20px);min-width:15px;height:15px;border-radius:999px;background:var(--gradient);color:#fff;font-size:8.5px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 4px}
-.fab{position:fixed;right:16px;bottom:calc(78px + env(safe-area-inset-bottom));width:54px;height:54px;border:none;border-radius:50%;background:var(--gradient);color:#fff;font-size:26px;cursor:pointer;box-shadow:0 10px 30px rgba(255,107,107,.45);z-index:19}
+.fab{position:fixed;right:16px;bottom:calc(78px + env(safe-area-inset-bottom));width:54px;height:54px;border:none;border-radius:50%;background:var(--gradient);color:#fff;cursor:pointer;box-shadow:0 10px 30px rgba(255,107,107,.45);z-index:19;display:flex;align-items:center;justify-content:center}
+.fab .icn{width:24px;height:24px}
 .card{background:var(--card);border-radius:18px;padding:12px;box-shadow:var(--shadow);margin-bottom:10px}
 input,textarea{width:100%;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:11px;font-size:14px;margin-bottom:8px;font-family:inherit}
 input:focus,textarea:focus{outline:none;border-color:var(--coral)}
-.btn{width:100%;background:var(--gradient);color:#fff;border:none;border-radius:999px;padding:13px;font-weight:800;font-size:14px;cursor:pointer}
+.btn{width:100%;background:var(--gradient);color:#fff;border:none;border-radius:999px;padding:13px;font-weight:800;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
+.btn .icn{width:16px;height:16px}
 .btn.soft{background:var(--bg);color:var(--ink)}
 .btn.green{background:linear-gradient(135deg,#10B981,#059669)}
 .btn.amber{background:linear-gradient(135deg,#F59E0B,#D97706)}
@@ -57,16 +61,20 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 .hidden{display:none!important}
 .empty{text-align:center;color:var(--gray);padding:30px;font-size:13px}
-.oLine{font-size:13px;line-height:1.6;color:var(--gray);margin-bottom:4px}
+.bigIcn{width:44px;height:44px;color:var(--coral);opacity:.45;display:block;margin:0 auto 10px}
+.oLine{font-size:13px;line-height:1.7;color:var(--gray);margin-bottom:4px}
 .oLine b{color:var(--ink)}
 .exRow{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card);border-radius:16px;box-shadow:var(--shadow);margin-bottom:8px}
 .exRow .nm{flex:1;font-weight:700;font-size:13px}
 .exRow .pr{font-weight:800;color:var(--coral);font-size:13px}
-.exRow .del{border:none;background:#FFF1F0;color:var(--red);border-radius:999px;padding:7px 11px;font-weight:700;font-size:11px;cursor:pointer}
+.delIco{border:none;background:#FFF1F0;color:var(--red);border-radius:999px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.delIco .icn{width:15px;height:15px}
 .bqRow{display:flex;gap:10px;align-items:center;padding:10px 12px;background:var(--card);border-radius:18px;box-shadow:var(--shadow);margin-bottom:8px}
-.bqRow .ph{width:52px;height:52px;border-radius:14px;object-fit:cover;flex:none;background:linear-gradient(135deg,#FFE5E5,#F5E6FF);display:flex;align-items:center;justify-content:center;font-size:24px}
+.bqRow .ph{width:52px;height:52px;border-radius:14px;flex:none;background:linear-gradient(135deg,#FFE5E5,#F5E6FF);display:flex;align-items:center;justify-content:center;color:var(--pink);overflow:hidden}
+.bqRow .ph .icn{width:24px;height:24px}
 .bqRow .inf{flex:1;min-width:0}
-.bqRow .tt{font-weight:800;font-size:13px}
+.bqRow .tt{font-weight:800;font-size:13px;display:flex;align-items:center;gap:4px}
+.bqRow .tt .icn{width:13px;height:13px;color:var(--yel)}
 .bqRow .pp{color:var(--coral);font-weight:800;font-size:12.5px}
 .icn{width:1.05em;height:1.05em;display:inline-block;vertical-align:-.15em;flex:none}
 #toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(30,41,59,.95);color:#F1F5F9;border:2px solid rgba(255,107,107,.4);border-radius:16px;font-weight:700;font-size:13px;padding:12px 20px;text-align:center;max-width:82vw;z-index:99}
@@ -81,10 +89,17 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.8l2.6 5.6 6 .7-4.5 4.1 1.2 5.9L12 16.2l-5.3 2.9 1.2-5.9L3.4 9.1l6-.7z"/></symbol>
 <symbol id="i-comment" viewBox="0 0 24 24"><path fill="currentColor" d="M4 4h16v12H9l-5 4z"/></symbol>
 <symbol id="i-shop" viewBox="0 0 24 24"><path fill="currentColor" d="M3 9h18v11H3zM6 6h12l2 3H4z"/></symbol>
+<symbol id="i-camera" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></g></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><path fill="currentColor" d="M6 3h4l1 5-2.5 1.5a12 12 0 0 0 6 6L16 13l5 1v4a2 2 0 0 1-2 2A16 16 0 0 1 4 5a2 2 0 0 1 2-2z"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 12.5l5 5L20 6.5"/></symbol>
+<symbol id="i-truck" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M2 6h12v10H2z"/><path d="M14 9h4l3 3v4h-7z"/><circle cx="6" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/></g></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 14h10l1-14"/></g></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></symbol>
 </svg>
 <div class="top">
   <div class="topIn">
-    <div class="shopAva" id="shopAva">🌷</div>
+    <div class="shopAva" id="shopAva"><svg class="icn"><use href="#i-flower"/></svg></div>
     <div>
       <div class="shopName" id="shopName">Цветочная лавка</div>
       <div class="shopStatus">кабинет продавца</div>
@@ -102,7 +117,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
   </section>
   <section id="sec-extras" class="hidden">
     <div class="secTitle">Допы к букетам</div>
-    <div class="card"><input id="exName" placeholder="Название (Открытка с вашими словами)"><input id="exPrice" type="number" placeholder="Цена в рублях (0 = бесплатно)"><button class="btn" onclick="addExtra()">＋ Добавить доп</button></div>
+    <div class="card"><input id="exName" placeholder="Название (Открытка с вашими словами)"><input id="exPrice" type="number" placeholder="Цена в рублях (0 = бесплатно)"><button class="btn" onclick="addExtra()"><svg class="icn"><use href="#i-plus"/></svg>Добавить доп</button></div>
     <div id="extraList"></div>
   </section>
   <section id="sec-reviews" class="hidden">
@@ -116,14 +131,14 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
       <input id="shPhone" placeholder="Телефон">
       <input id="shAddr" placeholder="Адрес">
       <textarea id="shDesc" placeholder="Описание"></textarea>
-      <button class="btn soft" onclick="document.getElementById('shLogo').click()">📷 Логотип</button>
+      <button class="btn soft" onclick="document.getElementById('shLogo').click()"><svg class="icn"><use href="#i-camera"/></svg>Логотип</button>
       <input type="file" id="shLogo" accept="image/*" style="display:none" onchange="pickLogo(this)">
       <button class="btn" style="margin-top:8px" onclick="saveShop()">Сохранить</button>
     </div>
     <button class="btn danger" onclick="logout()">Выйти</button>
   </section>
 </main>
-<button class="fab hidden" id="fabBouq" onclick="openAddBouquet()">＋</button>
+<button class="fab hidden" id="fabBouq" onclick="openAddBouquet()"><svg class="icn"><use href="#i-plus"/></svg></button>
 <nav class="bnav">
   <button class="on" id="nvOrders" onclick="showSec('orders')"><svg class="icn"><use href="#i-box"/></svg>Заказы<span class="nb hidden" id="nbOrders"></span></button>
   <button id="nvBouquets" onclick="showSec('bouquets')"><svg class="icn"><use href="#i-flower"/></svg>Букеты</button>
@@ -149,6 +164,7 @@ const sb=supabase.createClient('https://dhwkkbtrhexywymegwoo.supabase.co','eyJhb
 let me=null,shop=null,myBouquets=[],myOrders=[],myReviews=[],myExtras=[],pickedPhoto=null,pickedLogo=null;
 function $(id){return document.getElementById(id);}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function ic(n){return '<svg class="icn"><use href="#'+n+'"/></svg>';}
 function toast(m){const t=$('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('hidden'),2400);}
 function closeSheet(id){$(id).classList.add('hidden');}
 function whenRu(t){try{return new Date(t).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
@@ -205,32 +221,33 @@ function renderOrders(){
     const b=myBouquets.find(x=>x.id===o.bouquet_id);
     const name=o.recipient_name||o.sender_name||'Клиент';
     return '<div class="chatRow'+(o.status==='new'?' fresh':'')+'" onclick="openOrder('+o.id+')">'+
-      '<div class="chatAva">'+(b&&b.photo_url?'<img src="'+b.photo_url+'">':'🌷')+'</div>'+
+      '<div class="chatAva">'+(b&&b.photo_url?'<img src="'+b.photo_url+'">':ic('i-flower'))+'</div>'+
       '<div class="chatBody"><div class="chatTop"><span class="chatName">'+esc(name)+'</span><span class="chatTime">'+whenRu(o.created_at)+'</span></div>'+
       '<div class="chatMsg">'+esc(b?b.title:'Букет')+' · '+((b?b.price:'?')+' ₽')+' · '+(o.kind==='delivery'?'доставка':'самовывоз')+'</div></div>'+
       '<div class="chatMeta"><span class="stPill s-'+o.status+'">'+statusRu(o.status)+'</span></div></div>';
-  }).join(''):'<div class="empty">Пока нет заказов.<br>Как только кто-то закажет — он появится здесь 🌷</div>';
+  }).join(''):'<div class="empty">'+icBig('i-box')+'Пока нет заказов.<br>Как только кто-то закажет — он появится здесь</div>';
 }
+function icBig(n){return '<svg class="bigIcn"><use href="#'+n+'"/></svg>';}
 function openOrder(id){
   const o=myOrders.find(x=>x.id===id);if(!o)return;
   const b=myBouquets.find(x=>x.id===o.bouquet_id);
   let exHtml='';
-  if(o.extras&&o.extras.length){exHtml='<div class="oLine">➕ допы: <b>'+o.extras.map(e=>esc(e.name)+(e.price?' ('+e.price+' ₽)':'')).join(', ')+'</b></div>';}
+  if(o.extras&&o.extras.length){exHtml='<div class="oLine">Допы: <b>'+o.extras.map(e=>esc(e.name)+(e.price?' ('+e.price+' ₽)':'')).join(', ')+'</b></div>';}
   const phone=o.recipient_phone||o.sender_phone;
   $('orderBody').innerHTML='<h3>'+esc(b?b.title:'Букет')+' · '+(b?b.price+' ₽':'')+'</h3>'+
-    '<div class="oLine">👤 получатель: <b>'+esc(o.recipient_name||o.sender_name||'—')+'</b></div>'+
-    (phone?'<div class="oLine">📞 телефон: <b>'+esc(phone)+'</b></div>':'')+
-    (o.address?'<div class="oLine">📍 адрес: <b>'+esc(o.address)+'</b></div>':'')+
-    (o.sender_name&&o.recipient_name?'<div class="oLine">📲 заказчик: <b>'+esc(o.sender_name)+'</b>'+(o.sender_phone?' · '+esc(o.sender_phone):'')+'</div>':'')+
-    (o.note?'<div class="oLine">📝 комментарий: <i>'+esc(o.note)+'</i></div>':'')+
+    '<div class="oLine">Получатель: <b>'+esc(o.recipient_name||o.sender_name||'—')+'</b></div>'+
+    (phone?'<div class="oLine">Телефон: <b>'+esc(phone)+'</b></div>':'')+
+    (o.address?'<div class="oLine">Адрес: <b>'+esc(o.address)+'</b></div>':'')+
+    (o.sender_name&&o.recipient_name?'<div class="oLine">Заказчик: <b>'+esc(o.sender_name)+'</b>'+(o.sender_phone?' · '+esc(o.sender_phone):'')+'</div>':'')+
+    (o.note?'<div class="oLine">Комментарий: <i>'+esc(o.note)+'</i></div>':'')+
     exHtml+
-    '<div class="oLine" style="margin-top:6px">статус: <span class="stPill s-'+o.status+'">'+statusRu(o.status)+'</span></div>'+
+    '<div class="oLine" style="margin-top:6px">Статус: <span class="stPill s-'+o.status+'">'+statusRu(o.status)+'</span></div>'+
     '<div class="rowBtns">'+
-      (phone?'<button class="btn" onclick="call(\''+esc(phone)+'\')">📞 Позвонить</button>':'')+
-      (o.status==='new'?'<button class="btn green" onclick="setStatus('+o.id+',\'accepted\')">✅ Принять заказ</button>':'')+
-      (o.status==='accepted'?'<button class="btn amber" onclick="setStatus('+o.id+',\'ready\')">💐 Готов</button>':'')+
-      (o.status==='ready'?'<button class="btn green" onclick="setStatus('+o.id+',\'delivered\')">🚚 Доставлен</button>':'')+
-      (o.status!=='delivered'&&o.status!=='cancelled'?'<button class="btn danger" onclick="setStatus('+o.id+',\'cancelled\')">Отменить</button>':'')+
+      (phone?'<button class="btn" onclick="call(\''+esc(phone)+'\')">'+ic('i-phone')+'Позвонить</button>':'')+
+      (o.status==='new'?'<button class="btn green" onclick="setStatus('+o.id+',\'accepted\')">'+ic('i-check')+'Принять заказ</button>':'')+
+      (o.status==='accepted'?'<button class="btn amber" onclick="setStatus('+o.id+',\'ready\')">'+ic('i-flower')+'Готов</button>':'')+
+      (o.status==='ready'?'<button class="btn green" onclick="setStatus('+o.id+',\'delivered\')">'+ic('i-truck')+'Доставлен</button>':'')+
+      (o.status!=='delivered'&&o.status!=='cancelled'?'<button class="btn danger" onclick="setStatus('+o.id+',\'cancelled\')">'+ic('i-x')+'Отменить</button>':'')+
       '<button class="btn soft" onclick="closeSheet(\'orderSheet\')">Закрыть</button>'+
     '</div>';
   $('orderSheet').classList.remove('hidden');
@@ -245,10 +262,10 @@ async function setStatus(id,st){
 function renderBouquets(){
   const box=$('bouqList');
   box.innerHTML=myBouquets.length?myBouquets.map(b=>
-    '<div class="bqRow"><div class="ph">'+(b.photo_url?'<img src="'+b.photo_url+'" style="width:100%;height:100%;object-fit:cover;border-radius:14px">':'🌷')+'</div>'+
-    '<div class="inf"><div class="tt">'+esc(b.title)+(b.is_day?' ⭐':'')+'</div><div class="pp">'+b.price+' ₽ · '+(b.in_stock?'в наличии':'под заказ')+'</div></div>'+
-    '<button class="exRow del" style="flex:none" onclick="delBouquet('+b.id+')">🗑</button></div>'
-  ).join(''):'<div class="empty">Пока нет букетов. Нажми ＋ чтобы добавить</div>';
+    '<div class="bqRow"><div class="ph">'+(b.photo_url?'<img src="'+b.photo_url+'" style="width:100%;height:100%;object-fit:cover">':ic('i-flower'))+'</div>'+
+    '<div class="inf"><div class="tt">'+esc(b.title)+(b.is_day?ic('i-star'):'')+'</div><div class="pp">'+b.price+' ₽ · '+(b.in_stock?'в наличии':'под заказ')+'</div></div>'+
+    '<button class="delIco" onclick="delBouquet('+b.id+')">'+ic('i-trash')+'</button></div>'
+  ).join(''):'<div class="empty">'+icBig('i-flower')+'Пока нет букетов.<br>Нажми ＋ чтобы добавить</div>';
 }
 function openAddBouquet(){
   pickedPhoto=null;
@@ -257,7 +274,7 @@ function openAddBouquet(){
     '<input id="fPrice" type="number" placeholder="Цена в рублях">'+
     '<textarea id="fDesc" placeholder="Описание (что входит)"></textarea>'+
     '<input id="fCat" placeholder="Категория (розы / тюльпаны / ...)">'+
-    '<button class="btn soft" onclick="document.getElementById(\'fPhoto\').click()">📷 Фото</button>'+
+    '<button class="btn soft" onclick="document.getElementById(\'fPhoto\').click()">'+ic('i-camera')+'Фото</button>'+
     '<input type="file" id="fPhoto" accept="image/*" style="display:none" onchange="pickPhoto(this)">'+
     '<span id="fPhotoName" style="font-size:11px;color:var(--gray)"></span>'+
     '<label style="display:flex;gap:8px;align-items:center;font-size:13px;margin:8px 0"><input type="checkbox" id="fStock" checked style="width:auto;margin:0"> В наличии</label>'+
@@ -265,7 +282,7 @@ function openAddBouquet(){
     '<button class="btn soft" style="margin-top:8px" onclick="closeSheet(\'bouqSheet\')">Закрыть</button>';
   $('bouqSheet').classList.remove('hidden');
 }
-function pickPhoto(inp){const f=inp.files[0];if(!f)return;pickedPhoto=f;$('fPhotoName').textContent='📷 '+f.name.slice(0,20);}
+function pickPhoto(inp){const f=inp.files[0];if(!f)return;pickedPhoto=f;$('fPhotoName').textContent='Файл: '+f.name.slice(0,20);}
 async function submitBouquet(){
   const t=$('fTitle').value.trim(),p=+$('fPrice').value;
   if(!t||!p){toast('Заполни название и цену');return;}
@@ -280,7 +297,7 @@ async function submitBouquet(){
   if(res.error){toast('Ошибка: '+res.error.message);return;}
   closeSheet('bouqSheet');
   await refresh();
-  toast('Букет добавлен 🌷');
+  toast('Букет добавлен');
 }
 async function delBouquet(id){
   if(!confirm('Удалить букет?'))return;
@@ -291,8 +308,8 @@ async function delBouquet(id){
 function renderExtras(){
   const box=$('extraList');
   box.innerHTML=myExtras.length?myExtras.map(e=>
-    '<div class="exRow"><div class="nm">'+esc(e.name)+'</div><div class="pr">'+(e.price?e.price+' ₽':'бесплатно')+'</div><button class="del" onclick="delExtra('+e.id+')">🗑</button></div>'
-  ).join(''):'<div class="empty">Допов пока нет. Добавь первый — например «Открытка» 🌸</div>';
+    '<div class="exRow"><div class="nm">'+esc(e.name)+'</div><div class="pr">'+(e.price?e.price+' ₽':'бесплатно')+'</div><button class="delIco" onclick="delExtra('+e.id+')">'+ic('i-trash')+'</button></div>'
+  ).join(''):'<div class="empty">'+icBig('i-star')+'Допов пока нет.<br>Добавь первый — например «Открытка»</div>';
 }
 async function addExtra(){
   if(!shop){toast('Сначала заполни магазин');return;}
@@ -302,7 +319,7 @@ async function addExtra(){
   if(res.error){toast('Ошибка: '+res.error.message);return;}
   $('exName').value='';$('exPrice').value='';
   await refresh();
-  toast('Доп добавлен ✨');
+  toast('Доп добавлен');
 }
 async function delExtra(id){
   const res=await sb.from('shop_extras').delete().eq('id',id);
@@ -315,12 +332,12 @@ function renderReviews(){
   const list=myReviews.filter(c=>ids.includes(c.bouquet_id));
   box.innerHTML=list.length?list.map(c=>{
     const b=myBouquets.find(x=>x.id===c.bouquet_id);
-    return '<div class="card"><div style="font-size:11px;color:var(--gray)">'+whenRu(c.created_at)+' · <b>'+esc(c.user_nick||'аноним')+'</b>'+(c.rating?' · ⭐'+c.rating:'')+'</div>'+
+    return '<div class="card"><div style="font-size:11px;color:var(--gray)">'+whenRu(c.created_at)+' · <b>'+esc(c.user_nick||'аноним')+'</b>'+(c.rating?' · '+c.rating+'/5':'')+'</div>'+
       (b?'<div style="font-size:11px;color:var(--coral);margin-top:2px">к букету: '+esc(b.title)+'</div>':'')+
       '<div style="font-size:13.5px;margin-top:6px;line-height:1.5">'+esc(c.text)+'</div></div>';
-  }).join(''):'<div class="empty">Отзывов пока нет 🎉</div>';
+  }).join(''):'<div class="empty">'+icBig('i-comment')+'Отзывов пока нет</div>';
 }
-function pickLogo(inp){const f=inp.files[0];if(!f)return;pickedLogo=f;toast('📷 '+f.name.slice(0,20));}
+function pickLogo(inp){const f=inp.files[0];if(!f)return;pickedLogo=f;toast('Файл: '+f.name.slice(0,20));}
 async function saveShop(){
   if(!shop){toast('Магазин не найден');return;}
   let logo_url=shop.logo_url;
@@ -334,7 +351,7 @@ async function saveShop(){
   if(res.error){toast('Ошибка: '+res.error.message);return;}
   pickedLogo=null;
   await refresh();
-  toast('Магазин сохранён ✅');
+  toast('Магазин сохранён');
 }
 boot();
 </script>
