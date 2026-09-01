@@ -5,11 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Лепесток — цветочный агрегатор</title>
 <meta name="theme-color" content="#FF6B6B">
-<link href="https://fonts.cdnfonts.com/css/opposans" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
 <!-- тема всегда светлая -->
 <style>
 :root{--bg:#FFF5F5;--card:#FFFFFF;--ink:#1A1A2E;--gray:#94A3B8;--red:#EF4444;--yel:#F59E0B;--grn:#10B981;--pink:#FF6B9D;--coral:#FF6B6B;--purple:#A855F7;--gradient:linear-gradient(135deg,#FF6B6B 0%,#FF6B9D 50%,#A855F7 100%);--glass:rgba(255,255,255,0.85);--shadow:0 8px 32px rgba(255,107,107,0.15);--shadow-hover:0 12px 48px rgba(255,107,107,0.25)}
-*{box-sizing:border-box;margin:0;padding:0;font-family:'OPPO Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+@font-face{font-family:'Num';src:local('Roboto'),local('Helvetica Neue'),local('Arial');unicode-range:U+0030-0039}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Num','Playfair Display',system-ui,-apple-system,'Segoe UI',Roboto,serif;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);color:var(--ink);min-height:100vh;position:relative;overflow-x:hidden}
 body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,107,107,0.08) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(168,85,247,0.08) 0%,transparent 50%);pointer-events:none;z-index:0}
 body.night{--bg:#0F172A;--card:#1E293B;--ink:#F1F5F9;--gray:#64748B;--glass:rgba(30,41,59,0.85);background:var(--bg)}
@@ -45,6 +48,33 @@ body.night .skeleton{background:linear-gradient(90deg,#1E293B 25%,#334155 50%,#1
 main{padding:150px 16px 30px;max-width:620px;width:100%;margin:0 auto;position:relative;z-index:1}
 .secHead{font-weight:800;font-size:16px;margin:4px 0 4px;display:flex;align-items:center;gap:7px}
 .secTitle{text-align:center;font-size:26px;font-weight:800;letter-spacing:.35em;text-transform:uppercase;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:4px 0 14px;padding-left:.35em}
+#tab-day{position:relative;overflow:hidden}
+#tab-day .secTitle{background:linear-gradient(135deg,#B45309,#F59E0B 50%,#D97706);-webkit-background-clip:text;background-clip:text}
+.fallLayer{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.leaf{position:absolute;top:-8%;animation:fall linear infinite;opacity:.45}
+.leaf svg{width:100%;height:100%}
+@keyframes fall{to{transform:translateY(115vh) rotate(360deg)}}
+#dayBox{position:relative}
+.dayCard{position:relative;z-index:1;background:var(--card);border-radius:24px;padding:12px;box-shadow:var(--shadow);animation:cardIn .5s ease both}
+.dayCard.back{position:absolute;left:6px;right:6px;top:10px;z-index:0;transform:scale(.96);opacity:.6;pointer-events:none}
+.dayPhoto{position:relative;border-radius:18px;overflow:hidden;margin-top:8px}
+.dayPhoto img{width:100%;height:min(60vh,520px);object-fit:cover;display:block}
+.dayName{font-size:20px;font-weight:800;margin-top:10px;display:flex;align-items:center;gap:6px}
+.swipeHint{text-align:center;color:var(--gray);font-size:10px;margin-top:8px;letter-spacing:.06em}
+#dayTop{touch-action:pan-y}
+.bn.dayTab{color:#D97706;font-weight:800}
+.bn.dayTab .icn{color:#F59E0B;animation:flamePulse 1.6s ease-in-out infinite}
+@keyframes flamePulse{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.25) rotate(-8deg)}}
+.bn.dayTab.on::after{background:linear-gradient(90deg,#F59E0B,#D97706);box-shadow:0 0 12px rgba(245,158,11,.7)}
+.tabLeaf{position:absolute;top:1px;right:6px;width:10px;height:10px;color:#FB923C;animation:leafSway 2.2s ease-in-out infinite}
+.bookMini{position:relative;width:44px;height:30px;margin:0 auto 4px;transform:rotate(-4deg);perspective:140px}
+.bookMini .half{position:absolute;top:5px;width:20px;height:22px;background:#FFF7ED;border:1.5px solid #D97706}
+.bookMini .half.l{left:1px;border-radius:6px 2px 2px 6px;transform:skewY(6deg)}
+.bookMini .half.r{right:1px;border-radius:2px 6px 6px 2px;transform:skewY(-6deg)}
+.bookMini .spine{position:absolute;left:50%;top:4px;bottom:4px;width:2px;background:#D97706;transform:translateX(-50%)}
+.bookMini .page{position:absolute;left:50%;top:5px;width:19px;height:21px;background:#fff;border:1px solid #E5B769;border-radius:2px 6px 6px 2px;transform-origin:left center;animation:pageFlip 2.8s ease-in-out infinite}
+@keyframes pageFlip{0%,15%{transform:rotateY(0)}55%,80%{transform:rotateY(-160deg)}95%,100%{transform:rotateY(-180deg);opacity:0}}
+@keyframes leafSway{0%,100%{transform:rotate(-20deg) translateY(0)}50%{transform:rotate(25deg) translateY(2px)}}
 .secSub{text-align:center;color:var(--gray);font-size:11px;line-height:1.5;margin:-8px 0 14px;padding:0 10px}
 .secHead .icn{color:var(--coral);width:17px;height:17px}
 .secDesc{color:var(--gray);font-size:12px;line-height:1.4;margin-bottom:14px}
@@ -52,7 +82,7 @@ main{padding:150px 16px 30px;max-width:620px;width:100%;margin:0 auto;position:r
 .searchBox input{width:100%;background:var(--card);border:2px solid transparent;border-radius:999px;padding:12px 16px 12px 44px;font-size:14px;box-shadow:var(--shadow)}
 .searchBox input:focus{outline:none;border-color:var(--coral)}
 .searchBox .icn{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--gray);width:18px;height:18px}
-.filters{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.filters{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding:2px 24px 6px 0;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 90%,transparent);mask-image:linear-gradient(90deg,#000 90%,transparent)}
 .filters::-webkit-scrollbar{display:none}
 .filter{background:var(--card);border:none;outline:none;border-radius:999px;padding:8px 14px;font-size:11px;font-weight:700;color:var(--gray);cursor:pointer;white-space:nowrap}
 .filter.on{background:var(--gradient);color:#fff;border:none;outline:none}
@@ -210,7 +240,7 @@ body.night .cityFab{color:#FFB3B3;border-color:#FFB3B3}
   </div>
   <div class="tabbar">
     <button class="bn on" data-t="shop" onclick="showTab('shop')"><svg class="icn"><use href="#i-flower"/></svg>витрина</button>
-    <button class="bn" data-t="day" onclick="showTab('day')"><svg class="icn"><use href="#i-flame"/></svg>букет дня</button>
+    <button class="bn dayTab" data-t="day" onclick="showTab('day')"><svg class="icn"><use href="#i-flame"/></svg>букет дня<svg class="tabLeaf" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C8 8 5 12 5 16a7 7 0 0 0 14 0c0-4-3-8-7-14z"/></svg></button>
     <button class="bn" data-t="mine" onclick="showTab('mine')"><svg class="icn"><use href="#i-doc"/></svg>мои</button>
     <button class="bn" data-t="profile" onclick="showTab('profile')"><svg class="icn"><use href="#i-user"/></svg>профиль</button>
   </div>
@@ -224,8 +254,10 @@ body.night .cityFab{color:#FFB3B3;border-color:#FFB3B3}
     <div id="feed"></div>
   </section>
   <section id="tab-day" class="hidden">
+    <div class="fallLayer" id="fallLayer"></div>
+    <div class="bookMini"><div class="half l"></div><div class="half r"></div><div class="spine"></div><div class="page"></div></div>
     <div class="secTitle">букет дня</div>
-    <div class="secSub">один особенный букет на сегодня — флорист выбирает его с настроением. меняется каждый вечер</div>
+    <div class="secSub">1 сентября — день знаний. букеты для учителей, первоклашек и всех, кто начинает новое 🍂 свайп вправо — если понравился, влево — дальше</div>
     <div id="dayBox"></div>
   </section>
   <section id="tab-quiz" class="hidden">
@@ -363,7 +395,54 @@ function renderFeed(){
   const html=list.map((b,i)=>bouquetCard(b,i)).join('');
   $('feed').innerHTML=html?'<div class="lpGrid">'+html+'</div>':'<div class="empty">Пока пусто — флорист скоро добавит букеты 🌸</div>';
 }
-function renderDay(){const d=bouquets.find(b=>b.is_day&&b.photo_url)||bouquets.find(b=>b.photo_url);$('dayBox').innerHTML=d?bouquetCard(d,0):'<div class="empty">Букет дня скоро появится</div>';}
+let dayDeck=[],dayIdx=0;
+function renderDay(){
+  dayDeck=bouquets.filter(b=>b.is_day&&b.photo_url);
+  if(!dayDeck.length)dayDeck=bouquets.filter(b=>b.photo_url);
+  dayIdx=0;drawDay();
+}
+function drawDay(){
+  const box=$('dayBox');if(!box)return;
+  const rest=dayDeck.slice(dayIdx);
+  if(!rest.length){box.innerHTML='<div class="empty">На сегодня всё — загляни завтра 🍂</div><button class="btn soft" style="margin-top:10px" onclick="dayIdx=0;drawDay()">показать сначала</button>';return;}
+  box.innerHTML=rest.slice(0,2).map((b,i)=>dayCard(b,i)).join('');
+  bindSwipe();
+}
+function dayCard(b,i){
+  const shop=shops.find(s=>s.owner_id===b.user_id);
+  const r=avgRating(b.id);
+  const star='<svg class="icn" style="color:var(--yel);width:12px;height:12px"><use href="#i-star"/></svg>';
+  const likes=bouquetLikes.filter(l=>l.bouquet_id===b.id).length;
+  const cms=comments.filter(c=>c.bouquet_id===b.id&&!c.parent_id).length;
+  return '<div class="dayCard'+(i?' back':'')+'" '+(i?'':'id="dayTop"')+' onclick="dayTap('+b.id+')">'+(shop?'<div class="shopWrap"><div class="floralHalo"></div><div class="shopRow">'+(shop.logo_url?'<img class="shopLogo" src="'+shop.logo_url+'">':ic('i-shop'))+esc(shop.name)+'</div></div>':'')+'<div class="dayPhoto"><img src="'+b.photo_url+'" loading="lazy"><div class="glassBar"></div><div class="pricePlate">'+b.price+' ₽</div></div><div class="dayName">'+esc(b.title)+(r?star+' '+r.toFixed(1):'')+'</div><div class="lpFoot" style="margin-top:6px;justify-content:flex-start;gap:10px"><span class="lpStock '+(b.in_stock?'in':'out')+'">'+(b.in_stock?'в наличии':'под заказ')+'</span>'+(b.category?'<span class="catTxt">'+esc(b.category)+'</span>':'')+'</div><div class="lpActs" style="margin-top:8px"><button onclick="event.stopPropagation();likeBouquet('+b.id+')">'+ic('i-heart')+' '+likes+'</button><button onclick="event.stopPropagation();openComments('+b.id+')">'+ic('i-comment')+' '+cms+'</button><button class="ord" onclick="event.stopPropagation();openOrder('+b.id+')">заказать</button></div>'+(i?'':'<div class="swipeHint">свайп вправо — в избранное, влево — следующий</div>')+'</div>';
+}
+let daySwipeBlock=false;
+function dayTap(id){if(daySwipeBlock){daySwipeBlock=false;return;}openCard(id);}
+function bindSwipe(){
+  const top=$('dayTop');if(!top)return;
+  let sx=0,sy=0,dx=0,drag=false;
+  top.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;drag=true;top.style.transition='none';},{passive:true});
+  top.addEventListener('touchmove',e=>{if(!drag)return;dx=e.touches[0].clientX-sx;const dy=Math.abs(e.touches[0].clientY-sy);if(Math.abs(dx)>dy){top.style.transform='translateX('+dx+'px) rotate('+(dx/18)+'deg)';top.style.opacity=1-Math.abs(dx)/600;}},{passive:true});
+  top.addEventListener('touchend',()=>{drag=false;if(Math.abs(dx)>10)daySwipeBlock=true;if(Math.abs(dx)>90){flyDay(dx>0?1:-1);}else{top.style.transition='all .25s';top.style.transform='';top.style.opacity='';}dx=0;});
+}
+function flyDay(dir){
+  const top=$('dayTop');if(!top)return;
+  if(dir>0)likeBouquet(dayDeck[dayIdx].id);
+  top.style.transition='all .3s';top.style.transform='translateX('+(dir*120)+'vw) rotate('+(dir*25)+'deg)';top.style.opacity=0;
+  setTimeout(()=>{dayIdx++;drawDay();},280);
+}
+function renderFall(){
+  const fl=$('fallLayer');if(!fl)return;
+  const leaf='<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C8 8 5 12 5 16a7 7 0 0 0 14 0c0-4-3-8-7-14z"/></svg>';
+  const spark='<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" fill="currentColor"/></svg>';
+  const cols=['#F59E0B','#FB923C','#EAB308','#D97706','#FBBF24'];
+  let h='';
+  for(let i=0;i<18;i++){
+    const s=i%3===2;const sz=s?4+Math.round(Math.random()*4):9+Math.round(Math.random()*14);
+    h+='<span class="leaf" style="left:'+(Math.random()*95)+'%;width:'+sz+'px;height:'+sz+'px;color:'+cols[i%5]+';opacity:'+(s?'.3':'.45')+';animation-duration:'+(6+Math.random()*9).toFixed(1)+'s;animation-delay:-'+(Math.random()*12).toFixed(1)+'s">'+(s?spark:leaf)+'</span>';
+  }
+  fl.innerHTML=h;
+}
 function openCard(id){
   const b=bouquets.find(x=>x.id===id);if(!b)return;curB=b;track('view',{bouquet_id:id});
   const img=b.photo_url?'<div style="position:relative"><img src="'+b.photo_url+'" style="width:100%;max-height:320px;object-fit:cover;border-radius:16px"><div class="glassBar"></div><div class="pricePlate">'+b.price+' ₽</div></div>':'';
@@ -580,7 +659,7 @@ async function doAuth(){
 }
 sb.auth.onAuthStateChange(()=>refreshMe());
 // тёмная тема отключена
-renderTicker();refreshMe();load();
+renderTicker();renderFall();refreshMe();load();
 </script>
 </body>
 </html>
