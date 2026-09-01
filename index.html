@@ -97,6 +97,8 @@ body.night .lpCover{background:linear-gradient(135deg,#2D1B3D,#1E293B)}
 .crow{display:flex;gap:8px;margin-top:10px}
 .crow input{flex:1;background:var(--card);border:2px solid transparent;border-radius:999px;padding:12px 14px;font-size:14px;box-shadow:var(--shadow)}
 .crow button{background:var(--gradient);border:none;border-radius:999px;padding:0 18px;font-weight:700;color:#fff;cursor:pointer}
+.crow .camBtn{background:var(--bg);color:var(--gray);padding:0;width:46px;flex:none;display:flex;align-items:center;justify-content:center}
+.crow .camBtn .icn{width:17px;height:17px}
 .reacts{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:4px;margin:10px 0 2px;scrollbar-width:none}
 .reacts::-webkit-scrollbar{display:none}
 .rct{flex:0 0 auto;display:flex;align-items:center;gap:3px;padding:4px 8px;border-radius:999px;font-size:10px;font-weight:800;border:1px solid transparent;cursor:pointer;background:var(--bg)}
@@ -161,6 +163,7 @@ body.night .cityFab{color:#FFB3B3;border-color:#FFB3B3}
 <symbol id="i-share" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 6.5L12 3l4 3.5"/><path d="M6 10H5v11h14V10h-1"/></g></symbol>
 <symbol id="i-flag" viewBox="0 0 24 24"><path fill="currentColor" d="M5 2h2v20H5z"/><path fill="currentColor" d="M9 3h11l-3 4.5L20 12H9z"/></symbol>
 <symbol id="i-shop" viewBox="0 0 24 24"><path fill="currentColor" d="M3 9h18v11H3zM6 6h12l2 3H4z"/></symbol>
+<symbol id="i-camera" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></g></symbol>
 <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></g></symbol>
 </svg>
 <div class="topbar">
@@ -377,9 +380,41 @@ function openComments(id){
   renderCmtList(id);openSheet('commentsSheet');
 }
 function commentInput(inputId,fn,tagId){
-  return '<div class="crow"><input id="'+inputId+'" maxlength="500" placeholder="Твой отзыв..."><button onclick="'+fn+'">→</button></div><div style="margin-top:8px"><div style="font-size:11px;color:var(--gray);margin-bottom:4px">Оценка:</div><div class="rating" id="rating_'+inputId+'">'+[1,2,3,4,5].map(n=>'<span class="star" onclick="setRating(\''+inputId+'\','+n+')">★</span>').join('')+'</div></div><div id="'+tagId+'" class="hidden" style="font-size:11px;color:var(--gray);margin-top:4px"></div>';
+  return '<div class="crow"><input id="'+inputId+'" maxlength="500" placeholder="Твой отзыв..."><button class="camBtn" onclick="document.getElementById(\'cf_'+inputId+'\').click()">'+ic('i-camera')+'</button><input type="file" id="cf_'+inputId+'" accept="image/*" style="display:none" onchange="pickCmtPhoto(this,\''+inputId+'\')"><button onclick="'+fn+'">→</button></div><div id="cprev_'+inputId+'" class="hidden" style="margin-top:6px"><img id="cprevimg_'+inputId+'" style="width:64px;height:64px;object-fit:cover;border-radius:12px;box-shadow:var(--shadow)"></div><div style="margin-top:8px"><div style="font-size:11px;color:var(--gray);margin-bottom:4px">Оценка:</div><div class="rating" id="rating_'+inputId+'">'+[1,2,3,4,5].map(n=>'<span class="star" onclick="setRating(\''+inputId+'\','+n+')">★</span>').join('')+'</div></div><div id="'+tagId+'" class="hidden" style="font-size:11px;color:var(--gray);margin-top:4px"></div>';
+}
+function cmtPhotoHtml(c){
+  return c.photo_url
+    ? '<img src="'+c.photo_url+'" loading="lazy" style="width:76px;height:76px;object-fit:cover;border-radius:12px;margin-top:6px;box-shadow:var(--shadow)">'
+    : '';
+}
+
+function myCmtBtns(c){
+  return (me && c.user_id === me.id)
+    ? '<button onclick="editCmt('+c.id+')">изменить</button><button onclick="delCmt('+c.id+')" style="color:var(--red)">удалить</button>'
+    : '';
 }
 function setRating(inputId,r){ratings[inputId]=r;const stars=document.querySelectorAll('#rating_'+inputId+' .star');stars.forEach((s,i)=>s.classList.toggle('on',i<r));}
+let cmtPhotoFiles={},editingCmt=null;
+function pickCmtPhoto(inp,inputId){const f=inp.files[0];if(!f)return;cmtPhotoFiles[inputId]=f;const r=new FileReader();r.onload=e=>{$('cprevimg_'+inputId).src=e.target.result;$('cprev_'+inputId).classList.remove('hidden');};r.readAsDataURL(f);}
+function editCmt(id){
+  const c=comments.find(x=>x.id===id);if(!c)return;
+  editingCmt=id;replyTo=null;
+  const inp=$('ci_'+c.bouquet_id);if(inp){inp.value=c.text;inp.focus();}
+  document.querySelectorAll('[id^=replyTag]').forEach(t=>{t.classList.remove('hidden');t.innerHTML='редактирование отзыва · <span style="color:var(--red);cursor:pointer" onclick="cancelEdit()">отмена</span>';});
+}
+function cancelEdit(){editingCmt=null;document.querySelectorAll('[id^=replyTag]').forEach(t=>t.classList.add('hidden'));}
+async function delCmt(id){
+  if(!confirm('Удалить твой отзыв?'))return;
+  const c=comments.find(x=>x.id===id);if(!c)return;
+  const{error}=await sb.from('bouquet_comments').delete().eq('id',id).eq('user_id',me.id);
+  if(error){handleSBError(error,'Удаление');return;}
+  await reloadComments(c.bouquet_id);toast('Отзыв удалён');
+}
+async function reloadComments(bouquetId){
+  const{data}=await sb.from('bouquet_comments').select('*').eq('status','approved');
+  comments=(data||[]).filter(x=>!x.hidden);
+  renderCmtList(bouquetId);renderFeed();
+}
 function renderCmtList(bouquetId){
   const all=comments.filter(c=>c.bouquet_id===bouquetId);
   const tops=all.filter(c=>!c.parent_id);
@@ -389,9 +424,9 @@ function renderCmtList(bouquetId){
   list.innerHTML=tops.length?tops.map(c=>cmtBlock(c,byP[c.id]||[],nicks)).join(''):'<div class="empty">Пока нет отзывов. Будь первым!</div>';
 }
 function cmtBlock(c,reps,nicks){
-  return '<div class="cmt">'+cmtHead(c,nicks[c.user_id])+'<div class="cBody">'+richText(c.text)+'</div>'+(c.rating?'<div class="rating">'+[1,2,3,4,5].map(n=>'<span class="star'+(n<=c.rating?' on':'')+'" style="cursor:default">★</span>').join('')+'</div>':'')+'<div class="cActions"><button onclick="setReply('+c.id+',\''+esc(nicks[c.user_id]||'')+'\')">↩ ответить</button><button onclick="likeComment('+c.id+')">👏 '+(likesOf(c.id)||'')+'</button>'+(reps.length?'<button onclick="toggleReplies('+c.id+')"><span id="reptxt_'+c.id+'">открыть ответы ('+reps.length+')</span></button>':'')+'</div><div class="reacts" id="cr_'+c.id+'">'+cReactsHtml(c.id)+'</div><div class="replies hidden" id="rep_'+c.id+'">'+reps.map(r=>cmtRow(r,nicks)).join('')+'</div></div>';
+  return '<div class="cmt">'+cmtHead(c,nicks[c.user_id])+'<div class="cBody">'+richText(c.text)+cmtPhotoHtml(c)+'</div>'+(c.photo_url?'<img src="'+c.photo_url+'" loading="lazy" style="width:76px;height:76px;object-fit:cover;border-radius:12px;margin-top:6px;box-shadow:var(--shadow)">':'')+(c.rating?'<div class="rating">'+[1,2,3,4,5].map(n=>'<span class="star'+(n<=c.rating?' on':'')+'" style="cursor:default">★</span>').join('')+'</div>':'')+'<div class="cActions"><div class="cActions">'+myCmtBtns(c)+''+(me&&c.user_id===me.id?'<button onclick="editCmt('+c.id+')">изменить</button><button onclick="delCmt('+c.id+')" style="color:var(--red)">удалить</button>':'')+'<button onclick="setReply('+c.id+',\''+esc(nicks[c.user_id]||'')+'\')">↩ ответить</button><button onclick="likeComment('+c.id+')">👏 '+(likesOf(c.id)||'')+'</button>'+(reps.length?'<button onclick="toggleReplies('+c.id+')"><span id="reptxt_'+c.id+'">открыть ответы ('+reps.length+')</span></button>':'')+'</div><div class="reacts" id="cr_'+c.id+'">'+cReactsHtml(c.id)+'</div><div class="replies hidden" id="rep_'+c.id+'">'+reps.map(r=>cmtRow(r,nicks)).join('')+'</div></div>';
 }
-function cmtRow(c,nicks){return '<div class="cmt">'+cmtHead(c,nicks[c.user_id])+'<div class="cBody">'+richText(c.text)+'</div><div class="cActions"><button onclick="likeComment('+c.id+')">👏 '+(likesOf(c.id)||'')+'</button></div><div class="reacts" id="cr_'+c.id+'">'+cReactsHtml(c.id)+'</div></div>';}
+function cmtRow(c,nicks){return '<div class="cmt">'+cmtHead(c,nicks[c.user_id])+'<div class="cBody">'+richText(c.text)+cmtPhotoHtml(c)+'</div><div class="cActions"><button onclick="likeComment('+c.id+')">👏 '+(likesOf(c.id)||'')+'</button></div><div class="reacts" id="cr_'+c.id+'">'+cReactsHtml(c.id)+'</div></div>';}
 function cmtHead(c,nick){return '<button class="repAbs" onclick="reportItem('+c.id+')">'+ic('i-flag')+'</button><div class="cHead"><span class="cAva">'+(nick||'?').slice(0,1).toUpperCase()+'</span><span class="nickCol"><span class="nick">'+esc(nick||'аноним')+'</span><span class="laserLine"></span></span></div>';}
 function likesOf(id){return commentLikes.filter(l=>l.comment_id===id).length;}
 async function likeComment(id){
@@ -420,13 +455,25 @@ async function sendComment(bouquetId){
   if(!me){openAuth();return;}
   const inp=$('ci_'+bouquetId);const t=inp.value.trim();if(!t)return;
   const rating=ratings['ci_'+bouquetId]||null;
-  const{error}=await sb.from('bouquet_comments').insert({bouquet_id:bouquetId,text:t,rating,user_id:me.id,user_nick:me.user_metadata?.nick||me.email?.split('@')[0]||'аноним',status:'approved',parent_id:replyTo?replyTo.id:null});
-  inp.value='';
+  if(editingCmt){
+    const res=await sb.from('bouquet_comments').update({text:t,rating}).eq('id',editingCmt).eq('user_id',me.id);
+    if(res.error){handleSBError(res.error,'Комментарий');return;}
+    editingCmt=null;inp.value='';cancelEdit();
+    await reloadComments(bouquetId);toast('Отзыв обновлён');return;
+  }
+  let photo_url=null;
+  const pf=cmtPhotoFiles['ci_'+bouquetId];
+  if(pf){
+    const path=me.id+'/cmt_'+Date.now()+'.jpg';
+    const up=await sb.storage.from('bouquets').upload(path,pf,{contentType:pf.type});
+    if(up.error){handleSBError(up.error,'Фото');return;}
+    photo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
+  }
+  const{error}=await sb.from('bouquet_comments').insert({bouquet_id:bouquetId,text:t,rating,photo_url,user_id:me.id,user_nick:me.user_metadata?.nick||me.email?.split('@')[0]||'аноним',status:'approved',parent_id:replyTo?replyTo.id:null});
+  inp.value='';cmtPhotoFiles['ci_'+bouquetId]=null;const pw=$('cprev_ci_'+bouquetId);if(pw)pw.classList.add('hidden');
   if(error){handleSBError(error,'Комментарий');return;}
   clearReply();
-  const{data}=await sb.from('bouquet_comments').select('*').eq('status','approved');
-  comments=(data||[]).filter(x=>!x.hidden);
-  renderCmtList(bouquetId);renderFeed();toast('Комментарий опубликован ✅');track('comment');
+  await reloadComments(bouquetId);toast('Комментарий опубликован');track('comment');
 }
 async function reportItem(commentId){
   if(!me){openAuth();return;}
