@@ -136,6 +136,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
       <textarea id="shDesc" placeholder="Описание"></textarea>
       <button class="btn soft" onclick="document.getElementById('shLogo').click()"><svg class="icn"><use href="#i-camera"/></svg>Логотип</button>
       <input type="file" id="shLogo" accept="image/*" style="display:none" onchange="pickLogo(this)">
+      <div id="lPrevWrap" class="hidden" style="margin:8px 0"><img id="lPrev" style="width:64px;height:64px;object-fit:cover;border-radius:50%;box-shadow:var(--shadow)"></div>
       <button class="btn" style="margin-top:8px" onclick="saveShop()">Сохранить</button>
     </div>
     <button class="btn danger" onclick="logout()">Выйти</button>
@@ -279,6 +280,7 @@ function openAddBouquet(){
     '<div style="font-size:11px;color:var(--gray);margin:4px 0 6px">Категория</div><div class="chips" id="fCatRow">'+['сборный','розы','тюльпаны','хризантемы','пионы','лилии','композиция'].map(c=>'<button type="button" class="chip" onclick="pickCat(this,\''+c+'\')">'+c+'</button>').join('')+'</div>'+
     '<button class="btn soft" onclick="document.getElementById(\'fPhoto\').click()">'+ic('i-camera')+'Фото</button>'+
     '<input type="file" id="fPhoto" accept="image/*" style="display:none" onchange="pickPhoto(this)">'+
+    '<div id="fPrevWrap" class="hidden" style="margin:8px 0"><img id="fPrev" style="width:84px;height:84px;object-fit:cover;border-radius:14px;box-shadow:var(--shadow)"></div>'+
     '<span id="fPhotoName" style="font-size:11px;color:var(--gray)"></span>'+
     '<label style="display:flex;gap:8px;align-items:center;font-size:13px;margin:8px 0"><input type="checkbox" id="fStock" checked style="width:auto;margin:0"> В наличии</label>'+
     '<button class="btn" onclick="submitBouquet()">Сохранить</button>'+
@@ -287,7 +289,7 @@ function openAddBouquet(){
 }
 let pickedCat='';
 function pickCat(el,c){pickedCat=c;document.querySelectorAll('#fCatRow .chip').forEach(x=>x.classList.toggle('on',x.textContent===c));}
-function pickPhoto(inp){const f=inp.files[0];if(!f)return;pickedPhoto=f;$('fPhotoName').textContent='Файл: '+f.name.slice(0,20);}
+function pickPhoto(inp){const f=inp.files[0];if(!f)return;pickedPhoto=f;$('fPhotoName').textContent='Файл: '+f.name.slice(0,20);const r=new FileReader();r.onload=e=>{$('fPrev').src=e.target.result;$('fPrevWrap').classList.remove('hidden');};r.readAsDataURL(f);}
 async function submitBouquet(){
   const t=$('fTitle').value.trim(),p=+$('fPrice').value;
   if(!t||!p){toast('Заполни название и цену');return;}
@@ -342,7 +344,7 @@ function renderReviews(){
       '<div style="font-size:13.5px;margin-top:6px;line-height:1.5">'+esc(c.text)+'</div></div>';
   }).join(''):'<div class="empty">'+icBig('i-comment')+'Отзывов пока нет</div>';
 }
-function pickLogo(inp){const f=inp.files[0];if(!f)return;pickedLogo=f;toast('Файл: '+f.name.slice(0,20));}
+function pickLogo(inp){const f=inp.files[0];if(!f)return;pickedLogo=f;const r=new FileReader();r.onload=e=>{$('lPrev').src=e.target.result;$('lPrevWrap').classList.remove('hidden');};r.readAsDataURL(f);}
 async function saveShop(){
   if(!shop){toast('Магазин не найден');return;}
   let logo_url=shop.logo_url;
