@@ -1,5 +1,5 @@
 // shared.js — общий код для Лепестка
-const SB_URL = 'https://dhwkkbtrhexywymegwoo.supabase.co';
+const SB_URL = 'https://tfqsyovyshheqkslsjhx.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmcXN5b3Z5c2hoZXFrc2xzamh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MTU3MTMsImV4cCI6MjEwMzA5MTcxM30.S5-0MVJ6HLyFs2TQ5tpE7IlRXum25j7Vwhvnab1pAIY';
 const ADMIN_EMAIL = 'artixz18@gmail.com';
 
