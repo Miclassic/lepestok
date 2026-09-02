@@ -67,7 +67,7 @@ main.withTicker{padding-top:150px}
 .filter{background:var(--card);border:none;outline:none;border-radius:999px;padding:9px 14px;font-size:11.5px;font-weight:700;color:var(--gray);cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;box-shadow:var(--shadow)}
 .filter .icn{width:13px;height:13px}
 .filter.on{background:var(--gradient);color:#fff}
-.sortRow{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:0 2px}
+.sortRow{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:0 2px;flex-wrap:wrap}
 .sortRow .sortLbl{font-size:11px;color:var(--gray);font-weight:700;display:inline-flex;align-items:center;gap:5px;flex:none}
 .sortRow .sortLbl .icn{width:12px;height:12px;color:var(--coral)}
 .sortRow .sortPill{background:var(--card);border:2px solid transparent;border-radius:999px;padding:6px 12px;font-size:10.5px;font-weight:800;color:var(--gray);cursor:pointer;box-shadow:var(--shadow);transition:.2s;display:inline-flex;align-items:center;gap:4px}
@@ -77,13 +77,16 @@ main.withTicker{padding-top:150px}
 /* ---------- hero ---------- */
 .heroCard{display:flex;flex-direction:column;background:var(--card);border-radius:24px;padding:14px;box-shadow:var(--shadow);animation:cardIn .5s ease both;position:relative}
 @keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
-.heroPhoto{position:relative;border-radius:18px;overflow:hidden;height:280px;flex:none}
+/* нежная рамка фото: воздушная белая кайма + мягкое внутреннее свечение */
+.heroPhoto{position:relative;border-radius:26px;overflow:hidden;height:280px;flex:none;border:5px solid #fff;box-shadow:0 12px 32px rgba(233,120,140,.18)}
 .heroPhoto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.heroPhoto::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:20px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.55),inset 0 -34px 46px -18px rgba(255,241,244,.42)}
 .heroDots{position:absolute;bottom:10px;right:12px;display:flex;gap:5px;z-index:2}
 .heroDots .dot{width:6px;height:6px;border-radius:999px;background:rgba(255,255,255,.65);cursor:pointer;transition:all .25s}
 .heroDots .dot.on{width:18px;background:#fff}
-.shopChipGlass{position:absolute;left:10px;bottom:10px;z-index:2;display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:999px;padding:4px 10px;font-size:8.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
-.shopChipGlass img{width:12px;height:12px;border-radius:50%;object-fit:cover}
+.shopChipGlass{position:absolute;left:10px;bottom:10px;z-index:2;display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:999px;padding:4px 10px;font-size:8.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;max-width:70%}
+.shopChipGlass img{width:12px;height:12px;border-radius:50%;object-fit:cover;flex:none}
+.shopChipGlass .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .heroInfo{display:grid;grid-template-columns:1.15fr .85fr;gap:12px;padding:12px 2px 2px;align-items:stretch}
 .heroMain{display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0}
 .heroBadge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,107,107,.12);color:var(--coral);border-radius:999px;padding:5px 10px;font-size:9.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
@@ -92,7 +95,7 @@ main.withTicker{padding-top:150px}
 .heroRate{display:inline-flex;align-items:center;gap:3px;font-size:12px;color:var(--ink);font-weight:800}
 .heroRate .icn{width:12px;height:12px;color:var(--yel)}
 .heroComp{color:var(--gray);font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
-.heroPrice{color:var(--coral);font-size:21px;font-weight:800;letter-spacing:.5px}
+.heroPrice{color:var(--coral);font-size:21px;font-weight:800;letter-spacing:.5px;white-space:nowrap}
 .heroRow{display:flex;align-items:center;gap:8px}
 .heroBtns{display:flex;align-items:center;gap:8px;margin-top:2px}
 .ctaBig{background:var(--gradient);border:none;border-radius:14px;padding:12px 20px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(255,107,107,.35)}
@@ -185,8 +188,8 @@ main.withTicker{padding-top:150px}
 .popCover img{width:100%;height:100%;object-fit:cover}
 .popName{font-size:12.5px;font-weight:800;margin-top:8px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
 .popComp{color:var(--gray);font-size:10px;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.popFoot{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:6px}
-.popPrice{color:var(--coral);font-weight:800;font-size:12.5px}
+.popFoot{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:6px;flex-wrap:wrap;row-gap:4px}
+.popPrice{color:var(--coral);font-weight:800;font-size:12.5px;white-space:nowrap}
 .catHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:18px 2px 10px}
 .searchPill{display:flex;align-items:center;gap:6px;background:var(--card);border-radius:999px;padding:8px 12px;box-shadow:var(--shadow)}
 .searchPill .icn{width:14px;height:14px;color:var(--gray)}
@@ -201,9 +204,10 @@ main.withTicker{padding-top:150px}
 .lpCard:active .lpCover img{transform:scale(1.06)}
 .dayChip{position:absolute;top:8px;left:8px;z-index:2;display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.88);backdrop-filter:blur(6px);border-radius:999px;padding:4px 9px;font-size:8px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--amber)}
 .dayChip .icn{width:10px;height:10px;color:var(--yel)}
-.shopChip{position:absolute;left:8px;bottom:8px;z-index:2;display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:999px;padding:4px 9px;font-size:8px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;max-width:80%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.shopChip{position:absolute;left:8px;bottom:8px;z-index:2;display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:999px;padding:4px 9px;font-size:8px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;max-width:82%;overflow:hidden}
 .shopChip img{width:12px;height:12px;border-radius:50%;object-fit:cover;flex:none}
 .shopChip .icn{width:10px;height:10px;color:var(--coral);flex:none}
+.shopChip .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .favBtn{position:absolute;top:8px;right:8px;z-index:2;width:30px;height:30px;border:none;border-radius:50%;background:rgba(255,255,255,.92);color:var(--gray);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.14)}
 .favBtn .icn{width:14px;height:14px}
 .favBtn.on{color:var(--pink)}
@@ -212,13 +216,13 @@ main.withTicker{padding-top:150px}
 .lpRate{display:inline-flex;align-items:center;gap:2px;font-size:10.5px;color:var(--ink);font-weight:800;flex:none}
 .lpRate .icn{width:11px;height:11px;color:var(--yel)}
 .lpComp{color:var(--gray);font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lpFoot{display:flex;justify-content:space-between;align-items:center;gap:6px}
-.lpPrice{color:var(--coral);font-weight:800;font-size:13.5px;letter-spacing:.3px}
-.stockPill{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:4px 10px;font-size:9px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
+.lpFoot{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;row-gap:4px}
+.lpPrice{color:var(--coral);font-weight:800;font-size:13px;letter-spacing:.3px;white-space:nowrap}
+.stockPill{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:4px 10px;font-size:9px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
 .stockPill .icn{width:10px;height:10px}
 .stockPill.in{background:rgba(16,185,129,.13);color:var(--grn)}
 .stockPill.out{background:rgba(239,68,68,.11);color:var(--red)}
-.stockPill.mini{padding:3px 8px;font-size:8px}
+.stockPill.mini{padding:3px 7px;font-size:7.5px}
 .lpActs{display:flex;gap:6px;margin-top:auto}
 .lpActs button{flex:1;border:none;border-radius:999px;padding:8px 4px;font-size:10.5px;font-weight:700;background:var(--bg);color:var(--gray);box-shadow:0 4px 12px rgba(0,0,0,.06);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px}
 .lpActs button .icn{width:12px;height:12px}
@@ -237,7 +241,7 @@ main.withTicker{padding-top:150px}
 #dayBox{position:relative}
 .dayCard{position:relative;z-index:1;background:var(--card);border-radius:24px;padding:12px;box-shadow:var(--shadow);animation:cardIn .5s ease both}
 .dayCard.back{position:absolute;left:6px;right:6px;top:10px;z-index:0;transform:scale(.96);opacity:.6;pointer-events:none}
-.dayPhoto{position:relative;border-radius:18px;overflow:hidden;margin-top:8px}
+.dayPhoto{position:relative;border-radius:22px;overflow:hidden;margin-top:8px;border:5px solid #fff;box-shadow:0 12px 32px rgba(233,120,140,.18)}
 .dayPhoto img{width:100%;height:min(60vh,520px);object-fit:cover;display:block}
 .dayName{font-size:20px;font-weight:800;margin-top:10px;display:flex;align-items:center;gap:6px}
 .swipeHint{text-align:center;color:var(--gray);font-size:10px;margin-top:8px;letter-spacing:.06em}
@@ -543,7 +547,7 @@ const HOLIDAYS=[
   {d:'02-14', days:2, msg:'💝 День святого Валентина ·'},
   {d:'03-08', days:3, msg:'🌷 8 марта — международный женский день ·'},
   {d:'05-09', days:1, msg:'🎖 День Победы ·'},
-  {d:'09-27', days:1, msg:'👩🏫 День воспитателя ·'},
+  {d:'09-27', days:1, msg:'👩 День воспитателя ·'},
   {d:'10-05', days:1, msg:'🎓 День учителя ·'},
   {d:'11-21', days:1, msg:'👩 День матери ·'},
   {d:'12-25', days:7, msg:'🎄 Новогодние праздники ·'}
@@ -639,7 +643,6 @@ function renderShopsTab(){
   if(shopCityFilter!=='all'&&!cities.includes(shopCityFilter))shopCityFilter='all';
   $('shopCities').innerHTML='<button class="filter'+(shopCityFilter==='all'?' on':'')+'" onclick="setShopCity(\'all\')">'+ic('i-pin')+'Все города</button>'+cities.map(c=>'<button class="filter'+(shopCityFilter===c?' on':'')+'" onclick="setShopCity(\''+esc(c)+'\')">'+esc(c)+'</button>').join('');
   let list=shops.filter(s=>shopCityFilter==='all'||(s.city||'Вуктыл')===shopCityFilter);
-  // сортировка
   list=[...list].sort((a,b)=>{
     if(shopSort==='rating')return shopRating(b)-shopRating(a);
     if(shopSort==='count')return shopCount(b)-shopCount(a);
@@ -719,9 +722,32 @@ function descChunks(text){
   if(cur.trim())chunks.push(cur.trim());
   return chunks;
 }
-/* ---------- hero ---------- */
+/* ---------- hero: умный отбор 2–5 букетов дня ---------- */
 let heroIdx=0,heroTimer=null,heroDescTimer=null,heroDescIdx=0,heroDescArr=[];
-function heroDeck(){let d=bouquets.filter(b=>b.is_day&&b.photo_url);if(!d.length)d=bouquets.filter(b=>b.photo_url).slice(0,8);return d;}
+// алгоритм скоринга: букет дня + рейтинг + лайки + свежесть
+function heroScore(b){
+  let s=0;
+  if(b.is_day)s+=100;
+  s+=avgRating(b.id)*10;
+  s+=bouquetLikes.filter(l=>l.bouquet_id===b.id).length*2;
+  const age=(Date.now()-new Date(b.created_at).getTime())/864e5;
+  s+=Math.max(0,14-Math.floor(age));
+  return s;
+}
+function heroDeck(){
+  const withPhoto=bouquets.filter(b=>b.photo_url);
+  // сначала помеченные как букет дня, отсортированные по скорингу
+  let day=withPhoto.filter(b=>b.is_day).sort((a,b)=>heroScore(b)-heroScore(a));
+  // не больше 5
+  if(day.length>5)day=day.slice(0,5);
+  // если меньше 2 — добираем лучшими обычными букетами (в сумме не более 5, минимум 2 если есть контент)
+  if(day.length<2){
+    const rest=withPhoto.filter(b=>!b.is_day).sort((a,b)=>heroScore(b)-heroScore(a));
+    day=day.concat(rest);
+    day=day.slice(0,Math.min(5,Math.max(2,day.length)));
+  }
+  return day;
+}
 function renderHero(){
   const d=heroDeck();const box=$('heroBox');if(!box)return;
   if(!d.length){box.innerHTML='<div class="heroCard emptyHero">'+ic('i-flower')+'<div>Скоро здесь появятся букеты</div></div>';return;}
@@ -730,7 +756,7 @@ function renderHero(){
   const isFav=favorites.some(f=>f.bouquet_id===b.id);
   box.innerHTML='<div class="heroCard" id="heroCard">'+
     '<div class="heroPhoto"><img src="'+b.photo_url+'" alt="'+esc(b.title)+'">'+
-      (shop?'<div class="shopChipGlass" onclick="event.stopPropagation();openShopPage('+shop.id+')">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':'')+esc(shop.name)+'</div>':'')+
+      (shop?'<div class="shopChipGlass" onclick="event.stopPropagation();openShopPage('+shop.id+')">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':'')+'<span class="nm">'+esc(shop.name)+'</span></div>':'')+
       '<div class="heroDots">'+d.map((x,i)=>'<span class="dot'+(i===heroIdx?' on':'')+'" onclick="setHero('+i+')"></span>').join('')+'</div>'+
     '</div>'+
     '<div class="heroInfo">'+
@@ -847,7 +873,7 @@ function bouquetCard(b,i){
     '<div class="lpCover"><img src="'+b.photo_url+'" loading="lazy" decoding="async">'+
       '<button class="favBtn'+(isFav?' on':'')+'" onclick="event.stopPropagation();toggleFav('+b.id+')">'+ic('i-heart')+'</button>'+
       (b.is_day?'<span class="dayChip">'+ic('i-flame')+'букет дня</span>':'')+
-      (shop?'<span class="shopChip" onclick="event.stopPropagation();openShopPage('+shop.id+')">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':ic('i-shop'))+esc(shop.name)+'</span>':'')+
+      (shop?'<span class="shopChip" onclick="event.stopPropagation();openShopPage('+shop.id+')">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':ic('i-shop'))+'<span class="nm">'+esc(shop.name)+'</span></span>':'')+
     '</div>'+
     '<div class="lpName"><span class="t">'+esc(b.title)+'</span>'+(r?'<span class="lpRate">'+ic('i-star')+r.toFixed(1)+'</span>':'')+'</div>'+
     (b.category?'<div class="lpComp">'+esc(b.category)+'</div>':'')+
@@ -936,7 +962,6 @@ function renderPetals(){
 }
 function openCard(id){
   const b=bouquets.find(x=>x.id===id);if(!b)return;curB=b;
-  // трекаем просмотр с тегами
   track('view',{bouquet_id:id,tags:getTags(b),price:b.price,category:b.category});
   const img=b.photo_url?'<div style="position:relative"><img src="'+b.photo_url+'" style="width:100%;max-height:320px;object-fit:cover;border-radius:16px"><div class="priceSpin big"><span class="wline w1"></span><span class="wline w2"></span><span class="gust">'+LEAF_SVG+'</span><span class="gust g2">'+LEAF_SVG+'</span><span class="gust g3">'+LEAF_SVG+'</span><span class="priceSpinIn">'+fmtPrice(b.price)+'</span></div></div>':'';
   const r=avgRating(b.id);
