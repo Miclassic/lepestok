@@ -104,6 +104,8 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 .pushBtn{margin-top:10px;background:var(--bg);border:2px dashed rgba(255,107,107,.4);border-radius:999px;padding:11px;font-weight:700;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;color:var(--coral);width:100%}
 .pushBtn.on{background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(16,185,129,.15));border-style:solid;border-color:rgba(16,185,129,.3);color:var(--grn)}
 .pushBtn .icn{width:15px;height:15px}
+.tgWrap{display:flex;justify-content:center;margin:8px 0 10px}
+.tgWrap iframe{border-radius:999px!important;overflow:hidden!important;border:none!important;box-shadow:0 6px 18px rgba(51,153,204,.35)}
 #toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(30,41,59,.95);color:#F1F5F9;border:2px solid rgba(255,107,107,.4);border-radius:16px;font-weight:700;font-size:13px;padding:12px 20px;text-align:center;max-width:82vw;z-index:99}
 #toast:not(.hidden){animation:toastIn .3s ease}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,-50%) scale(.85)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
@@ -167,8 +169,8 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
       <input id="shPhone" placeholder="Телефон">
       <input id="shAddr" placeholder="Адрес (улица, дом)">
       <textarea id="shDesc" placeholder="Описание"></textarea>
-      <div style="margin:6px 0 10px;display:flex;justify-content:center">
-        <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="lepestok_notify_bot" data-size="medium" data-onauth="onTelegramAuth(user)" data-request-access="write"></script>
+      <div class="tgWrap">
+        <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="lepestok_notify_bot" data-size="medium" data-radius="44" data-onauth="onTelegramAuth(user)" data-request-access="write"></script>
       </div>
       <div style="text-align:center;font-size:10.5px;color:var(--gray);margin-bottom:8px">нажми и подтверди в Telegram — заказы будут приходить тебе автоматически</div>
       <button class="btn soft" onclick="document.getElementById('shLogo').click()"><svg class="icn"><use href="#i-camera"/></svg>Логотип</button>
