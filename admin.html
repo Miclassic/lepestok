@@ -267,9 +267,11 @@ function renderOrders(){
 }
 function call(p){window.location.href='tel:'+p.replace(/\s+/g,'');}
 async function updateOrder(id,status){const res=await sb.from('orders').update({status}).eq('id',id).select();if(res.error){alert('Ошибка: '+res.error.message);return;}if(viewMode==='seller')await refreshSeller();else await refresh();}
+let adminEditId=null,adminEditPhoto=null;
 function renderBouquets(){
   const box=$('list');
-  box.innerHTML=bouquets.length?bouquets.map(b=>{
+  const form=adminEditId?adminEditFormHtml():'';
+  box.innerHTML=form+(bouquets.length?bouquets.map(b=>{
     const tags=getTags(b);
     const tagsHtml=tags.length?'<div class="bTags">'+tags.slice(0,6).map(t=>'<span>'+esc(t)+'</span>').join('')+(tags.length>6?'<span>+'+(tags.length-6)+'</span>':'')+'</div>':'';
     return '<div class="card"><div class="bouquetRow">'+(b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:34px;background:linear-gradient(135deg,#FFE5E5,#F5E6FF)">🌷</div>')+
@@ -279,9 +281,48 @@ function renderBouquets(){
     '<div class="mbtns" style="margin-top:8px">'+
       (b.is_day?'<button class="no" onclick="toggleDay('+b.id+',false)">убрать из дня</button>':'<button class="day" onclick="toggleDay('+b.id+',true)">⭐ букет дня</button>')+
       '<button class="info" onclick="toggleStock('+b.id+','+(b.in_stock?'false':'true')+')">'+(b.in_stock?'в под заказ':'в наличии')+'</button>'+
+      '<button class="info" onclick="startAdminEdit('+b.id+')">✏️ изменить</button>'+
       '<button class="no" onclick="delBouquet('+b.id+')">🗑 удалить</button>'+
     '</div></div>';
-  }).join(''):'<div class="empty">Пока нет букетов</div>';
+  }).join(''):'<div class="empty">Пока нет букетов</div>');
+  if(adminEditId)fillAdminEdit();
+}
+function adminEditFormHtml(){
+  return '<div class="addForm"><h3>✏️ Редактирование букета #'+adminEditId+'</h3>'+
+    '<input id="aeTitle" placeholder="Название">'+
+    '<input id="aePrice" type="number" placeholder="Цена">'+
+    '<textarea id="aeDesc" placeholder="Описание"></textarea>'+
+    '<input id="aeCat" placeholder="Категория">'+
+    '<input id="aeTags" placeholder="Теги через запятую">'+
+    '<button class="btn" style="background:var(--bg);color:var(--ink)" onclick="document.getElementById(\'aePhoto\').click()">📷 Заменить фото</button>'+
+    '<input type="file" id="aePhoto" accept="image/*" style="display:none" onchange="onAdminEditPhoto(this)">'+
+    '<span id="aePhotoName" style="font-size:10.5px;color:var(--gray)"></span>'+
+    '<label><input type="checkbox" id="aeStock"> В наличии</label>'+
+    '<div class="mbtns" style="margin-top:8px"><button class="ok" onclick="saveAdminEdit()">💾 Сохранить</button><button class="no" onclick="cancelAdminEdit()">Отмена</button></div>'+
+  '</div>';
+}
+function startAdminEdit(id){adminEditId=id;adminEditPhoto=null;renderBouquets();window.scrollTo({top:0,behavior:'smooth'});}
+function fillAdminEdit(){
+  const b=bouquets.find(x=>x.id===adminEditId);if(!b)return;
+  $('aeTitle').value=b.title||'';$('aePrice').value=b.price||'';$('aeDesc').value=b.description||'';$('aeCat').value=b.category||'';$('aeTags').value=getTags(b).join(', '||'');$('aeStock').checked=!!b.in_stock;
+}
+function onAdminEditPhoto(inp){const f=inp.files[0];if(!f)return;adminEditPhoto=f;$('aePhotoName').textContent='📷 '+f.name.slice(0,20);}
+function cancelAdminEdit(){adminEditId=null;adminEditPhoto=null;renderBouquets();}
+async function saveAdminEdit(){
+  const b=bouquets.find(x=>x.id===adminEditId);if(!b)return;
+  let photo_url=b.photo_url;
+  if(adminEditPhoto){
+    const path=(b.user_id||adminId)+'/edit_'+Date.now()+'.jpg';
+    const up=await sb.storage.from('bouquets').upload(path,adminEditPhoto,{contentType:adminEditPhoto.type});
+    if(up.error){alert('Фото: '+up.error.message);return;}
+    photo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
+  }
+  const tagsRaw=$('aeTags').value.trim();
+  const tags=tagsRaw?tagsRaw.split(',').map(x=>x.trim()).filter(Boolean):[];
+  const res=await sb.from('bouquets').update({title:$('aeTitle').value.trim(),price:+$('aePrice').value,description:$('aeDesc').value.trim(),category:$('aeCat').value.trim(),tags:tags,in_stock:$('aeStock').checked,photo_url:photo_url}).eq('id',adminEditId);
+  if(res.error){alert('Ошибка: '+res.error.message);return;}
+  adminEditId=null;adminEditPhoto=null;
+  await refresh();
 }
 async function toggleDay(id,on){if(on)await sb.from('bouquets').update({is_day:false}).eq('is_day',true);const res=await sb.from('bouquets').update({is_day:on}).eq('id',id).select();if(res.error){alert('Ошибка: '+res.error.message);return;}await refresh();}
 async function toggleStock(id,on){const res=await sb.from('bouquets').update({in_stock:on}).eq('id',id).select();if(res.error){alert('Ошибка: '+res.error.message);return;}await refresh();}

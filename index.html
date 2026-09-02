@@ -474,19 +474,15 @@ main.withTicker{padding-top:112px}
     <div class="filters" id="filters"></div>
     <div id="heroBox"></div>
     <div class="uspCard" id="uspCard"></div>
-    <div id="popWrap">
-      <div class="popHead"><h2>Свежие букеты</h2><button class="seeAll" onclick="scrollToCatalog()">Смотреть все<svg class="icn"><use href="#i-chevR"/></svg></button></div>
-      <div class="popRow" id="popRow"></div>
-    </div>
-    <div id="shopsWrap">
-      <div class="popHead"><h2>Магазины-партнёры</h2><button class="seeAll" onclick="showTab('shops')">Все магазины<svg class="icn"><use href="#i-chevR"/></svg></button></div>
-      <div class="popRow" id="shopsRow"></div>
-    </div>
     <div class="catHead" id="catalogAnchor">
       <h2>Каталог</h2>
       <div class="searchPill"><svg class="icn"><use href="#i-search"/></svg><input id="searchInput" oninput="searchBouquets()" placeholder="поиск букетов"></div>
     </div>
     <div id="feed"></div>
+    <div id="shopsWrap">
+      <div class="popHead"><h2>Магазины-партнёры</h2><button class="seeAll" onclick="showTab('shops')">Все магазины<svg class="icn"><use href="#i-chevR"/></svg></button></div>
+      <div class="popRow" id="shopsRow"></div>
+    </div>
   </section>
 
   <section id="tab-day" class="hidden">
@@ -723,7 +719,7 @@ function openCity(){
   openSheet('citySheet');
 }
 function pickCity(c,el){city=c;localStorage.setItem('lep_city',c);$('cityName').textContent=c;document.querySelectorAll('#citySheet .opt').forEach(o=>o.classList.remove('on'));el.classList.add('on');closeSheet('citySheet');toast('Город: '+c,'i-pin');}
-function showTab(t){['shop','day','quiz','mine','profile','shops'].forEach(k=>$('tab-'+k).classList.toggle('hidden',k!==t));$('shopPage').classList.add('hidden');document.querySelectorAll('.bn').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='shop'){renderHero();renderPopular();renderShopsRow();renderFeed();}if(t==='day')renderDay();if(t==='mine')renderMine();if(t==='profile')showProfile();if(t==='shops')renderShopsTab();window.scrollTo(0,0);}
+function showTab(t){['shop','day','quiz','mine','profile','shops'].forEach(k=>$('tab-'+k).classList.toggle('hidden',k!==t));$('shopPage').classList.add('hidden');document.querySelectorAll('.bn').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='shop'){renderHero();renderShopsRow();renderFeed();}if(t==='day')renderDay();if(t==='mine')renderMine();if(t==='profile')showProfile();if(t==='shops')renderShopsTab();window.scrollTo(0,0);}
 function scrollToCatalog(){const el=$('catalogAnchor');if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 async function load(){
   $('feed').innerHTML='<div class="lpGrid"><div class="skeleton" style="aspect-ratio:4/5"></div><div class="skeleton" style="aspect-ratio:4/5"></div><div class="skeleton" style="aspect-ratio:4/5"></div><div class="skeleton" style="aspect-ratio:4/5"></div></div>';
@@ -736,10 +732,10 @@ async function load(){
   const{data:sh}=await sb.from('shops').select('*');shops=sh||[];
   if(err1||err2){toast('Ошибка: '+(err1||err2).message);return;}
   bouquets=b||[];comments=(c||[]).filter(x=>!x.hidden);bouquetLikes=bl||[];commentLikes=cl||[];commentReacts=cr||[];favorites=fav||[];
-  renderFilters();renderHero();renderUSP();renderPopular();renderShopsRow();renderFeed();renderDay();renderTicker();
+  renderFilters();renderHero();renderUSP();renderShopsRow();renderFeed();renderDay();renderTicker();
   updateOrdersBadge();
 }
-function refreshShop(){renderHero();renderPopular();renderFeed();renderDay();}
+function refreshShop(){renderHero();renderFeed();renderDay();}
 function catIcon(c){c=(c||'').toLowerCase();
   if(/люб|валент|свид|heart/.test(c))return'i-heart';
   if(/рожд|юбил|праздн|gift|др/.test(c))return'i-gift';
@@ -980,26 +976,12 @@ function renderUSP(){
   const d=bouquets.filter(b=>b.photo_url);
   $('uspCard').innerHTML='<div class="uspIco">'+ic('i-wand')+'</div><div class="uspTxt"><h3>Не знаешь, что выбрать?</h3><p>Ответь на пару вопросов — Лепесток подберёт букет за тебя</p><button class="ctaGrad" onclick="openQuiz()">Собрать мне'+ic('i-arrow')+'</button></div>'+(d.length?'<img class="uspImg" src="'+d[0].photo_url+'" alt="">':'');
 }
-function renderPopular(){
-  const row=$('popRow');if(!row)return;
-  const list=bouquets.filter(b=>b.photo_url).slice().sort((a,b)=>new Date(b.created_at)-new Date(a.created_at)).slice(0,10);
-  row.innerHTML=list.map((b,i)=>popCard(b,i)).join('');
-}
-function popCard(b,i){
-  const isFav=favorites.some(f=>f.bouquet_id===b.id);
-  return '<div class="popCard" style="animation-delay:'+(i*60)+'ms" onclick="openCard('+b.id+')">'+
-    '<div class="popCover"><img src="'+b.photo_url+'" loading="lazy" decoding="async">'+
-    '<button class="favBtn'+(isFav?' on':'')+'" onclick="event.stopPropagation();toggleFav('+b.id+')">'+ic('i-heart')+'</button></div>'+
-    '<div class="popName">'+esc(b.title)+'</div>'+
-    '<div class="popComp">'+esc(b.category||'')+'</div>'+
-    '<div class="popFoot"><span class="popPrice">'+fmtPrice(b.price)+'</span>'+stockPill(b,true)+'</div></div>';
-}
+
 function renderFeed(){
   let list=bouquets.filter(b=>b.photo_url);
   if(activeFilter!=='all')list=list.filter(b=>(b.category||'').toLowerCase()===activeFilter);
   if(searchQuery)list=list.filter(b=>b.title.toLowerCase().includes(searchQuery));
   const extras=!searchQuery&&activeFilter==='all';
-  $('popWrap').classList.toggle('hidden',!extras);
   $('uspCard').classList.toggle('hidden',!extras);
   $('shopsWrap').classList.toggle('hidden',!extras||!shops.length);
   if(!list.length){
@@ -1299,7 +1281,7 @@ function quizGo(){
   track('quiz_complete',{count:fit.length,tags:wantTags});
   if(!fit.length){toast('Под бюджет пока пусто — напишите флористу, соберёт вручную','i-wand');showTab('shop');return;}
   showTab('shop');
-  setTimeout(()=>{$('popWrap').classList.add('hidden');$('uspCard').classList.add('hidden');$('shopsWrap').classList.add('hidden');$('feed').innerHTML='<div class="lpGrid">'+fit.map((b,i)=>bouquetCard(b,i)).join('')+'</div>';toast('Подобрал '+fit.length+' букетов','i-wand');},100);
+  setTimeout(()=>{$('uspCard').classList.add('hidden');$('shopsWrap').classList.add('hidden');$('feed').innerHTML='<div class="lpGrid">'+fit.map((b,i)=>bouquetCard(b,i)).join('')+'</div>';toast('Подобрал '+fit.length+' букетов','i-wand');},100);
 }
 function openComments(id){
   const b=bouquets.find(x=>x.id===id);if(!b)return;curB=b;
@@ -1425,8 +1407,33 @@ function renderMine(){
     const list=data||[];
     box.innerHTML=list.length?list.map(o=>{
       const b=bouquets.find(x=>x.id===o.bouquet_id);
-      return '<div class="secCard" style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><div style="font-weight:800">'+(b?esc(b.title):'Букет')+'</div><span class="statusPill '+statusCls(o.status)+'">'+statusRu(o.status)+'</span></div><div class="lpPrice" style="margin-top:4px">'+(b?fmtPrice(b.price):'')+'</div><div style="font-size:12px;color:var(--gray);margin-top:6px;display:flex;align-items:center;gap:6px">'+(o.kind==='delivery'?ic('i-truck')+'Доставка: '+esc(o.address||''):ic('i-home')+'Самовывоз')+(o.recipient_name?' · '+esc(o.recipient_name):'')+'</div></div>';
+      return '<div class="secCard" style="margin-bottom:8px;cursor:pointer" onclick="openMyOrder('+o.id+')"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><div style="font-weight:800">'+(b?esc(b.title):'Букет')+'</div><span class="statusPill '+statusCls(o.status)+'">'+statusRu(o.status)+'</span></div><div class="lpPrice" style="margin-top:4px">'+(b?fmtPrice(b.price):'')+'</div><div style="font-size:12px;color:var(--gray);margin-top:6px;display:flex;align-items:center;gap:6px">'+(o.kind==='delivery'?ic('i-truck')+'Доставка: '+esc(o.address||''):ic('i-home')+'Самовывоз')+(o.recipient_name?' · '+esc(o.recipient_name):'')+'</div><div style="font-size:10px;color:var(--gray);margin-top:6px;opacity:.7">нажми на карточку — детали заказа</div></div>';
     }).join(''):'<div class="empty">'+ic('i-doc')+'Ты ещё не делал(а) заказов.<br>Смотри витрину или загляни к нашим партнёрам</div><button class="fpill" onclick="showTab(\'shops\')">'+ic('i-shop')+'Посмотреть магазины-партнёры</button>';
+  });
+}
+function openMyOrder(id){
+  sb.from('orders').select('*').eq('id',id).maybeSingle().then(({data:o})=>{
+    if(!o)return;
+    const b=bouquets.find(x=>x.id===o.bouquet_id);
+    const shop=b?shopOf(b):null;
+    const shopPhone=shop&&shop.phone?String(shop.phone).replace(/\D/g,''):'';
+    $('orderBody').innerHTML=
+      (b&&b.photo_url?'<img src="'+b.photo_url+'" style="width:100%;max-height:220px;object-fit:cover;border-radius:16px;margin-bottom:10px">':'')+
+      '<h3>'+esc(b?b.title:'Букет')+'</h3>'+
+      '<div style="color:var(--coral);font-weight:800;font-size:15px;margin-top:4px">'+(b?fmtPrice(b.price):'')+'</div>'+
+      '<div style="margin-top:8px"><span class="statusPill '+statusCls(o.status)+'">'+statusRu(o.status)+'</span></div>'+
+      '<div style="font-size:12.5px;color:var(--gray);line-height:1.8;margin-top:10px">'+
+        '<div>'+(o.kind==='delivery'?ic('i-truck')+'Доставка: <b>'+esc(o.address||'')+'</b>':ic('i-home')+'Самовывоз из магазина')+'</div>'+
+        (o.recipient_name?'<div>'+ic('i-user')+'Получатель: <b>'+esc(o.recipient_name)+'</b>'+(o.recipient_phone?' · '+esc(o.recipient_phone):'')+'</div>':'')+
+        (o.note?'<div>'+ic('i-comment')+'<i>'+esc(o.note)+'</i></div>':'')+
+        (shop?'<div>'+ic('i-shop')+'Магазин: <b>'+esc(shop.name)+'</b>'+(shop.city?' ('+esc(shop.city)+')':'')+'</div>':'')+
+      '</div>'+
+      '<div class="rowBtns">'+
+        (shopPhone?'<button class="btn soft" onclick="window.location.href=\'tel:'+shopPhone+'\'">'+ic('i-phone')+'Позвонить в магазин</button>':'')+
+        (b?'<button class="btn rose" onclick="closeSheet(\'orderSheet\');openOrder('+b.id+')">'+ic('i-flower')+'Повторить заказ</button>':'')+
+        '<button class="btn soft" onclick="closeSheet(\'orderSheet\')">Закрыть</button>'+
+      '</div>';
+    openSheet('orderSheet');
   });
 }
 async function showProfile(){
