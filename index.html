@@ -342,6 +342,7 @@ main.withTicker{padding-top:112px}
 .step .dot{width:22px;height:22px;border-radius:50%;background:var(--bg);border:2px solid rgba(148,163,184,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--gray);transition:.3s}
 .step .lbl{font-size:9.5px;font-weight:700;color:var(--gray);transition:.3s}
 .step.done .dot{background:var(--gradient);border-color:transparent;color:#fff}
+.step .dot .icn{width:11px;height:11px}
 .step.done .lbl{color:var(--ink)}
 .step.active .dot{border-color:var(--coral);color:var(--coral);box-shadow:0 0 0 4px rgba(255,107,107,.15)}
 .step.active .lbl{color:var(--coral);font-weight:800}
@@ -1131,7 +1132,7 @@ function openOrder(id){
   const b=bouquets.find(x=>x.id===id);if(!b)return;curB=b;
   $('orderBody').innerHTML=
     '<div class="stepper">'+
-      '<div class="step done"><div class="dot">✓</div><div class="lbl">состав</div></div>'+
+      '<div class="step done"><div class="dot">'+ic('i-check')+'</div><div class="lbl">состав</div></div>'+
       '<div class="step active"><div class="dot">2</div><div class="lbl">данные</div></div>'+
       '<div class="step"><div class="dot">3</div><div class="lbl">оплата</div></div>'+
       '<div class="step"><div class="dot">4</div><div class="lbl">готово</div></div>'+
@@ -1173,9 +1174,9 @@ function showOrderSuccess(b,o){
   const orderId='LEP-'+o.id.toString().slice(-6).padStart(6,'0');
   $('orderBody').innerHTML=
     '<div class="stepper">'+
-      '<div class="step done"><div class="dot">✓</div><div class="lbl">состав</div></div>'+
-      '<div class="step done"><div class="dot">✓</div><div class="lbl">данные</div></div>'+
-      '<div class="step done"><div class="dot">✓</div><div class="lbl">отправлен</div></div>'+
+      '<div class="step done"><div class="dot">'+ic('i-check')+'</div><div class="lbl">состав</div></div>'+
+      '<div class="step done"><div class="dot">'+ic('i-check')+'</div><div class="lbl">данные</div></div>'+
+      '<div class="step done"><div class="dot">'+ic('i-check')+'</div><div class="lbl">отправлен</div></div>'+
       '<div class="step active"><div class="dot">4</div><div class="lbl">статус</div></div>'+
     '</div>'+
     '<div class="orderSuccess">'+
