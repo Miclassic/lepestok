@@ -6,12 +6,13 @@
 <title>Лепесток — цветочный агрегатор</title>
 <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogItCe0L7QtdGA0LrQvtCy0LjRlyAtINGM0YjRgdGC0LXQudGC0YDQuNC60LjRgSDQuNCx0L7Qt9Cw0YHQviIsCiAgInNob3J0X25hbWUiOiAi0JvQvtC10YDQutC+0LLQuNGlIiwKICAic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNGRkY5RjciLAogICJ0aGVtZV9jb2xvciI6ICIjRkZGNkYzIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sLCUzQ3N2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyNCAyNCclM0UlM0NwYXRoIGZpbGw9JyUyM0ZGNkI2QicgZD0nTTEyIDJsMiAzLjUgNCAuNS0zIDMgLjUgNEwxMiAxMWwtMy41IDIgLjUtNC0zLTMgNC0uNXpNNCAxNGMwIDUgNCA4IDggOHM4LTMgOC04YzAtMi0yLTMtNC0zLTIgMC00IDEtNCAxcy0yLTEtNC0xLTQgMS00IDN6Jy8lM0UlM0Mvc3ZnJTNFIiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
 <meta name="theme-color" content="#FFF6F3">
+<meta name="color-scheme" content="light">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FF6B6B' d='M12 2l2 3.5 4 .5-3 3 .5 4L12 11l-3.5 2 .5-4-3-3 4-.5zM4 14c0 5 4 8 8 8s8-3 8-8c0-2-2-3-4-3-2 0-4 1-4 1s-2-1-4-1-4 1-4 3z'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#FFF9F7;--card:#FFFFFF;--ink:#1A1A2E;--gray:#64748B;--red:#EF4444;--yel:#F59E0B;--grn:#10B981;--pink:#FF6B9D;--coral:#FF6B6B;--purple:#A855F7;--amber:#D97706;--gradient:linear-gradient(135deg,#FF6B6B 0%,#FF6B9D 50%,#A855F7 100%);--glass:rgba(255,255,255,.86);--shadow:0 8px 28px rgba(233,120,140,.12);--shadow-hover:0 14px 40px rgba(233,120,140,.2)}
+:root{color-scheme:light;--bg:#FFF9F7;--card:#FFFFFF;--ink:#1A1A2E;--gray:#64748B;--red:#EF4444;--yel:#F59E0B;--grn:#10B981;--pink:#FF6B9D;--coral:#FF6B6B;--purple:#A855F7;--amber:#D97706;--gradient:linear-gradient(135deg,#FF6B6B 0%,#FF6B9D 50%,#A855F7 100%);--glass:rgba(255,255,255,.86);--shadow:0 8px 28px rgba(233,120,140,.12);--shadow-hover:0 14px 40px rgba(233,120,140,.2)}
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Playfair Display',system-ui,-apple-system,'Segoe UI',Roboto,serif;-webkit-tap-highlight-color:transparent}
 body{background:linear-gradient(180deg,#FFFDFA 0%,#FFF6F3 45%,#FFFBF9 100%);color:var(--ink);min-height:100vh;position:relative;overflow-x:hidden}
 body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle at 15% 12%,rgba(255,107,107,.06) 0%,transparent 45%),radial-gradient(circle at 88% 70%,rgba(168,85,247,.05) 0%,transparent 45%);pointer-events:none;z-index:0}
@@ -1464,7 +1465,10 @@ async function doAuth(){
   if(authMode==='reg'){
     const nick=$('aNick').value.trim();if(nick.length<2){toast('Придумай никнейм (мин. 2 символа)');return;}
     const r=await sb.auth.signUp({email,password:pass,options:{data:{nick}}});
-    if(r.error){handleSBError(r.error,'Регистрация');return;}
+    if(r.error){
+      if(/already registered/i.test(r.error.message)){toast('Этот email уже зарегистрирован — входи','i-lock');authMode='login';syncAuthMode();return;}
+      handleSBError(r.error,'Регистрация');return;
+    }
     if(r.data.session){await sb.from('profiles').insert({id:r.data.session.user.id,nick,is_florist:false}).catch(()=>{});toast('Добро пожаловать, '+nick+'!','i-flower');track('reg');}
     else{toast('Подтверди письмо на '+email);}
     closeAuth();await refreshMe();load();
