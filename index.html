@@ -50,10 +50,13 @@ body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle
 @keyframes leafSway{0%,100%{transform:rotate(-20deg) translateY(0)}50%{transform:rotate(25deg) translateY(2px)}}
 .tabBadge{position:absolute;top:2px;right:calc(50% - 20px);min-width:16px;height:16px;border-radius:999px;background:var(--gradient);color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 4px;box-shadow:0 2px 8px rgba(255,107,107,.4);animation:badgePulse 2s ease-in-out infinite}
 @keyframes badgePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
-.ticker{max-width:620px;margin:0 auto;overflow:hidden;padding:0 12px 8px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-.tickTrack{display:flex;width:max-content;animation:tick 40s linear infinite;will-change:transform;color:var(--coral);font-size:11px;font-weight:700}
-.tickHalf{display:inline-flex;align-items:center;gap:26px;padding-right:26px;white-space:nowrap}
-@keyframes tick{to{transform:translateX(-50%)}}
+.ticker{max-width:620px;margin:0 auto;overflow:hidden;padding:2px 14px 8px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.tickLine{color:#8A93A6;font-size:10.5px;font-weight:700;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;animation:tickFade 5s ease both;letter-spacing:.01em}
+.tickLine .tn{color:var(--ink);font-weight:800}
+.tickLine .tm{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:800}
+.tickLine .tf{color:var(--pink);font-weight:800}
+.tickLine .tb{color:var(--amber);font-weight:800}
+@keyframes tickFade{0%{opacity:0;transform:translateX(16px);filter:blur(3px)}7%{opacity:1;transform:none;filter:blur(0)}90%{opacity:1;transform:none;filter:blur(0)}100%{opacity:0;transform:translateX(-16px);filter:blur(3px)}}
 main{padding:84px 16px calc(96px + env(safe-area-inset-bottom));max-width:620px;width:100%;margin:0 auto;position:relative;z-index:1}
 main.withTicker{padding-top:112px}
 .pageHead{margin:2px 2px 14px}
@@ -207,6 +210,12 @@ main.withTicker{padding-top:112px}
 .shopChip img{width:12px;height:12px;border-radius:50%;object-fit:cover;flex:none}
 .shopChip .icn{width:10px;height:10px;color:var(--coral);flex:none}
 .shopChip .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.chipRate{display:inline-flex;align-items:center;gap:2px;color:var(--amber);font-weight:800;font-size:8px;flex:none;margin-left:3px;padding-left:5px;border-left:1px solid rgba(26,26,46,.15);animation:rateBreathe 2.6s ease-in-out infinite}
+.chipRate .icn{width:9px;height:9px;color:var(--yel)}
+@keyframes rateBreathe{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.1);opacity:1}}
+/* премиальные цветочные узоры от кромки фото к плашке магазина */
+.lpCover::after{content:"";position:absolute;left:0;bottom:0;right:0;height:54px;z-index:1;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='36' viewBox='0 0 56 36'%3E%3Cg fill='none' stroke='%23fff' stroke-width='1.1'%3E%3Cpath d='M10 8l1.6 2.8 3.2.4-2.3 2.3.4 3.2-2.9-1.6-2.9 1.6.4-3.2-2.3-2.3 3.2-.4z'/%3E%3Cpath d='M38 22l1.3 2.2 2.6.3-1.9 1.9.3 2.6-2.3-1.3-2.3 1.3.3-2.6-1.9-1.9 2.6-.3z'/%3E%3Ccircle cx='48' cy='7' r='1.8'/%3E%3Cpath d='M24 30c2-1.5 4-1.5 6 0M4 22c1.5-1.5 3.5-1.5 5 0'/%3E%3C/g%3E%3C/svg%3E") repeat;opacity:.38;-webkit-mask-image:radial-gradient(130% 110% at 0% 100%,#000 25%,transparent 72%);mask-image:radial-gradient(130% 110% at 0% 100%,#000 25%,transparent 72%)}
+.heroPhoto::before{content:"";position:absolute;left:0;bottom:0;right:0;height:64px;z-index:1;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='36' viewBox='0 0 56 36'%3E%3Cg fill='none' stroke='%23fff' stroke-width='1.1'%3E%3Cpath d='M10 8l1.6 2.8 3.2.4-2.3 2.3.4 3.2-2.9-1.6-2.9 1.6.4-3.2-2.3-2.3 3.2-.4z'/%3E%3Cpath d='M38 22l1.3 2.2 2.6.3-1.9 1.9.3 2.6-2.3-1.3-2.3 1.3.3-2.6-1.9-1.9 2.6-.3z'/%3E%3Ccircle cx='48' cy='7' r='1.8'/%3E%3Cpath d='M24 30c2-1.5 4-1.5 6 0M4 22c1.5-1.5 3.5-1.5 5 0'/%3E%3C/g%3E%3C/svg%3E") repeat;opacity:.38;-webkit-mask-image:radial-gradient(130% 110% at 0% 100%,#000 25%,transparent 72%);mask-image:radial-gradient(130% 110% at 0% 100%,#000 25%,transparent 72%)}
 .favBtn{position:absolute;top:8px;right:8px;z-index:2;width:30px;height:30px;border:none;border-radius:50%;background:rgba(255,255,255,.92);color:var(--gray);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.14)}
 .favBtn .icn{width:14px;height:14px}
 .favBtn.on{color:var(--pink)}
@@ -428,7 +437,7 @@ main.withTicker{padding-top:112px}
       <span id="tbUser"></span>
     </div>
   </div>
-  <div class="ticker hidden" id="ticker"><div class="tickTrack" id="tickTrack"></div></div>
+  <div class="ticker hidden" id="ticker"><div class="tickLine" id="tickLine"></div></div>
 </div>
 
 <main id="mainWrap">
@@ -591,12 +600,49 @@ function currentHoliday(){
   }
   return null;
 }
-function renderTicker(){
+/* ---------- живая строка «сейчас ищут» (заглушка; позже — реальные данные из events) ---------- */
+const TICK_NAMES=['Настя','Мария','Ольга','Катя','Анна','Лена','Вика','Полина','Дмитрий','Алексей','Иван','Максим'];
+const TICK_VERB=['собирает','выбирает','ищет','заказывает','смотрит'];
+const TICK_FLOWER=['розы','хризантемы','тюльпаны','пионы','лилии','гортензии','сборный букет','нежный букет','яркий букет'];
+const TICK_WHO=['маме','девушке','подруге','жене','учителю','коллеге','себе','бабушке'];
+const TICK_BUDGET=['до 2500','2500–4000','4000+'];
+const TICK_EMO=['🌸','🌷','💐','🌹','✨','💝',''];
+const tickRand=a=>a[Math.floor(Math.random()*a.length)];
+let tickTimer=null,tickIdx=0,tickPool=[];
+function buildTickPool(){
+  const pool=[];
   const h=currentHoliday();
-  const tk=$('ticker'),tr=$('tickTrack'),mw=$('mainWrap');
-  if(!h){tk.classList.add('hidden');mw.classList.remove('withTicker');return;}
+  if(h)pool.push(h.msg.replace(/\s*·\s*$/,'')+' уже собирают в <span class="tm">«собери мне»</span> ✨');
+  pool.push('✨ не знаешь, что выбрать? <span class="tm">«собери мне»</span> подберёт букет за тебя');
+  pool.push('🤍 повод + цветы + бюджет — и <span class="tm">«собери мне»</span> соберёт идеальный букет');
+  const used=new Set();let guard=0;
+  while(pool.length<18&&guard<300){
+    guard++;
+    const bud=Math.random()<.5?' · <span class="tb">'+tickRand(TICK_BUDGET)+' ₽</span>':'';
+    const ph=tickRand(TICK_EMO)+' <span class="tn">'+tickRand(TICK_NAMES)+'</span> '+tickRand(TICK_VERB)+' в <span class="tm">«собери мне»</span>: <span class="tf">'+tickRand(TICK_FLOWER)+'</span> '+tickRand(TICK_WHO)+bud;
+    if(used.has(ph))continue;
+    used.add(ph);pool.push(ph);
+  }
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+  return pool;
+}
+function renderTicker(){
+  const tk=$('ticker'),mw=$('mainWrap');
+  tickPool=buildTickPool();
+  if(!tickPool.length){tk.classList.add('hidden');mw.classList.remove('withTicker');return;}
   tk.classList.remove('hidden');mw.classList.add('withTicker');
-  tr.innerHTML='<div class="tickHalf"><span>'+h.msg+'</span><span>'+h.msg+'</span></div>';
+  tickIdx=0;showTickLine();
+  clearInterval(tickTimer);
+  tickTimer=setInterval(()=>{
+    if(document.visibilityState!=='visible')return;
+    tickIdx=(tickIdx+1)%tickPool.length;
+    showTickLine();
+  },5000);
+}
+function showTickLine(){
+  const el=$('tickLine');if(!el)return;
+  el.innerHTML=tickPool[tickIdx];
+  el.style.animation='none';void el.offsetWidth;el.style.animation='';
 }
 const isAdmin=()=>!!(me&&me.email&&ADMIN_EMAILS.includes(String(me.email).toLowerCase()));
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
@@ -657,6 +703,11 @@ function shopRating(s){
   const rc=comments.filter(c=>bids.includes(c.bouquet_id)&&c.rating);
   if(!rc.length)return 0;
   return rc.reduce((a,c)=>a+c.rating,0)/rc.length;
+}
+function shopRateChip(s){
+  const r=shopRating(s);
+  if(!r)return'';
+  return '<span class="chipRate">'+ic('i-star')+r.toFixed(1)+'</span>';
 }
 function shopCount(s){return bouquets.filter(b=>b.user_id===s.owner_id&&b.photo_url).length;}
 function setShopCity(c){shopCityFilter=c;renderShopsTab();}
@@ -779,7 +830,7 @@ function renderHero(){
   const isFav=favorites.some(f=>f.bouquet_id===b.id);
   box.innerHTML='<div class="heroCard" id="heroCard">'+
     '<div class="heroPhoto"><img src="'+b.photo_url+'" alt="'+esc(b.title)+'" fetchpriority="high">'+
-      (shop?'<div class="shopChipGlass" onclick="event.stopPropagation();openShopPage('+shop.id+')">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':'')+'<span class="nm">'+esc(shop.name)+'</span></div>':'')+
+      (shop?'<div class="shopChipGlass" onclick="event.stopPropagation();openShopPage('+shop.id+')">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':'')+'<span class="nm">'+esc(shop.name)+'</span>'+shopRateChip(shop)+'</div>':'')+
       '<div class="heroDots">'+d.map((x,i)=>'<span class="dot'+(i===heroIdx?' on':'')+'" onclick="setHero('+i+')"></span>').join('')+'</div>'+
     '</div>'+
     '<div class="heroInfo">'+
@@ -911,7 +962,7 @@ function bouquetCard(b,i){
     '<div class="lpCover"><img src="'+b.photo_url+'" loading="lazy" decoding="async">'+
       '<button class="favBtn'+(isFav?' on':'')+'" onclick="event.stopPropagation();toggleFav('+b.id+')">'+ic('i-heart')+'</button>'+
       (b.is_day?'<span class="dayChip">'+ic('i-flame')+'букет дня</span>':'')+
-      (shop?'<span class="shopChip" onclick="event.stopPropagation();openShopPage('+shop.id+')">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':ic('i-shop'))+'<span class="nm">'+esc(shop.name)+'</span></span>':'')+
+      (shop?'<span class="shopChip" onclick="event.stopPropagation();openShopPage('+shop.id+')">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':ic('i-shop'))+'<span class="nm">'+esc(shop.name)+'</span>'+shopRateChip(shop)+'</span>':'')+
     '</div>'+
     '<div class="lpName"><span class="t">'+esc(b.title)+'</span>'+(r?'<span class="lpRate">'+ic('i-star')+r.toFixed(1)+'</span>':'')+'</div>'+
     (b.category?'<div class="lpComp">'+esc(b.category)+'</div>':'')+
