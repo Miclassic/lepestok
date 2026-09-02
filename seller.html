@@ -342,8 +342,6 @@ async function refresh(){
     $('shopName').textContent=shop.name;
     if(shop.logo_url)$('shopAva').innerHTML='<img src="'+shop.logo_url+'">';
     $('shName').value=shop.name||'';$('shCity').value=shop.city||'Вуктыл';$('shPhone').value=shop.phone||'';$('shAddr').value=shop.address||'';$('shDesc').value=shop.description||'';
-   const prTg=await sb.from('profiles').select('telegram_chat_id').eq('id',me.id).maybeSingle();
-   $('shTg').value=prTg.data?.telegram_chat_id||'';
     const ex=await sb.from('shop_extras').select('*').eq('shop_id',shop.id).order('created_at');
     myExtras=ex.data||[];
   }
