@@ -101,6 +101,9 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 .trendChip .cnt{font-size:9px;background:rgba(255,107,107,.14);color:var(--coral);padding:1px 6px;border-radius:999px;font-weight:800}
 .trendChip:hover .cnt{background:rgba(255,255,255,.3);color:#fff}
 .trendChip.added{opacity:.5;cursor:default;border-style:dotted}
+.pushBtn{margin-top:10px;background:var(--bg);border:2px dashed rgba(255,107,107,.4);border-radius:999px;padding:11px;font-weight:700;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;color:var(--coral);width:100%}
+.pushBtn.on{background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(16,185,129,.15));border-style:solid;border-color:rgba(16,185,129,.3);color:var(--grn)}
+.pushBtn .icn{width:15px;height:15px}
 #toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(30,41,59,.95);color:#F1F5F9;border:2px solid rgba(255,107,107,.4);border-radius:16px;font-weight:700;font-size:13px;padding:12px 20px;text-align:center;max-width:82vw;z-index:99}
 #toast:not(.hidden){animation:toastIn .3s ease}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,-50%) scale(.85)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
@@ -125,6 +128,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 <symbol id="i-tag" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M20 12l-8 8-9-9V3h8z"/><circle cx="7.5" cy="7.5" r="1.3" fill="currentColor"/></g></symbol>
 <symbol id="i-trend" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></g></symbol>
 <symbol id="i-wand" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20l9.5-9.5"/><path fill="currentColor" stroke="none" d="M15.5 3l1.2 3 3 1.2-3 1.2-1.2 3-1.2-3-3-1.2 3-1.2z"/><path fill="currentColor" stroke="none" d="M19.5 12l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/><path fill="currentColor" stroke="none" d="M8 3l.7 1.8 1.8.7-1.8.7L8 8l-.7-1.8-1.8-.7 1.8-.7z"/></g></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" d="M12 3a6 6 0 0 1 6 6v4l2 3H4l2-3V9a6 6 0 0 1 6-6z"/><path fill="none" stroke="currentColor" stroke-width="1.7" d="M10 19a2 2 0 0 0 4 0"/></symbol>
 </svg>
 <div class="top">
   <div class="topIn">
@@ -163,11 +167,13 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
       <input id="shPhone" placeholder="Телефон">
       <input id="shAddr" placeholder="Адрес (улица, дом)">
       <textarea id="shDesc" placeholder="Описание"></textarea>
+      <input id="shTg" placeholder="Telegram chat ID для уведомлений (например: 960378369)">
       <button class="btn soft" onclick="document.getElementById('shLogo').click()"><svg class="icn"><use href="#i-camera"/></svg>Логотип</button>
       <input type="file" id="shLogo" accept="image/*" style="display:none" onchange="pickLogo(this)">
       <div id="lPrevWrap" class="hidden" style="margin:8px 0"><img id="lPrev" style="width:64px;height:64px;object-fit:cover;border-radius:50%;box-shadow:var(--shadow)"></div>
       <button class="btn" style="margin-top:8px" onclick="saveShop()">Сохранить</button>
     </div>
+    <button class="pushBtn" id="pushBtn" onclick="togglePush()"><svg class="icn"><use href="#i-bell"/></svg><span id="pushBtnTxt">включить уведомления о новых заказах</span></button>
     <button class="btn danger" onclick="logout()">Выйти</button>
   </section>
 </main>
@@ -314,6 +320,9 @@ async function boot(){
   const pr=await sb.from('profiles').select('is_florist').eq('id',me.id).maybeSingle();
   if(!pr.data||!pr.data.is_florist){return;}
   $('loginBox').classList.add('hidden');
+  registerSW();
+  initPushBtn();
+  startOrderRealtime();
   await fetchTrendTags();
   await refresh();
 }
@@ -330,6 +339,8 @@ async function refresh(){
     $('shopName').textContent=shop.name;
     if(shop.logo_url)$('shopAva').innerHTML='<img src="'+shop.logo_url+'">';
     $('shName').value=shop.name||'';$('shCity').value=shop.city||'Вуктыл';$('shPhone').value=shop.phone||'';$('shAddr').value=shop.address||'';$('shDesc').value=shop.description||'';
+    const prTg=await sb.from('profiles').select('telegram_chat_id').eq('id',me.id).maybeSingle();
+    $('shTg').value=prTg.data?.telegram_chat_id||'';
     const ex=await sb.from('shop_extras').select('*').eq('shop_id',shop.id).order('created_at');
     myExtras=ex.data||[];
   }
@@ -574,9 +585,95 @@ async function saveShop(){
   }
   const res=await sb.from('shops').update({name:$('shName').value.trim(),city:($('shCity').value.trim()||'Вуктыл'),phone:$('shPhone').value.trim(),address:$('shAddr').value.trim(),description:$('shDesc').value.trim(),logo_url}).eq('id',shop.id);
   if(res.error){toast('Ошибка: '+res.error.message);return;}
+  const tg=$('shTg').value.trim();
+  await sb.from('profiles').update({telegram_chat_id:tg||null}).eq('id',me.id);
   pickedLogo=null;
   await refresh();
   toast('Магазин сохранён');
+}
+/* ---------- Push для салона ---------- */
+const VAPID_PUBLIC='BEQrKQaG8qpNHp5p_45b_C9aEcwUSV3hltk6ApRaKQMEds4vNnEbu9hGDK5ZRjkNmVJ7WHmBvhLKfk9YQ856ijo'; // тот же, что в index.html
+function urlBase64ToUint8Array(b64){
+  const padding='='.repeat((4-b64.length%4)%4);
+  const base64=(b64+padding).replace(/-/g,'+').replace(/_/g,'/');
+  const raw=atob(base64);
+  const out=new Uint8Array(raw.length);
+  for(let i=0;i<raw.length;++i)out[i]=raw.charCodeAt(i);
+  return out;
+}
+async function subscribePush(){
+  if(!('serviceWorker' in navigator)||!('PushManager' in window)){toast('Уведомления не поддерживаются');return false;}
+  const reg=await navigator.serviceWorker.ready;
+  const perm=await Notification.requestPermission();
+  if(perm!=='granted'){toast('Разреши уведомления в настройках браузера');return false;}
+  let sub=await reg.pushManager.getSubscription();
+  if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC)});
+  const j=sub.toJSON();
+  await sb.from('push_subscriptions').upsert({user_id:me.id,device:localStorage.getItem('lep_device')||'seller',endpoint:j.endpoint,keys_p256dh:j.keys.p256dh,keys_auth:j.keys.auth,role:'florist'},{onConflict:'endpoint'});
+  return true;
+}
+async function isPushSubscribed(){
+  if(!('serviceWorker' in navigator))return false;
+  const reg=await navigator.serviceWorker.ready;
+  return !!(await reg.pushManager.getSubscription());
+}
+async function togglePush(){
+  const sub=await isPushSubscribed();
+  if(sub){
+    if(!confirm('Отключить уведомления о новых заказах?'))return;
+    const reg=await navigator.serviceWorker.ready;
+    const s=await reg.pushManager.getSubscription();
+    if(s)await s.unsubscribe();
+    toast('Уведомления отключены');
+    $('pushBtn').classList.remove('on');
+    $('pushBtnTxt').textContent='включить уведомления о новых заказах';
+  }else{
+    const ok=await subscribePush();
+    if(ok){toast('Уведомления включены! Заказы долетят даже при закрытом сайте');$('pushBtn').classList.add('on');$('pushBtnTxt').textContent='уведомления включены';}
+  }
+}
+async function initPushBtn(){
+  if(await isPushSubscribed()){$('pushBtn').classList.add('on');$('pushBtnTxt').textContent='уведомления включены';}
+}
+/* ---------- Realtime: мгновенные новые заказы ---------- */
+function startOrderRealtime(){
+  sb.channel('florist-orders-'+me.id)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'orders'},async payload=>{
+      const o=payload.new;
+      if(!o||!o.bouquet_id)return;
+      if(!myBouquets.some(b=>b.id===o.bouquet_id))return;
+      toast('🌸 Новый заказ!','i-bell');
+      try{
+        const ctx=new (window.AudioContext||window.webkitAudioContext)();
+        const osc=ctx.createOscillator();const g=ctx.createGain();
+        osc.connect(g);g.connect(ctx.destination);
+        osc.frequency.value=880;g.gain.value=.15;
+        osc.start();setTimeout(()=>{osc.stop();ctx.close();},400);
+      }catch(e){}
+      document.title='🌸 Новый заказ! — Лепесток';
+      setTimeout(()=>{document.title='Лепесток · кабинет продавца';},6000);
+      await refresh();
+    })
+    .subscribe();
+}
+/* ---------- Service Worker (тот же, что в index) ---------- */
+function registerSW(){
+  if(!('serviceWorker' in navigator))return;
+  const swCode=`
+    self.addEventListener('install',e=>self.skipWaiting());
+    self.addEventListener('activate',e=>self.clients.claim());
+    self.addEventListener('push',e=>{
+      let data={title:'Лепесток',body:'У вас обновление',icon:'',tag:'lepestok'};
+      try{if(e.data)data={...data,...e.data.json()};}catch(_){}
+      e.waitUntil(self.registration.showNotification(data.title,{body:data.body,icon:data.icon,tag:data.tag,vibrate:[100,50,100]}));
+    });
+    self.addEventListener('notificationclick',e=>{
+      e.notification.close();
+      e.waitUntil(clients.matchAll({type:'window'}).then(ws=>{for(const w of ws){if('focus' in w)return w.focus();}if(clients.openWindow)return clients.openWindow('/');}));
+    });
+  `;
+  const swBlob=new Blob([swCode],{type:'application/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(()=>{});
 }
 boot();
 </script>
