@@ -375,10 +375,17 @@ main.withTicker{padding-top:112px}
 .s-ready{background:rgba(217,119,6,.14);color:#D97706}
 .s-delivered{background:rgba(16,185,129,.14);color:#10B981}
 .s-cancelled{background:rgba(148,163,184,.14);color:#94A3B8;text-decoration:line-through}
-.cityFab{border:1px solid rgba(217,119,6,.22);color:var(--amber);border-radius:999px;padding:5px 10px;font-size:9.5px;font-weight:800;letter-spacing:.02em;background:linear-gradient(180deg,#FFFEFB 0%,#FFF7EC 100%);cursor:pointer;display:flex;align-items:center;gap:4px;box-shadow:0 3px 12px rgba(190,150,95,.14);transition:all .3s;flex:0 1 auto;min-width:0}
+.cityFab{position:relative;z-index:2;border:1px solid rgba(217,119,6,.22);color:var(--amber);border-radius:999px;padding:5px 10px;font-size:9.5px;font-weight:800;letter-spacing:.02em;background:linear-gradient(180deg,#FFFEFB 0%,#FFF7EC 100%);cursor:pointer;display:flex;align-items:center;gap:4px;box-shadow:0 3px 12px rgba(190,150,95,.14);transition:all .3s;flex:0 1 auto;min-width:0}
 .cityFab:active{transform:scale(.95)}
 .cityFab .icn{width:10px;height:10px;flex:none}
 .cityFab .cityNm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:74px}
+@media(max-width:460px){
+  .brandSlog{display:none}
+  .miniBtn.cta{padding:8px 10px;font-size:10px;gap:4px}
+  .avaBtn{width:30px;height:30px;font-size:12px}
+  .cityFab{padding:5px 8px}
+  .cityFab .cityNm{max-width:64px}
+}
 .tourVeil{position:fixed;inset:0;z-index:99;background:transparent}
 .tourSpot{position:fixed;z-index:100;border-radius:20px;box-shadow:0 0 0 9999px rgba(26,26,46,.72),0 0 0 2.5px #fff;pointer-events:none;transition:top .45s cubic-bezier(.4,0,.2,1),left .45s cubic-bezier(.4,0,.2,1),width .45s,height .45s}
 .tourTip{position:fixed;left:16px;right:16px;z-index:101;background:var(--card);border-radius:20px;padding:16px 16px 14px;box-shadow:0 16px 48px rgba(0,0,0,.35);animation:cardIn .35s ease}
