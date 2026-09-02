@@ -91,6 +91,16 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 .tagInputRow input{margin:0;flex:1}
 .tagInputRow button{width:42px;flex:none;border:none;background:var(--gradient);color:#fff;border-radius:12px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .tagInputRow button .icn{width:16px;height:16px}
+.trendBlock{background:linear-gradient(120deg,#FFF3F1 0%,#FFECEF 100%);border-radius:18px;padding:12px;margin-bottom:10px;box-shadow:var(--shadow);border:1.5px dashed rgba(255,107,107,.35)}
+.trendBlock h4{font-size:12.5px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:6px;color:var(--coral)}
+.trendBlock h4 .icn{width:14px;height:14px}
+.trendBlock .trendSub{font-size:10.5px;color:var(--gray);margin-bottom:8px;line-height:1.4}
+.trendChips{display:flex;flex-wrap:wrap;gap:5px}
+.trendChip{background:var(--card);border:1.5px solid rgba(255,107,107,.3);color:var(--coral);border-radius:999px;padding:5px 10px;font-size:10.5px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:.2s}
+.trendChip:hover{background:var(--gradient);color:#fff;border-color:transparent}
+.trendChip .cnt{font-size:9px;background:rgba(255,107,107,.14);color:var(--coral);padding:1px 6px;border-radius:999px;font-weight:800}
+.trendChip:hover .cnt{background:rgba(255,255,255,.3);color:#fff}
+.trendChip.added{opacity:.5;cursor:default;border-style:dotted}
 #toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(30,41,59,.95);color:#F1F5F9;border:2px solid rgba(255,107,107,.4);border-radius:16px;font-weight:700;font-size:13px;padding:12px 20px;text-align:center;max-width:82vw;z-index:99}
 #toast:not(.hidden){animation:toastIn .3s ease}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,-50%) scale(.85)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
@@ -113,6 +123,8 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 <symbol id="i-edit" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 20h4L20 8l-4-4L4 16z"/><path d="M13 7l4 4"/></g></symbol>
 <symbol id="i-back" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6"/></symbol>
 <symbol id="i-tag" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M20 12l-8 8-9-9V3h8z"/><circle cx="7.5" cy="7.5" r="1.3" fill="currentColor"/></g></symbol>
+<symbol id="i-trend" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></g></symbol>
+<symbol id="i-wand" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20l9.5-9.5"/><path fill="currentColor" stroke="none" d="M15.5 3l1.2 3 3 1.2-3 1.2-1.2 3-1.2-3-3-1.2 3-1.2z"/><path fill="currentColor" stroke="none" d="M19.5 12l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/><path fill="currentColor" stroke="none" d="M8 3l.7 1.8 1.8.7-1.8.7L8 8l-.7-1.8-1.8-.7 1.8-.7z"/></g></symbol>
 </svg>
 <div class="top">
   <div class="topIn">
@@ -131,6 +143,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
   </section>
   <section id="sec-bouquets" class="hidden">
     <div class="secTitle">Мои букеты <span class="cnt" id="cntBouq">0</span></div>
+    <div id="trendBlock"></div>
     <div id="bouqList"></div>
   </section>
   <section id="sec-extras" class="hidden">
@@ -146,8 +159,9 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
     <div class="secTitle">Мой магазин</div>
     <div class="card">
       <input id="shName" placeholder="Название магазина">
+      <input id="shCity" placeholder="Город (например: Вуктыл)">
       <input id="shPhone" placeholder="Телефон">
-      <input id="shAddr" placeholder="Адрес">
+      <input id="shAddr" placeholder="Адрес (улица, дом)">
       <textarea id="shDesc" placeholder="Описание"></textarea>
       <button class="btn soft" onclick="document.getElementById('shLogo').click()"><svg class="icn"><use href="#i-camera"/></svg>Логотип</button>
       <input type="file" id="shLogo" accept="image/*" style="display:none" onchange="pickLogo(this)">
@@ -181,6 +195,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 <script>
 const sb=supabase.createClient('https://dhwkkbtrhexywymegwoo.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRod2trYnRyaGV4eXd5bWVnd29vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMDUxODMsImV4cCI6MjEwMzc4MTE4M30.NAyY4dCeRRC2OznENuNCfvr-mKqACyMU61K-y-PkRIQ');
 let me=null,shop=null,myBouquets=[],myOrders=[],myReviews=[],myExtras=[],pickedPhoto=null,pickedLogo=null;
+let trendTags=[];
 function $(id){return document.getElementById(id);}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function ic(n){return '<svg class="icn"><use href="#'+n+'"/></svg>';}
@@ -189,7 +204,101 @@ function closeSheet(id){$(id).classList.add('hidden');}
 function whenRu(t){try{return new Date(t).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
 function statusRu(s){return({new:'новый',accepted:'принят',ready:'готов',delivered:'доставлен',cancelled:'отменён'})[s]||s;}
 
-// предустановленные теги для AI-подбора "собери мне"
+// ===== АВТОТЕГИ =====
+// Матрица: ключевые слова → тег. Простой keyword-matching.
+const TAG_KEYWORDS={
+  'день рождения':['день рождения','др','именин','birthday','праздник'],
+  'свидание':['свидание','романтический','любимой','любимому','валентин','14 февраля'],
+  'просто так':['просто так','без повода','настроение','порадовать'],
+  '8 марта':['8 марта','женский день','весна'],
+  'извинение':['извинение','прости','виноват','сори'],
+  'выпускной':['выпускной','выпуск','школа','универ'],
+  '1 сентября':['1 сентября','день знаний','школа','первоклассник','учитель'],
+  'день учителя':['день учителя','учитель','педагог'],
+  'день матери':['день матери','маме','мама'],
+  'новый год':['новый год','рождество','ёлка','праздник','декабрь'],
+  'маме':['маме','мама','матери'],
+  'подруге':['подруге','подруга','девушке','женщине'],
+  'девушке':['девушке','любимой','романтика'],
+  'жене':['жене','супруге'],
+  'коллеге':['коллеге','сотруднику','офис'],
+  'себе':['себе','для себя'],
+  'учителю':['учителю','учителю','педагогу'],
+  'бабушке':['бабушке','бабушка'],
+  'розы':['роза','роз','розовый'],
+  'пионы':['пион','пионов','пионовый'],
+  'тюльпаны':['тюльпан','тюльпанов'],
+  'хризантемы':['хризантем'],
+  'лилии':['лилия','лилий'],
+  'белый':['белый','белые','снежный'],
+  'красный':['красный','красные','алый'],
+  'нежный':['нежный','нежная','воздушный','пастельный'],
+  'ярко':['яркий','яркая','сочный','насыщенный']
+};
+
+function autoTagFromText(title,desc){
+  const text=((title||'')+' '+(desc||'')).toLowerCase();
+  const found=new Set();
+  for(const [tag,kws] of Object.entries(TAG_KEYWORDS)){
+    for(const kw of kws){
+      if(text.includes(kw.toLowerCase())){found.add(tag);break;}
+    }
+  }
+  return Array.from(found).slice(0,8);
+}
+
+// ===== АНАЛИТИКА ПОПУЛЯРНЫХ ТЕГОВ =====
+async function fetchTrendTags(){
+  try{
+    const since=new Date(Date.now()-14*864e5).toISOString();
+    const {data}=await sb.from('events')
+      .select('metadata')
+      .in('name',['view','order'])
+      .gte('created_at',since);
+    const counts={};
+    (data||[]).forEach(e=>{
+      const m=e.metadata||{};
+      const tags=m.tags||[];
+      if(Array.isArray(tags)){
+        tags.forEach(t=>{
+          if(!t)return;
+          const k=String(t).toLowerCase().trim();
+          if(!k)return;
+          counts[k]=(counts[k]||0)+1;
+        });
+      }
+    });
+    trendTags=Object.entries(counts)
+      .sort((a,b)=>b[1]-a[1])
+      .slice(0,12)
+      .map(([tag,count])=>({tag,count}));
+  }catch(e){trendTags=[];}
+  renderTrendBlock();
+}
+
+function renderTrendBlock(){
+  const box=$('trendBlock');if(!box)return;
+  if(!trendTags.length){
+    box.innerHTML='<div class="trendBlock"><h4>'+ic('i-trend')+'Популярные теги</h4>'+
+      '<div class="trendSub">Пока мало данных. Когда пользователи начнут просматривать и заказывать букеты — здесь появятся самые востребованные теги для автоподбора «Собери мне».</div></div>';
+    return;
+  }
+  box.innerHTML='<div class="trendBlock"><h4>'+ic('i-trend')+'🔥 Что ищут сейчас</h4>'+
+    '<div class="trendSub">Самые частые теги за 14 дней. Добавь их к букетам — они чаще попадут в подбор «Собери мне».</div>'+
+    '<div class="trendChips">'+trendTags.map(t=>
+      '<span class="trendChip" onclick="addTrendTag(this,\''+esc(t.tag).replace(/'/g,"\\'")+'\')">'+
+      esc(t.tag)+'<span class="cnt">'+t.count+'</span></span>'
+    ).join('')+'</div></div>';
+}
+
+function addTrendTag(el,t){
+  if(el.classList.contains('added'))return;
+  if(!pickedTags.includes(t))pickedTags.push(t);
+  el.classList.add('added');
+  renderTagChips();
+  toast('Тег «'+t+'» добавлен');
+}
+
 const TAG_PRESETS=[
   'день рождения','свидание','просто так','8 марта','извинение',
   'выпускной','1 сентября','день учителя','день матери','новый год','14 февраля',
@@ -205,6 +314,7 @@ async function boot(){
   const pr=await sb.from('profiles').select('is_florist').eq('id',me.id).maybeSingle();
   if(!pr.data||!pr.data.is_florist){return;}
   $('loginBox').classList.add('hidden');
+  await fetchTrendTags();
   await refresh();
 }
 async function doLogin(){
@@ -219,7 +329,7 @@ async function refresh(){
   if(shop){
     $('shopName').textContent=shop.name;
     if(shop.logo_url)$('shopAva').innerHTML='<img src="'+shop.logo_url+'">';
-    $('shName').value=shop.name||'';$('shPhone').value=shop.phone||'';$('shAddr').value=shop.address||'';$('shDesc').value=shop.description||'';
+    $('shName').value=shop.name||'';$('shCity').value=shop.city||'Вуктыл';$('shPhone').value=shop.phone||'';$('shAddr').value=shop.address||'';$('shDesc').value=shop.description||'';
     const ex=await sb.from('shop_extras').select('*').eq('shop_id',shop.id).order('created_at');
     myExtras=ex.data||[];
   }
@@ -243,6 +353,7 @@ function showSec(s){
   ['orders','bouquets','extras','reviews','shop'].forEach(k=>$('sec-'+k).classList.toggle('hidden',k!==s));
   ['Orders','Bouquets','Extras','Reviews','Shop'].forEach(k=>$('nv'+k).classList.toggle('on',k.toLowerCase()===s));
   $('fabBouq').classList.toggle('hidden',s!=='bouquets');
+  if(s==='bouquets')renderTrendBlock();
 }
 function renderOrders(){
   const box=$('orderList');
@@ -301,7 +412,6 @@ function renderBouquets(){
 }
 function renderTagChips(){
   const row=$('fTagRow');if(!row)return;
-  // чипсы из пресетов + свои
   const all=[...new Set([...TAG_PRESETS,...pickedTags])];
   row.innerHTML=all.map(t=>{
     const on=pickedTags.includes(t);
@@ -324,18 +434,30 @@ function addCustomTag(){
   inp.value='';
   renderTagChips();
 }
+function runAutoTag(){
+  const t=($('fTitle').value||'').trim();
+  const d=($('fDesc').value||'').trim();
+  if(!t&&!d){toast('Сначала заполни название или описание');return;}
+  const found=autoTagFromText(t,d);
+  if(!found.length){toast('Не нашёл подходящих тегов. Добавь вручную');return;}
+  let added=0;
+  found.forEach(x=>{if(!pickedTags.includes(x)){pickedTags.push(x);added++;}});
+  renderTagChips();
+  toast(added?'Добавлено '+added+' тег(ов)':'Все теги уже добавлены');
+}
 function openAddBouquet(){
   pickedPhoto=null;pickedCat='';editingId=null;pickedTags=[];
   $('bouqBody').innerHTML='<h3 id="bouqHead">Новый букет</h3>'+
-    '<input id="fTitle" placeholder="Название">'+
+    '<input id="fTitle" placeholder="Название" oninput="onTitleDescChange()">'+
     '<input id="fPrice" type="number" placeholder="Цена в рублях">'+
     '<div class="fieldLbl">'+ic('i-tag')+'Категория</div>'+
     '<div class="chips" id="fCatRow">'+['сборный','розы','тюльпаны','хризантемы','пионы','лилии','композиция'].map(c=>'<button type="button" class="chip" onclick="pickCat(this,\''+c+'\')">'+c+'</button>').join('')+'</div>'+
     '<div class="fieldLbl">'+ic('i-wand')+'Теги для «Собери мне» <span style="color:var(--gray);font-weight:400;font-size:10px">(выбери повод, кому и бюджет — AI подберёт этот букет)</span></div>'+
     '<div class="chips" id="fTagRow"></div>'+
     '<div class="tagInputRow"><input id="fNewTag" placeholder="свой тег (например: для мамы)" onkeypress="if(event.key===\'Enter\'){event.preventDefault();addCustomTag();}"><button type="button" onclick="addCustomTag()">'+ic('i-plus')+'</button></div>'+
+    '<button class="btn soft" style="background:linear-gradient(135deg,#FFF3F1,#FFECEF);color:var(--coral);border:1.5px dashed rgba(255,107,107,.4);margin-bottom:8px" onclick="runAutoTag()">'+ic('i-wand')+'Автоподбор тегов из названия и описания</button>'+
     '<div class="fieldLbl">'+ic('i-doc')+'Описание</div>'+
-    '<textarea id="fDesc" placeholder="Что входит в букет"></textarea>'+
+    '<textarea id="fDesc" placeholder="Что входит в букет" oninput="onTitleDescChange()"></textarea>'+
     '<button class="btn soft" onclick="document.getElementById(\'fPhoto\').click()">'+ic('i-camera')+'Фото</button>'+
     '<input type="file" id="fPhoto" accept="image/*" style="display:none" onchange="pickPhoto(this)">'+
     '<div id="fPrevWrap" class="hidden" style="margin:8px 0"><img id="fPrev" style="width:84px;height:84px;object-fit:cover;border-radius:14px;box-shadow:var(--shadow)"></div>'+
@@ -349,6 +471,21 @@ function openAddBouquet(){
 let pickedCat='';
 function pickCat(el,c){pickedCat=c;document.querySelectorAll('#fCatRow .chip').forEach(x=>x.classList.toggle('on',x.textContent===c));}
 let editingId=null;
+let autoTagTimer=null;
+function onTitleDescChange(){
+  // авто-анализ с задержкой 1.2с после последней правки
+  clearTimeout(autoTagTimer);
+  autoTagTimer=setTimeout(()=>{
+    if(editingId)return; // в режиме редактирования не мешаем
+    const t=($('fTitle').value||'').trim();
+    const d=($('fDesc').value||'').trim();
+    if(!t&&!d)return;
+    const found=autoTagFromText(t,d);
+    let added=0;
+    found.forEach(x=>{if(!pickedTags.includes(x)){pickedTags.push(x);added++;}});
+    if(added)renderTagChips();
+  },1200);
+}
 function openEditBouquet(id){
   const b=myBouquets.find(x=>x.id===id);if(!b)return;
   openAddBouquet();
@@ -435,7 +572,7 @@ async function saveShop(){
     if(up.error){toast('Лого: '+up.error.message);return;}
     logo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
   }
-  const res=await sb.from('shops').update({name:$('shName').value.trim(),phone:$('shPhone').value.trim(),address:$('shAddr').value.trim(),description:$('shDesc').value.trim(),logo_url}).eq('id',shop.id);
+  const res=await sb.from('shops').update({name:$('shName').value.trim(),city:($('shCity').value.trim()||'Вуктыл'),phone:$('shPhone').value.trim(),address:$('shAddr').value.trim(),description:$('shDesc').value.trim(),logo_url}).eq('id',shop.id);
   if(res.error){toast('Ошибка: '+res.error.message);return;}
   pickedLogo=null;
   await refresh();

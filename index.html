@@ -35,9 +35,10 @@ body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle
 .miniBtn.cta{background:var(--gradient);color:#fff;font-weight:800;box-shadow:0 6px 22px rgba(255,107,107,.35);display:inline-flex;align-items:center;gap:6px;position:relative;overflow:hidden}
 .miniBtn.cta .icn{width:12px;height:12px}
 .avaBtn{width:34px;height:34px;border:none;border-radius:50%;color:#fff;font-weight:800;font-size:14px;box-shadow:0 4px 16px rgba(255,107,107,.3);overflow:hidden;padding:0;cursor:pointer;background:var(--gradient);flex:none}
-.tabbar{max-width:620px;margin:0 auto;display:flex;gap:2px;padding:5px 6px;background:var(--card);border-radius:18px;box-shadow:var(--shadow);margin-left:12px;margin-right:12px;margin-bottom:10px}
+.tabbar{max-width:620px;margin:0 auto;display:flex;gap:2px;padding:5px 6px;background:var(--card);border-radius:18px;box-shadow:var(--shadow);margin-left:12px;margin-right:12px;margin-bottom:10px;overflow-x:auto;scrollbar-width:none}
+.tabbar::-webkit-scrollbar{display:none}
 @media(min-width:648px){.tabbar{margin-left:auto;margin-right:auto;max-width:596px}}
-.bn{flex:1;background:none;border:none;border-radius:14px;padding:9px 4px 11px;display:flex;align-items:center;justify-content:center;gap:5px;color:var(--gray);font-size:11px;font-weight:700;white-space:nowrap;cursor:pointer;position:relative}
+.bn{flex:1 0 auto;background:none;border:none;border-radius:14px;padding:9px 8px 11px;display:flex;align-items:center;justify-content:center;gap:5px;color:var(--gray);font-size:11px;font-weight:700;white-space:nowrap;cursor:pointer;position:relative}
 .bn .icn{width:15px;height:15px}
 .bn.on{color:var(--ink)}
 .bn.on::after{content:"";position:absolute;left:20%;right:20%;bottom:4px;height:2px;border-radius:999px;background:var(--gradient);box-shadow:0 0 10px rgba(255,107,107,.5)}
@@ -47,7 +48,6 @@ body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle
 .bn.dayTab.on::after{background:linear-gradient(90deg,#F59E0B,#D97706);box-shadow:0 0 10px rgba(245,158,11,.6)}
 .tabLeaf{position:absolute;top:2px;right:8px;width:9px;height:9px;color:#FB923C;animation:leafSway 2.2s ease-in-out infinite}
 @keyframes leafSway{0%,100%{transform:rotate(-20deg) translateY(0)}50%{transform:rotate(25deg) translateY(2px)}}
-/* бегущая строка */
 .ticker{max-width:620px;margin:0 auto;overflow:hidden;padding:0 12px 8px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
 .tickTrack{display:flex;width:max-content;animation:tick 40s linear infinite;will-change:transform;color:var(--coral);font-size:11px;font-weight:700}
 .tickHalf{display:inline-flex;align-items:center;gap:26px;padding-right:26px;white-space:nowrap}
@@ -67,10 +67,25 @@ main.withTicker{padding-top:150px}
 .filter{background:var(--card);border:none;outline:none;border-radius:999px;padding:9px 14px;font-size:11.5px;font-weight:700;color:var(--gray);cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;box-shadow:var(--shadow)}
 .filter .icn{width:13px;height:13px}
 .filter.on{background:var(--gradient);color:#fff}
-.heroCard{display:grid;grid-template-columns:1.02fr 1fr;gap:12px;background:var(--card);border-radius:24px;padding:14px;box-shadow:var(--shadow);animation:cardIn .5s ease both;position:relative}
-@media(max-width:360px){.heroCard{grid-template-columns:1fr}.heroPhoto{order:-1;min-height:200px}.heroInfo{padding:2px 0}}
+.sortRow{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:0 2px}
+.sortRow .sortLbl{font-size:11px;color:var(--gray);font-weight:700;display:inline-flex;align-items:center;gap:5px;flex:none}
+.sortRow .sortLbl .icn{width:12px;height:12px;color:var(--coral)}
+.sortRow .sortPill{background:var(--card);border:2px solid transparent;border-radius:999px;padding:6px 12px;font-size:10.5px;font-weight:800;color:var(--gray);cursor:pointer;box-shadow:var(--shadow);transition:.2s;display:inline-flex;align-items:center;gap:4px}
+.sortRow .sortPill .icn{width:11px;height:11px}
+.sortRow .sortPill.on{background:var(--gradient);color:#fff;border-color:var(--gradient);box-shadow:0 6px 18px rgba(255,107,107,.35)}
+.sortRow .sortPill:not(.on):hover{border-color:rgba(255,107,107,.4)}
+/* ---------- hero ---------- */
+.heroCard{display:flex;flex-direction:column;background:var(--card);border-radius:24px;padding:14px;box-shadow:var(--shadow);animation:cardIn .5s ease both;position:relative}
 @keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
-.heroInfo{display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0;padding:4px 0}
+.heroPhoto{position:relative;border-radius:18px;overflow:hidden;height:280px;flex:none}
+.heroPhoto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.heroDots{position:absolute;bottom:10px;right:12px;display:flex;gap:5px;z-index:2}
+.heroDots .dot{width:6px;height:6px;border-radius:999px;background:rgba(255,255,255,.65);cursor:pointer;transition:all .25s}
+.heroDots .dot.on{width:18px;background:#fff}
+.shopChipGlass{position:absolute;left:10px;bottom:10px;z-index:2;display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:999px;padding:4px 10px;font-size:8.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.shopChipGlass img{width:12px;height:12px;border-radius:50%;object-fit:cover}
+.heroInfo{display:grid;grid-template-columns:1.15fr .85fr;gap:12px;padding:12px 2px 2px;align-items:stretch}
+.heroMain{display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0}
 .heroBadge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,107,107,.12);color:var(--coral);border-radius:999px;padding:5px 10px;font-size:9.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
 .heroBadge .icn{width:11px;height:11px}
 .heroName{font-size:21px;font-weight:800;line-height:1.15;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -85,15 +100,71 @@ main.withTicker{padding-top:150px}
 .iconBtn{width:42px;height:42px;border:none;border-radius:50%;background:var(--bg);color:var(--gray);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow)}
 .iconBtn .icn{width:17px;height:17px}
 .iconBtn.on{color:var(--pink)}
-.heroPhoto{position:relative;border-radius:18px;overflow:hidden;min-height:230px}
-.heroPhoto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.heroDots{position:absolute;bottom:10px;right:12px;display:flex;gap:5px;z-index:2}
-.heroDots .dot{width:6px;height:6px;border-radius:999px;background:rgba(255,255,255,.65);cursor:pointer;transition:all .25s}
-.heroDots .dot.on{width:18px;background:#fff}
-.shopChipGlass{position:absolute;left:10px;bottom:10px;z-index:2;display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:999px;padding:4px 10px;font-size:8.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
-.shopChipGlass img{width:12px;height:12px;border-radius:50%;object-fit:cover}
-.emptyHero{display:flex;flex-direction:column;align-items:center;gap:10px;padding:34px 0;color:var(--gray);font-size:13px;grid-template-columns:1fr}
+.heroSide{position:relative;min-width:0;border-left:2px solid rgba(255,107,107,.22);padding-left:10px;display:flex;flex-direction:column;gap:10px;justify-content:center;overflow:hidden}
+.heroDesc{display:flex;flex-direction:column;gap:6px;min-width:0;overflow:hidden}
+.heroRev{background:linear-gradient(120deg,#FFF6F4,#FFF0F3);border-radius:14px;padding:9px 10px;display:flex;flex-direction:column;gap:5px;box-shadow:0 4px 14px rgba(233,120,140,.12);animation:revIn .8s ease both}
+@keyframes revIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.heroRevTop{display:flex;align-items:center;gap:6px}
+.heroRevAva{width:20px;height:20px;border-radius:50%;background:var(--gradient);color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.heroRevNick{font-size:10px;font-weight:800;color:var(--ink);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.heroRevStars{display:flex;gap:1px;flex:none}
+.heroRevStars .icn{width:9px;height:9px}
+.heroRevTxt{font-size:10.5px;line-height:1.45;color:var(--gray);font-style:italic;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.heroRevMeta{display:flex;gap:8px;align-items:center;color:var(--gray);font-size:9px;font-weight:700}
+.heroRevMeta span{display:inline-flex;align-items:center;gap:3px}
+.heroRevMeta .icn{width:10px;height:10px;color:var(--pink)}
+.heroDescLbl{display:flex;align-items:center;gap:5px;color:var(--coral);font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.9;flex:none}
+.heroDescLbl .icn{width:10px;height:10px}
+.heroDescLine{font-style:italic;color:var(--gray);font-size:11.5px;line-height:1.55;animation:descFade 12s ease both}
+.heroDescLine.static{animation:none;opacity:.85}
+@keyframes descFade{0%{opacity:0;transform:translateY(8px);filter:blur(3px)}4%{opacity:1;transform:none;filter:blur(0)}94%{opacity:1}100%{opacity:0;transform:translateY(-8px);filter:blur(3px)}}
+@media(max-width:359px){.heroInfo{grid-template-columns:1fr}.heroSide{border-left:none;padding-left:0;border-top:1px dashed rgba(255,107,107,.25);padding-top:8px}}
+@media(min-width:520px){.heroCard{flex-direction:row;gap:12px}.heroPhoto{width:46%;height:auto;min-height:300px;order:2}.heroInfo{flex:1;order:1;grid-template-columns:1fr;align-content:start;padding:2px 0}}
+.emptyHero{display:flex;flex-direction:column;align-items:center;gap:10px;padding:34px 0;color:var(--gray);font-size:13px}
 .emptyHero .icn{width:30px;height:30px;color:var(--coral);opacity:.7}
+/* ---------- теги в карточке ---------- */
+.tagBlock{margin-top:12px}
+.tagLbl{display:flex;align-items:center;gap:5px;color:var(--gray);font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.tagLbl .icn{width:12px;height:12px;color:var(--coral)}
+.tagChips{display:flex;flex-wrap:wrap;gap:6px}
+.tagChip{display:inline-flex;align-items:center;background:rgba(255,107,107,.1);color:var(--coral);border:none;border-radius:999px;padding:6px 11px;font-size:10.5px;font-weight:800;letter-spacing:.02em}
+.tagChip.more{background:var(--bg);color:var(--gray);cursor:pointer}
+.shopLine{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:18px;padding:12px;box-shadow:var(--shadow);cursor:pointer;margin-bottom:10px;transition:.2s}
+.shopLine:active{transform:scale(.98)}
+.shopLineAva{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#FFE5E5,#F5E6FF);display:flex;align-items:center;justify-content:center;overflow:hidden;flex:none;color:var(--coral)}
+.shopLineAva img{width:100%;height:100%;object-fit:cover}
+.shopLineAva .icn{width:22px;height:22px}
+.shopLineBody{flex:1;min-width:0}
+.shopLineName{font-weight:800;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.shopLineMeta{display:flex;align-items:center;gap:4px;color:var(--gray);font-size:10.5px;margin-top:2px}
+.shopLineMeta .icn{width:11px;height:11px;color:var(--coral)}
+.shopLineR{display:flex;align-items:center;gap:6px;flex:none;color:var(--gray)}
+.shopLineR .icn{width:14px;height:14px}
+.shopMini{flex:0 0 150px;scroll-snap-align:start;background:var(--card);border-radius:18px;padding:12px;box-shadow:var(--shadow);cursor:pointer;display:flex;flex-direction:column;gap:6px;align-items:flex-start;animation:cardIn .5s ease both}
+.shopMini .ava{width:44px;height:44px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#FFE5E5,#F5E6FF);display:flex;align-items:center;justify-content:center;color:var(--coral)}
+.shopMini .ava img{width:100%;height:100%;object-fit:cover}
+.shopMini .ava .icn{width:20px;height:20px}
+.shopMini .nm{font-weight:800;font-size:12px;line-height:1.25}
+.shopMini .ct{color:var(--gray);font-size:10px;display:flex;align-items:center;gap:4px}
+.shopMini .ct .icn{width:10px;height:10px;color:var(--coral)}
+.spBackRow{display:flex;align-items:center;gap:8px;margin:0 2px 10px}
+.spBackTxt{font-size:12px;font-weight:800;color:var(--gray)}
+.backBtn{width:36px;height:36px;border:none;border-radius:50%;background:var(--card);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow);flex:none}
+.backBtn .icn{width:18px;height:18px}
+.spHead{background:var(--card);border-radius:24px;padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px}
+.spAva{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#FFE5E5,#F5E6FF);display:flex;align-items:center;justify-content:center;overflow:hidden;color:var(--coral);margin:2px auto 0}
+.spAva img{width:100%;height:100%;object-fit:cover}
+.spAva .icn{width:28px;height:28px}
+.spName{text-align:center;font-size:19px;font-weight:800}
+.spMeta{text-align:center;color:var(--gray);font-size:11px;display:flex;justify-content:center;align-items:center;gap:4px}
+.spMeta .lpRate{font-size:11px}
+.spInfo{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.spRow{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray)}
+.spRow .icn{width:13px;height:13px;color:var(--coral);flex:none}
+.spRow a{color:var(--ink);text-decoration:none;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.spRow a .icn{width:13px;height:13px;color:var(--grn)}
+.spDesc{font-size:12.5px;line-height:1.5;color:var(--gray);border-top:1px dashed rgba(255,107,107,.25);padding-top:8px;margin-top:4px}
+.spSec{margin:16px 2px 10px;font-size:16.5px;font-weight:800}
 .uspCard{margin-top:14px;background:linear-gradient(120deg,#FFF3F1 0%,#FFECEF 100%);border-radius:22px;padding:14px;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;box-shadow:var(--shadow)}
 .uspIco{width:46px;height:46px;flex:none;background:var(--card);border-radius:14px;display:grid;place-items:center;color:var(--coral);box-shadow:var(--shadow)}
 .uspIco .icn{width:21px;height:21px}
@@ -272,7 +343,6 @@ main.withTicker{padding-top:150px}
 .cityFab{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:30;border:1.5px solid rgba(255,107,107,.55);color:var(--coral);border-radius:999px;padding:10px 16px;font-size:12px;font-weight:800;background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 8px 24px rgba(255,107,107,.25);transition:all .3s}
 .cityFab:active{transform:scale(.95)}
 .cityFab .icn{width:13px;height:13px}
-.glassBar{position:absolute;left:0;right:0;bottom:0;height:78px;border-radius:0 0 16px 16px;background:rgba(255,255,255,.4);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);-webkit-mask-image:linear-gradient(to top,#000 45%,transparent);mask-image:linear-gradient(to top,#000 45%,transparent)}
 </style>
 </head>
 <body>
@@ -310,6 +380,10 @@ main.withTicker{padding-top:150px}
 <symbol id="i-leaf" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C8 8 5 12 5 16a7 7 0 0 0 14 0c0-4-3-8-7-14z"/></symbol>
 <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></g></symbol>
 <symbol id="i-tag" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M20 12l-8 8-9-9V3h8z"/><circle cx="7.5" cy="7.5" r="1.3" fill="currentColor"/></g></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><path fill="currentColor" d="M6 3h4l1 5-2.5 1.5a12 12 0 0 0 6 6L16 13l5 1v4a2 2 0 0 1-2 2A16 16 0 0 1 4 5a2 2 0 0 1 2-2z"/></symbol>
+<symbol id="i-back" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6"/></symbol>
+<symbol id="i-sort" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h10M4 18h6"/></g></symbol>
+<symbol id="i-trend" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></g></symbol>
 </svg>
 
 <div class="petals" id="petals"></div>
@@ -328,7 +402,8 @@ main.withTicker{padding-top:150px}
   <div class="tabbar">
     <button class="bn on" data-t="shop" onclick="showTab('shop')"><svg class="icn"><use href="#i-flower"/></svg>витрина</button>
     <button class="bn dayTab" data-t="day" onclick="showTab('day')"><svg class="icn"><use href="#i-flame"/></svg>букет дня<svg class="tabLeaf" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C8 8 5 12 5 16a7 7 0 0 0 14 0c0-4-3-8-7-14z"/></svg></button>
-    <button class="bn" data-t="mine" onclick="showTab('mine')"><svg class="icn"><use href="#i-doc"/></svg>мои заказы</button>
+    <button class="bn" data-t="shops" onclick="showTab('shops')"><svg class="icn"><use href="#i-shop"/></svg>магазины</button>
+    <button class="bn" data-t="mine" onclick="showTab('mine')"><svg class="icn"><use href="#i-doc"/></svg>заказы</button>
     <button class="bn" data-t="profile" onclick="showTab('profile')"><svg class="icn"><use href="#i-user"/></svg>профиль</button>
   </div>
   <div class="ticker hidden" id="ticker"><div class="tickTrack" id="tickTrack"></div></div>
@@ -344,8 +419,12 @@ main.withTicker{padding-top:150px}
     <div id="heroBox"></div>
     <div class="uspCard" id="uspCard"></div>
     <div id="popWrap">
-      <div class="popHead"><h2 id="popTitle">Свежие букеты</h2><button class="seeAll" onclick="scrollToCatalog()">Смотреть все<svg class="icn"><use href="#i-chevR"/></svg></button></div>
+      <div class="popHead"><h2>Свежие букеты</h2><button class="seeAll" onclick="scrollToCatalog()">Смотреть все<svg class="icn"><use href="#i-chevR"/></svg></button></div>
       <div class="popRow" id="popRow"></div>
+    </div>
+    <div id="shopsWrap">
+      <div class="popHead"><h2>Магазины-партнёры</h2><button class="seeAll" onclick="showTab('shops')">Все магазины<svg class="icn"><use href="#i-chevR"/></svg></button></div>
+      <div class="popRow" id="shopsRow"></div>
     </div>
     <div class="catHead" id="catalogAnchor">
       <h2>Каталог</h2>
@@ -370,6 +449,28 @@ main.withTicker{padding-top:150px}
       <p>ответь на три вопроса — и мы подберём букеты под твой повод и бюджет</p>
     </div>
     <div id="quizBox"></div>
+  </section>
+
+  <section id="tab-shops" class="hidden">
+    <div class="pageHead">
+      <h1><svg class="hIco"><use href="#i-shop"/></svg>Магазины-партнёры</h1>
+      <p>цветочные салоны, которые собирают букеты в Лепестке — выбирай свой город</p>
+    </div>
+    <div class="filters" id="shopCities"></div>
+    <div class="sortRow">
+      <span class="sortLbl"><svg class="icn"><use href="#i-sort"/></svg>сортировать:</span>
+      <button class="sortPill on" data-sort="rating" onclick="setShopSort('rating')"><svg class="icn"><use href="#i-trend"/></svg>по рейтингу</button>
+      <button class="sortPill" data-sort="count" onclick="setShopSort('count')"><svg class="icn"><use href="#i-flower"/></svg>по количеству</button>
+      <button class="sortPill" data-sort="name" onclick="setShopSort('name')"><svg class="icn"><use href="#i-spark"/></svg>по алфавиту</button>
+    </div>
+    <div id="shopsList"></div>
+  </section>
+
+  <section id="shopPage" class="hidden">
+    <div class="spBackRow"><button class="backBtn" onclick="closeShopPage()"><svg class="icn"><use href="#i-back"/></svg></button><div class="spBackTxt">все магазины</div></div>
+    <div class="spHead" id="shopPageHead"></div>
+    <div class="spSec">Букеты магазина</div>
+    <div id="shopPageFeed"></div>
   </section>
 
   <section id="tab-mine" class="hidden">
@@ -409,8 +510,8 @@ main.withTicker{padding-top:150px}
 <div id="citySheet" class="sheet hidden" onclick="if(event.target.id==='citySheet')closeSheet('citySheet')">
   <div class="sheetIn">
     <h3>Выбери город</h3>
-    <div class="row"><div class="opt on" onclick="pickCity('Вуктыл',this)" style="display:flex;align-items:center;justify-content:center;gap:6px"><svg class="icn" style="width:13px;height:13px"><use href="#i-pin"/></svg>Вуктыл (Республика Коми)</div></div>
-    <div style="color:var(--gray);font-size:11px;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:5px">Другие города — скоро <svg class="icn" style="width:11px;height:11px;color:var(--coral)"><use href="#i-flower"/></svg></div>
+    <div class="row" id="cityRow"></div>
+    <div style="color:var(--gray);font-size:11px;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:5px">Нет твоего города? Магазины там скоро появятся <svg class="icn" style="width:11px;height:11px;color:var(--coral)"><use href="#i-flower"/></svg></div>
     <button class="btn soft" onclick="closeSheet('citySheet')">Закрыть</button>
   </div>
 </div>
@@ -429,38 +530,31 @@ let me=null,bouquets=[],comments=[],bouquetLikes=[],commentLikes=[],commentReact
 let curB=null,replyTo=null,authMode='reg',brandTaps=0,brandTimer=null,myFlorist=false;
 let searchQuery='',activeFilter='all',ratings={};
 let city=localStorage.getItem('lep_city')||'Вуктыл';
+let shopSort=localStorage.getItem('lep_shop_sort')||'rating';
 let device=localStorage.getItem('lep_device');
 if(!device){device='d'+Math.random().toString(36).slice(2)+Date.now();localStorage.setItem('lep_device',device);}
 function track(name,extra){try{sb.from('events').insert({name,device,user_id:me?me.id:null,metadata:extra||{}}).then(()=>{});}catch(e){}}
 if(!sessionStorage.getItem('lep_open')){sessionStorage.setItem('lep_open','1');track('open');}
 const ic=n=>'<svg class="icn"><use href="#'+n+'"/></svg>';
 const LEAF_SVG='<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C8 8 5 12 5 16a7 7 0 0 0 14 0c0-4-3-8-7-14z"/></svg>';
-// эмодзи-реакции (возвращены)
 const REACTS=[{k:'heart',e:'❤️'},{k:'fire',e:'🔥'},{k:'wow',e:'🤩'},{k:'sad',e:'😢'},{k:'pray',e:'🙏'},{k:'eye',e:'👀'}];
-
-// праздники: MM-DD, ±days, сообщение для тикера
 const HOLIDAYS=[
   {d:'09-01', days:3, msg:'🎒 День знаний — букеты для учителей и первоклашек ·'},
   {d:'02-14', days:2, msg:'💝 День святого Валентина ·'},
   {d:'03-08', days:3, msg:'🌷 8 марта — международный женский день ·'},
   {d:'05-09', days:1, msg:'🎖 День Победы ·'},
-  {d:'09-27', days:1, msg:'👩‍🏫 День воспитателя ·'},
+  {d:'09-27', days:1, msg:'👩🏫 День воспитателя ·'},
   {d:'10-05', days:1, msg:'🎓 День учителя ·'},
   {d:'11-21', days:1, msg:'👩 День матери ·'},
   {d:'12-25', days:7, msg:'🎄 Новогодние праздники ·'}
 ];
 function currentHoliday(){
-  const now=new Date();
-  const mm=String(now.getMonth()+1).padStart(2,'0');
-  const dd=String(now.getDate()).padStart(2,'0');
-  const nowKey=mm+'-'+dd;
-  const nowTs=now.getTime();
+  const now=new Date();const nowTs=now.getTime();
   for(const h of HOLIDAYS){
     const [hm,hd]=h.d.split('-').map(Number);
     const base=new Date(now.getFullYear(),hm-1,hd);
-    // если праздник уже прошёл в этом году — проверим на следующий (для декабря)
     const diff=(nowTs-base.getTime())/(1000*60*60*24);
-    if(diff>=-1 && diff<=h.days)return h;
+    if(diff>=-1&&diff<=h.days)return h;
   }
   return null;
 }
@@ -469,10 +563,8 @@ function renderTicker(){
   const tk=$('ticker'),tr=$('tickTrack'),mw=$('mainWrap');
   if(!h){tk.classList.add('hidden');mw.classList.remove('withTicker');return;}
   tk.classList.remove('hidden');mw.classList.add('withTicker');
-  const msg=h.msg;
-  tr.innerHTML='<div class="tickHalf"><span>'+msg+'</span><span>'+msg+'</span></div>';
+  tr.innerHTML='<div class="tickHalf"><span>'+h.msg+'</span><span>'+h.msg+'</span></div>';
 }
-
 const isAdmin=()=>!!(me&&me.email&&ADMIN_EMAILS.includes(String(me.email).toLowerCase()));
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function richText(t){return String(t||'').split(/\n+/).map(p=>esc(p)).join('<br>');}
@@ -484,9 +576,14 @@ function handleSBError(error,ctx){if(!error)return;let msg=error.message||'Не�
 function closeSheet(id){$(id).classList.add('hidden');}
 function openSheet(id){$(id).classList.remove('hidden');}
 function brandTap(){brandTaps++;clearTimeout(brandTimer);brandTimer=setTimeout(()=>brandTaps=0,1500);if(brandTaps>=5){brandTaps=0;if(isAdmin())location.href='admin.html';else if(myFlorist)location.href='seller.html';else toast('Кабинет продавца доступен только продавцам');}}
-function openCity(){openSheet('citySheet');}
+function openCity(){
+  const cities=[...new Set(shops.map(s=>(s.city||'Вуктыл').trim()))];
+  if(!cities.includes(city))cities.unshift(city);
+  $('cityRow').innerHTML=cities.map(c=>'<div class="opt'+(c===city?' on':'')+'" onclick="pickCity(\''+esc(c)+'\',this)" style="display:flex;align-items:center;justify-content:center;gap:6px"><svg class="icn" style="width:13px;height:13px"><use href="#i-pin"/></svg>'+esc(c)+'</div>').join('');
+  openSheet('citySheet');
+}
 function pickCity(c,el){city=c;localStorage.setItem('lep_city',c);$('cityName').textContent=c;document.querySelectorAll('#citySheet .opt').forEach(o=>o.classList.remove('on'));el.classList.add('on');closeSheet('citySheet');toast('Город: '+c,'i-pin');}
-function showTab(t){['shop','day','quiz','mine','profile'].forEach(k=>$('tab-'+k).classList.toggle('hidden',k!==t));document.querySelectorAll('.bn').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='shop'){renderHero();renderPopular();renderFeed();}if(t==='day')renderDay();if(t==='mine')renderMine();if(t==='profile')showProfile();window.scrollTo(0,0);}
+function showTab(t){['shop','day','quiz','mine','profile','shops'].forEach(k=>$('tab-'+k).classList.toggle('hidden',k!==t));$('shopPage').classList.add('hidden');document.querySelectorAll('.bn').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='shop'){renderHero();renderPopular();renderShopsRow();renderFeed();}if(t==='day')renderDay();if(t==='mine')renderMine();if(t==='profile')showProfile();if(t==='shops')renderShopsTab();window.scrollTo(0,0);}
 function scrollToCatalog(){const el=$('catalogAnchor');if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 async function load(){
   $('feed').innerHTML='<div class="lpGrid"><div class="skeleton" style="height:260px"></div><div class="skeleton" style="height:260px"></div><div class="skeleton" style="height:260px"></div><div class="skeleton" style="height:260px"></div></div>';
@@ -499,7 +596,7 @@ async function load(){
   const{data:sh}=await sb.from('shops').select('*');shops=sh||[];
   if(err1||err2){toast('Ошибка: '+(err1||err2).message);return;}
   bouquets=b||[];comments=(c||[]).filter(x=>!x.hidden);bouquetLikes=bl||[];commentLikes=cl||[];commentReacts=cr||[];favorites=fav||[];
-  renderFilters();renderHero();renderUSP();renderPopular();renderFeed();renderDay();renderTicker();
+  renderFilters();renderHero();renderUSP();renderPopular();renderShopsRow();renderFeed();renderDay();renderTicker();
 }
 function refreshShop(){renderHero();renderPopular();renderFeed();renderDay();}
 function catIcon(c){c=(c||'').toLowerCase();
@@ -519,9 +616,111 @@ function avgRating(bid){const rc=comments.filter(c=>c.bouquet_id===bid&&c.rating
 function stockPill(b,mini){return '<span class="stockPill '+(b.in_stock?'in':'out')+(mini?' mini':'')+'">'+ic(b.in_stock?'i-check':'i-clock')+(b.in_stock?'В наличии':'Под заказ')+'</span>';}
 function shopOf(b){return shops.find(s=>s.owner_id===b.user_id);}
 function getTags(b){return Array.isArray(b.tags)?b.tags:(b.tags?String(b.tags).split(',').filter(Boolean):[]);}
-
-/* ---------- hero с автопрокруткой ---------- */
-let heroIdx=0,heroTimer=null;
+function pluralTag(n){const m=n%10,h=n%100;if(m===1&&h!==11)return'тег';if(m>=2&&m<=4&&(h<12||h>14))return'тега';return'тегов';}
+/* ---------- магазины ---------- */
+let shopCityFilter='all',curShop=null;
+function shopRating(s){
+  const bids=bouquets.filter(b=>b.user_id===s.owner_id).map(b=>b.id);
+  const rc=comments.filter(c=>bids.includes(c.bouquet_id)&&c.rating);
+  if(!rc.length)return 0;
+  return rc.reduce((a,c)=>a+c.rating,0)/rc.length;
+}
+function shopCount(s){return bouquets.filter(b=>b.user_id===s.owner_id&&b.photo_url).length;}
+function setShopCity(c){shopCityFilter=c;renderShopsTab();}
+function setShopSort(s){
+  shopSort=s;
+  localStorage.setItem('lep_shop_sort',s);
+  track('shop_sort',{sort:s});
+  document.querySelectorAll('.sortRow .sortPill').forEach(b=>b.classList.toggle('on',b.dataset.sort===s));
+  renderShopsTab();
+}
+function renderShopsTab(){
+  const cities=[...new Set(shops.map(s=>(s.city||'Вуктыл').trim()))];
+  if(shopCityFilter!=='all'&&!cities.includes(shopCityFilter))shopCityFilter='all';
+  $('shopCities').innerHTML='<button class="filter'+(shopCityFilter==='all'?' on':'')+'" onclick="setShopCity(\'all\')">'+ic('i-pin')+'Все города</button>'+cities.map(c=>'<button class="filter'+(shopCityFilter===c?' on':'')+'" onclick="setShopCity(\''+esc(c)+'\')">'+esc(c)+'</button>').join('');
+  let list=shops.filter(s=>shopCityFilter==='all'||(s.city||'Вуктыл')===shopCityFilter);
+  // сортировка
+  list=[...list].sort((a,b)=>{
+    if(shopSort==='rating')return shopRating(b)-shopRating(a);
+    if(shopSort==='count')return shopCount(b)-shopCount(a);
+    return String(a.name||'').localeCompare(String(b.name||''),'ru');
+  });
+  $('shopsList').innerHTML=list.length?list.map(s=>{
+    const r=shopRating(s),cnt=shopCount(s);
+    return '<div class="shopLine" onclick="openShopPage('+s.id+')">'+
+      '<div class="shopLineAva">'+(s.logo_url?'<img src="'+s.logo_url+'">':ic('i-shop'))+'</div>'+
+      '<div class="shopLineBody"><div class="shopLineName">'+esc(s.name)+'</div>'+
+      '<div class="shopLineMeta">'+ic('i-pin')+esc(s.city||'Вуктыл')+' · '+cnt+' '+pluralBouq(cnt)+'</div></div>'+
+      '<div class="shopLineR">'+(r?'<span class="lpRate">'+ic('i-star')+r.toFixed(1)+'</span>':'')+ic('i-chevR')+'</div></div>';
+  }).join(''):'<div class="empty">'+ic('i-shop')+'В этом городе магазинов пока нет.<br>Загляни позже</div>';
+}
+function pluralBouq(n){const m=n%10,h=n%100;if(m===1&&h!==11)return'букет';if(m>=2&&m<=4&&(h<12||h>14))return'букета';return'букетов';}
+function renderShopsRow(){
+  const row=$('shopsRow');if(!row)return;
+  $('shopsWrap').classList.toggle('hidden',!shops.length);
+  row.innerHTML=shops.map((s,i)=>{
+    const r=shopRating(s);
+    return '<div class="shopMini" style="animation-delay:'+(i*60)+'ms" onclick="openShopPage('+s.id+')">'+
+      '<div class="ava">'+(s.logo_url?'<img src="'+s.logo_url+'">':ic('i-shop'))+'</div>'+
+      '<div class="nm">'+esc(s.name)+'</div>'+
+      '<div class="ct">'+ic('i-pin')+esc(s.city||'Вуктыл')+(r?'<span class="lpRate" style="margin-left:2px">'+ic('i-star')+r.toFixed(1)+'</span>':'')+'</div></div>';
+  }).join('');
+}
+function openShopPage(id){
+  const s=shops.find(x=>x.id===id);if(!s)return;curShop=s;
+  track('shop_view',{shop_id:id});
+  ['shop','day','quiz','mine','profile','shops'].forEach(k=>$('tab-'+k).classList.add('hidden'));
+  $('shopPage').classList.remove('hidden');
+  document.querySelectorAll('.bn').forEach(b=>b.classList.toggle('on',b.dataset.t==='shops'));
+  const r=shopRating(s);
+  const bids=bouquets.filter(b=>b.user_id===s.owner_id).map(b=>b.id);
+  const rev=comments.filter(c=>bids.includes(c.bouquet_id)&&!c.parent_id).length;
+  $('shopPageHead').innerHTML=
+    '<div class="spAva">'+(s.logo_url?'<img src="'+s.logo_url+'">':ic('i-flower'))+'</div>'+
+    '<div class="spName">'+esc(s.name)+'</div>'+
+    '<div class="spMeta">'+(r?'<span class="lpRate">'+ic('i-star')+r.toFixed(1)+'</span> · ':'')+'<span>'+rev+' отзывов</span></div>'+
+    '<div class="spInfo">'+
+      '<div class="spRow">'+ic('i-pin')+esc(s.city||'Вуктыл')+(s.address?', '+esc(s.address):'')+'</div>'+
+      (s.phone?'<div class="spRow"><a href="tel:'+String(s.phone).replace(/\D/g,'')+'">'+ic('i-phone')+esc(s.phone)+'</a></div>':'')+
+    '</div>'+
+    (s.description?'<div class="spDesc">'+richText(s.description)+'</div>':'');
+  const list=bouquets.filter(b=>b.user_id===s.owner_id&&b.photo_url);
+  $('shopPageFeed').innerHTML=list.length?'<div class="lpGrid">'+list.map((b,i)=>bouquetCard(b,i)).join('')+'</div>':'<div class="empty">'+ic('i-flower')+'Магазин ещё не добавил букеты</div>';
+  window.scrollTo(0,0);
+}
+function closeShopPage(){$('shopPage').classList.add('hidden');showTab('shops');}
+/* ---------- теги в карточке ---------- */
+function tagsHtml(b){
+  const t=getTags(b);if(!t.length)return'';
+  const show=t.slice(0,3),rest=t.length-show.length;
+  return '<div class="tagBlock"><div class="tagLbl">'+ic('i-tag')+'Подойдёт для</div><div class="tagChips" id="cardTags">'+show.map(x=>'<span class="tagChip">'+esc(x)+'</span>').join('')+(rest>0?'<button class="tagChip more" onclick="expandCardTags('+b.id+')">ещё +'+rest+' '+pluralTag(rest)+'</button>':'')+'</div></div>';
+}
+function expandCardTags(id){
+  const b=bouquets.find(x=>x.id===id);const el=$('cardTags');if(!b||!el)return;
+  el.innerHTML=getTags(b).map(x=>'<span class="tagChip">'+esc(x)+'</span>').join('');
+}
+/* ---------- нарезка описания на чанки ---------- */
+function descChunks(text){
+  const s=String(text||'').replace(/\s+/g,' ').trim();
+  if(!s)return[];
+  const parts=s.match(/[^.!?…\n]+[.!?…]*/g)||[s];
+  const chunks=[];let cur='';
+  for(let p of parts){
+    p=p.trim();if(!p)continue;
+    if(p.length<=90){
+      if((cur+' '+p).trim().length>90){if(cur)chunks.push(cur.trim());cur=p;}
+      else cur=(cur+' '+p).trim();
+    }else{
+      if(cur){chunks.push(cur.trim());cur='';}
+      const words=p.split(' ');
+      for(let i=0;i<words.length;i+=14){chunks.push(words.slice(i,i+14).join(' '));}
+    }
+  }
+  if(cur.trim())chunks.push(cur.trim());
+  return chunks;
+}
+/* ---------- hero ---------- */
+let heroIdx=0,heroTimer=null,heroDescTimer=null,heroDescIdx=0,heroDescArr=[];
 function heroDeck(){let d=bouquets.filter(b=>b.is_day&&b.photo_url);if(!d.length)d=bouquets.filter(b=>b.photo_url).slice(0,8);return d;}
 function renderHero(){
   const d=heroDeck();const box=$('heroBox');if(!box)return;
@@ -530,21 +729,69 @@ function renderHero(){
   const b=d[heroIdx];const shop=shopOf(b);const r=avgRating(b.id);
   const isFav=favorites.some(f=>f.bouquet_id===b.id);
   box.innerHTML='<div class="heroCard" id="heroCard">'+
-    '<div class="heroInfo">'+
-      '<span class="heroBadge">'+ic('i-spark')+'букет дня</span>'+
-      '<div class="heroName">'+esc(b.title)+(r?'<span class="heroRate">'+ic('i-star')+r.toFixed(1)+'</span>':'')+'</div>'+
-      '<div class="heroComp">'+esc(b.category||'свежие цветы · авторская упаковка')+'</div>'+
-      '<div class="heroPrice">'+fmtPrice(b.price)+'</div>'+
-      '<div class="heroRow">'+stockPill(b)+'</div>'+
-      '<div class="heroBtns"><button class="ctaBig" onclick="openOrder('+b.id+')">Заказать'+ic('i-arrow')+'</button>'+
-      '<button class="iconBtn'+(isFav?' on':'')+'" onclick="toggleFav('+b.id+')">'+ic('i-heart')+'</button></div>'+
-    '</div>'+
     '<div class="heroPhoto"><img src="'+b.photo_url+'" alt="'+esc(b.title)+'">'+
-      (shop?'<div class="shopChipGlass">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':'')+esc(shop.name)+'</div>':'')+
+      (shop?'<div class="shopChipGlass" onclick="event.stopPropagation();openShopPage('+shop.id+')">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':'')+esc(shop.name)+'</div>':'')+
       '<div class="heroDots">'+d.map((x,i)=>'<span class="dot'+(i===heroIdx?' on':'')+'" onclick="setHero('+i+')"></span>').join('')+'</div>'+
+    '</div>'+
+    '<div class="heroInfo">'+
+      '<div class="heroMain">'+
+        '<span class="heroBadge">'+ic('i-spark')+'букет дня</span>'+
+        '<div class="heroName">'+esc(b.title)+(r?'<span class="heroRate">'+ic('i-star')+r.toFixed(1)+'</span>':'')+'</div>'+
+        '<div class="heroComp">'+esc(b.category||'свежие цветы · авторская упаковка')+'</div>'+
+        '<div class="heroPrice">'+fmtPrice(b.price)+'</div>'+
+        '<div class="heroRow">'+stockPill(b)+'</div>'+
+        '<div class="heroBtns"><button class="ctaBig" onclick="openOrder('+b.id+')">Заказать'+ic('i-arrow')+'</button>'+
+        '<button class="iconBtn'+(isFav?' on':'')+'" onclick="toggleFav('+b.id+')">'+ic('i-heart')+'</button></div>'+
+      '</div>'+
+      '<div class="heroSide"><div id="heroRevBox"></div><div class="heroDesc"><div class="heroDescLbl">'+ic('i-leaf')+'о букете</div><div class="heroDescLine" id="heroDescLine"></div></div></div>'+
     '</div></div>';
   bindHeroSwipe();
+  startHeroDesc(b);
   resetHeroTimer();
+}
+const descProgress={};
+function bestReviews(bid){
+  const tops=comments.filter(c=>c.bouquet_id===bid&&!c.parent_id&&c.rating>=4);
+  return tops.map(c=>{
+    const reacts=commentReacts.filter(r=>r.comment_id===c.id).length;
+    const likes=commentLikes.filter(l=>l.comment_id===c.id).length;
+    const reps=comments.filter(r=>r.parent_id===c.id).length;
+    return{c:c,score:(c.rating||0)*2+reacts+likes+reps*2};
+  }).sort((a,b)=>b.score-a.score).slice(0,5).map(x=>x.c);
+}
+function renderHeroRev(b){
+  const box=$('heroRevBox');if(!box)return;
+  const list=bestReviews(b.id);
+  if(!list.length){box.innerHTML='';return;}
+  const key='r'+b.id;
+  if(typeof descProgress[key]!=='number'||descProgress[key]>=list.length)descProgress[key]=0;
+  const c=list[descProgress[key]];
+  descProgress[key]=(descProgress[key]+1)%list.length;
+  const reacts=commentReacts.filter(r=>r.comment_id===c.id).length;
+  const likes=commentLikes.filter(l=>l.comment_id===c.id).length;
+  const reps=comments.filter(r=>r.parent_id===c.id).length;
+  const nick=c.user_nick||'аноним';
+  box.innerHTML='<div class="heroRev">'+
+    '<div class="heroRevTop"><span class="heroRevAva">'+esc(nick).slice(0,1).toUpperCase()+'</span><span class="heroRevNick">'+esc(nick)+'</span><span class="heroRevStars">'+[1,2,3,4,5].map(n=>'<svg class="icn" style="color:'+(n<=c.rating?'var(--yel)':'rgba(148,163,184,.35)')+'"><use href="#i-star"/></svg>').join('')+'</span></div>'+
+    '<div class="heroRevTxt">«'+esc(c.text)+'»</div>'+
+    '<div class="heroRevMeta"><span>'+ic('i-heart')+(reacts+likes)+'</span><span>'+ic('i-comment')+' '+reps+'</span></div></div>';
+}
+function startHeroDesc(b){
+  renderHeroRev(b);
+  heroDescArr=descChunks(b&&b.description?b.description:'');
+  const key=b?b.id:0;
+  if(!heroDescArr.length){heroDescIdx=0;renderHeroDesc();return;}
+  if(typeof descProgress[key]!=='number'||descProgress[key]>=heroDescArr.length)descProgress[key]=0;
+  heroDescIdx=descProgress[key];
+  descProgress[key]=(heroDescIdx+1)%heroDescArr.length;
+  renderHeroDesc();
+}
+function renderHeroDesc(){
+  const el=$('heroDescLine');if(!el)return;
+  if(!heroDescArr.length){el.textContent='свежие цветы · авторская упаковка · собран с любовью';el.classList.add('static');return;}
+  el.classList.remove('static');
+  el.textContent=heroDescArr[heroDescIdx];
+  el.style.animation='none';void el.offsetWidth;el.style.animation='';
 }
 function setHero(i){heroIdx=i;renderHero();}
 function resetHeroTimer(){
@@ -553,7 +800,7 @@ function resetHeroTimer(){
     if(document.visibilityState!=='visible')return;
     const d=heroDeck();if(!d.length)return;
     heroIdx=(heroIdx+1)%d.length;renderHero();
-  },6000);
+  },12000);
 }
 function bindHeroSwipe(){
   const el=$('heroCard');if(!el)return;
@@ -562,12 +809,10 @@ function bindHeroSwipe(){
   el.addEventListener('touchmove',e=>{if(drag)dx=e.touches[0].clientX-sx;},{passive:true});
   el.addEventListener('touchend',()=>{if(!drag)return;drag=false;const n=heroDeck().length;if(dx>60)heroIdx=(heroIdx-1+n)%n;else if(dx<-60)heroIdx=(heroIdx+1)%n;else{resetHeroTimer();return;}renderHero();});
 }
-/* ---------- USP ---------- */
 function renderUSP(){
   const d=bouquets.filter(b=>b.photo_url);
   $('uspCard').innerHTML='<div class="uspIco">'+ic('i-wand')+'</div><div class="uspTxt"><h3>Не знаешь, что выбрать?</h3><p>Ответь на 3 вопроса — Лепесток подберёт букет за тебя</p><button class="ctaGrad" onclick="openQuiz()">Собрать мне'+ic('i-arrow')+'</button></div>'+(d.length?'<img class="uspImg" src="'+d[0].photo_url+'" alt="">':'');
 }
-/* ---------- СВЕЖИЕ букеты (сортировка по дате) ---------- */
 function renderPopular(){
   const row=$('popRow');if(!row)return;
   const list=bouquets.filter(b=>b.photo_url).slice().sort((a,b)=>new Date(b.created_at)-new Date(a.created_at)).slice(0,10);
@@ -589,6 +834,7 @@ function renderFeed(){
   const extras=!searchQuery&&activeFilter==='all';
   $('popWrap').classList.toggle('hidden',!extras);
   $('uspCard').classList.toggle('hidden',!extras);
+  $('shopsWrap').classList.toggle('hidden',!extras||!shops.length);
   $('feed').innerHTML=list.length?'<div class="lpGrid">'+list.map((b,i)=>bouquetCard(b,i)).join('')+'</div>':'<div class="empty">'+ic('i-flower')+'Пока пусто — флорист скоро добавит букеты</div>';
 }
 function bouquetCard(b,i){
@@ -601,7 +847,7 @@ function bouquetCard(b,i){
     '<div class="lpCover"><img src="'+b.photo_url+'" loading="lazy" decoding="async">'+
       '<button class="favBtn'+(isFav?' on':'')+'" onclick="event.stopPropagation();toggleFav('+b.id+')">'+ic('i-heart')+'</button>'+
       (b.is_day?'<span class="dayChip">'+ic('i-flame')+'букет дня</span>':'')+
-      (shop?'<span class="shopChip">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':ic('i-shop'))+esc(shop.name)+'</span>':'')+
+      (shop?'<span class="shopChip" onclick="event.stopPropagation();openShopPage('+shop.id+')">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':ic('i-shop'))+esc(shop.name)+'</span>':'')+
     '</div>'+
     '<div class="lpName"><span class="t">'+esc(b.title)+'</span>'+(r?'<span class="lpRate">'+ic('i-star')+r.toFixed(1)+'</span>':'')+'</div>'+
     (b.category?'<div class="lpComp">'+esc(b.category)+'</div>':'')+
@@ -689,15 +935,18 @@ function renderPetals(){
   p.innerHTML=h;
 }
 function openCard(id){
-  const b=bouquets.find(x=>x.id===id);if(!b)return;curB=b;track('view',{bouquet_id:id});
+  const b=bouquets.find(x=>x.id===id);if(!b)return;curB=b;
+  // трекаем просмотр с тегами
+  track('view',{bouquet_id:id,tags:getTags(b),price:b.price,category:b.category});
   const img=b.photo_url?'<div style="position:relative"><img src="'+b.photo_url+'" style="width:100%;max-height:320px;object-fit:cover;border-radius:16px"><div class="priceSpin big"><span class="wline w1"></span><span class="wline w2"></span><span class="gust">'+LEAF_SVG+'</span><span class="gust g2">'+LEAF_SVG+'</span><span class="gust g3">'+LEAF_SVG+'</span><span class="priceSpinIn">'+fmtPrice(b.price)+'</span></div></div>':'';
   const r=avgRating(b.id);
   const shop=shopOf(b);
   $('cardBody').innerHTML=img+
-    (shop?'<div class="shopWrap" style="margin-top:10px"><div class="floralHalo"></div><div class="shopRow">'+(shop.logo_url?'<img class="shopLogo" src="'+shop.logo_url+'">':ic('i-shop'))+esc(shop.name)+'</div></div>':'')+
+    (shop?'<div class="shopWrap" style="margin-top:10px"><div class="floralHalo"></div><div class="shopRow" onclick="closeSheet(\'cardSheet\');openShopPage('+shop.id+')">'+(shop.logo_url?'<img class="shopLogo" src="'+shop.logo_url+'">':ic('i-shop'))+esc(shop.name)+'</div></div>':'')+
     '<h3 style="margin-top:6px">'+esc(b.title)+(r?' <span style="color:var(--yel);display:inline-flex;align-items:center;gap:3px">'+ic('i-star')+r.toFixed(1)+'</span>':'')+'</h3>'+
     '<div class="lpFoot" style="margin-top:6px;justify-content:flex-start;gap:10px">'+(b.photo_url?'':'<span class="lpPrice" style="font-size:18px">'+fmtPrice(b.price)+'</span>')+stockPill(b)+(b.category?'<span class="lpComp">'+esc(b.category)+'</span>':'')+'</div>'+
     '<div style="margin-top:10px;font-size:14px;line-height:1.5">'+richText(b.description||'')+'</div>'+
+    tagsHtml(b)+
     '<button class="btn rose" onclick="openOrder('+b.id+');closeSheet(\'cardSheet\')">'+ic('i-flower')+'Заказать</button>'+
     '<button class="btn soft" onclick="shareBouquet('+b.id+')">'+ic('i-share')+'Поделиться</button>'+
     '<button class="btn soft" onclick="closeSheet(\'cardSheet\')">Закрыть</button>';
@@ -728,7 +977,7 @@ async function submitOrder(){
   }
   const{error}=await sb.from('orders').insert(o);
   if(error){handleSBError(error,'Заказ');return;}
-  closeSheet('orderSheet');toast('Заказ отправлен флористу','i-check');track('order');
+  closeSheet('orderSheet');toast('Заказ отправлен флористу','i-check');track('order',{tags:getTags(curB)});
 }
 function openQuiz(){openQuizTab();openSheet('quizSheet');}
 function openQuizTab(){
@@ -737,7 +986,6 @@ function openQuizTab(){
 }
 function qOpts(a){return a.map(o=>'<div class="opt" onclick="qPick(this)">'+o+'</div>').join('');}
 function qPick(el){[...el.parentElement.children].forEach(x=>x.classList.remove('on'));el.classList.add('on');}
-// AI-подбор: учитываем совпадения тегов
 function quizGo(){
   const p=$('q1').querySelector('.on');
   const k=$('q2').querySelector('.on');
@@ -749,9 +997,7 @@ function quizGo(){
   if(p)wantTags.push(p.textContent.toLowerCase());
   if(k)wantTags.push(k.textContent.toLowerCase());
   if(b)wantTags.push(b.textContent.toLowerCase());
-  // фильтр по цене
   let fit=bouquets.filter(x=>x.in_stock&&x.photo_url&&x.price>=min&&x.price<=max);
-  // скоринг по тегам
   fit=fit.map(x=>{
     const tgs=getTags(x).map(t=>String(t).toLowerCase());
     let score=0;
@@ -764,7 +1010,7 @@ function quizGo(){
   track('quiz_complete',{count:fit.length,tags:wantTags});
   if(!fit.length){toast('Под бюджет пока пусто — напишите флористу, соберёт вручную','i-wand');showTab('shop');return;}
   showTab('shop');
-  setTimeout(()=>{$('popWrap').classList.add('hidden');$('uspCard').classList.add('hidden');$('feed').innerHTML='<div class="lpGrid">'+fit.map((b,i)=>bouquetCard(b,i)).join('')+'</div>';toast('Подобрал '+fit.length+' букетов','i-wand');},100);
+  setTimeout(()=>{$('popWrap').classList.add('hidden');$('uspCard').classList.add('hidden');$('shopsWrap').classList.add('hidden');$('feed').innerHTML='<div class="lpGrid">'+fit.map((b,i)=>bouquetCard(b,i)).join('')+'</div>';toast('Подобрал '+fit.length+' букетов','i-wand');},100);
 }
 function openComments(id){
   const b=bouquets.find(x=>x.id===id);if(!b)return;curB=b;
