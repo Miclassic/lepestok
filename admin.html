@@ -19,7 +19,8 @@ h1{font-size:17px;font-weight:800;background:var(--gradient);-webkit-background-
 input,textarea,select{width:100%;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:11px;font-size:14px;margin-bottom:8px;font-family:inherit}
 input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 textarea{min-height:70px;resize:vertical}
-.btn{width:100%;background:var(--gradient);color:#fff;border:none;border-radius:999px;padding:12px;font-weight:800;font-size:14px;cursor:pointer}
+.btn{width:100%;background:var(--gradient);color:#fff;border:none;border-radius:999px;padding:12px;font-weight:800;font-size:14px;cursor:pointer;transition:.2s}
+.btn:active{transform:scale(.98)}
 .err{color:var(--red);font-size:12px;margin-top:6px}
 .modeSwitch{display:flex;background:var(--card);border-radius:999px;padding:4px;box-shadow:var(--shadow);margin-bottom:12px}
 .modeBtn{flex:1;border:none;background:none;border-radius:999px;padding:9px;font-size:11.5px;font-weight:800;color:var(--gray);cursor:pointer;transition:.25s}
@@ -102,6 +103,45 @@ textarea{min-height:70px;resize:vertical}
 .secHd .icn{width:14px;height:14px;color:var(--coral)}
 .tagInsight{background:linear-gradient(120deg,#FFF3F1 0%,#FFECEF 100%);border-radius:14px;padding:10px 12px;font-size:11px;line-height:1.5;color:var(--gray);margin-top:8px;border:1.5px dashed rgba(255,107,107,.3)}
 .tagInsight b{color:var(--coral)}
+/* Loader */
+.loader{position:fixed;inset:0;z-index:200;background:rgba(255,255,255,.7);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;pointer-events:all}
+.loader .spin{width:42px;height:42px;border:3px solid rgba(255,107,107,.2);border-top-color:var(--coral);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* Toast */
+#toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(30,41,59,.95);color:#F1F5F9;border:2px solid rgba(255,107,107,.4);border-radius:16px;box-shadow:0 12px 48px rgba(255,107,107,.3);font-weight:700;font-size:13px;padding:12px 20px;text-align:center;max-width:82vw;z-index:300}
+#toast .icn{width:15px;height:15px;margin-right:6px;vertical-align:-2px;color:var(--pink)}
+#toast:not(.hidden){animation:toastIn .3s ease}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,-50%) scale(.85)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+/* Revenue chart */
+.revChart{background:var(--card);border-radius:16px;padding:12px;box-shadow:var(--shadow);margin-bottom:10px}
+.revChart .mcat{font-size:10.5px;color:var(--gray);font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.revChart .mcat .icn{width:13px;height:13px;color:var(--grn)}
+.revBars{display:flex;align-items:flex-end;gap:4px;height:90px;padding-bottom:4px;border-bottom:1px dashed rgba(255,107,107,.2)}
+.revBars .bar{flex:1;background:var(--gradient);border-radius:4px 4px 0 0;min-height:2px;position:relative;transition:all .3s;cursor:pointer}
+.revBars .bar:hover{opacity:.85}
+.revBars .bar::before{content:attr(data-val);position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:800;color:var(--coral);white-space:nowrap;opacity:0;transition:.2s}
+.revBars .bar:hover::before{opacity:1}
+.revChart .days{display:flex;gap:4px;margin-top:4px}
+.revChart .days span{flex:1;text-align:center;font-size:8.5px;color:var(--gray);font-weight:700}
+/* Bulk actions bar */
+.bulkBar{display:flex;gap:6px;align-items:center;margin-bottom:10px;padding:8px;background:linear-gradient(120deg,#FFF3F1,#FFECEF);border-radius:14px;box-shadow:var(--shadow)}
+.bulkBar .cnt{font-size:11px;font-weight:800;color:var(--ink)}
+.bulkBar button{border:none;border-radius:999px;padding:7px 12px;font-size:10.5px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.bulkBar .icn{width:12px;height:12px}
+.bulkBar .accept{background:linear-gradient(135deg,#10B981,#059669);color:#fff}
+.bulkBar .cancel{background:#FFF1F0;color:var(--red)}
+/* Admin log */
+.logList{max-height:200px;overflow-y:auto;font-size:11px;line-height:1.7}
+.logList .lItem{padding:4px 0;border-bottom:1px dashed rgba(255,107,107,.1);display:flex;gap:8px;align-items:flex-start}
+.logList .lTime{color:var(--gray);font-size:10px;flex:none;width:80px}
+.logList .lAct{color:var(--ink);flex:1;word-break:break-word}
+/* Order checkbox */
+.orderChk{width:18px;height:18px;flex:none;margin-right:8px;accent-color:var(--coral)}
+/* Search */
+.searchRow{display:flex;gap:6px;margin-bottom:10px}
+.searchRow input{flex:1;margin:0;padding:9px 12px;font-size:12px}
+.searchRow .sBtn{width:38px;flex:none;border:none;background:var(--gradient);color:#fff;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.searchRow .sBtn .icn{width:14px;height:14px}
 </style>
 </head>
 <body>
@@ -113,6 +153,11 @@ textarea{min-height:70px;resize:vertical}
 <symbol id="i-users" viewBox="0 0 24 24"><g fill="currentColor"><circle cx="9" cy="8" r="3.2"/><path d="M2.8 19c.7-3.2 3.3-4.8 6.2-4.8s5.5 1.6 6.2 4.8z"/><circle cx="17" cy="9" r="2.6"/><path d="M14.8 14.6c2.6.2 5 1.6 5.7 4.4h-4"/></g></symbol>
 <symbol id="i-tag" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M20 12l-8 8-9-9V3h8z"/><circle cx="7.5" cy="7.5" r="1.3" fill="currentColor"/></symbol>
 <symbol id="i-trend" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></g></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.5l5 5 10-11"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></g></symbol>
+<symbol id="i-download" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13M6 10l6 6 6-6M4 20h16"/></g></symbol>
+<symbol id="i-wand" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20l9.5-9.5"/><path fill="currentColor" stroke="none" d="M15.5 3l1.2 3 3 1.2-3 1.2-1.2 3-1.2-3-3-1.2 3-1.2z"/><path fill="currentColor" stroke="none" d="M19.5 12l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/><path fill="currentColor" stroke="none" d="M8 3l.7 1.8 1.8.7-1.8.7L8 8l-.7-1.8-1.8-.7 1.8-.7z"/></g></symbol>
 </svg>
 <div class="box">
 <div class="head">
@@ -150,6 +195,8 @@ textarea{min-height:70px;resize:vertical}
   <button class="out" onclick="logout()">Выйти из админки</button>
 </div>
 </div>
+<div id="toast" class="hidden"></div>
+<div id="loader" class="loader hidden"><div class="spin"></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const sb=supabase.createClient('https://dhwkkbtrhexywymegwoo.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRod2trYnRyaGV4eXd5bWVnd29vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMDUxODMsImV4cCI6MjEwMzc4MTE4M30.NAyY4dCeRRC2OznENuNCfvr-mKqACyMU61K-y-PkRIQ');
@@ -157,12 +204,34 @@ const ADMIN_EMAIL='artixz18@gmail.com';
 let tab='orders',bouquets=[],orders=[],comments=[],evFull=[];
 let adminId=null,orderFilter='new',usrStatsRange='7';
 let viewMode='admin',sTab='orders',myBouquets=[],myOrders=[],myReviews=[],pickedPhoto=null,imFlorist=false;
+let selectedOrders=new Set();
+let searchQuery='';
+let metricsCache=null,metricsCacheDays=null;
+
+// === УТИЛИТЫ ===
+const PHONE_REGEX=/^\+?[\d\s\-()]{10,18}$/;
+function validatePhone(p){if(!p)return true;return PHONE_REGEX.test(p.trim());}
 function $(id){return document.getElementById(id);}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function ic(n){return '<svg class="icn"><use href="#'+n+'"/></svg>';}
+function toast(m,icon){const t=$('toast');t.innerHTML=(icon?ic(icon):'')+esc(m);t.classList.remove('hidden');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('hidden'),2600);}
+function showLoader(){$('loader').classList.remove('hidden');}
+function hideLoader(){$('loader').classList.add('hidden');}
 function whenRu(t){try{return new Date(t).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
 function statusRu(s){return({new:'🆕 новый',accepted:'⏳ принят',ready:'✅ готов',delivered:'🚚 доставлен',cancelled:'❌ отменён'})[s]||s;}
 function statusCls(s){return 's-'+s;}
 function getTags(b){return Array.isArray(b.tags)?b.tags:(b.tags?String(b.tags).split(',').filter(Boolean):[]);}
+function fmtPrice(p){return String(p||0).replace(/\B(?=(\d{3})+(?!\d))/g,' ')+' ₽';}
+function dayKey(t){return new Date(t).toISOString().slice(0,10);}
+
+// === ЛОГ ДЕЙСТВИЙ АДМИНА ===
+const adminLog=JSON.parse(localStorage.getItem('lep_admin_log')||'[]');
+function logAdmin(action,details={}){
+  adminLog.unshift({ts:Date.now(),action,details});
+  if(adminLog.length>200)adminLog.length=200;
+  localStorage.setItem('lep_admin_log',JSON.stringify(adminLog));
+}
+
 async function boot(){
   const {data}=await sb.auth.getSession();
   if(data.session){const email=(data.session.user.email||'').toLowerCase();if(email===ADMIN_EMAIL){panel();return;}await sb.auth.signOut();}
@@ -171,9 +240,12 @@ async function boot(){
 async function doLogin(){
   const email=$('email').value.trim(),pass=$('pass').value;
   if(email.toLowerCase()!==ADMIN_EMAIL){$('loginErr').textContent='Вход только для администратора';return;}
-  const {error}=await sb.auth.signInWithPassword({email,password:pass});
-  if(error){$('loginErr').textContent='Неверный email или пароль';return;}
-  $('loginBox').classList.add('hidden');panel();
+  showLoader();
+  try{
+    const {error}=await sb.auth.signInWithPassword({email,password:pass});
+    if(error){$('loginErr').textContent='Неверный email или пароль';return;}
+    $('loginBox').classList.add('hidden');panel();
+  }finally{hideLoader();}
 }
 async function panel(){
   const u=(await sb.auth.getUser()).data.user;adminId=u?u.id:null;
@@ -182,15 +254,19 @@ async function panel(){
   await refresh();
 }
 async function refresh(){
-  const [b,o,c,evAll]=await Promise.all([
-    sb.from('bouquets').select('*').order('created_at',{ascending:false}),
-    sb.from('orders').select('*').order('created_at',{ascending:false}),
-    sb.from('bouquet_comments').select('*').order('created_at',{ascending:false}),
-    sb.from('events').select('*').gte('created_at',new Date(Date.now()-30*864e5).toISOString()).order('created_at',{ascending:true})
-  ]);
-  bouquets=b.data||[];orders=o.data||[];comments=c.data||[];evFull=evAll.data||[];
-  $('cOrders').textContent=orders.filter(o=>o.status==='new').length;
-  if(viewMode==='admin')renderList();
+  showLoader();
+  try{
+    const [b,o,c,evAll]=await Promise.all([
+      sb.from('bouquets').select('*').order('created_at',{ascending:false}),
+      sb.from('orders').select('*').order('created_at',{ascending:false}),
+      sb.from('bouquet_comments').select('*').order('created_at',{ascending:false}),
+      sb.from('events').select('*').gte('created_at',new Date(Date.now()-30*864e5).toISOString()).order('created_at',{ascending:true})
+    ]);
+    bouquets=b.data||[];orders=o.data||[];comments=c.data||[];evFull=evAll.data||[];
+    $('cOrders').textContent=orders.filter(o=>o.status==='new').length;
+    metricsCache=null; // сбрасываем кэш при обновлении данных
+    if(viewMode==='admin')renderList();
+  }finally{hideLoader();}
 }
 function setMode(m){
   viewMode=m;
@@ -200,7 +276,7 @@ function setMode(m){
   $('sellerTabs').classList.toggle('hidden',m!=='seller');
   if(m==='seller')refreshSeller();else renderList();
 }
-function setTab(t){tab=t;['Orders','Bouquets','Comments','Stats','Users'].forEach(k=>$('tab'+k).classList.toggle('on',t===k.toLowerCase()));renderList();}
+function setTab(t){tab=t;selectedOrders.clear();['Orders','Bouquets','Comments','Stats','Users'].forEach(k=>$('tab'+k).classList.toggle('on',t===k.toLowerCase()));renderList();}
 function setUsrRange(r){usrStatsRange=r;renderList();}
 function setOrderFilter(f){orderFilter=f;if(viewMode==='seller')renderSList();else renderList();}
 function renderList(){
@@ -210,6 +286,7 @@ function renderList(){
   else if(tab==='stats')renderStats();
   else if(tab==='users')renderUsers();
 }
+
 // ===== АНАЛИТИКА ТЕГОВ =====
 function computeTagMetrics(events){
   const views={},orders={};
@@ -236,7 +313,33 @@ function computeTagMetrics(events){
   rows.sort((a,b)=>(b.orders-a.orders)||(b.views-a.views));
   return rows.slice(0,15);
 }
-function orderCard(o,list){
+
+// ===== ВЫРУЧКА ПО ДНЯМ =====
+function computeRevenue(days){
+  const since=Date.now()-days*864e5;
+  const byDay={};
+  let total=0,cnt=0;
+  const daysArr=[];
+  for(let i=days-1;i>=0;i--){
+    const d=new Date(Date.now()-i*864e5);
+    daysArr.push(d.toISOString().slice(0,10));
+  }
+  daysArr.forEach(d=>byDay[d]=0);
+  orders.forEach(o=>{
+    if(o.status!=='delivered'&&o.status!=='ready')return;
+    const ts=new Date(o.created_at).getTime();
+    if(ts<since)return;
+    const b=bouquets.find(x=>x.id===o.bouquet_id);
+    const price=b?b.price:0;
+    const day=dayKey(o.created_at);
+    if(byDay[day]!==undefined)byDay[day]+=price;
+    total+=price;cnt++;
+  });
+  const avg=cnt?Math.round(total/cnt):0;
+  return {byDay,total,cnt,avg,daysArr};
+}
+
+function orderCard(o,list,admin){
   const b=list.find(x=>x.id===o.bouquet_id);
   const kindRu=o.kind==='delivery'?'🚚 доставка':'🏠 самовывоз';
   const next=({new:'accepted',accepted:'ready',ready:'delivered'})[o.status];
@@ -247,7 +350,9 @@ function orderCard(o,list){
   const callBtn=o.recipient_phone?'<button class="day" onclick="call(\''+esc(o.recipient_phone)+'\')">📞 позвонить</button>':(o.sender_phone?'<button class="day" onclick="call(\''+esc(o.sender_phone)+'\')">📞 заказчик</button>':'');
   const bTags=b?getTags(b):[];
   const tagsHtml=bTags.length?'<div class="bTags">'+bTags.slice(0,5).map(t=>'<span>'+esc(t)+'</span>').join('')+'</div>':'';
-  return '<div class="card"><div class="mcat">'+whenRu(o.created_at)+' · <span class="statusPill '+statusCls(o.status)+'">'+statusRu(o.status)+'</span></div>'+
+  const chk=admin?'<input type="checkbox" class="orderChk" data-oid="'+o.id+'" '+(selectedOrders.has(o.id)?'checked':'')+' onclick="event.stopPropagation();toggleOrderSel('+o.id+',this.checked)">':'';
+  return '<div class="card"><div style="display:flex;align-items:flex-start">'+chk+
+    '<div style="flex:1"><div class="mcat">'+whenRu(o.created_at)+' · <span class="statusPill '+statusCls(o.status)+'">'+statusRu(o.status)+'</span></div>'+
     '<div class="bouquetRow">'+(b&&b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:34px">🌷</div>')+
     '<div class="bInfo"><div class="title">'+esc(b?b.title:'Букет удалён')+'</div><div class="price">'+(b?b.price+' ₽':'?')+'</div><div class="cat">'+kindRu+'</div>'+tagsHtml+'</div></div>'+
     '<div class="orderMeta">'+
@@ -256,17 +361,104 @@ function orderCard(o,list){
       (o.sender_name?'<div>📲 заказчик: <b>'+esc(o.sender_name)+'</b>'+(o.sender_phone?' · '+esc(o.sender_phone):'')+'</div>':'')+
       (o.note?'<div>📝 комментарий: <i>'+esc(o.note)+'</i></div>':'')+
     '</div>'+
-    '<div class="mbtns" style="margin-top:8px">'+callBtn+backBtn+nextBtn+cancelBtn+'</div></div>';
+    '<div class="mbtns" style="margin-top:8px">'+callBtn+backBtn+nextBtn+cancelBtn+'</div></div></div>';
+}
+function toggleOrderSel(id,on){
+  if(on)selectedOrders.add(id);else selectedOrders.delete(id);
+  renderBulkBar();
+}
+function renderBulkBar(){
+  const box=$('bulkBar');
+  if(!box)return;
+  if(selectedOrders.size<2){box.innerHTML='';return;}
+  const fresh=[...selectedOrders].filter(id=>orders.find(o=>o.id===id&&o.status==='new')).length;
+  box.innerHTML='<span class="cnt">'+selectedOrders.size+' выбрано</span>'+
+    (fresh>0?'<button class="accept" onclick="bulkStatus(\'accepted\')">'+ic('i-check')+'Принять '+fresh+' новых</button>':'')+
+    '<button class="cancel" onclick="bulkStatus(\'cancelled\')">'+ic('i-x')+'Отменить выбранные</button>';
+}
+async function bulkStatus(st){
+  const ids=[...selectedOrders];
+  if(!ids.length)return;
+  const label=st==='accepted'?'принять':'отменить';
+  if(!confirm('Действительно '+label+' '+ids.length+' заказов?'))return;
+  showLoader();
+  try{
+    const res=await sb.from('orders').update({status:st}).in('id',ids);
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    logAdmin('bulk_status',{status:st,count:ids.length});
+    toast('Обновлено '+ids.length+' заказов','i-check');
+    selectedOrders.clear();
+    await refresh();
+  }finally{hideLoader();}
+}
+function exportOrdersCSV(){
+  if(!orders.length){toast('Нет заказов для экспорта','i-x');return;}
+  const rows=[['ID','Дата','Букет','Цена','Статус','Тип','Получатель','Телефон','Адрес','Заказчик','Комментарий']];
+  orders.forEach(o=>{
+    const b=bouquets.find(x=>x.id===o.bouquet_id);
+    rows.push([
+      o.id,
+      new Date(o.created_at).toLocaleString('ru-RU'),
+      b?b.title:'—',
+      b?b.price:'',
+      statusRu(o.status).replace(/[🆕⏳✅🚚❌]\s*/g,''),
+      o.kind==='delivery'?'доставка':'самовывоз',
+      o.recipient_name||'',
+      o.recipient_phone||'',
+      o.address||'',
+      o.sender_name||'',
+      (o.note||'').replace(/\n/g,' ')
+    ]);
+  });
+  const csv=rows.map(r=>r.map(c=>{
+    const s=String(c==null?'':c);
+    return s.includes(',')||s.includes('"')||s.includes('\n')?'"'+s.replace(/"/g,'""')+'"':s;
+  }).join(',')).join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='orders_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();URL.revokeObjectURL(url);
+  logAdmin('export_csv',{count:orders.length});
+  toast('CSV экспортирован','i-download');
 }
 function renderOrders(){
   const box=$('list');
   const filters=[['new','🆕 новые'],['accepted','⏳ приняты'],['ready','✅ готовы'],['delivered','🚚 доставлены'],['cancelled','❌ отменены']];
-  const filtered=orders.filter(o=>o.status===orderFilter);
-  const cards=filtered.length?filtered.map(o=>orderCard(o,bouquets)).join(''):'<div class="empty">Нет заказов со статусом «'+statusRu(orderFilter)+'» 🎉</div>';
-  box.innerHTML='<div class="rangeSel">'+filters.map(f=>'<button class="'+(orderFilter===f[0]?'on':'')+'" onclick="setOrderFilter(\''+f[0]+'\')">'+f[1]+' ('+orders.filter(o=>o.status===f[0]).length+')</button>').join('')+'</div>'+cards;
+  let filtered=orders.filter(o=>o.status===orderFilter);
+  if(searchQuery){
+    const q=searchQuery.toLowerCase();
+    filtered=filtered.filter(o=>{
+      const b=bouquets.find(x=>x.id===o.bouquet_id);
+      return (b&&b.title.toLowerCase().includes(q))||
+        (o.recipient_name&&o.recipient_name.toLowerCase().includes(q))||
+        (o.sender_name&&o.sender_name.toLowerCase().includes(q))||
+        String(o.id).includes(q);
+    });
+  }
+  const cards=filtered.length?filtered.map(o=>orderCard(o,bouquets,true)).join(''):'<div class="empty">Нет заказов со статусом «'+statusRu(orderFilter)+'» 🎉</div>';
+  box.innerHTML=
+    '<div class="searchRow"><input id="ordSearch" placeholder="Поиск по названию, имени или ID" value="'+esc(searchQuery)+'" oninput="onSearchOrders(this.value)"><button class="sBtn" onclick="clearSearch()">'+ic('i-x')+'</button></div>'+
+    '<div style="display:flex;gap:6px;margin-bottom:10px">'+
+      '<button class="btn" style="padding:10px;font-size:12px" onclick="exportOrdersCSV()">'+ic('i-download')+'Экспорт CSV</button>'+
+    '</div>'+
+    '<div id="bulkBar"></div>'+
+    '<div class="rangeSel">'+filters.map(f=>'<button class="'+(orderFilter===f[0]?'on':'')+'" onclick="setOrderFilter(\''+f[0]+'\')">'+f[1]+' ('+orders.filter(o=>o.status===f[0]).length+')</button>').join('')+'</div>'+cards;
+  renderBulkBar();
 }
+function onSearchOrders(v){searchQuery=v;renderOrders();}
+function clearSearch(){searchQuery='';renderOrders();}
 function call(p){window.location.href='tel:'+p.replace(/\s+/g,'');}
-async function updateOrder(id,status){const res=await sb.from('orders').update({status}).eq('id',id).select();if(res.error){alert('Ошибка: '+res.error.message);return;}if(viewMode==='seller')await refreshSeller();else await refresh();}
+async function updateOrder(id,status){
+  showLoader();
+  try{
+    const res=await sb.from('orders').update({status}).eq('id',id).select();
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    logAdmin('order_status',{order_id:id,status});
+    toast('Статус обновлён','i-check');
+    if(viewMode==='seller')await refreshSeller();else await refresh();
+  }finally{hideLoader();}
+}
 let adminEditId=null,adminEditPhoto=null;
 function renderBouquets(){
   const box=$('list');
@@ -304,29 +496,65 @@ function adminEditFormHtml(){
 function startAdminEdit(id){adminEditId=id;adminEditPhoto=null;renderBouquets();window.scrollTo({top:0,behavior:'smooth'});}
 function fillAdminEdit(){
   const b=bouquets.find(x=>x.id===adminEditId);if(!b)return;
-  $('aeTitle').value=b.title||'';$('aePrice').value=b.price||'';$('aeDesc').value=b.description||'';$('aeCat').value=b.category||'';$('aeTags').value=getTags(b).join(', '||'');$('aeStock').checked=!!b.in_stock;
+  $('aeTitle').value=b.title||'';$('aePrice').value=b.price||'';$('aeDesc').value=b.description||'';$('aeCat').value=b.category||'';
+  $('aeTags').value=getTags(b).join(', '); // FIX: было `join(', '||'')` — бессмысленное выражение
+  $('aeStock').checked=!!b.in_stock;
 }
 function onAdminEditPhoto(inp){const f=inp.files[0];if(!f)return;adminEditPhoto=f;$('aePhotoName').textContent='📷 '+f.name.slice(0,20);}
 function cancelAdminEdit(){adminEditId=null;adminEditPhoto=null;renderBouquets();}
 async function saveAdminEdit(){
   const b=bouquets.find(x=>x.id===adminEditId);if(!b)return;
   let photo_url=b.photo_url;
-  if(adminEditPhoto){
-    const path=(b.user_id||adminId)+'/edit_'+Date.now()+'.jpg';
-    const up=await sb.storage.from('bouquets').upload(path,adminEditPhoto,{contentType:adminEditPhoto.type});
-    if(up.error){alert('Фото: '+up.error.message);return;}
-    photo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
-  }
-  const tagsRaw=$('aeTags').value.trim();
-  const tags=tagsRaw?tagsRaw.split(',').map(x=>x.trim()).filter(Boolean):[];
-  const res=await sb.from('bouquets').update({title:$('aeTitle').value.trim(),price:+$('aePrice').value,description:$('aeDesc').value.trim(),category:$('aeCat').value.trim(),tags:tags,in_stock:$('aeStock').checked,photo_url:photo_url}).eq('id',adminEditId);
-  if(res.error){alert('Ошибка: '+res.error.message);return;}
-  adminEditId=null;adminEditPhoto=null;
-  await refresh();
+  showLoader();
+  try{
+    if(adminEditPhoto){
+      const path=(b.user_id||adminId)+'/edit_'+Date.now()+'.jpg';
+      const up=await sb.storage.from('bouquets').upload(path,adminEditPhoto,{contentType:adminEditPhoto.type});
+      if(up.error){toast('Фото: '+up.error.message,'i-x');return;}
+      photo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
+    }
+    const tagsRaw=$('aeTags').value.trim();
+    const tags=tagsRaw?tagsRaw.split(',').map(x=>x.trim()).filter(Boolean):[];
+    const res=await sb.from('bouquets').update({title:$('aeTitle').value.trim(),price:+$('aePrice').value,description:$('aeDesc').value.trim(),category:$('aeCat').value.trim(),tags:tags,in_stock:$('aeStock').checked,photo_url:photo_url}).eq('id',adminEditId);
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    logAdmin('edit_bouquet',{bouquet_id:adminEditId});
+    toast('Букет обновлён','i-check');
+    adminEditId=null;adminEditPhoto=null;
+    await refresh();
+  }finally{hideLoader();}
 }
-async function toggleDay(id,on){if(on)await sb.from('bouquets').update({is_day:false}).eq('is_day',true);const res=await sb.from('bouquets').update({is_day:on}).eq('id',id).select();if(res.error){alert('Ошибка: '+res.error.message);return;}await refresh();}
-async function toggleStock(id,on){const res=await sb.from('bouquets').update({in_stock:on}).eq('id',id).select();if(res.error){alert('Ошибка: '+res.error.message);return;}await refresh();}
-async function delBouquet(id){if(!confirm('Удалить букет?'))return;const res=await sb.from('bouquets').delete().eq('id',id);if(res.error){alert('Ошибка: '+res.error.message);return;}await refresh();}
+async function toggleDay(id,on){
+  showLoader();
+  try{
+    if(on)await sb.from('bouquets').update({is_day:false}).eq('is_day',true);
+    const res=await sb.from('bouquets').update({is_day:on}).eq('id',id).select();
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    logAdmin('toggle_day',{bouquet_id:id,on});
+    toast(on?'Букет дня обновлён':'Убрано из букета дня','i-check');
+    await refresh();
+  }finally{hideLoader();}
+}
+async function toggleStock(id,on){
+  showLoader();
+  try{
+    const res=await sb.from('bouquets').update({in_stock:on}).eq('id',id).select();
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    logAdmin('toggle_stock',{bouquet_id:id,on});
+    toast('Наличие обновлено','i-check');
+    await refresh();
+  }finally{hideLoader();}
+}
+async function delBouquet(id){
+  if(!confirm('Удалить букет?'))return;
+  showLoader();
+  try{
+    const res=await sb.from('bouquets').delete().eq('id',id);
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    logAdmin('delete_bouquet',{bouquet_id:id});
+    toast('Букет удалён','i-check');
+    await refresh();
+  }finally{hideLoader();}
+}
 function renderComments(){
   const box=$('list');
   box.innerHTML=comments.length?comments.map(c=>{
@@ -338,12 +566,43 @@ function renderComments(){
       '<button class="no" onclick="killComment('+c.id+')">🗑 удалить</button></div></div>';
   }).join(''):'<div class="empty">Отзывов пока нет 🎉</div>';
 }
-async function unhide(id){const res=await sb.from('bouquet_comments').update({hidden:false}).eq('id',id).select();if(res.error){alert('Ошибка: '+res.error.message);return;}if(viewMode==='seller'){await refreshSeller();}else{await refresh();}}
-async function hideComment(id){const res=await sb.from('bouquet_comments').update({hidden:true}).eq('id',id).select();if(res.error){alert('Ошибка: '+res.error.message);return;}if(viewMode==='seller'){await refreshSeller();}else{await refresh();}}
-async function killComment(id){if(!confirm('Удалить комментарий?'))return;const res=await sb.from('bouquet_comments').delete().eq('id',id);if(res.error){alert('Ошибка: '+res.error.message);return;}if(viewMode==='seller'){await refreshSeller();}else{await refresh();}}
-function dayKey(t){return new Date(t).toISOString().slice(0,10);}
+async function unhide(id){
+  showLoader();
+  try{
+    const res=await sb.from('bouquet_comments').update({hidden:false}).eq('id',id).select();
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    logAdmin('unhide_comment',{comment_id:id});
+    toast('Отзыв восстановлен','i-check');
+    if(viewMode==='seller'){await refreshSeller();}else{await refresh();}
+  }finally{hideLoader();}
+}
+async function hideComment(id){
+  showLoader();
+  try{
+    const res=await sb.from('bouquet_comments').update({hidden:true}).eq('id',id).select();
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    logAdmin('hide_comment',{comment_id:id});
+    toast('Отзыв скрыт','i-check');
+    if(viewMode==='seller'){await refreshSeller();}else{await refresh();}
+  }finally{hideLoader();}
+}
+async function killComment(id){
+  if(!confirm('Удалить комментарий?'))return;
+  showLoader();
+  try{
+    const res=await sb.from('bouquet_comments').delete().eq('id',id);
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    logAdmin('delete_comment',{comment_id:id});
+    toast('Комментарий удалён','i-check');
+    if(viewMode==='seller'){await refreshSeller();}else{await refresh();}
+  }finally{hideLoader();}
+}
+
+// ===== МЕТРИКИ С КЭШЕМ =====
 function sessionsFromEvents(events){const GAP=5*60*1000;const byDev={};events.forEach(e=>{const dev=e.device||'__anon__';(byDev[dev]=byDev[dev]||[]).push(new Date(e.created_at).getTime());});const sessions=[];Object.entries(byDev).forEach(([dev,ts])=>{ts.sort((a,b)=>a-b);let start=ts[0],last=ts[0];for(let i=1;i<ts.length;i++){if(ts[i]-last>GAP){sessions.push({dev,start,end:last,len:last-start});start=ts[i];}last=ts[i];}sessions.push({dev,start,end:last,len:last-start});});return sessions;}
 function computeMetrics(days){
+  // Кэш: если данные за тот же период не менялись — возвращаем сохранённое
+  if(metricsCache&&metricsCacheDays===days)return metricsCache;
   const since=Date.now()-days*864e5;
   const ev=evFull.filter(e=>new Date(e.created_at).getTime()>=since);
   const devs=new Set(ev.map(e=>e.device||e.user_id||'__anon__'));
@@ -354,16 +613,19 @@ function computeMetrics(days){
   const funnel={open:uniqByType('open'),view:uniqByType('view'),order:uniqByType('order'),comment:uniqByType('comment'),share:uniqByType('share'),reg:uniqByType('reg')};
   const sessions=sessionsFromEvents(ev);const real=sessions.filter(s=>s.len>5000);
   const avgLen=real.length?Math.round(real.reduce((a,s)=>a+s.len,0)/real.length/1000):0;
-  return {sessions,devs,dayMap,daysArr,returners,funnel,ev,avgLen};
+  metricsCache={sessions,devs,dayMap,daysArr,returners,funnel,ev,avgLen};
+  metricsCacheDays=days;
+  return metricsCache;
 }
 function renderStats(){
   const days=+usrStatsRange;const m=computeMetrics(days);const box=$('list');
   const totalOrders=orders.length;const newOrders=orders.filter(o=>o.status==='new').length;
   const revenue=orders.filter(o=>o.status==='delivered'||o.status==='ready').reduce((s,o)=>{const b=bouquets.find(x=>x.id===o.bouquet_id);return s+(b?b.price:0);},0);
+  const rev=computeRevenue(days);
   const big='<div class="bigStat">'+
     '<div><div class="lbl">уникальных устройств</div><div class="val">'+m.devs.size+'</div><div class="sub">за '+days+' дн.</div></div>'+
     '<div><div class="lbl">всего заказов</div><div class="val"><b>'+totalOrders+'</b></div><div class="sub">новых: '+newOrders+'</div></div>'+
-    '<div><div class="lbl">выручка</div><div class="val"><b>'+revenue.toLocaleString('ru-RU')+' ₽</b></div></div>'+
+    '<div><div class="lbl">выручка</div><div class="val"><b>'+fmtPrice(revenue)+'</b></div><div class="sub">средний чек: '+fmtPrice(rev.avg)+'</div></div>'+
     '<div><div class="lbl">возврат</div><div class="val"><b>'+m.returners+'</b></div><div class="sub">зашли ≥2 дня</div></div></div>';
   const funnelMax=Math.max(...Object.values(m.funnel),1);
   const funnelHtml='<div class="funnel"><div class="mcat" style="font-weight:700;color:#1A1A2E">🎯 воронка: уникальные</div>'+
@@ -391,7 +653,24 @@ function renderStats(){
   const maxEv=Math.max(...m.daysArr.map(d=>m.dayMap[d].ev),1);
   const chart='<div class="funnel"><div class="mcat" style="font-weight:700;color:#1A1A2E">📈 по дням</div>'+
     m.daysArr.map(d=>{const v=m.dayMap[d];const pct=Math.round(v.ev*100/maxEv);return '<div class="dayRow"><div class="dLbl">'+d.slice(5)+'</div><div class="dBar"><i style="width:'+pct+'%"></i></div><div class="dNum">'+v.ev+'</div></div>';}).join('')+'</div>';
-  box.innerHTML='<div class="rangeSel">'+[['7','7 дней'],['14','14 дней'],['30','30 дней']].map(r=>'<button class="'+(usrStatsRange===r[0]?'on':'')+'" onclick="setUsrRange(\''+r[0]+'\')">'+r[1]+'</button>').join('')+'</div>'+big+funnelHtml+tagHtml+chart;
+  // === ГРАФИК ВЫРУЧКИ ===
+  const revMax=Math.max(...rev.daysArr.map(d=>rev.byDay[d]),1);
+  const revChartHtml='<div class="revChart"><div class="mcat">'+ic('i-trend')+'💰 выручка по дням (готовые/доставленные)</div>'+
+    '<div class="revBars">'+rev.daysArr.map(d=>{
+      const v=rev.byDay[d];
+      const pct=Math.round(v*100/revMax);
+      return '<div class="bar" style="height:'+Math.max(pct,3)+'%" data-val="'+fmtPrice(v)+'"></div>';
+    }).join('')+'</div>'+
+    '<div class="days">'+rev.daysArr.map(d=>'<span>'+d.slice(8)+'</span>').join('')+'</div>'+
+  '</div>';
+  // === ЛОГ ДЕЙСТВИЙ ===
+  const logHtml='<div class="funnel"><div class="mcat" style="font-weight:700;color:#1A1A2E">📋 лог действий администратора</div>'+
+    (adminLog.length?'<div class="logList">'+adminLog.slice(0,50).map(l=>{
+      const time=new Date(l.ts).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+      return '<div class="lItem"><span class="lTime">'+time+'</span><span class="lAct">'+esc(l.action)+(l.details.order_id?' · заказ #'+l.details.order_id:'')+(l.details.bouquet_id?' · букет #'+l.details.bouquet_id:'')+(l.details.status?' → '+statusRu(l.details.status):'')+'</span></div>';
+    }).join('')+'</div>':'<div class="mcat">Пока пусто</div>')+
+  '</div>';
+  box.innerHTML='<div class="rangeSel">'+[['7','7 дней'],['14','14 дней'],['30','30 дней']].map(r=>'<button class="'+(usrStatsRange===r[0]?'on':'')+'" onclick="setUsrRange(\''+r[0]+'\')">'+r[1]+'</button>').join('')+'</div>'+big+funnelHtml+tagHtml+chart+revChartHtml+logHtml;
 }
 async function renderUsers(){
   const days=+usrStatsRange;const m=computeMetrics(days);const box=$('list');
@@ -410,37 +689,56 @@ async function renderUsers(){
   box.innerHTML='<div class="rangeSel">'+[['7','7 дней'],['14','14 дней'],['30','30 дней']].map(r=>'<button class="'+(usrStatsRange===r[0]?'on':'')+'" onclick="setUsrRange(\''+r[0]+'\')">'+r[1]+'</button>').join('')+'</div>'+
     '<div class="card"><div class="mcat" style="font-weight:700;color:#1A1A2E;margin-bottom:6px">👥 топ-15 активных</div>'+rows.join('')+'</div>';
 }
-async function makeFlorist(uid){if(!confirm('Сделать этого пользователя продавцом?'))return;const res=await sb.from('profiles').update({is_florist:true}).eq('id',uid);if(res.error){alert('Ошибка: '+res.error.message);return;}await refresh();}
+async function makeFlorist(uid){
+  if(!confirm('Сделать этого пользователя продавцом?'))return;
+  showLoader();
+  try{
+    const res=await sb.from('profiles').update({is_florist:true}).eq('id',uid);
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    logAdmin('make_florist',{user_id:uid});
+    toast('Пользователь теперь продавец','i-check');
+    await refresh();
+  }finally{hideLoader();}
+}
 // ===== РЕЖИМ ПРОДАВЦА =====
 function setSTab(t){sTab=t;['Orders','Bouquets','Reviews'].forEach(k=>$('stab'+k).classList.toggle('on',t===k.toLowerCase()));renderSList();}
 async function refreshSeller(){
-  if(!adminId){const u=(await sb.auth.getUser()).data.user;adminId=u?u.id:null;}
-  const pr=await sb.from('profiles').select('is_florist').eq('id',adminId).maybeSingle();
-  imFlorist=!!(pr.data&&pr.data.is_florist);
-  const b=await sb.from('bouquets').select('*').eq('user_id',adminId).order('created_at',{ascending:false});
-  myBouquets=b.data||[];
-  const ids=myBouquets.map(x=>x.id);
-  if(ids.length){
-    const o=await sb.from('orders').select('*').in('bouquet_id',ids).order('created_at',{ascending:false});
-    myOrders=o.data||[];
-    const r=await sb.from('bouquet_comments').select('*').in('bouquet_id',ids).order('created_at',{ascending:false});
-    myReviews=r.data||[];
-  }else{myOrders=[];myReviews=[];}
-  $('scOrders').textContent=myOrders.filter(o=>o.status==='new').length;
-  renderSList();
+  showLoader();
+  try{
+    if(!adminId){const u=(await sb.auth.getUser()).data.user;adminId=u?u.id:null;}
+    const pr=await sb.from('profiles').select('is_florist').eq('id',adminId).maybeSingle();
+    imFlorist=!!(pr.data&&pr.data.is_florist);
+    const b=await sb.from('bouquets').select('*').eq('user_id',adminId).order('created_at',{ascending:false});
+    myBouquets=b.data||[];
+    const ids=myBouquets.map(x=>x.id);
+    if(ids.length){
+      const [o,r]=await Promise.all([
+        sb.from('orders').select('*').in('bouquet_id',ids).order('created_at',{ascending:false}),
+        sb.from('bouquet_comments').select('*').in('bouquet_id',ids).order('created_at',{ascending:false})
+      ]);
+      myOrders=o.data||[];
+      myReviews=r.data||[];
+    }else{myOrders=[];myReviews=[];}
+    $('scOrders').textContent=myOrders.filter(o=>o.status==='new').length;
+    renderSList();
+  }finally{hideLoader();}
 }
 async function enableMeFlorist(){
-  const res=await sb.from('profiles').update({is_florist:true}).eq('id',adminId);
-  if(res.error){alert('Ошибка: '+res.error.message);return;}
-  await refreshSeller();
-  alert('✅ Готово! Ты теперь продавец — seller.html тоже открыт с этим аккаунтом.');
+  showLoader();
+  try{
+    const res=await sb.from('profiles').update({is_florist:true}).eq('id',adminId);
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    await refreshSeller();
+    // FIX: убран вводящий в заблуждение alert про seller.html
+    toast('Готово! Ты теперь продавец. Кабинет продавца — в отдельном файле','i-check');
+  }finally{hideLoader();}
 }
 function renderSList(){if(sTab==='orders')sRenderOrders();else if(sTab==='bouquets')sRenderBouquets();else sRenderReviews();}
 function sRenderOrders(){
   const box=$('list');
   const filters=[['new','🆕 новые'],['accepted','⏳ приняты'],['ready','✅ готовы'],['delivered','🚚 доставлены'],['cancelled','❌ отменены']];
   const filtered=myOrders.filter(o=>o.status===orderFilter);
-  const cards=filtered.length?filtered.map(o=>orderCard(o,myBouquets)).join(''):'<div class="empty">У продавца нет заказов со статусом «'+statusRu(orderFilter)+'» 🎉</div>';
+  const cards=filtered.length?filtered.map(o=>orderCard(o,myBouquets,false)).join(''):'<div class="empty">У продавца нет заказов со статусом «'+statusRu(orderFilter)+'» 🎉</div>';
   box.innerHTML=(imFlorist?'':'<div class="card" style="text-align:center"><div style="font-size:12px;color:var(--gray);margin-bottom:8px">На твоём аккаунте не включён продавец</div><button class="btn" onclick="enableMeFlorist()">⭐ Включить мне продавца</button></div>')+
     '<div class="rangeSel">'+filters.map(f=>'<button class="'+(orderFilter===f[0]?'on':'')+'" onclick="setOrderFilter(\''+f[0]+'\')">'+f[1]+' ('+myOrders.filter(o=>o.status===f[0]).length+')</button>').join('')+'</div>'+cards;
 }
@@ -480,36 +778,59 @@ async function submitBouquet(){
   const t=$('fTitle').value.trim(),p=+$('fPrice').value,d=$('fDesc').value.trim(),c=$('fCat').value.trim();
   const tagsRaw=$('fTags').value.trim();
   const tags=tagsRaw?tagsRaw.split(',').map(x=>x.trim()).filter(Boolean):[];
-  if(!t||!p){alert('Заполни название и цену');return;}
-  let photo_url=null;
-  if(pickedPhoto){
-    const path=adminId+'/'+Date.now()+'.jpg';
-    const up=await sb.storage.from('bouquets').upload(path,pickedPhoto,{contentType:pickedPhoto.type,upsert:false});
-    if(up.error){alert('Фото: '+up.error.message);return;}
-    photo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
-  }
-  if($('fDay').checked)await sb.from('bouquets').update({is_day:false}).eq('user_id',adminId).eq('is_day',true);
-  const res=await sb.from('bouquets').insert({title:t,price:p,description:d,category:c,tags,photo_url,in_stock:$('fStock').checked,is_day:$('fDay').checked,user_id:adminId});
-  if(res.error){alert('Ошибка: '+res.error.message);return;}
-  pickedPhoto=null;
-  await refreshSeller();
+  if(!t||!p){toast('Заполни название и цену','i-x');return;}
+  showLoader();
+  try{
+    let photo_url=null;
+    if(pickedPhoto){
+      const path=adminId+'/'+Date.now()+'.jpg';
+      const up=await sb.storage.from('bouquets').upload(path,pickedPhoto,{contentType:pickedPhoto.type,upsert:false});
+      if(up.error){toast('Фото: '+up.error.message,'i-x');return;}
+      photo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
+    }
+    // FIX: сначала создаём букет, потом сбрасываем is_day у других
+    // Это безопаснее, чем UPDATE потом INSERT (если INSERT упадёт — is_day не потеряется)
+    const res=await sb.from('bouquets').insert({title:t,price:p,description:d,category:c,tags,photo_url,in_stock:$('fStock').checked,is_day:$('fDay').checked,user_id:adminId});
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    if($('fDay').checked){
+      // Сбрасываем у других букетов этого продавца после успешного создания
+      await sb.from('bouquets').update({is_day:false}).eq('user_id',adminId).eq('is_day',true);
+      await sb.from('bouquets').update({is_day:true}).eq('id',res.data[0].id);
+    }
+    logAdmin('seller_add_bouquet',{title:t,price:p});
+    toast('Букет добавлен','i-check');
+    pickedPhoto=null;
+    await refreshSeller();
+  }finally{hideLoader();}
 }
 async function sToggleDay(id,on){
-  if(on)await sb.from('bouquets').update({is_day:false}).eq('user_id',adminId).eq('is_day',true);
-  const res=await sb.from('bouquets').update({is_day:on}).eq('id',id).select();
-  if(res.error){alert('Ошибка: '+res.error.message);return;}
-  await refreshSeller();
+  showLoader();
+  try{
+    if(on)await sb.from('bouquets').update({is_day:false}).eq('user_id',adminId).eq('is_day',true);
+    const res=await sb.from('bouquets').update({is_day:on}).eq('id',id).select();
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    toast(on?'Букет дня обновлён':'Убрано из дня','i-check');
+    await refreshSeller();
+  }finally{hideLoader();}
 }
 async function sToggleStock(id,on){
-  const res=await sb.from('bouquets').update({in_stock:on}).eq('id',id).select();
-  if(res.error){alert('Ошибка: '+res.error.message);return;}
-  await refreshSeller();
+  showLoader();
+  try{
+    const res=await sb.from('bouquets').update({in_stock:on}).eq('id',id).select();
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    toast('Наличие обновлено','i-check');
+    await refreshSeller();
+  }finally{hideLoader();}
 }
 async function sDelBouquet(id){
   if(!confirm('Удалить букет?'))return;
-  const res=await sb.from('bouquets').delete().eq('id',id);
-  if(res.error){alert('Ошибка: '+res.error.message);return;}
-  await refreshSeller();
+  showLoader();
+  try{
+    const res=await sb.from('bouquets').delete().eq('id',id);
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    toast('Букет удалён','i-check');
+    await refreshSeller();
+  }finally{hideLoader();}
 }
 function sRenderReviews(){
   const box=$('list');
@@ -527,7 +848,12 @@ function sRenderReviews(){
   }).join(''):'<div class="empty">Отзывов на букеты продавца пока нет 🎉</div>';
   box.innerHTML=list;
 }
-async function logout(){await sb.auth.signOut();location.reload();}
+async function logout(){
+  showLoader();
+  await sb.auth.signOut();
+  hideLoader();
+  location.reload();
+}
 boot();
 </script>
 </body>

@@ -48,7 +48,8 @@ main{max-width:620px;margin:0 auto;padding:76px 14px 96px}
 .card{background:var(--card);border-radius:18px;padding:12px;box-shadow:var(--shadow);margin-bottom:10px}
 input,textarea{width:100%;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:11px;font-size:14px;margin-bottom:8px;font-family:inherit}
 input:focus,textarea:focus{outline:none;border-color:var(--coral)}
-.btn{width:100%;background:var(--gradient);color:#fff;border:none;border-radius:999px;padding:13px;font-weight:800;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
+.btn{width:100%;background:var(--gradient);color:#fff;border:none;border-radius:999px;padding:13px;font-weight:800;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:.2s}
+.btn:active{transform:scale(.98)}
 .btn .icn{width:16px;height:16px}
 .btn.soft{background:var(--bg);color:var(--ink)}
 .btn.green{background:linear-gradient(135deg,#10B981,#059669)}
@@ -106,9 +107,74 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 .pushBtn .icn{width:15px;height:15px}
 .tgWrap{display:flex;justify-content:center;margin:8px 0 10px}
 .tgWrap iframe{border-radius:999px!important;overflow:hidden!important;border:none!important;box-shadow:0 6px 18px rgba(51,153,204,.35)}
-#toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(30,41,59,.95);color:#F1F5F9;border:2px solid rgba(255,107,107,.4);border-radius:16px;font-weight:700;font-size:13px;padding:12px 20px;text-align:center;max-width:82vw;z-index:99}
+#toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(30,41,59,.95);color:#F1F5F9;border:2px solid rgba(255,107,107,.4);border-radius:16px;box-shadow:0 12px 48px rgba(255,107,107,.3);font-weight:700;font-size:13px;padding:12px 20px;text-align:center;max-width:82vw;z-index:99}
+#toast .icn{width:15px;height:15px;margin-right:6px;vertical-align:-2px;color:var(--pink)}
 #toast:not(.hidden){animation:toastIn .3s ease}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,-50%) scale(.85)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+/* Loader */
+.loader{position:fixed;inset:0;z-index:200;background:rgba(255,255,255,.7);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;pointer-events:all}
+.loader .spin{width:42px;height:42px;border:3px solid rgba(255,107,107,.2);border-top-color:var(--coral);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* Revenue chart */
+.revCard{background:linear-gradient(120deg,#FFF3F1 0%,#FFECEF 100%);border-radius:18px;padding:12px;margin-bottom:10px;box-shadow:var(--shadow);border:1.5px dashed rgba(255,107,107,.35)}
+.revCard h4{font-size:12.5px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:6px;color:var(--grn)}
+.revCard h4 .icn{width:14px;height:14px}
+.revStats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.revStats>div{background:var(--card);border-radius:12px;padding:8px}
+.revStats .lbl{font-size:9px;color:var(--gray);font-weight:700}
+.revStats .val{font-size:13px;font-weight:800;color:var(--ink);margin-top:2px}
+.revStats .val b{color:var(--grn)}
+.revBars{display:flex;align-items:flex-end;gap:4px;height:70px;padding-bottom:4px;border-bottom:1px dashed rgba(255,107,107,.2)}
+.revBars .bar{flex:1;background:var(--gradient);border-radius:4px 4px 0 0;min-height:2px;position:relative;transition:all .3s;cursor:pointer}
+.revBars .bar:hover{opacity:.85}
+.revBars .bar::before{content:attr(data-val);position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:800;color:var(--coral);white-space:nowrap;opacity:0;transition:.2s}
+.revBars .bar:hover::before{opacity:1}
+.revDays{display:flex;gap:4px;margin-top:4px}
+.revDays span{flex:1;text-align:center;font-size:8px;color:var(--gray);font-weight:700}
+.topBqRow{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed rgba(255,107,107,.15);font-size:12px}
+.topBqRow:last-child{border:none}
+.topBqRow .n{font-weight:700;color:var(--ink);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topBqRow .r{font-weight:800;color:var(--grn);flex:none}
+/* Review reply */
+.revRow{background:var(--card);border-radius:16px;padding:12px;box-shadow:var(--shadow);margin-bottom:8px}
+.revHead{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.revAva{width:32px;height:32px;border-radius:50%;background:var(--gradient);color:#fff;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none}
+.revNick{font-weight:800;font-size:12px;flex:1}
+.revDate{font-size:10px;color:var(--gray)}
+.revBq{font-size:10px;color:var(--coral);margin-bottom:4px;font-weight:700}
+.revText{font-size:13px;line-height:1.5;color:var(--ink);margin-bottom:8px}
+.revStars{display:flex;gap:1px;margin-bottom:6px}
+.revStars .icn{width:13px;height:13px}
+.replyChain{border-left:2px solid rgba(255,107,107,.2);padding-left:10px;margin:6px 0}
+.replyItem{background:linear-gradient(120deg,#FFF3F1,#FFECEF);border-radius:10px;padding:8px 10px;margin-bottom:4px;font-size:12px;line-height:1.4}
+.replyItem .rpNick{font-weight:800;font-size:10px;color:var(--coral);margin-bottom:2px}
+.replyInput{display:flex;gap:6px;margin-top:8px}
+.replyInput input{margin:0;flex:1;padding:9px 12px;font-size:12px}
+.replyInput button{width:42px;flex:none;border:none;background:var(--gradient);color:#fff;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.replyInput button .icn{width:14px;height:14px}
+/* Quick replies */
+.qrBlock{background:var(--card);border-radius:16px;padding:10px;margin-bottom:10px;box-shadow:var(--shadow)}
+.qrBlock h4{font-size:11px;font-weight:800;margin-bottom:6px;color:var(--coral);display:flex;align-items:center;gap:5px}
+.qrChips{display:flex;flex-wrap:wrap;gap:5px}
+.qrChip{background:var(--bg);border:1.5px solid rgba(148,163,184,.25);border-radius:999px;padding:5px 9px;font-size:10.5px;font-weight:700;color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.qrChip .rm{color:var(--red);font-weight:800;opacity:.7}
+.qrAdd{display:flex;gap:5px;margin-top:6px}
+.qrAdd input{margin:0;flex:1;padding:8px 10px;font-size:11px}
+.qrAdd button{width:36px;flex:none;border:none;background:var(--gradient);color:#fff;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.qrAdd button .icn{width:13px;height:13px}
+/* Working hours */
+.whRow{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px}
+.whRow .day{width:70px;font-weight:700}
+.whRow input[type=time]{padding:6px;font-size:11px;margin:0}
+.whRow input[type=time]:focus{border-color:var(--coral)}
+.whRow label{display:flex;align-items:center;gap:5px;font-size:11px;margin-left:auto;cursor:pointer}
+.whRow input[type=checkbox]{width:auto;margin:0}
+.bulkBar{display:flex;gap:6px;align-items:center;margin-bottom:10px;padding:8px;background:linear-gradient(120deg,#FFF3F1,#FFECEF);border-radius:14px;box-shadow:var(--shadow)}
+.bulkBar .cnt{font-size:11px;font-weight:800;color:var(--ink)}
+.bulkBar button{border:none;border-radius:999px;padding:7px 12px;font-size:10.5px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.bulkBar .icn{width:12px;height:12px}
+.bulkBar .accept{background:linear-gradient(135deg,#10B981,#059669);color:#fff}
+.bulkBar .cancel{background:#FFF1F0;color:var(--red)}
 </style>
 </head>
 <body>
@@ -131,6 +197,10 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 <symbol id="i-trend" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></g></symbol>
 <symbol id="i-wand" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20l9.5-9.5"/><path fill="currentColor" stroke="none" d="M15.5 3l1.2 3 3 1.2-3 1.2-1.2 3-1.2-3-3-1.2 3-1.2z"/><path fill="currentColor" stroke="none" d="M19.5 12l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/><path fill="currentColor" stroke="none" d="M8 3l.7 1.8 1.8.7-1.8.7L8 8l-.7-1.8-1.8-.7 1.8-.7z"/></g></symbol>
 <symbol id="i-bell" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" d="M12 3a6 6 0 0 1 6 6v4l2 3H4l2-3V9a6 6 0 0 1 6-6z"/><path fill="none" stroke="currentColor" stroke-width="1.7" d="M10 19a2 2 0 0 0 4 0"/></symbol>
+<symbol id="i-download" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13M6 10l6 6 6-6M4 20h16"/></g></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></g></symbol>
+<symbol id="i-send" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 20l18-8L3 4v6l12 2-12 2z"/></g></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.5 1 4 1.5s2-1.5 4-1.5c3.5 0 5 3.5 3.5 6.5-2.5 4.5-9.5 9-9.5 9z"/></symbol>
 </svg>
 <div class="top">
   <div class="topIn">
@@ -145,10 +215,15 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 <main>
   <section id="sec-orders">
     <div class="secTitle">Заказы <span class="cnt" id="cntOrders">0</span></div>
+    <div id="ordersBulk"></div>
+    <div style="display:flex;gap:6px;margin-bottom:10px">
+      <button class="btn soft" style="padding:10px;font-size:12px" onclick="exportOrdersCSV()"><svg class="icn"><use href="#i-download"/></svg>Экспорт CSV</button>
+    </div>
     <div id="orderList"></div>
   </section>
   <section id="sec-bouquets" class="hidden">
     <div class="secTitle">Мои букеты <span class="cnt" id="cntBouq">0</span></div>
+    <div id="revBlock"></div>
     <div id="trendBlock"></div>
     <div id="bouqList"></div>
   </section>
@@ -159,6 +234,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
   </section>
   <section id="sec-reviews" class="hidden">
     <div class="secTitle">Отзывы <span class="cnt" id="cntRev">0</span></div>
+    <div id="qrBlock"></div>
     <div id="revList"></div>
   </section>
   <section id="sec-shop" class="hidden">
@@ -169,6 +245,8 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
       <input id="shPhone" placeholder="Телефон">
       <input id="shAddr" placeholder="Адрес (улица, дом)">
       <textarea id="shDesc" placeholder="Описание"></textarea>
+      <div class="fieldLbl"><svg class="icn"><use href="#i-clock"/></svg>Часы работы</div>
+      <div id="whBlock"></div>
       <div class="tgWrap">
         <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="lepestok_notify_bot" data-size="medium" data-radius="44" data-onauth="onTelegramAuth(user)" data-request-access="write"></script>
       </div>
@@ -202,21 +280,55 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
   </div>
 </div>
 <div id="toast" class="hidden"></div>
+<div id="loader" class="loader hidden"><div class="spin"></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const sb=supabase.createClient('https://dhwkkbtrhexywymegwoo.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRod2trYnRyaGV4eXd5bWVnd29vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMDUxODMsImV4cCI6MjEwMzc4MTE4M30.NAyY4dCeRRC2OznENuNCfvr-mKqACyMU61K-y-PkRIQ');
-let me=null,shop=null,myBouquets=[],myOrders=[],myReviews=[],myExtras=[],pickedPhoto=null,pickedLogo=null;
+let me=null,shop=null,myBouquets=[],myOrders=[],myReviews=[],myExtras=[],myReplies=[],pickedPhoto=null,pickedLogo=null;
 let trendTags=[];
+let device=localStorage.getItem('lep_device');
+if(!device){device='d'+Math.random().toString(36).slice(2)+Date.now();localStorage.setItem('lep_device',device);}
+
+// === УТИЛИТЫ ===
+const PHONE_REGEX=/^\+?[\d\s\-()]{10,18}$/;
+function validatePhone(p){if(!p)return true;return PHONE_REGEX.test(p.trim());}
 function $(id){return document.getElementById(id);}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function ic(n){return '<svg class="icn"><use href="#'+n+'"/></svg>';}
-function toast(m){const t=$('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('hidden'),2400);}
+function toast(m,icon){const t=$('toast');t.innerHTML=(icon?ic(icon):'')+esc(m);t.classList.remove('hidden');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('hidden'),2600);}
+function showLoader(){$('loader').classList.remove('hidden');}
+function hideLoader(){$('loader').classList.add('hidden');}
 function closeSheet(id){$(id).classList.add('hidden');}
 function whenRu(t){try{return new Date(t).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
 function statusRu(s){return({new:'новый',accepted:'принят',ready:'готов',delivered:'доставлен',cancelled:'отменён'})[s]||s;}
+function fmtPrice(p){return String(p||0).replace(/\B(?=(\d{3})+(?!\d))/g,' ')+' ₽';}
 
-// ===== АВТОТЕГИ =====
-// Матрица: ключевые слова → тег. Простой keyword-matching.
+// === ШАБЛОНЫ ОТВЕТОВ ===
+let quickReplies=JSON.parse(localStorage.getItem('lep_qr_'+(me?.id||'x'))||'null')||
+  ['Спасибо за отзыв!','Будем стараться для вас 🌸','Рады, что вам понравилось','Приходите ещё!','Извините за неудобства, исправимся'];
+function saveQR(){if(me)localStorage.setItem('lep_qr_'+me.id,JSON.stringify(quickReplies));}
+function renderQR(){
+  const box=$('qrBlock');if(!box)return;
+  box.innerHTML='<div class="qrBlock"><h4>'+ic('i-wand')+'Шаблоны ответов</h4>'+
+    '<div class="qrChips">'+quickReplies.map((q,i)=>'<span class="qrChip" data-qi="'+i+'">'+esc(q)+'<span class="rm" data-qr="'+i+'">×</span></span>').join('')+'</div>'+
+    '<div class="qrAdd"><input id="qrNew" placeholder="новая фраза-шаблон"><button onclick="addQR()">'+ic('i-plus')+'</button></div>'+
+    '<div style="font-size:10px;color:var(--gray);margin-top:6px">Клик по шаблону — вставится в поле ответа</div></div>';
+}
+function addQR(){
+  const inp=$('qrNew');const t=inp.value.trim();
+  if(!t)return;
+  if(quickReplies.includes(t)){toast('Такой уже есть','i-x');return;}
+  quickReplies.push(t);saveQR();renderQR();inp.value='';
+  toast('Шаблон добавлен','i-check');
+}
+function removeQR(i){quickReplies.splice(i,1);saveQR();renderQR();}
+function insertQR(txt){
+  const input=document.querySelector('.replyInput input');
+  if(!input)return;
+  input.value=txt;input.focus();
+}
+
+// === АВТОТЕГИ ===
 const TAG_KEYWORDS={
   'день рождения':['день рождения','др','именин','birthday','праздник'],
   'свидание':['свидание','романтический','любимой','любимому','валентин','14 февраля'],
@@ -234,7 +346,7 @@ const TAG_KEYWORDS={
   'жене':['жене','супруге'],
   'коллеге':['коллеге','сотруднику','офис'],
   'себе':['себе','для себя'],
-  'учителю':['учителю','учителю','педагогу'],
+  'учителю':['учителю','педагогу'],
   'бабушке':['бабушке','бабушка'],
   'розы':['роза','роз','розовый'],
   'пионы':['пион','пионов','пионовый'],
@@ -246,7 +358,6 @@ const TAG_KEYWORDS={
   'нежный':['нежный','нежная','воздушный','пастельный'],
   'ярко':['яркий','яркая','сочный','насыщенный']
 };
-
 function autoTagFromText(title,desc){
   const text=((title||'')+' '+(desc||'')).toLowerCase();
   const found=new Set();
@@ -258,7 +369,59 @@ function autoTagFromText(title,desc){
   return Array.from(found).slice(0,8);
 }
 
-// ===== АНАЛИТИКА ПОПУЛЯРНЫХ ТЕГОВ =====
+// === ЧАСЫ РАБОТЫ ===
+const DEFAULT_WH={
+  mon:{open:'09:00',close:'20:00',on:true},
+  tue:{open:'09:00',close:'20:00',on:true},
+  wed:{open:'09:00',close:'20:00',on:true},
+  thu:{open:'09:00',close:'20:00',on:true},
+  fri:{open:'09:00',close:'20:00',on:true},
+  sat:{open:'10:00',close:'18:00',on:true},
+  sun:{open:'10:00',close:'18:00',on:false}
+};
+const DAY_NAMES={mon:'Пн',tue:'Вт',wed:'Ср',thu:'Чт',fri:'Пт',sat:'Сб',sun:'Вс'};
+let workHours=DEFAULT_WH;
+
+function renderWH(){
+  const box=$('whBlock');if(!box)return;
+  box.innerHTML=Object.keys(DAY_NAMES).map(d=>{
+    const h=workHours[d]||DEFAULT_WH[d];
+    return '<div class="whRow"><span class="day">'+DAY_NAMES[d]+'</span>'+
+      '<input type="time" id="wh_o_'+d+'" value="'+(h.open||'09:00')+'">'+
+      '<span style="color:var(--gray)">–</span>'+
+      '<input type="time" id="wh_c_'+d+'" value="'+(h.close||'20:00')+'">'+
+      '<label><input type="checkbox" id="wh_on_'+d+'" '+(h.on!==false?'checked':'')+'> раб.</label></div>';
+  }).join('');
+}
+function collectWH(){
+  const wh={};
+  Object.keys(DAY_NAMES).forEach(d=>{
+    wh[d]={
+      open:$('wh_o_'+d).value||'09:00',
+      close:$('wh_c_'+d).value||'20:00',
+      on:$('wh_on_'+d).checked
+    };
+  });
+  return wh;
+}
+function isShopOpenNow(){
+  if(!shop||!shop.working_hours)return true; // по умолчанию открыто
+  const wh=shop.working_hours;
+  const now=new Date();
+  const dayIdx=now.getDay(); // 0=вс, 1=пн, ...
+  const dayKeys=['sun','mon','tue','wed','thu','fri','sat'];
+  const key=dayKeys[dayIdx];
+  const day=wh[key];
+  if(!day||!day.on)return false;
+  const cur=now.getHours()*60+now.getMinutes();
+  const [oh,om]=day.open.split(':').map(Number);
+  const [ch,cm]=day.close.split(':').map(Number);
+  const open=oh*60+om,close=ch*60+cm;
+  if(open<=close)return cur>=open&&cur<=close;
+  return cur>=open||cur<=close; // через полночь
+}
+
+// === АНАЛИТИКА ===
 async function fetchTrendTags(){
   try{
     const since=new Date(Date.now()-14*864e5).toISOString();
@@ -286,7 +449,6 @@ async function fetchTrendTags(){
   }catch(e){trendTags=[];}
   renderTrendBlock();
 }
-
 function renderTrendBlock(){
   const box=$('trendBlock');if(!box)return;
   if(!trendTags.length){
@@ -295,19 +457,54 @@ function renderTrendBlock(){
     return;
   }
   box.innerHTML='<div class="trendBlock"><h4>'+ic('i-trend')+'🔥 Что ищут сейчас</h4>'+
-    '<div class="trendSub">Самые частые теги за 14 дней. Добавь их к букетам — они чаще попадут в подбор «Собери мне».</div>'+
-    '<div class="trendChips">'+trendTags.map(t=>
-      '<span class="trendChip" onclick="addTrendTag(this,\''+esc(t.tag).replace(/'/g,"\\'")+'\')">'+
+    '<div class="trendSub">Самые частые теги за 14 дней. Нажми — добавится к новому букету.</div>'+
+    '<div class="trendChips" id="trendChipsWrap">'+trendTags.map((t,i)=>
+      '<span class="trendChip" data-trend="'+i+'">'+
       esc(t.tag)+'<span class="cnt">'+t.count+'</span></span>'
     ).join('')+'</div></div>';
 }
-
-function addTrendTag(el,t){
-  if(el.classList.contains('added'))return;
-  if(!pickedTags.includes(t))pickedTags.push(t);
-  el.classList.add('added');
-  renderTagChips();
-  toast('Тег «'+t+'» добавлен');
+function renderRevenue(){
+  const box=$('revBlock');if(!box)return;
+  if(!myOrders.length){box.innerHTML='';return;}
+  // Статистика за 14 дней
+  const days=14;
+  const now=new Date();
+  const daysArr=[];
+  for(let i=days-1;i>=0;i--){
+    const d=new Date(now.getTime()-i*864e5);
+    daysArr.push(d.toISOString().slice(0,10));
+  }
+  const byDay={};daysArr.forEach(d=>byDay[d]=0);
+  let totalRev=0,paidCount=0,topBq={};
+  myOrders.forEach(o=>{
+    if(o.status!=='delivered'&&o.status!=='ready')return;
+    const b=myBouquets.find(x=>x.id===o.bouquet_id);
+    if(!b)return;
+    const day=new Date(o.created_at).toISOString().slice(0,10);
+    if(byDay[day]!==undefined)byDay[day]+=b.price;
+    totalRev+=b.price;paidCount++;
+    topBq[b.id]=(topBq[b.id]||{title:b.title,rev:0,cnt:0});
+    topBq[b.id].rev+=b.price;topBq[b.id].cnt++;
+  });
+  const maxVal=Math.max(...Object.values(byDay),1);
+  const avg=paidCount?Math.round(totalRev/paidCount):0;
+  const topArr=Object.entries(topBq).sort((a,b)=>b[1].rev-a[1].rev).slice(0,3);
+  box.innerHTML='<div class="revCard"><h4>'+ic('i-trend')+'Выручка за 14 дней</h4>'+
+    '<div class="revStats">'+
+      '<div><div class="lbl">Итого</div><div class="val"><b>'+fmtPrice(totalRev)+'</b></div></div>'+
+      '<div><div class="lbl">Средний чек</div><div class="val">'+fmtPrice(avg)+'</div></div>'+
+      '<div><div class="lbl">Заказов</div><div class="val">'+paidCount+'</div></div>'+
+    '</div>'+
+    '<div class="revBars">'+daysArr.map(d=>{
+      const v=byDay[d];
+      const pct=Math.round(v*100/maxVal);
+      return '<div class="bar" style="height:'+Math.max(pct,3)+'%" data-val="'+fmtPrice(v)+'"></div>';
+    }).join('')+'</div>'+
+    '<div class="revDays">'+daysArr.map(d=>'<span>'+d.slice(8)+'</span>').join('')+'</div>'+
+    (topArr.length?'<div style="margin-top:10px"><div style="font-size:10px;color:var(--gray);font-weight:700;margin-bottom:4px">🏆 ТОП-3 букета</div>'+
+      topArr.map(([id,t])=>'<div class="topBqRow"><span class="n">'+esc(t.title)+' · '+t.cnt+' шт.</span><span class="r">'+fmtPrice(t.rev)+'</span></div>').join('')+
+    '</div>':'')+
+  '</div>';
 }
 
 const TAG_PRESETS=[
@@ -328,49 +525,80 @@ async function boot(){
   registerSW();
   initPushBtn();
   startOrderRealtime();
+  // Загружаем шаблоны с учётом me.id (после установки me)
+  quickReplies=JSON.parse(localStorage.getItem('lep_qr_'+me.id)||'null')||
+    ['Спасибо за отзыв!','Будем стараться для вас 🌸','Рады, что вам понравилось','Приходите ещё!','Извините за неудобства, исправимся'];
   await fetchTrendTags();
   await refresh();
 }
 async function doLogin(){
-  const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('pass').value});
-  if(error){$('loginErr').textContent='Неверный email или пароль';return;}
-  location.reload();
+  showLoader();
+  try{
+    const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('pass').value});
+    if(error){$('loginErr').textContent='Неверный email или пароль';return;}
+    location.reload();
+  }finally{hideLoader();}
 }
-async function logout(){await sb.auth.signOut();location.reload();}
+async function logout(){showLoader();await sb.auth.signOut();hideLoader();location.reload();}
 async function refresh(){
-  const sh=await sb.from('shops').select('*').eq('owner_id',me.id).maybeSingle();
-  shop=sh.data||null;
-  if(shop){
-    $('shopName').textContent=shop.name;
-    if(shop.logo_url)$('shopAva').innerHTML='<img src="'+shop.logo_url+'">';
-    $('shName').value=shop.name||'';$('shCity').value=shop.city||'Вуктыл';$('shPhone').value=shop.phone||'';$('shAddr').value=shop.address||'';$('shDesc').value=shop.description||'';
-    const ex=await sb.from('shop_extras').select('*').eq('shop_id',shop.id).order('created_at');
-    myExtras=ex.data||[];
-  }
-  const b=await sb.from('bouquets').select('*').eq('user_id',me.id).order('created_at',{ascending:false});
-  myBouquets=b.data||[];
-  const ids=myBouquets.map(x=>x.id);
-  if(ids.length){
-    const o=await sb.from('orders').select('*').in('bouquet_id',ids).order('created_at',{ascending:false});
-    myOrders=o.data||[];
-    const r=await sb.from('bouquet_comments').select('*').in('bouquet_id',ids).order('created_at',{ascending:false});
-    myReviews=r.data||[];
-  }else{myOrders=[];myReviews=[];}
-  const fresh=myOrders.filter(o=>o.status==='new').length;
-  $('cntOrders').textContent=myOrders.length;
-  $('cntBouq').textContent=myBouquets.length;
-  $('cntRev').textContent=myReviews.length;
-  if(fresh>0){$('nbOrders').classList.remove('hidden');$('nbOrders').textContent=fresh;}else{$('nbOrders').classList.add('hidden');}
-  renderOrders();renderBouquets();renderExtras();renderReviews();
+  showLoader();
+  try{
+    const [shRes,bRes]=await Promise.all([
+      sb.from('shops').select('*').eq('owner_id',me.id).maybeSingle(),
+      sb.from('bouquets').select('*').eq('user_id',me.id).order('created_at',{ascending:false})
+    ]);
+    shop=shRes.data||null;
+    if(shop){
+      $('shopName').textContent=shop.name;
+      if(shop.logo_url)$('shopAva').innerHTML='<img src="'+shop.logo_url+'">';
+      $('shName').value=shop.name||'';$('shCity').value=shop.city||'Вуктыл';$('shPhone').value=shop.phone||'';$('shAddr').value=shop.address||'';$('shDesc').value=shop.description||'';
+      workHours=shop.working_hours||DEFAULT_WH;
+      const exRes=await sb.from('shop_extras').select('*').eq('shop_id',shop.id).order('created_at');
+      myExtras=exRes.data||[];
+    }else{
+      workHours=DEFAULT_WH;
+    }
+    myBouquets=bRes.data||[];
+    renderWH();
+    const ids=myBouquets.map(x=>x.id);
+    if(ids.length){
+      const [oRes,rRes]=await Promise.all([
+        sb.from('orders').select('*').in('bouquet_id',ids).order('created_at',{ascending:false}),
+        sb.from('bouquet_comments').select('*').in('bouquet_id',ids).order('created_at',{ascending:false})
+      ]);
+      myOrders=oRes.data||[];
+      myReviews=rRes.data||[];
+      // Загружаем ответы на отзывы
+      const parentIds=myReviews.map(r=>r.id);
+      if(parentIds.length){
+        const rpRes=await sb.from('bouquet_comments').select('*').in('parent_id',parentIds);
+        myReplies=rpRes.data||[];
+      }else{myReplies=[];}
+    }else{myOrders=[];myReviews=[];myReplies=[];}
+    const fresh=myOrders.filter(o=>o.status==='new').length;
+    $('cntOrders').textContent=myOrders.length;
+    $('cntBouq').textContent=myBouquets.length;
+    $('cntRev').textContent=myReviews.length;
+    if(fresh>0){$('nbOrders').classList.remove('hidden');$('nbOrders').textContent=fresh;}else{$('nbOrders').classList.add('hidden');}
+    renderOrders();renderBouquets();renderExtras();renderReviews();renderRevenue();renderQR();
+  }finally{hideLoader();}
 }
 function showSec(s){
   ['orders','bouquets','extras','reviews','shop'].forEach(k=>$('sec-'+k).classList.toggle('hidden',k!==s));
   ['Orders','Bouquets','Extras','Reviews','Shop'].forEach(k=>$('nv'+k).classList.toggle('on',k.toLowerCase()===s));
   $('fabBouq').classList.toggle('hidden',s!=='bouquets');
-  if(s==='bouquets')renderTrendBlock();
+  if(s==='bouquets'){renderTrendBlock();renderRevenue();}
+  if(s==='reviews')renderQR();
 }
 function renderOrders(){
   const box=$('orderList');
+  const bulkBox=$('ordersBulk');
+  const fresh=myOrders.filter(o=>o.status==='new');
+  if(bulkBox){
+    bulkBox.innerHTML=fresh.length>1?'<div class="bulkBar"><span class="cnt">'+fresh.length+' новых</span>'+
+      '<button class="accept" onclick="bulkStatus(\'accepted\')">'+ic('i-check')+'Принять все</button>'+
+      '<button class="cancel" onclick="bulkStatus(\'cancelled\')">'+ic('i-x')+'Отклонить</button></div>':'';
+  }
   box.innerHTML=myOrders.length?myOrders.map(o=>{
     const b=myBouquets.find(x=>x.id===o.bouquet_id);
     const name=o.recipient_name||o.sender_name||'Клиент';
@@ -396,6 +624,7 @@ function openOrder(id){
     (o.note?'<div class="oLine">Комментарий: <i>'+esc(o.note)+'</i></div>':'')+
     exHtml+
     '<div class="oLine" style="margin-top:6px">Статус: <span class="stPill s-'+o.status+'">'+statusRu(o.status)+'</span></div>'+
+    (!isShopOpenNow()?'<div class="oLine" style="color:var(--red);margin-top:8px">⚠ Сейчас нерабочее время — клиент увидит это только утром</div>':'')+
     '<div class="rowBtns">'+
       (phone?'<button class="btn" onclick="call(\''+esc(phone)+'\')">'+ic('i-phone')+'Позвонить</button>':'')+
       (o.status==='new'?'<button class="btn green" onclick="setStatus('+o.id+',\'accepted\')">'+ic('i-check')+'Принять заказ</button>':'')+
@@ -408,10 +637,57 @@ function openOrder(id){
 }
 function call(p){window.location.href='tel:'+p.replace(/\D/g,'');}
 async function setStatus(id,st){
-  const res=await sb.from('orders').update({status:st}).eq('id',id).select();
-  if(res.error){toast('Ошибка: '+res.error.message);return;}
-  closeSheet('orderSheet');
-  await refresh();
+  showLoader();
+  try{
+    const res=await sb.from('orders').update({status:st}).eq('id',id).select();
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    toast('Статус обновлён','i-check');
+    closeSheet('orderSheet');
+    await refresh();
+  }finally{hideLoader();}
+}
+async function bulkStatus(st){
+  const fresh=myOrders.filter(o=>o.status==='new');
+  if(!fresh.length)return;
+  if(!confirm('Изменить статус '+fresh.length+' заказов на «'+statusRu(st)+'»?'))return;
+  showLoader();
+  try{
+    const ids=fresh.map(o=>o.id);
+    const res=await sb.from('orders').update({status:st}).in('id',ids);
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    toast('Обновлено '+ids.length+' заказов','i-check');
+    await refresh();
+  }finally{hideLoader();}
+}
+function exportOrdersCSV(){
+  if(!myOrders.length){toast('Нет заказов для экспорта','i-x');return;}
+  const rows=[['ID','Дата','Букет','Цена','Статус','Тип','Получатель','Телефон','Адрес','Заказчик','Комментарий']];
+  myOrders.forEach(o=>{
+    const b=myBouquets.find(x=>x.id===o.bouquet_id);
+    rows.push([
+      o.id,
+      new Date(o.created_at).toLocaleString('ru-RU'),
+      b?b.title:'—',
+      b?b.price:'',
+      statusRu(o.status),
+      o.kind==='delivery'?'доставка':'самовывоз',
+      o.recipient_name||'',
+      o.recipient_phone||'',
+      o.address||'',
+      o.sender_name||'',
+      (o.note||'').replace(/\n/g,' ')
+    ]);
+  });
+  const csv=rows.map(r=>r.map(c=>{
+    const s=String(c==null?'':c);
+    return s.includes(',')||s.includes('"')||s.includes('\n')?'"'+s.replace(/"/g,'""')+'"':s;
+  }).join(',')).join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='orders_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();URL.revokeObjectURL(url);
+  toast('CSV экспортирован','i-download');
 }
 function getTags(b){return Array.isArray(b.tags)?b.tags:(b.tags?String(b.tags).split(',').filter(Boolean):[]);}
 function renderBouquets(){
@@ -430,10 +706,10 @@ function renderTagChips(){
   row.innerHTML=all.map(t=>{
     const on=pickedTags.includes(t);
     const isCustom=!TAG_PRESETS.includes(t);
-    return '<button type="button" class="chip'+(on?' on':'')+'" onclick="toggleTag(this,\''+esc(t).replace(/'/g,"\\'")+'\')">'+esc(t)+(isCustom&&on?'<span class="x">×</span>':'')+'</button>';
+    return '<button type="button" class="chip'+(on?' on':'')+'" data-tag="'+esc(t)+'">'+esc(t)+(isCustom&&on?'<span class="x" data-tag-rm="'+esc(t)+'">×</span>':'')+'</button>';
   }).join('');
 }
-function toggleTag(el,t){
+function toggleTag(t){
   const i=pickedTags.indexOf(t);
   if(i>=0){pickedTags.splice(i,1);}
   else{pickedTags.push(t);}
@@ -451,13 +727,13 @@ function addCustomTag(){
 function runAutoTag(){
   const t=($('fTitle').value||'').trim();
   const d=($('fDesc').value||'').trim();
-  if(!t&&!d){toast('Сначала заполни название или описание');return;}
+  if(!t&&!d){toast('Сначала заполни название или описание','i-x');return;}
   const found=autoTagFromText(t,d);
-  if(!found.length){toast('Не нашёл подходящих тегов. Добавь вручную');return;}
+  if(!found.length){toast('Не нашёл подходящих тегов. Добавь вручную','i-wand');return;}
   let added=0;
   found.forEach(x=>{if(!pickedTags.includes(x)){pickedTags.push(x);added++;}});
   renderTagChips();
-  toast(added?'Добавлено '+added+' тег(ов)':'Все теги уже добавлены');
+  toast(added?'Добавлено '+added+' тег(ов)':'Все теги уже добавлены','i-wand');
 }
 function openAddBouquet(){
   pickedPhoto=null;pickedCat='';editingId=null;pickedTags=[];
@@ -465,7 +741,7 @@ function openAddBouquet(){
     '<input id="fTitle" placeholder="Название" oninput="onTitleDescChange()">'+
     '<input id="fPrice" type="number" placeholder="Цена в рублях">'+
     '<div class="fieldLbl">'+ic('i-tag')+'Категория</div>'+
-    '<div class="chips" id="fCatRow">'+['сборный','розы','тюльпаны','хризантемы','пионы','лилии','композиция'].map(c=>'<button type="button" class="chip" onclick="pickCat(this,\''+c+'\')">'+c+'</button>').join('')+'</div>'+
+    '<div class="chips" id="fCatRow">'+['сборный','розы','тюльпаны','хризантемы','пионы','лилии','композиция'].map(c=>'<button type="button" class="chip" data-cat="'+c+'">'+c+'</button>').join('')+'</div>'+
     '<div class="fieldLbl">'+ic('i-wand')+'Теги для «Собери мне» <span style="color:var(--gray);font-weight:400;font-size:10px">(выбери повод, кому и бюджет — AI подберёт этот букет)</span></div>'+
     '<div class="chips" id="fTagRow"></div>'+
     '<div class="tagInputRow"><input id="fNewTag" placeholder="свой тег (например: для мамы)" onkeypress="if(event.key===\'Enter\'){event.preventDefault();addCustomTag();}"><button type="button" onclick="addCustomTag()">'+ic('i-plus')+'</button></div>'+
@@ -480,17 +756,29 @@ function openAddBouquet(){
     '<button class="btn" id="bouqSaveBtn" onclick="submitBouquet()">Сохранить</button>'+
     '<button class="btn soft" style="margin-top:8px" onclick="closeSheet(\'bouqSheet\')">Закрыть</button>';
   renderTagChips();
+  // Делегирование для категорий
+  $('fCatRow').addEventListener('click',e=>{
+    const btn=e.target.closest('[data-cat]');
+    if(!btn)return;
+    pickedCat=btn.dataset.cat;
+    document.querySelectorAll('#fCatRow .chip').forEach(x=>x.classList.toggle('on',x.dataset.cat===pickedCat));
+  });
+  // Делегирование для тегов
+  $('fTagRow').addEventListener('click',e=>{
+    const rm=e.target.closest('[data-tag-rm]');
+    if(rm){e.stopPropagation();toggleTag(rm.dataset.tagRm);return;}
+    const btn=e.target.closest('[data-tag]');
+    if(btn)toggleTag(btn.dataset.tag);
+  });
   $('bouqSheet').classList.remove('hidden');
 }
 let pickedCat='';
-function pickCat(el,c){pickedCat=c;document.querySelectorAll('#fCatRow .chip').forEach(x=>x.classList.toggle('on',x.textContent===c));}
 let editingId=null;
 let autoTagTimer=null;
 function onTitleDescChange(){
-  // авто-анализ с задержкой 1.2с после последней правки
   clearTimeout(autoTagTimer);
   autoTagTimer=setTimeout(()=>{
-    if(editingId)return; // в режиме редактирования не мешаем
+    if(editingId)return;
     const t=($('fTitle').value||'').trim();
     const d=($('fDesc').value||'').trim();
     if(!t&&!d)return;
@@ -506,7 +794,9 @@ function openEditBouquet(id){
   editingId=id;
   $('fTitle').value=b.title;$('fPrice').value=b.price;$('fDesc').value=b.description||'';$('fStock').checked=b.in_stock;
   pickedCat=b.category||'';
-  document.querySelectorAll('#fCatRow .chip').forEach(x=>x.classList.toggle('on',x.textContent===pickedCat));
+  setTimeout(()=>{
+    document.querySelectorAll('#fCatRow .chip').forEach(x=>x.classList.toggle('on',x.dataset.cat===pickedCat));
+  },0);
   pickedTags=getTags(b);
   renderTagChips();
   if(b.photo_url){$('fPrev').src=b.photo_url;$('fPrevWrap').classList.remove('hidden');}
@@ -516,33 +806,45 @@ function openEditBouquet(id){
 function pickPhoto(inp){const f=inp.files[0];if(!f)return;pickedPhoto=f;$('fPhotoName').textContent='Файл: '+f.name.slice(0,20);const r=new FileReader();r.onload=e=>{$('fPrev').src=e.target.result;$('fPrevWrap').classList.remove('hidden');};r.readAsDataURL(f);}
 async function submitBouquet(){
   const t=$('fTitle').value.trim(),p=+$('fPrice').value;
-  if(!t||!p){toast('Заполни название и цену');return;}
-  let photo_url=null;
-  if(pickedPhoto){
-    const path=me.id+'/'+Date.now()+'.jpg';
-    const up=await sb.storage.from('bouquets').upload(path,pickedPhoto,{contentType:pickedPhoto.type});
-    if(up.error){toast('Фото: '+up.error.message);return;}
-    photo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
-  }
-  if(editingId){
-    const upd={title:t,price:p,description:$('fDesc').value.trim(),category:pickedCat,tags:pickedTags,in_stock:$('fStock').checked};
-    if(photo_url)upd.photo_url=photo_url;
-    const res=await sb.from('bouquets').update(upd).eq('id',editingId).eq('user_id',me.id);
-    if(res.error){toast('Ошибка: '+res.error.message);return;}
-    toast('Букет обновлён');
-  }else{
-    const res=await sb.from('bouquets').insert({title:t,price:p,description:$('fDesc').value.trim(),category:pickedCat,tags:pickedTags,photo_url,in_stock:$('fStock').checked,user_id:me.id});
-    if(res.error){toast('Ошибка: '+res.error.message);return;}
-    toast('Букет добавлен');
-  }
-  closeSheet('bouqSheet');
-  await refresh();
+  if(!t||!p){toast('Заполни название и цену','i-x');return;}
+  showLoader();
+  try{
+    let photo_url=null;
+    if(pickedPhoto){
+      const path=me.id+'/'+Date.now()+'.jpg';
+      const up=await sb.storage.from('bouquets').upload(path,pickedPhoto,{contentType:pickedPhoto.type});
+      if(up.error){toast('Фото: '+up.error.message,'i-x');return;}
+      photo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
+    }
+    if(editingId){
+      const upd={title:t,price:p,description:$('fDesc').value.trim(),category:pickedCat,tags:pickedTags,in_stock:$('fStock').checked};
+      if(photo_url)upd.photo_url=photo_url;
+      const res=await sb.from('bouquets').update(upd).eq('id',editingId).eq('user_id',me.id);
+      if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+      toast('Букет обновлён','i-check');
+    }else{
+      // Сначала создаём букет, потом сбрасываем is_day у других — чтобы не было race
+      const res=await sb.from('bouquets').insert({title:t,price:p,description:$('fDesc').value.trim(),category:pickedCat,tags:pickedTags,photo_url,in_stock:$('fStock').checked,user_id:me.id});
+      if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+      if($('fDay')&&$('fDay').checked){
+        await sb.from('bouquets').update({is_day:false}).eq('user_id',me.id).eq('is_day',true);
+        await sb.from('bouquets').update({is_day:true}).eq('id',res.data[0].id);
+      }
+      toast('Букет добавлен','i-check');
+    }
+    closeSheet('bouqSheet');
+    await refresh();
+  }finally{hideLoader();}
 }
 async function delBouquet(id){
   if(!confirm('Удалить букет?'))return;
-  const res=await sb.from('bouquets').delete().eq('id',id).eq('user_id',me.id);
-  if(res.error){toast('Ошибка: '+res.error.message);return;}
-  await refresh();
+  showLoader();
+  try{
+    const res=await sb.from('bouquets').delete().eq('id',id).eq('user_id',me.id);
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    toast('Букет удалён','i-check');
+    await refresh();
+  }finally{hideLoader();}
 }
 function renderExtras(){
   const box=$('extraList');
@@ -551,49 +853,131 @@ function renderExtras(){
   ).join(''):'<div class="empty">'+icBig('i-star')+'Допов пока нет.<br>Добавь первый — например «Открытка»</div>';
 }
 async function addExtra(){
-  if(!shop){toast('Сначала заполни магазин');return;}
+  if(!shop){toast('Сначала заполни магазин','i-x');return;}
   const n=$('exName').value.trim(),p=+$('exPrice').value||0;
-  if(!n){toast('Введи название допа');return;}
-  const res=await sb.from('shop_extras').insert({shop_id:shop.id,name:n,price:p});
-  if(res.error){toast('Ошибка: '+res.error.message);return;}
-  $('exName').value='';$('exPrice').value='';
-  await refresh();
-  toast('Доп добавлен');
+  if(!n){toast('Введи название допа','i-x');return;}
+  showLoader();
+  try{
+    const res=await sb.from('shop_extras').insert({shop_id:shop.id,name:n,price:p});
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    $('exName').value='';$('exPrice').value='';
+    toast('Доп добавлен','i-check');
+    await refresh();
+  }finally{hideLoader();}
 }
 async function delExtra(id){
-  const res=await sb.from('shop_extras').delete().eq('id',id);
-  if(res.error){toast('Ошибка: '+res.error.message);return;}
-  await refresh();
+  showLoader();
+  try{
+    const res=await sb.from('shop_extras').delete().eq('id',id);
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    toast('Доп удалён','i-check');
+    await refresh();
+  }finally{hideLoader();}
 }
 function renderReviews(){
   const box=$('revList');
   const ids=myBouquets.map(b=>b.id);
-  const list=myReviews.filter(c=>ids.includes(c.bouquet_id));
+  const list=myReviews.filter(c=>ids.includes(c.bouquet_id)&&!c.parent_id);
   box.innerHTML=list.length?list.map(c=>{
     const b=myBouquets.find(x=>x.id===c.bouquet_id);
-    return '<div class="card"><div style="font-size:11px;color:var(--gray)">'+whenRu(c.created_at)+' · <b>'+esc(c.user_nick||'аноним')+'</b>'+(c.rating?' · '+c.rating+'/5':'')+'</div>'+
-      (b?'<div style="font-size:11px;color:var(--coral);margin-top:2px">к букету: '+esc(b.title)+'</div>':'')+
-      '<div style="font-size:13.5px;margin-top:6px;line-height:1.5">'+esc(c.text)+'</div></div>';
+    const replies=myReplies.filter(r=>r.parent_id===c.id).sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
+    return '<div class="revRow" data-review="'+c.id+'">'+
+      '<div class="revHead">'+
+        '<div class="revAva">'+esc((c.user_nick||'?').slice(0,1).toUpperCase())+'</div>'+
+        '<div style="flex:1;min-width:0"><div class="revNick">'+esc(c.user_nick||'аноним')+'</div><div class="revDate">'+whenRu(c.created_at)+'</div></div>'+
+      '</div>'+
+      (b?'<div class="revBq">→ '+esc(b.title)+'</div>':'')+
+      (c.rating?'<div class="revStars">'+[1,2,3,4,5].map(n=>'<svg class="icn" style="color:'+(n<=c.rating?'var(--yel)':'rgba(148,163,184,.35)')+'"><use href="#i-star"/></svg>').join('')+'</div>':'')+
+      '<div class="revText">'+esc(c.text)+'</div>'+
+      (replies.length?'<div class="replyChain">'+replies.map(r=>'<div class="replyItem"><div class="rpNick">'+(r.user_id===me.id?'Ты':esc(r.user_nick||'аноним'))+'</div>'+esc(r.text)+'</div>').join('')+'</div>':'')+
+      '<div class="replyInput"><input placeholder="Твой ответ..." maxlength="500" data-reply-for="'+c.id+'"><button onclick="sendReply('+c.id+')">'+ic('i-send')+'</button></div>'+
+    '</div>';
   }).join(''):'<div class="empty">'+icBig('i-comment')+'Отзывов пока нет</div>';
+  // Делегирование для шаблонов
+  box.addEventListener('click',e=>{
+    const rm=e.target.closest('[data-qr]');
+    if(rm){e.stopPropagation();removeQR(+rm.dataset.qr);return;}
+    const qr=e.target.closest('.qrChip');
+    if(qr&&!e.target.closest('.rm')){
+      const idx=+qr.dataset.qi;
+      if(quickReplies[idx])insertQR(quickReplies[idx]);
+    }
+  });
+  // Делегирование для тренд-тегов
+  const tw=$('trendChipsWrap');
+  if(tw){
+    tw.onclick=e=>{
+      const chip=e.target.closest('[data-trend]');
+      if(!chip)return;
+      const idx=+chip.dataset.trend;
+      const t=trendTags[idx];
+      if(!t)return;
+      if(pickedTags.includes(t.tag)){toast('Тег уже добавлен','i-x');return;}
+      pickedTags.push(t.tag);
+      chip.classList.add('added');
+      renderTagChips();
+      toast('Тег «'+t.tag+'» добавлен','i-check');
+    };
+  }
+}
+async function sendReply(reviewId){
+  const input=document.querySelector('[data-reply-for="'+reviewId+'"]');
+  if(!input)return;
+  const t=input.value.trim();
+  if(!t){toast('Напиши ответ','i-x');return;}
+  if(!me)return;
+  showLoader();
+  try{
+    const {error}=await sb.from('bouquet_comments').insert({
+      bouquet_id:myReviews.find(r=>r.id===reviewId)?.bouquet_id,
+      text:t,
+      user_id:me.id,
+      user_nick:'Магазин',
+      parent_id:reviewId,
+      status:'approved'
+    });
+    if(error){toast('Ошибка: '+error.message,'i-x');return;}
+    toast('Ответ отправлен','i-check');
+    await refresh();
+  }finally{hideLoader();}
 }
 function pickLogo(inp){const f=inp.files[0];if(!f)return;pickedLogo=f;const r=new FileReader();r.onload=e=>{$('lPrev').src=e.target.result;$('lPrevWrap').classList.remove('hidden');};r.readAsDataURL(f);}
 async function saveShop(){
-  if(!shop){toast('Магазин не найден');return;}
-  let logo_url=shop.logo_url;
+  const phone=$('shPhone').value.trim();
+  if(phone&&!validatePhone(phone)){toast('Некорректный телефон','i-x');return;}
+  const data={
+    name:$('shName').value.trim(),
+    city:($('shCity').value.trim()||'Вуктыл'),
+    phone:phone,
+    address:$('shAddr').value.trim(),
+    description:$('shDesc').value.trim(),
+    working_hours:collectWH(),
+    owner_id:me.id
+  };
   if(pickedLogo){
     const path=me.id+'/logo_'+Date.now()+'.jpg';
     const up=await sb.storage.from('bouquets').upload(path,pickedLogo,{contentType:pickedLogo.type});
-    if(up.error){toast('Лого: '+up.error.message);return;}
-    logo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
+    if(up.error){toast('Лого: '+up.error.message,'i-x');return;}
+    data.logo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
+  }else if(shop){
+    data.logo_url=shop.logo_url;
   }
-  const res=await sb.from('shops').update({name:$('shName').value.trim(),city:($('shCity').value.trim()||'Вуктыл'),phone:$('shPhone').value.trim(),address:$('shAddr').value.trim(),description:$('shDesc').value.trim(),logo_url}).eq('id',shop.id);
-  if(res.error){toast('Ошибка: '+res.error.message);return;}
-  pickedLogo=null;
-  await refresh();
-  toast('Магазин сохранён');
+  showLoader();
+  try{
+    let res;
+    if(shop){
+      res=await sb.from('shops').update(data).eq('id',shop.id);
+    }else{
+      // UPSERT — создаём магазин, если его нет
+      res=await sb.from('shops').upsert(data,{onConflict:'owner_id'}).select();
+    }
+    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
+    pickedLogo=null;
+    toast('Магазин сохранён','i-check');
+    await refresh();
+  }finally{hideLoader();}
 }
-/* ---------- Push для салона ---------- */
-const VAPID_PUBLIC='BEQrKQaG8qpNHp5p_45b_C9aEcwUSV3hltk6ApRaKQMEds4vNnEbu9hGDK5ZRjkNmVJ7WHmBvhLKfk9YQ856ijo'; // тот же, что в index.html
+const VAPID_PUBLIC='BEQrKQaG8qpNHp5p_45b_C9aEcwUSV3hltk6ApRaKQMEds4vNnEbu9hGDK5ZRjkNmVJ7WHmBvhLKfk9YQ856ijo';
 function urlBase64ToUint8Array(b64){
   const padding='='.repeat((4-b64.length%4)%4);
   const base64=(b64+padding).replace(/-/g,'+').replace(/_/g,'/');
@@ -603,14 +987,14 @@ function urlBase64ToUint8Array(b64){
   return out;
 }
 async function subscribePush(){
-  if(!('serviceWorker' in navigator)||!('PushManager' in window)){toast('Уведомления не поддерживаются');return false;}
+  if(!('serviceWorker' in navigator)||!('PushManager' in window)){toast('Уведомления не поддерживаются','i-x');return false;}
   const reg=await navigator.serviceWorker.ready;
   const perm=await Notification.requestPermission();
-  if(perm!=='granted'){toast('Разреши уведомления в настройках браузера');return false;}
+  if(perm!=='granted'){toast('Разреши уведомления в настройках браузера','i-bell');return false;}
   let sub=await reg.pushManager.getSubscription();
   if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC)});
   const j=sub.toJSON();
-  await sb.from('push_subscriptions').upsert({user_id:me.id,device:localStorage.getItem('lep_device')||'seller',endpoint:j.endpoint,keys_p256dh:j.keys.p256dh,keys_auth:j.keys.auth,role:'florist'},{onConflict:'endpoint'});
+  await sb.from('push_subscriptions').upsert({user_id:me.id,device:device,endpoint:j.endpoint,keys_p256dh:j.keys.p256dh,keys_auth:j.keys.auth,role:'florist'},{onConflict:'endpoint'});
   return true;
 }
 async function isPushSubscribed(){
@@ -622,34 +1006,49 @@ async function togglePush(){
   const sub=await isPushSubscribed();
   if(sub){
     if(!confirm('Отключить уведомления о новых заказах?'))return;
-    const reg=await navigator.serviceWorker.ready;
-    const s=await reg.pushManager.getSubscription();
-    if(s)await s.unsubscribe();
-    toast('Уведомления отключены');
-    $('pushBtn').classList.remove('on');
-    $('pushBtnTxt').textContent='включить уведомления о новых заказах';
+    showLoader();
+    try{
+      const reg=await navigator.serviceWorker.ready;
+      const s=await reg.pushManager.getSubscription();
+      if(s)await s.unsubscribe();
+      await sb.from('push_subscriptions').delete().eq('device',device);
+      toast('Уведомления отключены','i-bell');
+      $('pushBtn').classList.remove('on');
+      $('pushBtnTxt').textContent='включить уведомления о новых заказах';
+    }finally{hideLoader();}
   }else{
-    const ok=await subscribePush();
-    if(ok){toast('Уведомления включены! Заказы долетят даже при закрытом сайте');$('pushBtn').classList.add('on');$('pushBtnTxt').textContent='уведомления включены';}
+    showLoader();
+    try{
+      const ok=await subscribePush();
+      if(ok){toast('Уведомления включены!','i-bell');$('pushBtn').classList.add('on');$('pushBtnTxt').textContent='уведомления включены';}
+    }finally{hideLoader();}
   }
 }
 async function initPushBtn(){
   if(await isPushSubscribed()){$('pushBtn').classList.add('on');$('pushBtnTxt').textContent='уведомления включены';}
 }
-/* ---------- Realtime: мгновенные новые заказы ---------- */
+// Realtime: мгновенные новые заказы — с защитой от race condition
+let rtChannel=null;
 function startOrderRealtime(){
-  sb.channel('florist-orders-'+me.id)
+  if(rtChannel){try{sb.removeChannel(rtChannel);}catch(e){}}
+  rtChannel=sb.channel('florist-orders-'+me.id)
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'orders'},async payload=>{
       const o=payload.new;
       if(!o||!o.bouquet_id)return;
-      if(!myBouquets.some(b=>b.id===o.bouquet_id))return;
+      // FIX race: загружаем актуальный список букетов, а не полагаемся на кэш
+      let owns=false;
+      try{
+        const {data:bk}=await sb.from('bouquets').select('id').eq('id',o.bouquet_id).eq('user_id',me.id).maybeSingle();
+        owns=!!bk;
+      }catch(e){owns=false;}
+      if(!owns)return;
       toast('🌸 Новый заказ!','i-bell');
       try{
         const ctx=new (window.AudioContext||window.webkitAudioContext)();
         const osc=ctx.createOscillator();const g=ctx.createGain();
         osc.connect(g);g.connect(ctx.destination);
         osc.frequency.value=880;g.gain.value=.15;
-        osc.start();setTimeout(()=>{osc.stop();ctx.close();},400);
+        osc.start();setTimeout(()=>{try{osc.stop();ctx.close();}catch(e){}},400);
       }catch(e){}
       document.title='🌸 Новый заказ! — Лепесток';
       setTimeout(()=>{document.title='Лепесток · кабинет продавца';},6000);
@@ -657,17 +1056,17 @@ function startOrderRealtime(){
     })
     .subscribe();
 }
-/* ---------- Service Worker (тот же, что в index) ---------- */
 function registerSW(){
   if(!('serviceWorker' in navigator))return;
   navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
-/* ---------- автопривязка Telegram (Login Widget) ---------- */
 window.onTelegramAuth=function(user){
   if(!me||!user||!user.id)return;
+  showLoader();
   sb.from('profiles').update({telegram_chat_id:String(user.id)}).eq('id',me.id).then(({error})=>{
-    if(error){toast('Не удалось привязать Telegram');return;}
-    toast('Telegram привязан! Заказы будут приходить тебе 🌸');
+    hideLoader();
+    if(error){toast('Не удалось привязать Telegram','i-x');return;}
+    toast('Telegram привязан! 🌸','i-check');
   });
 };
 boot();
