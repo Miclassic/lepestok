@@ -105,17 +105,16 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 .pushBtn{margin-top:10px;background:var(--bg);border:2px dashed rgba(255,107,107,.4);border-radius:999px;padding:11px;font-weight:700;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;color:var(--coral);width:100%}
 .pushBtn.on{background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(16,185,129,.15));border-style:solid;border-color:rgba(16,185,129,.3);color:var(--grn)}
 .pushBtn .icn{width:15px;height:15px}
-.tgWrap{display:flex;justify-content:center;margin:8px 0 10px}
+.tgWrap{display:flex;justify-content:center;margin:8px 0 6px;min-height:44px}
 .tgWrap iframe{border-radius:999px!important;overflow:hidden!important;border:none!important;box-shadow:0 6px 18px rgba(51,153,204,.35)}
+.tgLinkBtn{background:none;border:none;color:var(--coral);font-weight:700;font-size:10.5px;cursor:pointer;margin-top:4px;text-decoration:underline;padding:2px}
 #toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(30,41,59,.95);color:#F1F5F9;border:2px solid rgba(255,107,107,.4);border-radius:16px;box-shadow:0 12px 48px rgba(255,107,107,.3);font-weight:700;font-size:13px;padding:12px 20px;text-align:center;max-width:82vw;z-index:99}
 #toast .icn{width:15px;height:15px;margin-right:6px;vertical-align:-2px;color:var(--pink)}
 #toast:not(.hidden){animation:toastIn .3s ease}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,-50%) scale(.85)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
-/* Loader */
 .loader{position:fixed;inset:0;z-index:200;background:rgba(255,255,255,.7);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;pointer-events:all}
 .loader .spin{width:42px;height:42px;border:3px solid rgba(255,107,107,.2);border-top-color:var(--coral);border-radius:50%;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-/* Revenue chart */
 .revCard{background:linear-gradient(120deg,#FFF3F1 0%,#FFECEF 100%);border-radius:18px;padding:12px;margin-bottom:10px;box-shadow:var(--shadow);border:1.5px dashed rgba(255,107,107,.35)}
 .revCard h4{font-size:12.5px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:6px;color:var(--grn)}
 .revCard h4 .icn{width:14px;height:14px}
@@ -135,7 +134,6 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 .topBqRow:last-child{border:none}
 .topBqRow .n{font-weight:700;color:var(--ink);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .topBqRow .r{font-weight:800;color:var(--grn);flex:none}
-/* Review reply */
 .revRow{background:var(--card);border-radius:16px;padding:12px;box-shadow:var(--shadow);margin-bottom:8px}
 .revHead{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 .revAva{width:32px;height:32px;border-radius:50%;background:var(--gradient);color:#fff;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none}
@@ -152,7 +150,6 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 .replyInput input{margin:0;flex:1;padding:9px 12px;font-size:12px}
 .replyInput button{width:42px;flex:none;border:none;background:var(--gradient);color:#fff;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .replyInput button .icn{width:14px;height:14px}
-/* Quick replies */
 .qrBlock{background:var(--card);border-radius:16px;padding:10px;margin-bottom:10px;box-shadow:var(--shadow)}
 .qrBlock h4{font-size:11px;font-weight:800;margin-bottom:6px;color:var(--coral);display:flex;align-items:center;gap:5px}
 .qrChips{display:flex;flex-wrap:wrap;gap:5px}
@@ -162,7 +159,6 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 .qrAdd input{margin:0;flex:1;padding:8px 10px;font-size:11px}
 .qrAdd button{width:36px;flex:none;border:none;background:var(--gradient);color:#fff;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .qrAdd button .icn{width:13px;height:13px}
-/* Working hours */
 .whRow{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px}
 .whRow .day{width:70px;font-weight:700}
 .whRow input[type=time]{padding:6px;font-size:11px;margin:0}
@@ -175,6 +171,8 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 .bulkBar .icn{width:12px;height:12px}
 .bulkBar .accept{background:linear-gradient(135deg,#10B981,#059669);color:#fff}
 .bulkBar .cancel{background:#FFF1F0;color:var(--red)}
+.tgReasons{font-size:12px;color:var(--gray);line-height:1.6;margin:8px 0;padding-left:18px}
+.tgReasons li{margin-bottom:4px}
 </style>
 </head>
 <body>
@@ -201,6 +199,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></g></symbol>
 <symbol id="i-send" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 20l18-8L3 4v6l12 2-12 2z"/></g></symbol>
 <symbol id="i-heart" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21s-7-4.5-9.5-9C1 9 2.5 5.5 6 5.5c2 0 3.5 1 4 1.5s2-1.5 4-1.5c3.5 0 5 3.5 3.5 6.5-2.5 4.5-9.5 9-9.5 9z"/></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 12h7M9 16h7"/></g></symbol>
 </svg>
 <div class="top">
   <div class="topIn">
@@ -247,10 +246,9 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
       <textarea id="shDesc" placeholder="Описание"></textarea>
       <div class="fieldLbl"><svg class="icn"><use href="#i-clock"/></svg>Часы работы</div>
       <div id="whBlock"></div>
-      <div class="tgWrap">
-        <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="lepestok_notify_bot" data-size="medium" data-radius="44" data-onauth="onTelegramAuth(user)" data-request-access="write"></script>
-      </div>
-      <div style="text-align:center;font-size:10.5px;color:var(--gray);margin-bottom:8px">нажми и подтверди в Telegram — заказы будут приходить тебе автоматически</div>
+      <div class="tgWrap"><div id="tgBox"></div></div>
+      <div id="tgStatus" style="text-align:center;font-size:10.5px;color:var(--gray);margin-bottom:6px"></div>
+      <div style="text-align:center;font-size:10.5px;color:var(--gray);margin-bottom:8px">нажми и подтверди в Telegram — заказы будут приходить тебе автоматически<br><button type="button" class="tgLinkBtn" onclick="openTgSheet()">кнопка не появилась? привязать вручную</button></div>
       <button class="btn soft" onclick="document.getElementById('shLogo').click()"><svg class="icn"><use href="#i-camera"/></svg>Логотип</button>
       <input type="file" id="shLogo" accept="image/*" style="display:none" onchange="pickLogo(this)">
       <div id="lPrevWrap" class="hidden" style="margin:8px 0"><img id="lPrev" style="width:64px;height:64px;object-fit:cover;border-radius:50%;box-shadow:var(--shadow)"></div>
@@ -270,6 +268,23 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 </nav>
 <div id="orderSheet" class="sheet hidden" onclick="if(event.target.id==='orderSheet')closeSheet('orderSheet')"><div class="sheetIn" id="orderBody"></div></div>
 <div id="bouqSheet" class="sheet hidden" onclick="if(event.target.id==='bouqSheet')closeSheet('bouqSheet')"><div class="sheetIn" id="bouqBody"></div></div>
+<div id="tgSheet" class="sheet hidden" onclick="if(event.target.id==='tgSheet')closeSheet('tgSheet')">
+  <div class="sheetIn">
+    <h3>Привязка Telegram</h3>
+    <div class="oLine">Кнопка «Войти через Telegram» не отрисовалась. Частые причины:</div>
+    <ul class="tgReasons">
+      <li>сайт открыт по <b>HTTP</b> — виджет работает только по <b>HTTPS</b>;</li>
+      <li>домен сайта не добавлен боту в BotFather (команда <b>/setdomain</b> у @BotFather для @lepestok_notify_bot);</li>
+      <li>нет доступа к telegram.org (сеть/блокировщик).</li>
+    </ul>
+    <div class="oLine">Можно привязать напрямую: открой бота и напиши ему — уведомления о заказах придут в чат.</div>
+    <div class="rowBtns">
+      <button class="btn" onclick="window.open('https://t.me/lepestok_notify_bot','_blank')"><svg class="icn"><use href="#i-send"/></svg>Открыть бота в Telegram</button>
+      <button class="btn soft" onclick="retryTgWidget()"><svg class="icn"><use href="#i-back"/></svg>Попробовать загрузить кнопку ещё раз</button>
+      <button class="btn soft" onclick="closeSheet('tgSheet')">Закрыть</button>
+    </div>
+  </div>
+</div>
 <div id="loginBox" class="sheet" style="align-items:center;background:var(--bg)">
   <div class="sheetIn" style="border-radius:24px;max-width:420px;margin:0 16px">
     <h3>Вход для продавца</h3>
@@ -284,12 +299,12 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const sb=supabase.createClient('https://dhwkkbtrhexywymegwoo.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRod2trYnRyaGV4eXd5bWVnd29vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMDUxODMsImV4cCI6MjEwMzc4MTE4M30.NAyY4dCeRRC2OznENuNCfvr-mKqACyMU61K-y-PkRIQ');
-let me=null,shop=null,myBouquets=[],myOrders=[],myReviews=[],myExtras=[],myReplies=[],pickedPhoto=null,pickedLogo=null;
+const TG_BOT='lepestok_notify_bot';
+let me=null,shop=null,myBouquets=[],myOrders=[],myReviews=[],myExtras=[],myReplies=[],pickedPhoto=null,pickedLogo=null,myTgChat=null;
 let trendTags=[];
 let device=localStorage.getItem('lep_device');
 if(!device){device='d'+Math.random().toString(36).slice(2)+Date.now();localStorage.setItem('lep_device',device);}
 
-// === УТИЛИТЫ ===
 const PHONE_REGEX=/^\+?[\d\s\-()]{10,18}$/;
 function validatePhone(p){if(!p)return true;return PHONE_REGEX.test(p.trim());}
 function $(id){return document.getElementById(id);}
@@ -303,9 +318,62 @@ function whenRu(t){try{return new Date(t).toLocaleString('ru-RU',{day:'2-digit',
 function statusRu(s){return({new:'новый',accepted:'принят',ready:'готов',delivered:'доставлен',cancelled:'отменён'})[s]||s;}
 function fmtPrice(p){return String(p||0).replace(/\B(?=(\d{3})+(?!\d))/g,' ')+' ₽';}
 
-// === ШАБЛОНЫ ОТВЕТОВ ===
-let quickReplies=JSON.parse(localStorage.getItem('lep_qr_'+(me?.id||'x'))||'null')||
-  ['Спасибо за отзыв!','Будем стараться для вас 🌸','Рады, что вам понравилось','Приходите ещё!','Извините за неудобства, исправимся'];
+/* ---------- TELEGRAM WIDGET: динамическая загрузка + watchdog + fallback ---------- */
+let tgWatchdog=null;
+function loadTelegramWidget(){
+  const box=$('tgBox');if(!box)return;
+  box.innerHTML=''; // убираем прошлые iframe/скрипты
+  const s=document.createElement('script');
+  s.src='https://telegram.org/js/telegram-widget.js?22';
+  s.async=true;
+  s.setAttribute('data-telegram-login',TG_BOT);
+  s.setAttribute('data-size','medium');
+  s.setAttribute('data-radius','44');
+  s.setAttribute('data-onauth','onTelegramAuth(user)');
+  s.setAttribute('data-request-access','write');
+  box.appendChild(s);
+  clearTimeout(tgWatchdog);
+  tgWatchdog=setTimeout(()=>{
+    if(!box.querySelector('iframe'))tgWidgetFailed();
+  },7000);
+}
+function ensureTgWidget(){
+  const box=$('tgBox');
+  if(box&&!box.querySelector('iframe'))loadTelegramWidget();
+}
+function tgWidgetFailed(){
+  const box=$('tgBox');
+  if(box&&!box.querySelector('iframe')){
+    box.innerHTML='<button type="button" class="btn" style="max-width:250px;margin:0 auto" onclick="window.open(\'https://t.me/'+TG_BOT+'\',\'_blank\')">'+ic('i-send')+'Открыть бота в Telegram</button>';
+  }
+  toast('Кнопка Telegram не загрузилась — детали по ссылке ниже','i-bell');
+}
+function retryTgWidget(){closeSheet('tgSheet');loadTelegramWidget();}
+function openTgSheet(){$('tgSheet').classList.remove('hidden');}
+function renderTgStatus(){
+  const el=$('tgStatus');if(!el)return;
+  el.innerHTML=myTgChat
+    ?'<span style="color:var(--grn);font-weight:700">✓ Telegram привязан — уведомления приходят в бот</span>'
+    :'<span style="opacity:.8">Telegram пока не привязан</span>';
+}
+window.onTelegramAuth=function(user){
+  if(!me||!user||!user.id)return;
+  showLoader();
+  sb.from('profiles').update({telegram_chat_id:String(user.id)}).eq('id',me.id).then(({error})=>{
+    hideLoader();
+    if(error){toast('Не удалось привязать Telegram','i-x');return;}
+    myTgChat=String(user.id);
+    renderTgStatus();
+    toast('Telegram привязан! Заказы будут приходить тебе 🌸','i-check');
+  });
+};
+
+/* ---------- ШАБЛОНЫ ОТВЕТОВ ---------- */
+let quickReplies=['Спасибо за отзыв!','Будем стараться для вас 🌸','Рады, что вам понравилось','Приходите ещё!','Извините за неудобства, исправимся'];
+function loadQR(){
+  const saved=localStorage.getItem('lep_qr_'+(me?me.id:'x'));
+  if(saved){try{quickReplies=JSON.parse(saved);}catch(e){}}
+}
 function saveQR(){if(me)localStorage.setItem('lep_qr_'+me.id,JSON.stringify(quickReplies));}
 function renderQR(){
   const box=$('qrBlock');if(!box)return;
@@ -328,7 +396,7 @@ function insertQR(txt){
   input.value=txt;input.focus();
 }
 
-// === АВТОТЕГИ ===
+/* ---------- АВТОТЕГИ ---------- */
 const TAG_KEYWORDS={
   'день рождения':['день рождения','др','именин','birthday','праздник'],
   'свидание':['свидание','романтический','любимой','любимому','валентин','14 февраля'],
@@ -369,7 +437,7 @@ function autoTagFromText(title,desc){
   return Array.from(found).slice(0,8);
 }
 
-// === ЧАСЫ РАБОТЫ ===
+/* ---------- ЧАСЫ РАБОТЫ ---------- */
 const DEFAULT_WH={
   mon:{open:'09:00',close:'20:00',on:true},
   tue:{open:'09:00',close:'20:00',on:true},
@@ -381,7 +449,6 @@ const DEFAULT_WH={
 };
 const DAY_NAMES={mon:'Пн',tue:'Вт',wed:'Ср',thu:'Чт',fri:'Пт',sat:'Сб',sun:'Вс'};
 let workHours=DEFAULT_WH;
-
 function renderWH(){
   const box=$('whBlock');if(!box)return;
   box.innerHTML=Object.keys(DAY_NAMES).map(d=>{
@@ -396,39 +463,30 @@ function renderWH(){
 function collectWH(){
   const wh={};
   Object.keys(DAY_NAMES).forEach(d=>{
-    wh[d]={
-      open:$('wh_o_'+d).value||'09:00',
-      close:$('wh_c_'+d).value||'20:00',
-      on:$('wh_on_'+d).checked
-    };
+    wh[d]={open:$('wh_o_'+d).value||'09:00',close:$('wh_c_'+d).value||'20:00',on:$('wh_on_'+d).checked};
   });
   return wh;
 }
 function isShopOpenNow(){
-  if(!shop||!shop.working_hours)return true; // по умолчанию открыто
+  if(!shop||!shop.working_hours)return true;
   const wh=shop.working_hours;
   const now=new Date();
-  const dayIdx=now.getDay(); // 0=вс, 1=пн, ...
   const dayKeys=['sun','mon','tue','wed','thu','fri','sat'];
-  const key=dayKeys[dayIdx];
-  const day=wh[key];
+  const day=wh[dayKeys[now.getDay()]];
   if(!day||!day.on)return false;
   const cur=now.getHours()*60+now.getMinutes();
   const [oh,om]=day.open.split(':').map(Number);
   const [ch,cm]=day.close.split(':').map(Number);
   const open=oh*60+om,close=ch*60+cm;
   if(open<=close)return cur>=open&&cur<=close;
-  return cur>=open||cur<=close; // через полночь
+  return cur>=open||cur<=close;
 }
 
-// === АНАЛИТИКА ===
+/* ---------- АНАЛИТИКА ---------- */
 async function fetchTrendTags(){
   try{
     const since=new Date(Date.now()-14*864e5).toISOString();
-    const {data}=await sb.from('events')
-      .select('metadata')
-      .in('name',['view','order'])
-      .gte('created_at',since);
+    const {data}=await sb.from('events').select('metadata').in('name',['view','order']).gte('created_at',since);
     const counts={};
     (data||[]).forEach(e=>{
       const m=e.metadata||{};
@@ -442,10 +500,7 @@ async function fetchTrendTags(){
         });
       }
     });
-    trendTags=Object.entries(counts)
-      .sort((a,b)=>b[1]-a[1])
-      .slice(0,12)
-      .map(([tag,count])=>({tag,count}));
+    trendTags=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,12).map(([tag,count])=>({tag,count}));
   }catch(e){trendTags=[];}
   renderTrendBlock();
 }
@@ -459,21 +514,15 @@ function renderTrendBlock(){
   box.innerHTML='<div class="trendBlock"><h4>'+ic('i-trend')+'🔥 Что ищут сейчас</h4>'+
     '<div class="trendSub">Самые частые теги за 14 дней. Нажми — добавится к новому букету.</div>'+
     '<div class="trendChips" id="trendChipsWrap">'+trendTags.map((t,i)=>
-      '<span class="trendChip" data-trend="'+i+'">'+
-      esc(t.tag)+'<span class="cnt">'+t.count+'</span></span>'
-    ).join('')+'</div></div>';
+      '<span class="trendChip" data-trend="'+i+'">'+esc(t.tag)+'<span class="cnt">'+t.count+'</span></span>').join('')+'</div></div>';
 }
 function renderRevenue(){
   const box=$('revBlock');if(!box)return;
   if(!myOrders.length){box.innerHTML='';return;}
-  // Статистика за 14 дней
   const days=14;
   const now=new Date();
   const daysArr=[];
-  for(let i=days-1;i>=0;i--){
-    const d=new Date(now.getTime()-i*864e5);
-    daysArr.push(d.toISOString().slice(0,10));
-  }
+  for(let i=days-1;i>=0;i--){daysArr.push(new Date(now.getTime()-i*864e5).toISOString().slice(0,10));}
   const byDay={};daysArr.forEach(d=>byDay[d]=0);
   let totalRev=0,paidCount=0,topBq={};
   myOrders.forEach(o=>{
@@ -502,8 +551,7 @@ function renderRevenue(){
     }).join('')+'</div>'+
     '<div class="revDays">'+daysArr.map(d=>'<span>'+d.slice(8)+'</span>').join('')+'</div>'+
     (topArr.length?'<div style="margin-top:10px"><div style="font-size:10px;color:var(--gray);font-weight:700;margin-bottom:4px">🏆 ТОП-3 букета</div>'+
-      topArr.map(([id,t])=>'<div class="topBqRow"><span class="n">'+esc(t.title)+' · '+t.cnt+' шт.</span><span class="r">'+fmtPrice(t.rev)+'</span></div>').join('')+
-    '</div>':'')+
+      topArr.map(([id,t])=>'<div class="topBqRow"><span class="n">'+esc(t.title)+' · '+t.cnt+' шт.</span><span class="r">'+fmtPrice(t.rev)+'</span></div>').join('')+'</div>':'')+
   '</div>';
 }
 
@@ -519,15 +567,33 @@ async function boot(){
   const {data}=await sb.auth.getSession();
   if(!data.session){return;}
   me=data.session.user;
-  const pr=await sb.from('profiles').select('is_florist').eq('id',me.id).maybeSingle();
+  const pr=await sb.from('profiles').select('is_florist,telegram_chat_id').eq('id',me.id).maybeSingle();
   if(!pr.data||!pr.data.is_florist){return;}
+  myTgChat=pr.data.telegram_chat_id||null;
   $('loginBox').classList.add('hidden');
   registerSW();
   initPushBtn();
   startOrderRealtime();
-  // Загружаем шаблоны с учётом me.id (после установки me)
-  quickReplies=JSON.parse(localStorage.getItem('lep_qr_'+me.id)||'null')||
-    ['Спасибо за отзыв!','Будем стараться для вас 🌸','Рады, что вам понравилось','Приходите ещё!','Извините за неудобства, исправимся'];
+  loadQR();
+  renderTgStatus();
+  // делегирование вешается ОДИН раз (фикс дублирующихся слушателей)
+  $('qrBlock').addEventListener('click',e=>{
+    const rm=e.target.closest('[data-qr]');
+    if(rm){e.stopPropagation();removeQR(+rm.dataset.qr);return;}
+    const chip=e.target.closest('.qrChip');
+    if(chip){insertQR(quickReplies[+chip.dataset.qi]||'');}
+  });
+  $('trendBlock').addEventListener('click',e=>{
+    const chip=e.target.closest('[data-trend]');
+    if(!chip)return;
+    const t=trendTags[+chip.dataset.trend];
+    if(!t)return;
+    if(pickedTags.includes(t.tag)){toast('Тег уже добавлен','i-x');return;}
+    pickedTags.push(t.tag);
+    chip.classList.add('added');
+    renderTagChips();
+    toast('Тег «'+t.tag+'» добавлен','i-check');
+  });
   await fetchTrendTags();
   await refresh();
 }
@@ -555,9 +621,7 @@ async function refresh(){
       workHours=shop.working_hours||DEFAULT_WH;
       const exRes=await sb.from('shop_extras').select('*').eq('shop_id',shop.id).order('created_at');
       myExtras=exRes.data||[];
-    }else{
-      workHours=DEFAULT_WH;
-    }
+    }else{workHours=DEFAULT_WH;myExtras=[];}
     myBouquets=bRes.data||[];
     renderWH();
     const ids=myBouquets.map(x=>x.id);
@@ -568,7 +632,6 @@ async function refresh(){
       ]);
       myOrders=oRes.data||[];
       myReviews=rRes.data||[];
-      // Загружаем ответы на отзывы
       const parentIds=myReviews.map(r=>r.id);
       if(parentIds.length){
         const rpRes=await sb.from('bouquet_comments').select('*').in('parent_id',parentIds);
@@ -589,6 +652,7 @@ function showSec(s){
   $('fabBouq').classList.toggle('hidden',s!=='bouquets');
   if(s==='bouquets'){renderTrendBlock();renderRevenue();}
   if(s==='reviews')renderQR();
+  if(s==='shop')ensureTgWidget(); // виджет грузится только в видимой секции
 }
 function renderOrders(){
   const box=$('orderList');
@@ -664,24 +728,9 @@ function exportOrdersCSV(){
   const rows=[['ID','Дата','Букет','Цена','Статус','Тип','Получатель','Телефон','Адрес','Заказчик','Комментарий']];
   myOrders.forEach(o=>{
     const b=myBouquets.find(x=>x.id===o.bouquet_id);
-    rows.push([
-      o.id,
-      new Date(o.created_at).toLocaleString('ru-RU'),
-      b?b.title:'—',
-      b?b.price:'',
-      statusRu(o.status),
-      o.kind==='delivery'?'доставка':'самовывоз',
-      o.recipient_name||'',
-      o.recipient_phone||'',
-      o.address||'',
-      o.sender_name||'',
-      (o.note||'').replace(/\n/g,' ')
-    ]);
+    rows.push([o.id,new Date(o.created_at).toLocaleString('ru-RU'),b?b.title:'—',b?b.price:'',statusRu(o.status),o.kind==='delivery'?'доставка':'самовывоз',o.recipient_name||'',o.recipient_phone||'',o.address||'',o.sender_name||'',(o.note||'').replace(/\n/g,' ')]);
   });
-  const csv=rows.map(r=>r.map(c=>{
-    const s=String(c==null?'':c);
-    return s.includes(',')||s.includes('"')||s.includes('\n')?'"'+s.replace(/"/g,'""')+'"':s;
-  }).join(',')).join('\n');
+  const csv=rows.map(r=>r.map(c=>{const s=String(c==null?'':c);return s.includes(',')||s.includes('"')||s.includes('\n')?'"'+s.replace(/"/g,'""')+'"':s;}).join(',')).join('\n');
   const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
@@ -753,17 +802,16 @@ function openAddBouquet(){
     '<div id="fPrevWrap" class="hidden" style="margin:8px 0"><img id="fPrev" style="width:84px;height:84px;object-fit:cover;border-radius:14px;box-shadow:var(--shadow)"></div>'+
     '<span id="fPhotoName" style="font-size:11px;color:var(--gray)"></span>'+
     '<label style="display:flex;gap:8px;align-items:center;font-size:13px;margin:8px 0"><input type="checkbox" id="fStock" checked style="width:auto;margin:0"> В наличии</label>'+
+    '<label style="display:flex;gap:8px;align-items:center;font-size:13px;margin:8px 0"><input type="checkbox" id="fDay" style="width:auto;margin:0"> Букет дня</label>'+
     '<button class="btn" id="bouqSaveBtn" onclick="submitBouquet()">Сохранить</button>'+
     '<button class="btn soft" style="margin-top:8px" onclick="closeSheet(\'bouqSheet\')">Закрыть</button>';
   renderTagChips();
-  // Делегирование для категорий
   $('fCatRow').addEventListener('click',e=>{
     const btn=e.target.closest('[data-cat]');
     if(!btn)return;
     pickedCat=btn.dataset.cat;
     document.querySelectorAll('#fCatRow .chip').forEach(x=>x.classList.toggle('on',x.dataset.cat===pickedCat));
   });
-  // Делегирование для тегов
   $('fTagRow').addEventListener('click',e=>{
     const rm=e.target.closest('[data-tag-rm]');
     if(rm){e.stopPropagation();toggleTag(rm.dataset.tagRm);return;}
@@ -794,9 +842,7 @@ function openEditBouquet(id){
   editingId=id;
   $('fTitle').value=b.title;$('fPrice').value=b.price;$('fDesc').value=b.description||'';$('fStock').checked=b.in_stock;
   pickedCat=b.category||'';
-  setTimeout(()=>{
-    document.querySelectorAll('#fCatRow .chip').forEach(x=>x.classList.toggle('on',x.dataset.cat===pickedCat));
-  },0);
+  setTimeout(()=>{document.querySelectorAll('#fCatRow .chip').forEach(x=>x.classList.toggle('on',x.dataset.cat===pickedCat));},0);
   pickedTags=getTags(b);
   renderTagChips();
   if(b.photo_url){$('fPrev').src=b.photo_url;$('fPrevWrap').classList.remove('hidden');}
@@ -823,10 +869,9 @@ async function submitBouquet(){
       if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
       toast('Букет обновлён','i-check');
     }else{
-      // Сначала создаём букет, потом сбрасываем is_day у других — чтобы не было race
       const res=await sb.from('bouquets').insert({title:t,price:p,description:$('fDesc').value.trim(),category:pickedCat,tags:pickedTags,photo_url,in_stock:$('fStock').checked,user_id:me.id});
       if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
-      if($('fDay')&&$('fDay').checked){
+      if($('fDay').checked){
         await sb.from('bouquets').update({is_day:false}).eq('user_id',me.id).eq('is_day',true);
         await sb.from('bouquets').update({is_day:true}).eq('id',res.data[0].id);
       }
@@ -893,32 +938,6 @@ function renderReviews(){
       '<div class="replyInput"><input placeholder="Твой ответ..." maxlength="500" data-reply-for="'+c.id+'"><button onclick="sendReply('+c.id+')">'+ic('i-send')+'</button></div>'+
     '</div>';
   }).join(''):'<div class="empty">'+icBig('i-comment')+'Отзывов пока нет</div>';
-  // Делегирование для шаблонов
-  box.addEventListener('click',e=>{
-    const rm=e.target.closest('[data-qr]');
-    if(rm){e.stopPropagation();removeQR(+rm.dataset.qr);return;}
-    const qr=e.target.closest('.qrChip');
-    if(qr&&!e.target.closest('.rm')){
-      const idx=+qr.dataset.qi;
-      if(quickReplies[idx])insertQR(quickReplies[idx]);
-    }
-  });
-  // Делегирование для тренд-тегов
-  const tw=$('trendChipsWrap');
-  if(tw){
-    tw.onclick=e=>{
-      const chip=e.target.closest('[data-trend]');
-      if(!chip)return;
-      const idx=+chip.dataset.trend;
-      const t=trendTags[idx];
-      if(!t)return;
-      if(pickedTags.includes(t.tag)){toast('Тег уже добавлен','i-x');return;}
-      pickedTags.push(t.tag);
-      chip.classList.add('added');
-      renderTagChips();
-      toast('Тег «'+t.tag+'» добавлен','i-check');
-    };
-  }
 }
 async function sendReply(reviewId){
   const input=document.querySelector('[data-reply-for="'+reviewId+'"]');
@@ -930,11 +949,7 @@ async function sendReply(reviewId){
   try{
     const {error}=await sb.from('bouquet_comments').insert({
       bouquet_id:myReviews.find(r=>r.id===reviewId)?.bouquet_id,
-      text:t,
-      user_id:me.id,
-      user_nick:'Магазин',
-      parent_id:reviewId,
-      status:'approved'
+      text:t,user_id:me.id,user_nick:'Магазин',parent_id:reviewId,status:'approved'
     });
     if(error){toast('Ошибка: '+error.message,'i-x');return;}
     toast('Ответ отправлен','i-check');
@@ -959,18 +974,12 @@ async function saveShop(){
     const up=await sb.storage.from('bouquets').upload(path,pickedLogo,{contentType:pickedLogo.type});
     if(up.error){toast('Лого: '+up.error.message,'i-x');return;}
     data.logo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
-  }else if(shop){
-    data.logo_url=shop.logo_url;
-  }
+  }else if(shop){data.logo_url=shop.logo_url;}
   showLoader();
   try{
     let res;
-    if(shop){
-      res=await sb.from('shops').update(data).eq('id',shop.id);
-    }else{
-      // UPSERT — создаём магазин, если его нет
-      res=await sb.from('shops').upsert(data,{onConflict:'owner_id'}).select();
-    }
+    if(shop){res=await sb.from('shops').update(data).eq('id',shop.id);}
+    else{res=await sb.from('shops').upsert(data,{onConflict:'owner_id'}).select();}
     if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
     pickedLogo=null;
     toast('Магазин сохранён','i-check');
@@ -1027,7 +1036,6 @@ async function togglePush(){
 async function initPushBtn(){
   if(await isPushSubscribed()){$('pushBtn').classList.add('on');$('pushBtnTxt').textContent='уведомления включены';}
 }
-// Realtime: мгновенные новые заказы — с защитой от race condition
 let rtChannel=null;
 function startOrderRealtime(){
   if(rtChannel){try{sb.removeChannel(rtChannel);}catch(e){}}
@@ -1035,7 +1043,6 @@ function startOrderRealtime(){
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'orders'},async payload=>{
       const o=payload.new;
       if(!o||!o.bouquet_id)return;
-      // FIX race: загружаем актуальный список букетов, а не полагаемся на кэш
       let owns=false;
       try{
         const {data:bk}=await sb.from('bouquets').select('id').eq('id',o.bouquet_id).eq('user_id',me.id).maybeSingle();
@@ -1060,15 +1067,6 @@ function registerSW(){
   if(!('serviceWorker' in navigator))return;
   navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
-window.onTelegramAuth=function(user){
-  if(!me||!user||!user.id)return;
-  showLoader();
-  sb.from('profiles').update({telegram_chat_id:String(user.id)}).eq('id',me.id).then(({error})=>{
-    hideLoader();
-    if(error){toast('Не удалось привязать Telegram','i-x');return;}
-    toast('Telegram привязан! 🌸','i-check');
-  });
-};
 boot();
 </script>
 </body>
