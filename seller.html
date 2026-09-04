@@ -301,7 +301,8 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 const sb=supabase.createClient('https://dhwkkbtrhexywymegwoo.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRod2trYnRyaGV4eXd5bWVnd29vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMDUxODMsImV4cCI6MjEwMzc4MTE4M30.NAyY4dCeRRC2OznENuNCfvr-mKqACyMU61K-y-PkRIQ');
 const TG_BOT='lepestok_notify_bot';
 let me=null,shop=null,myBouquets=[],myOrders=[],myReviews=[],myExtras=[],myReplies=[],pickedPhoto=null,pickedLogo=null,myTgChat=null;
-let trendTags=[];
+let trendTags=[],categories=[];
+const DEFAULT_CATS=['сборный','розы','тюльпаны','хризантемы','пионы','лилии','композиция'];
 let device=localStorage.getItem('lep_device');
 if(!device){device='d'+Math.random().toString(36).slice(2)+Date.now();localStorage.setItem('lep_device',device);}
 
@@ -609,10 +610,12 @@ async function logout(){showLoader();await sb.auth.signOut();hideLoader();locati
 async function refresh(){
   showLoader();
   try{
-    const [shRes,bRes]=await Promise.all([
+    const [shRes,bRes,catsRes]=await Promise.all([
       sb.from('shops').select('*').eq('owner_id',me.id).maybeSingle(),
-      sb.from('bouquets').select('*').eq('user_id',me.id).order('created_at',{ascending:false})
+      sb.from('bouquets').select('*').eq('user_id',me.id).order('created_at',{ascending:false}),
+      sb.from('categories').select('*').order('id')
     ]);
+    categories=catsRes.data||[];
     shop=shRes.data||null;
     if(shop){
       $('shopName').textContent=shop.name;
@@ -784,13 +787,36 @@ function runAutoTag(){
   renderTagChips();
   toast(added?'Добавлено '+added+' тег(ов)':'Все теги уже добавлены','i-wand');
 }
+function openAddBouquet(){/* ---------- КАТЕГОРИИ: общий список из таблицы categories ---------- */
+function catList(){
+  const names=(categories||[]).map(c=>c.name||c);
+  return [...new Set([...DEFAULT_CATS,...names])];
+}
+function catChipsHtml(){
+  return catList().map(c=>'<button type="button" class="chip'+(pickedCat===c?' on':'')+'" data-cat="'+esc(c)+'">'+esc(c)+'</button>').join('');
+}
+function refreshCatRow(){const row=$('fCatRow');if(row)row.innerHTML=catChipsHtml();}
+async function addCategory(){
+  const inp=$('fNewCat');if(!inp)return;
+  const name=inp.value.trim().toLowerCase();
+  if(!name){toast('Введи название категории','i-x');return;}
+  if(catList().includes(name)){pickedCat=name;refreshCatRow();inp.value='';toast('Категория выбрана','i-check');return;}
+  const {error}=await sb.from('categories').insert({name});
+  if(error){toast('Не сохранилось: '+error.message,'i-x');return;}
+  categories.push({name});
+  pickedCat=name;
+  refreshCatRow();
+  inp.value='';
+  toast('Категория «'+name+'» добавлена','i-check');
+}
 function openAddBouquet(){
   pickedPhoto=null;pickedCat='';editingId=null;pickedTags=[];
   $('bouqBody').innerHTML='<h3 id="bouqHead">Новый букет</h3>'+
     '<input id="fTitle" placeholder="Название" oninput="onTitleDescChange()">'+
     '<input id="fPrice" type="number" placeholder="Цена в рублях">'+
     '<div class="fieldLbl">'+ic('i-tag')+'Категория</div>'+
-    '<div class="chips" id="fCatRow">'+['сборный','розы','тюльпаны','хризантемы','пионы','лилии','композиция'].map(c=>'<button type="button" class="chip" data-cat="'+c+'">'+c+'</button>').join('')+'</div>'+
+    '<div class="chips" id="fCatRow">'+catChipsHtml()+'</div>'+
+    '<div class="tagInputRow"><input id="fNewCat" placeholder="новая категория (например: орхидеи)"><button type="button" onclick="addCategory()">'+ic('i-plus')+'</button></div>'+
     '<div class="fieldLbl">'+ic('i-wand')+'Теги для «Собери мне» <span style="color:var(--gray);font-weight:400;font-size:10px">(выбери повод, кому и бюджет — AI подберёт этот букет)</span></div>'+
     '<div class="chips" id="fTagRow"></div>'+
     '<div class="tagInputRow"><input id="fNewTag" placeholder="свой тег (например: для мамы)" onkeypress="if(event.key===\'Enter\'){event.preventDefault();addCustomTag();}"><button type="button" onclick="addCustomTag()">'+ic('i-plus')+'</button></div>'+

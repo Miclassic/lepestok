@@ -206,6 +206,8 @@ let adminId=null,orderFilter='new',usrStatsRange='7';
 let viewMode='admin',sTab='orders',myBouquets=[],myOrders=[],myReviews=[],pickedPhoto=null,imFlorist=false;
 let selectedOrders=new Set();
 let searchQuery='';
+let categories=[];
+const DEFAULT_CATS=['сборный','розы','тюльпаны','хризантемы','пионы','лилии','композиция'];
 let metricsCache=null,metricsCacheDays=null;
 
 // === УТИЛИТЫ ===
@@ -256,13 +258,14 @@ async function panel(){
 async function refresh(){
   showLoader();
   try{
-    const [b,o,c,evAll]=await Promise.all([
+    const [b,o,c,evAll,cats]=await Promise.all([
       sb.from('bouquets').select('*').order('created_at',{ascending:false}),
       sb.from('orders').select('*').order('created_at',{ascending:false}),
       sb.from('bouquet_comments').select('*').order('created_at',{ascending:false}),
-      sb.from('events').select('*').gte('created_at',new Date(Date.now()-30*864e5).toISOString()).order('created_at',{ascending:true})
+      sb.from('events').select('*').gte('created_at',new Date(Date.now()-30*864e5).toISOString()).order('created_at',{ascending:true}),
+      sb.from('categories').select('*').order('id')
     ]);
-    bouquets=b.data||[];orders=o.data||[];comments=c.data||[];evFull=evAll.data||[];
+    bouquets=b.data||[];orders=o.data||[];comments=c.data||[];evFull=evAll.data||[];categories=cats.data||[];
     $('cOrders').textContent=orders.filter(o=>o.status==='new').length;
     metricsCache=null; // сбрасываем кэш при обновлении данных
     if(viewMode==='admin')renderList();
@@ -459,11 +462,49 @@ async function updateOrder(id,status){
     if(viewMode==='seller')await refreshSeller();else await refresh();
   }finally{hideLoader();}
 }
-let adminEditId=null,adminEditPhoto=null;
+let adminEditId=null,adminEditPhoto=null,adminEditCat='';
+/* ---------- КАТЕГОРИИ: управление + общие хелперы ---------- */
+function catList(){
+  const names=(categories||[]).map(c=>c.name||c);
+  return [...new Set([...DEFAULT_CATS,...names])];
+}
+function catsManagerHtml(){
+  return '<div class="card"><div class="mcat" style="font-weight:700;color:#1A1A2E;margin-bottom:6px">🏷 Категории витрины</div>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">'+catList().map(c=>{
+      const isDefault=DEFAULT_CATS.includes(c);
+      return '<span style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,107,107,.1);color:var(--coral);border-radius:999px;padding:5px 10px;font-size:11px;font-weight:700">'+esc(c)+
+        (isDefault?'':'<button style="border:none;background:none;color:var(--red);cursor:pointer;font-weight:800" data-delcat="'+esc(c)+'" onclick="delCategoryBtn(this)">×</button>')+'</span>';
+    }).join('')+'</div>'+
+    '<div style="display:flex;gap:6px"><input id="newCatInp" placeholder="новая категория" style="margin:0;flex:1"><button class="btn" style="width:auto;padding:9px 14px" onclick="addCategoryAdmin()">+ добавить</button></div>'+
+  '</div>';
+}
+function delCategoryBtn(el){delCategory(el.dataset.delcat);}
+async function addCategoryAdmin(){
+  const inp=$('newCatInp');if(!inp)return;
+  const name=inp.value.trim().toLowerCase();
+  if(!name){toast('Введи название','i-x');return;}
+  if(catList().includes(name)){toast('Такая категория уже есть','i-x');return;}
+  const {error}=await sb.from('categories').insert({name});
+  if(error){toast('Ошибка: '+error.message,'i-x');return;}
+  toast('Категория «'+name+'» добавлена','i-check');
+  await refresh();
+}
+async function delCategory(name){
+  if(!confirm('Удалить категорию «'+name+'»? Существующие букеты останутся.'))return;
+  const {error}=await sb.from('categories').delete().eq('name',name);
+  if(error){toast('Ошибка: '+error.message,'i-x');return;}
+  toast('Категория удалена','i-check');
+  await refresh();
+}
+function adminCatChipsHtml(){
+  return catList().map(c=>'<button type="button" data-acat="'+esc(c)+'" onclick="pickAdminCat(this)" style="border:2px solid '+(adminEditCat===c?'var(--coral)':'rgba(148,163,184,.25)')+';background:'+(adminEditCat===c?'var(--gradient)':'var(--bg)')+';color:'+(adminEditCat===c?'#fff':'var(--gray)')+';border-radius:999px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer">'+esc(c)+'</button>').join('');
+}
+function pickAdminCat(el){adminEditCat=el.dataset.acat;const row=$('aeCatRow');if(row)row.innerHTML=adminCatChipsHtml();}
+function fillCat(el){const i=$('fCat');if(i)i.value=el.dataset.c;}
 function renderBouquets(){
   const box=$('list');
   const form=adminEditId?adminEditFormHtml():'';
-  box.innerHTML=form+(bouquets.length?bouquets.map(b=>{
+  box.innerHTML=catsManagerHtml()+form+(bouquets.length?bouquets.map(b=>{
     const tags=getTags(b);
     const tagsHtml=tags.length?'<div class="bTags">'+tags.slice(0,6).map(t=>'<span>'+esc(t)+'</span>').join('')+(tags.length>6?'<span>+'+(tags.length-6)+'</span>':'')+'</div>':'';
     return '<div class="card"><div class="bouquetRow">'+(b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:34px;background:linear-gradient(135deg,#FFE5E5,#F5E6FF)">🌷</div>')+
@@ -484,7 +525,7 @@ function adminEditFormHtml(){
     '<input id="aeTitle" placeholder="Название">'+
     '<input id="aePrice" type="number" placeholder="Цена">'+
     '<textarea id="aeDesc" placeholder="Описание"></textarea>'+
-    '<input id="aeCat" placeholder="Категория">'+
+    '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px" id="aeCatRow">'+adminCatChipsHtml()+'</div>'+
     '<input id="aeTags" placeholder="Теги через запятую">'+
     '<button class="btn" style="background:var(--bg);color:var(--ink)" onclick="document.getElementById(\'aePhoto\').click()">📷 Заменить фото</button>'+
     '<input type="file" id="aePhoto" accept="image/*" style="display:none" onchange="onAdminEditPhoto(this)">'+
@@ -496,7 +537,9 @@ function adminEditFormHtml(){
 function startAdminEdit(id){adminEditId=id;adminEditPhoto=null;renderBouquets();window.scrollTo({top:0,behavior:'smooth'});}
 function fillAdminEdit(){
   const b=bouquets.find(x=>x.id===adminEditId);if(!b)return;
-  $('aeTitle').value=b.title||'';$('aePrice').value=b.price||'';$('aeDesc').value=b.description||'';$('aeCat').value=b.category||'';
+  $('aeTitle').value=b.title||'';$('aePrice').value=b.price||'';$('aeDesc').value=b.description||'';
+  adminEditCat=b.category||'';
+  const cr=$('aeCatRow');if(cr)cr.innerHTML=adminCatChipsHtml();
   $('aeTags').value=getTags(b).join(', '); // FIX: было `join(', '||'')` — бессмысленное выражение
   $('aeStock').checked=!!b.in_stock;
 }
@@ -515,7 +558,7 @@ async function saveAdminEdit(){
     }
     const tagsRaw=$('aeTags').value.trim();
     const tags=tagsRaw?tagsRaw.split(',').map(x=>x.trim()).filter(Boolean):[];
-    const res=await sb.from('bouquets').update({title:$('aeTitle').value.trim(),price:+$('aePrice').value,description:$('aeDesc').value.trim(),category:$('aeCat').value.trim(),tags:tags,in_stock:$('aeStock').checked,photo_url:photo_url}).eq('id',adminEditId);
+    const res=await sb.from('bouquets').update({title:$('aeTitle').value.trim(),price:+$('aePrice').value,description:$('aeDesc').value.trim(),category:adminEditCat,tags:tags,in_stock:$('aeStock').checked,photo_url:photo_url}).eq('id',adminEditId);
     if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
     logAdmin('edit_bouquet',{bouquet_id:adminEditId});
     toast('Букет обновлён','i-check');
@@ -748,6 +791,7 @@ function sRenderBouquets(){
     '<input id="fTitle" placeholder="Название (например: Нежный пион)">'+
     '<input id="fPrice" type="number" placeholder="Цена в рублях">'+
     '<textarea id="fDesc" placeholder="Описание — что входит в букет"></textarea>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">'+catList().map(c=>'<button type="button" data-c="'+esc(c)+'" onclick="fillCat(this)" style="border:2px solid rgba(148,163,184,.25);background:var(--bg);border-radius:999px;padding:6px 10px;font-size:11px;font-weight:700;color:var(--gray);cursor:pointer">'+esc(c)+'</button>').join('')+'</div>'+
     '<input id="fCat" placeholder="Категория (розы / полевые / лилии / тюльпаны)">'+
     '<input id="fTags" placeholder="Теги через запятую (маме, нежный, розы)">'+
     '<button class="btn" style="background:var(--bg);color:var(--ink)" onclick="document.getElementById(\'fPhoto\').click()">📷 Фото букета</button>'+
