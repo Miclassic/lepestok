@@ -900,7 +900,15 @@ async function likeBouquet(id){
   refreshShop();
 }
 /* ===== полный квиз (sheet) ===== */
-function openQuiz(){openQuizTab();openSheet('quizSheet');}
+function openQuiz(){
+  const h='<div class="secCard"><h4>Кому</h4><div class="row" id="q2">'+qOpts(['девушке','маме','подруге','жене','коллеге','учителю','себе','другу'])+'</div></div>'+
+  '<div class="secCard"><h4>Повод</h4><div class="row" id="q1">'+qOpts(['день рождения','свидание','годовщина','просто так','извиниться','8 марта','поблагодарить','свадьба'])+'</div></div>'+
+  '<div class="secCard"><h4>Бюджет</h4><div class="row" id="q3">'+qOpts(['до 2 000 ₽','2–3 000 ₽','3–5 000 ₽','5–10 000 ₽','неважно'])+'</div></div>'+
+  '<div class="secCard"><h4>Стиль</h4><div class="row" id="q5">'+qOpts(['нежный','яркий','классический','необычный','минималистичный'])+'</div></div>'+
+  '<button class="btn rose" onclick="quizGo()">'+ic('i-wand')+'Показать букеты</button>';
+  const qb=$('quizBody');if(qb)qb.innerHTML=h;
+  openSheet('quizSheet');
+}
 function openQuizTab(){
   const h='<div class="secCard"><h4>Кому</h4><div class="row" id="q2">'+qOpts(['девушке','маме','подруге','жене','коллеге','учителю','себе','другу'])+'</div></div>'+
   '<div class="secCard"><h4>Повод</h4><div class="row" id="q1">'+qOpts(['день рождения','свидание','годовщина','просто так','извиниться','8 марта','поблагодарить','свадьба'])+'</div></div>'+

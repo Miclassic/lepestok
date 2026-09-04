@@ -167,16 +167,14 @@ textarea{min-height:70px;resize:vertical}
     <button class="modeBtn" id="modeSeller" onclick="setMode('seller')">🌷 продавец</button>
   </div>
   <div class="tabs" id="adminTabs">
-    <button class="tab on" id="tabOrders" onclick="setTab('orders')"><svg class="icn"><use href="#i-box"/></svg>Заказы<span class="badge" id="cOrders">0</span></button>
-    <button class="tab" id="tabShops" onclick="setTab('shops')"><svg class="icn"><use href="#i-shop"/></svg>Магазины</button>
+    <button class="tab on" id="tabShops" onclick="setTab('shops')"><svg class="icn"><use href="#i-shop"/></svg>Магазины</button>
     <button class="tab" id="tabBouquets" onclick="setTab('bouquets')"><svg class="icn"><use href="#i-flower"/></svg>Букеты</button>
     <button class="tab" id="tabComments" onclick="setTab('comments')"><svg class="icn"><use href="#i-comment"/></svg>Отзывы</button>
     <button class="tab" id="tabStats" onclick="setTab('stats')"><svg class="icn"><use href="#i-chart"/></svg>Метрики</button>
     <button class="tab" id="tabUsers" onclick="setTab('users')"><svg class="icn"><use href="#i-users"/></svg>Клиенты</button>
   </div>
   <div class="tabs three hidden" id="sellerTabs">
-    <button class="tab on" id="stabOrders" onclick="setSTab('orders')"><svg class="icn"><use href="#i-box"/></svg>Заказы<span class="badge" id="scOrders">0</span></button>
-    <button class="tab" id="stabBouquets" onclick="setSTab('bouquets')"><svg class="icn"><use href="#i-flower"/></svg>Букеты</button>
+    <button class="tab on" id="stabBouquets" onclick="setSTab('bouquets')"><svg class="icn"><use href="#i-flower"/></svg>Букеты</button>
     <button class="tab" id="stabReviews" onclick="setSTab('reviews')"><svg class="icn"><use href="#i-comment"/></svg>Отзывы</button>
   </div>
   <div id="list"></div>
@@ -191,10 +189,10 @@ const sb=supabase.createClient('https://dhwkkbtrhexywymegwoo.supabase.co','eyJhb
 const ADMIN_EMAIL='artixz18@gmail.com';
 const DEFAULT_CITY='Новороссийск';
 const DEFAULT_CATS=['сборный','розы','тюльпаны','хризантемы','пионы','лилии','композиция'];
-let tab='orders',bouquets=[],orders=[],comments=[],evFull=[],shopsAll=[],categories=[];
+let tab='shops',bouquets=[],orders=[],comments=[],evFull=[],shopsAll=[],categories=[];
 let leadsByShop={},shopViewsByShop={},leadsChByShop={};
 let adminId=null,orderFilter='new',usrStatsRange='7',searchQuery='';
-let viewMode='admin',sTab='orders',myBouquets=[],myOrders=[],myReviews=[],pickedPhoto=null,imFlorist=false;
+let viewMode='admin',sTab='bouquets',myBouquets=[],myOrders=[],myReviews=[],pickedPhoto=null,imFlorist=false;
 let selectedOrders=new Set(),metricsCache=null,metricsCacheDays=null;
 let adminEditId=null,adminEditPhoto=null,adminEditCat='';
 let shopFormOpen=false,shopEditId=null,shopFormPhoto=null;
@@ -259,7 +257,6 @@ async function refresh(){
       }
       if(e.name==='shop_view'&&m.shop_id)shopViewsByShop[m.shop_id]=(shopViewsByShop[m.shop_id]||0)+1;
     });
-    $('cOrders').textContent=orders.filter(o=>o.status==='new').length;
     metricsCache=null;
     if(viewMode==='admin')renderList();
   }finally{hideLoader();}
@@ -276,8 +273,7 @@ function setTab(t){tab=t;selectedOrders.clear();['Orders','Shops','Bouquets','Co
 function setUsrRange(r){usrStatsRange=r;renderList();}
 function setOrderFilter(f){orderFilter=f;if(viewMode==='seller')renderSList();else renderList();}
 function renderList(){
-  if(tab==='orders')renderOrders();
-  else if(tab==='shops')renderShopsAdmin();
+  if(tab==='shops')renderShopsAdmin();
   else if(tab==='bouquets')renderBouquets();
   else if(tab==='comments')renderComments();
   else if(tab==='stats')renderStats();
@@ -771,7 +767,6 @@ async function refreshSeller(){
       ]);
       myOrders=o.data||[];myReviews=r.data||[];
     }else{myOrders=[];myReviews=[];}
-    $('scOrders').textContent=myOrders.filter(o=>o.status==='new').length;
     renderSList();
   }finally{hideLoader();}
 }
@@ -784,7 +779,7 @@ async function enableMeFlorist(){
     toast('Готово! Ты теперь продавец','i-check');
   }finally{hideLoader();}
 }
-function renderSList(){if(sTab==='orders')sRenderOrders();else if(sTab==='bouquets')sRenderBouquets();else sRenderReviews();}
+function renderSList(){if(sTab==='bouquets')sRenderBouquets();else sRenderReviews();}
 function sRenderOrders(){
   const box=$('list');
   const filters=[['new','🆕 новые'],['accepted','⏳ приняты'],['ready','✅ готовы'],['delivered','🚚 доставлены'],['cancelled','❌ отменены']];
