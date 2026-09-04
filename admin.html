@@ -269,7 +269,7 @@ function setMode(m){
   $('sellerTabs').classList.toggle('hidden',m!=='seller');
   if(m==='seller')refreshSeller();else renderList();
 }
-function setTab(t){tab=t;selectedOrders.clear();['Orders','Shops','Bouquets','Comments','Stats','Users'].forEach(k=>$('tab'+k).classList.toggle('on',t===k.toLowerCase()));renderList();}
+function setTab(t){tab=t;selectedOrders.clear();['Shops','Bouquets','Comments','Stats','Users'].forEach(k=>{const el=$('tab'+k);if(el)el.classList.toggle('on',t===k.toLowerCase());});renderList();}
 function setUsrRange(r){usrStatsRange=r;renderList();}
 function setOrderFilter(f){orderFilter=f;if(viewMode==='seller')renderSList();else renderList();}
 function renderList(){
@@ -750,7 +750,7 @@ async function makeFlorist(uid){
   }finally{hideLoader();}
 }
 /* ===== режим продавца ===== */
-function setSTab(t){sTab=t;['Orders','Bouquets','Reviews'].forEach(k=>$('stab'+k).classList.toggle('on',t===k.toLowerCase()));renderSList();}
+function setSTab(t){sTab=t;['Bouquets','Reviews'].forEach(k=>{const el=$('stab'+k);if(el)el.classList.toggle('on',t===k.toLowerCase());});renderSList();}
 async function refreshSeller(){
   showLoader();
   try{
