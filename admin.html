@@ -678,6 +678,18 @@ function computeTagMetrics(events){
   rows.sort((a,b)=>(b.orders-a.orders)||(b.views-a.views));
   return rows.slice(0,15);
 }
+async function resetMetrics(){
+  if(!confirm('Сбросить ВСЕ метрики (просмотры, лиды, воронки, лог)? Действие необратимо.'))return;
+  showLoader();
+  try{
+    const res=await sb.from('events').delete().gte('created_at','1970-01-01');
+    if(res.error){toast('Ошибка: '+res.error.message+'. Выполни в SQL: delete from public.events;','i-x');return;}
+    adminLog.length=0;localStorage.setItem('lep_admin_log','[]');
+    metricsCache=null;
+    toast('Метрики сброшены','i-check');
+    await refresh();
+  }finally{hideLoader();}
+}
 function renderStats(){
   const days=+usrStatsRange;const m=computeMetrics(days);const box=$('list');
   const totalOrders=orders.length;const newOrders=orders.filter(o=>o.status==='new').length;
@@ -719,7 +731,7 @@ function renderStats(){
     m.daysArr.map(d=>{const v=m.dayMap[d];const pct=Math.round(v.ev*100/maxEv);return '<div class="dayRow"><div class="dLbl">'+d.slice(5)+'</div><div class="dBar"><i style="width:'+pct+'%"></i></div><div class="dNum">'+v.ev+'</div></div>';}).join('')+'</div>';
   const logHtml='<div class="funnel"><div class="mcat" style="font-weight:700;color:#1A1A2E">📋 лог действий администратора</div>'+
     (adminLog.length?'<div class="logList">'+adminLog.slice(0,50).map(l=>{const time=new Date(l.ts).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});return '<div class="lItem"><span class="lTime">'+time+'</span><span class="lAct">'+esc(l.action)+(l.details.order_id?' · заказ #'+l.details.order_id:'')+(l.details.bouquet_id?' · букет #'+l.details.bouquet_id:'')+(l.details.shop_id?' · магазин #'+l.details.shop_id:'')+(l.details.status?' → '+statusRu(l.details.status):'')+'</span></div>';}).join('')+'</div>':'<div class="mcat">Пока пусто</div>')+'</div>';
-  box.innerHTML='<div class="rangeSel">'+[['7','7 дней'],['14','14 дней'],['30','30 дней']].map(r=>'<button class="'+(usrStatsRange===r[0]?'on':'')+'" onclick="setUsrRange(\''+r[0]+'\')">'+r[1]+'</button>').join('')+'</div>'+big+leadFunnel+shopLeadsHtml+funnelHtml+tagHtml+chart+logHtml;
+  box.innerHTML='<div class="rangeSel">'+[['7','7 дней'],['14','14 дней'],['30','30 дней']].map(r=>'<button class="'+(usrStatsRange===r[0]?'on':'')+'" onclick="setUsrRange(\''+r[0]+'\')">'+r[1]+'</button>').join('')+'<button style="border:none;border-radius:999px;padding:7px 12px;font-size:10.5px;font-weight:800;cursor:pointer;background:#FFF1F0;color:var(--red)" onclick="resetMetrics()">🗑 сбросить всё</button></div>'+big+leadFunnel+shopLeadsHtml+funnelHtml+tagHtml+chart+logHtml;
 }
 async function renderUsers(){
   const days=+usrStatsRange;const m=computeMetrics(days);const box=$('list');
