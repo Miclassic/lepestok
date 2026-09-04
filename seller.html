@@ -17,6 +17,8 @@ body{background:linear-gradient(160deg,#FFF7F5 0%,#FFEDEB 45%,#F6ECFF 100%);colo
 .shopName{font-weight:800;font-size:15px}
 .shopStatus{font-size:10.5px;color:var(--grn);font-weight:700;display:flex;align-items:center;gap:4px}
 .shopStatus::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--grn)}
+.shopStatus.warn{color:var(--gold)}
+.shopStatus.warn::before{background:var(--gold)}
 main{max-width:620px;margin:0 auto;padding:76px 14px 96px}
 .secTitle{font-size:15px;font-weight:800;margin:2px 0 10px;display:flex;align-items:center;gap:7px}
 .secTitle .cnt{background:var(--gradient);color:#fff;border-radius:999px;padding:2px 9px;font-size:10px;font-weight:800}
@@ -653,7 +655,9 @@ async function boot(){
       toast('Тег «'+t.tag+'» добавлен','i-check');
     });
     await fetchTrendTags();
+    await refresh();await fetchTrendTags();
     await refresh();
+    if(!shop)toast('Заполни магазин во вкладке «Магазин» — его увидят покупатели','i-shop');
   }catch(e){
     bootFail(e&&e.message?e.message:String(e));
   }
@@ -683,13 +687,21 @@ async function refresh(){
     categories=catsRes.data||[];
     shop=shRes.data||null;
     if(shop){
+      const st=document.querySelector('.shopStatus');
+      if(st){st.classList.remove('warn');st.textContent='кабинет продавца';}
       $('shopName').textContent=shop.name;
       if(shop.logo_url)$('shopAva').innerHTML='<img src="'+shop.logo_url+'">';
       $('shName').value=shop.name||'';$('shCity').value=shop.city||'Вуктыл';$('shPhone').value=shop.phone||'';$('shAddr').value=shop.address||'';$('shDesc').value=shop.description||'';
       workHours=shop.working_hours||DEFAULT_WH;
       const exRes=await sb.from('shop_extras').select('*').eq('shop_id',shop.id).order('created_at');
       myExtras=exRes.data||[];
-    }else{workHours=DEFAULT_WH;myExtras=[];}
+    }else{
+      workHours=DEFAULT_WH;myExtras=[];
+      const nick=(me.user_metadata&&me.user_metadata.nick)||((me.email||'').split('@')[0])||'Мой магазин';
+      $('shopName').textContent=nick;
+      const st=document.querySelector('.shopStatus');
+      if(st){st.classList.add('warn');st.textContent='магазин не заполнен — вкладка «Магазин»';}
+    }
     myBouquets=bRes.data||[];
     renderWH();
     const ids=myBouquets.map(x=>x.id);

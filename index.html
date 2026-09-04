@@ -1066,24 +1066,51 @@ function bouquetCard(b,i){
     '<button onclick="event.stopPropagation();openComments('+b.id+')">'+ic('i-comment')+'<span>'+cms+'</span></button>'+
     '<button class="ord" onclick="event.stopPropagation();openOrder('+b.id+')">заказать</button></div></div>';
 }
+let favBusy=false;
 async function toggleFav(id){
   if(!me){openAuth();return;}
-  const cur=favorites.find(f=>f.bouquet_id===id);
+  if(favBusy)return; // защита от двойного тапа
+  favBusy=true;
   showLoader();
   try{
-    if(cur){await sb.from('favorites').delete().eq('id',cur.id);favorites=favorites.filter(f=>f.id!==cur.id);}
-    else{const{data,error}=await sb.from('favorites').insert({bouquet_id:id,user_id:me.id}).select();if(error){handleSBError(error,'Избранное');return;}favorites.push(data[0]);}
-  }finally{hideLoader();}
+    const cur=favorites.find(f=>f.bouquet_id===id);
+    if(cur){
+      await sb.from('favorites').delete().eq('id',cur.id);
+      favorites=favorites.filter(f=>f.id!==cur.id);
+    }else{
+      const{data,error}=await sb.from('favorites').insert({bouquet_id:id,user_id:me.id}).select();
+      if(error){
+        if(/duplicate|unique/i.test(error.message)){
+          // сервер говорит «уже в избранном» — тихо синхронизируемся без ошибки
+          const {data:rows}=await sb.from('favorites').select('*').eq('user_id',me.id);
+          favorites=rows||[];
+        }else{handleSBError(error,'Избранное');return;}
+      }else if(data&&data[0]){favorites.push(data[0]);}
+    }
+  }finally{hideLoader();favBusy=false;}
   refreshShop();
 }
+let likeBusy=false;
 async function likeBouquet(id){
   if(!me){openAuth();return;}
-  const cur=bouquetLikes.find(l=>l.bouquet_id===id&&l.user_id===me.id);
+  if(likeBusy)return;
+  likeBusy=true;
   showLoader();
   try{
-    if(cur){await sb.from('bouquet_likes').delete().eq('id',cur.id);bouquetLikes=bouquetLikes.filter(l=>l.id!==cur.id);}
-    else{const{data,error}=await sb.from('bouquet_likes').insert({bouquet_id:id,user_id:me.id}).select();if(error){handleSBError(error,'Лайк');return;}bouquetLikes.push(data[0]);}
-  }finally{hideLoader();}
+    const cur=bouquetLikes.find(l=>l.bouquet_id===id&&l.user_id===me.id);
+    if(cur){
+      await sb.from('bouquet_likes').delete().eq('id',cur.id);
+      bouquetLikes=bouquetLikes.filter(l=>l.id!==cur.id);
+    }else{
+      const{data,error}=await sb.from('bouquet_likes').insert({bouquet_id:id,user_id:me.id}).select();
+      if(error){
+        if(/duplicate|unique/i.test(error.message)){
+          const {data:rows}=await sb.from('bouquet_likes').select('*').eq('user_id',me.id);
+          bouquetLikes=rows||[];
+        }else{handleSBError(error,'Лайк');return;}
+      }else if(data&&data[0]){bouquetLikes.push(data[0]);}
+    }
+  }finally{hideLoader();likeBusy=false;}
   refreshShop();
 }
 let dayDeck=[],dayIdx=0;
