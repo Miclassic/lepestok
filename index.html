@@ -53,11 +53,14 @@ main{padding:84px 16px calc(110px + env(safe-area-inset-bottom));max-width:620px
 .vkFall .vp{position:absolute;top:-6%;animation:vkDrop linear infinite}
 .vkFall .vp svg{width:100%;height:100%;display:block}
 @keyframes vkDrop{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(78vh) rotate(320deg)}}
-.vkAnnounce{position:relative;z-index:1;background:var(--bg);padding:66px 18px 12px;text-align:center}
-.vkAnnounce .a1{font-size:12.5px;font-weight:800;color:var(--ink);display:flex;align-items:center;justify-content:center;gap:6px}
-.vkAnnounce .a1 .icn{width:14px;height:14px;color:var(--coral)}
-.vkAnnounce .a1 b{color:var(--coral)}
-.vkAnnounce .a2{font-size:10.5px;color:var(--gray);margin-top:3px}
+.vkAnnounce{position:relative;z-index:1;background:var(--bg);padding:64px 16px 10px;text-align:center}
+.annBadge{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(120deg,#FFF3F1,#FFECEF);border:1.5px solid rgba(255,107,107,.35);border-radius:999px;padding:7px 14px 7px 8px;box-shadow:0 6px 18px rgba(233,120,140,.18)}
+.annBadge .abIco{width:26px;height:26px;flex:none;border-radius:50%;background:var(--gradient);color:#fff;display:grid;place-items:center}
+.annBadge .abIco .icn{width:14px;height:14px}
+.annBadge .abTxt{text-align:left}
+.annBadge .abTxt b{display:block;font-size:10.5px;color:var(--ink)}
+.annBadge .abTxt b span{color:var(--coral)}
+.annBadge .abTxt span{display:block;font-size:8.5px;color:var(--gray);margin-top:1px}
 .vkHero{margin:0;padding:26px 20px 62px;background:linear-gradient(180deg,rgba(255,251,249,.72) 0%,rgba(255,182,201,.38) 34%,rgba(255,143,178,.42) 55%,rgba(255,214,228,.55) 80%,rgba(255,249,247,.95) 100%),url('cover.jpg') left center/cover no-repeat #FFE9EE;text-align:center;color:#fff;position:relative;z-index:1}
 .vkHero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 15%,rgba(255,255,255,.25),transparent 45%),radial-gradient(circle at 85% 80%,rgba(255,255,255,.18),transparent 40%);pointer-events:none}
 .vkLogo{width:46px;height:46px;color:var(--coral);filter:drop-shadow(0 6px 18px rgba(255,107,107,.45));margin:0 auto 10px;display:block;animation:pulse 2.4s ease-in-out infinite}
@@ -112,7 +115,7 @@ main{padding:84px 16px calc(110px + env(safe-area-inset-bottom));max-width:620px
 .stockPill .icn{width:10px;height:10px}
 .stockPill.in{background:rgba(16,185,129,.13);color:var(--grn)}
 .stockPill.out{background:rgba(239,68,68,.11);color:var(--red)}
-.popStock{position:absolute;left:8px;bottom:8px;z-index:2}
+.popStock{position:absolute;left:8px;bottom:8px;z-index:2}.popFoot2{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-top:5px}
 .popName{font-size:12.5px;font-weight:800;margin-top:8px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .popComp{color:var(--gray);font-size:10px;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .popPrice{color:var(--coral);font-weight:800;font-size:12.5px;margin-top:5px}
@@ -324,13 +327,13 @@ main{padding:84px 16px calc(110px + env(safe-area-inset-bottom));max-width:620px
 .pBtn.danger{background:rgba(239,68,68,.1);color:var(--red)}
 .cityFab{position:relative;z-index:2;border:1px solid rgba(217,119,6,.22);color:var(--amber);border-radius:999px;padding:5px 10px;font-size:9.5px;font-weight:800;background:linear-gradient(180deg,#FFFEFB 0%,#FFF7EC 100%);cursor:pointer;display:flex;align-items:center;gap:4px;box-shadow:0 3px 12px rgba(190,150,95,.14);flex:0 1 auto;min-width:0}
 .cityFab .icn{width:10px;height:10px;flex:none}
-.cityFab .cityNm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:94px}
+.cityFab{flex:none}
+.cityFab .cityNm{white-space:nowrap}
 @media(max-width:460px){
   .brandSlog{display:none}
-  .miniBtn.cta{padding:8px 10px;font-size:10px;gap:4px}
+  .miniBtn.cta{display:none}
   .avaBtn{width:30px;height:30px;font-size:12px}
   .cityFab{padding:5px 8px}
-  .cityFab .cityNm{max-width:80px}
 }
 .loader{position:fixed;inset:0;z-index:200;background:rgba(255,255,255,.7);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;pointer-events:all}
 .loader .spin{width:42px;height:42px;border:3px solid rgba(255,107,107,.2);border-top-color:var(--coral);border-radius:50%;animation:spin 1s linear infinite}
@@ -409,8 +412,7 @@ main{padding:84px 16px calc(110px + env(safe-area-inset-bottom));max-width:620px
     <div class="vkWrap">
       <div class="vkFall" id="vkFall"></div>
       <div class="vkAnnounce">
-        <div class="a1"><svg class="icn"><use href="#i-flower"/></svg>Лепесток — цветочный поисковик <b id="annCity">Новороссийска</b></div>
-        <div class="a2">Мы помогаем выбрать букет и подсказываем, где его заказать</div>
+        <div class="annBadge"><span class="abIco"><svg class="icn"><use href="#i-flower"/></svg></span><span class="abTxt"><b>Лепесток — поисковик цветов <span id="annCity">Новороссийска</span></b><span>поможем выбрать букет и подскажем, где заказать</span></span></div>
       </div>
       <div class="vkHero">
         <svg class="icn vkLogo"><use href="#i-flower"/></svg>
@@ -629,16 +631,14 @@ function renderPopBouquets(){
   $('popBouquets').innerHTML=list.length?list.map(b=>popCard(b)).join(''):'<div class="empty" style="width:100%">'+ic('i-flower')+'Букеты скоро появятся — магазины подключаются</div>';
 }
 function popCard(b){
-  const shop=shopOf(b);
   const isFav=favorites.some(f=>f.bouquet_id===b.id);
   return '<div class="popCard" onclick="openCard('+b.id+')">'+
     '<div class="popCover"><img src="'+b.photo_url+'" loading="lazy">'+
       '<button class="favBtn'+(isFav?' on':'')+'" onclick="event.stopPropagation();toggleFav('+b.id+')">'+ic('i-heart')+'</button>'+
-      '<span class="popStock"><span class="stockPill '+(b.in_stock?'in':'out')+'">'+ic(b.in_stock?'i-check':'i-clock')+(b.in_stock?'в наличии':'под заказ')+'</span></span>'+
     '</div>'+
     '<div class="popName">'+esc(b.title)+'</div>'+
     '<div class="popComp">'+esc(b.category||'')+'</div>'+
-    '<div class="popPrice">'+fmtPrice(b.price)+'</div></div>';
+    '<div class="popFoot2"><span class="popPrice">'+fmtPrice(b.price)+'</span><span class="stockPill '+(b.in_stock?'in':'out')+'">'+ic(b.in_stock?'i-check':'i-clock')+(b.in_stock?'в наличии':'под заказ')+'</span></div></div>';
 }
 function shopReviewsCount(s){
   const bids=bouquets.filter(b=>b.user_id===s.owner_id).map(b=>b.id);

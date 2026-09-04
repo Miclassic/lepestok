@@ -35,10 +35,10 @@ textarea{min-height:70px;resize:vertical}
 .mtxt{font-size:13.5px;line-height:1.45;margin-bottom:8px}
 .mbtns{display:flex;gap:6px;flex-wrap:wrap}
 .mbtns button{flex:1;border:none;border-radius:999px;padding:9px 6px;font-weight:700;font-size:11px;cursor:pointer;white-space:nowrap}
-.ok{background:linear-gradient(135deg,#10B981,#059669);color:#fff}
+.ok{background:rgba(16,185,129,.14);color:#059669}
 .no{background:#FFF1F0;color:var(--red)}
 .day{background:var(--gradient);color:#fff}
-.info{background:linear-gradient(135deg,#F59E0B,#D97706);color:#fff}
+.info{background:rgba(245,158,11,.16);color:#D97706}
 .empty{text-align:center;color:var(--gray);padding:26px;font-size:13px}
 .out{background:none;border:none;color:var(--gray);font-size:12px;margin-top:10px;cursor:pointer;width:100%}
 .hidden{display:none!important}
@@ -529,11 +529,9 @@ function renderBouquets(){
     const tagsHtml=tags.length?'<div class="bTags">'+tags.slice(0,6).map(t=>'<span>'+esc(t)+'</span>').join('')+(tags.length>6?'<span>+'+(tags.length-6)+'</span>':'')+'</div>':'';
     const shop=shopsAll.find(s=>s.owner_id===b.user_id);
     return '<div class="card"><div class="bouquetRow">'+(b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:26px;background:linear-gradient(135deg,#FFE5E5,#F5E6FF)">🌷</div>')+
-    '<div class="bInfo"><div class="title">'+esc(b.title)+(b.is_day?' <span class="statusPill s-new">⭐ букет дня</span>':'')+'</div>'+
+    '<div class="bInfo"><div class="title">'+esc(b.title)+'</div>'+
     '<div class="price">'+b.price+' ₽</div><div class="cat">'+esc(b.category||'без категории')+' · '+(b.in_stock?'<span style="color:#10B981">в наличии</span>':'<span style="color:#EF4444">под заказ</span>')+(shop?' · '+esc(shop.name):'')+'</div>'+tagsHtml+'</div></div>'+
     '<div class="mbtns" style="margin-top:8px">'+
-      (b.is_day?'<button class="no" onclick="toggleDay('+b.id+',false)">убрать из дня</button>':'<button class="day" onclick="toggleDay('+b.id+',true)">⭐ букет дня</button>')+
-      '<button class="info" onclick="toggleStock('+b.id+','+(b.in_stock?'false':'true')+')">'+(b.in_stock?'в под заказ':'в наличии')+'</button>'+
       '<button class="info" onclick="startAdminEdit('+b.id+')">✏️ изменить</button>'+
       '<button class="no" onclick="delBouquet('+b.id+')">🗑 удалить</button>'+
     '</div></div>';
@@ -605,9 +603,14 @@ async function toggleStock(id,on){
   }finally{hideLoader();}
 }
 async function delBouquet(id){
-  if(!confirm('Удалить букет?'))return;
+  if(!confirm('Удалить букет? Связанные заказы и лайки тоже удалятся.'))return;
   showLoader();
   try{
+    await sb.from('orders').delete().eq('bouquet_id',id);
+    await sb.from('favorites').delete().eq('bouquet_id',id);
+    await sb.from('bouquet_likes').delete().eq('bouquet_id',id);
+    await sb.from('bouquet_comments').delete().not('parent_id','is',null).eq('bouquet_id',id);
+    await sb.from('bouquet_comments').delete().eq('bouquet_id',id);
     const res=await sb.from('bouquets').delete().eq('id',id);
     if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
     logAdmin('delete_bouquet',{bouquet_id:id});
@@ -821,17 +824,14 @@ function sRenderBouquets(){
     '<input type="file" id="fPhoto" accept="image/*" style="display:none" onchange="onPhotoPick(this)">'+
     '<span id="fPhotoName" style="font-size:10.5px;color:var(--gray)"></span>'+
     '<label><input type="checkbox" id="fStock" checked> В наличии</label>'+
-    '<label><input type="checkbox" id="fDay"> Букет дня</label>'+
     '<button class="btn" style="margin-top:10px" onclick="submitBouquet()">Сохранить букет</button></div>';
   const list=myBouquets.length?myBouquets.map(b=>{
     const tags=getTags(b);
     const tagsHtml=tags.length?'<div class="bTags">'+tags.slice(0,6).map(t=>'<span>'+esc(t)+'</span>').join('')+(tags.length>6?'<span>+'+(tags.length-6)+'</span>':'')+'</div>':'';
     return '<div class="card"><div class="bouquetRow">'+(b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:26px;background:linear-gradient(135deg,#FFE5E5,#F5E6FF)">🌷</div>')+
-    '<div class="bInfo"><div class="title">'+esc(b.title)+(b.is_day?' <span class="statusPill s-new">⭐ букет дня</span>':'')+'</div>'+
+    '<div class="bInfo"><div class="title">'+esc(b.title)+'</div>'+
     '<div class="price">'+b.price+' ₽</div><div class="cat">'+esc(b.category||'без категории')+' · '+(b.in_stock?'<span style="color:#10B981">в наличии</span>':'<span style="color:#EF4444">под заказ</span>')+'</div>'+tagsHtml+'</div></div>'+
     '<div class="mbtns" style="margin-top:8px">'+
-      (b.is_day?'<button class="no" onclick="sToggleDay('+b.id+',false)">убрать из дня</button>':'<button class="day" onclick="sToggleDay('+b.id+',true)">⭐ букет дня</button>')+
-      '<button class="info" onclick="sToggleStock('+b.id+','+(b.in_stock?'false':'true')+')">'+(b.in_stock?'в под заказ':'в наличии')+'</button>'+
       '<button class="no" onclick="sDelBouquet('+b.id+')">🗑 удалить</button>'+
     '</div></div>';
   }).join(''):'<div class="empty">У продавца пока нет букетов 🌷</div>';
@@ -852,12 +852,8 @@ async function submitBouquet(){
       if(up.error){toast('Фото: '+up.error.message,'i-x');return;}
       photo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
     }
-    const res=await sb.from('bouquets').insert({title:t,price:p,description:d,category:c,tags,photo_url,in_stock:$('fStock').checked,is_day:$('fDay').checked,user_id:adminId});
+    const res=await sb.from('bouquets').insert({title:t,price:p,description:d,category:c,tags,photo_url,in_stock:$('fStock').checked,user_id:adminId});
     if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
-    if($('fDay').checked){
-      await sb.from('bouquets').update({is_day:false}).eq('user_id',adminId).eq('is_day',true);
-      await sb.from('bouquets').update({is_day:true}).eq('id',res.data[0].id);
-    }
     toast('Букет добавлен','i-check');
     pickedPhoto=null;
     await refreshSeller();
@@ -886,6 +882,15 @@ async function sDelBouquet(id){
   if(!confirm('Удалить букет?'))return;
   showLoader();
   try{
+    const res=await sb.from('bouquets').delete().eq('id',id);async function sDelBouquet(id){
+  if(!confirm('Удалить букет? Связанные заказы тоже удалятся.'))return;
+  showLoader();
+  try{
+    await sb.from('orders').delete().eq('bouquet_id',id);
+    await sb.from('favorites').delete().eq('bouquet_id',id);
+    await sb.from('bouquet_likes').delete().eq('bouquet_id',id);
+    await sb.from('bouquet_comments').delete().not('parent_id','is',null).eq('bouquet_id',id);
+    await sb.from('bouquet_comments').delete().eq('bouquet_id',id);
     const res=await sb.from('bouquets').delete().eq('id',id);
     if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
     toast('Букет удалён','i-check');

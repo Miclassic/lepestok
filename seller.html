@@ -555,9 +555,14 @@ async function submitBouquet(){
   }finally{hideLoader();}
 }
 async function delBouquet(id){
-  if(!confirm('Удалить букет?'))return;
+  if(!confirm('Удалить букет? Связанные заказы и лайки тоже удалятся.'))return;
   showLoader();
   try{
+    await sb.from('orders').delete().eq('bouquet_id',id);
+    await sb.from('favorites').delete().eq('bouquet_id',id);
+    await sb.from('bouquet_likes').delete().eq('bouquet_id',id);
+    await sb.from('bouquet_comments').delete().not('parent_id','is',null).eq('bouquet_id',id);
+    await sb.from('bouquet_comments').delete().eq('bouquet_id',id);
     const res=await sb.from('bouquets').delete().eq('id',id).eq('user_id',me.id);
     if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
     toast('Букет удалён','i-check');
