@@ -99,8 +99,6 @@ textarea{min-height:70px;resize:vertical}
 .addForm label{display:flex;gap:8px;align-items:center;font-size:12px;margin-top:6px;cursor:pointer}
 .addForm input[type=checkbox]{width:auto;margin:0}
 .icn{width:1.05em;height:1.05em;display:inline-block;vertical-align:-.15em;flex:none}
-.secHd{font-size:12.5px;font-weight:800;margin:14px 0 8px;display:flex;align-items:center;gap:6px;color:var(--ink)}
-.secHd .icn{width:14px;height:14px;color:var(--coral)}
 .tagInsight{background:linear-gradient(120deg,#FFF3F1 0%,#FFECEF 100%);border-radius:14px;padding:10px 12px;font-size:11px;line-height:1.5;color:var(--gray);margin-top:8px;border:1.5px dashed rgba(255,107,107,.3)}
 .tagInsight b{color:var(--coral)}
 .loader{position:fixed;inset:0;z-index:200;background:rgba(255,255,255,.7);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;pointer-events:all}
@@ -216,9 +214,11 @@ function pluralBouq(n){const m=n%10,h=n%100;if(m===1&&h!==11)return'букет';
 const adminLog=JSON.parse(localStorage.getItem('lep_admin_log')||'[]');
 function logAdmin(action,details={}){adminLog.unshift({ts:Date.now(),action,details});if(adminLog.length>200)adminLog.length=200;localStorage.setItem('lep_admin_log',JSON.stringify(adminLog));}
 async function boot(){
-  const {data}=await sb.auth.getSession();
-  if(data.session){const email=(data.session.user.email||'').toLowerCase();if(email===ADMIN_EMAIL){panel();return;}await sb.auth.signOut();}
-  $('loginBox').classList.remove('hidden');
+  try{
+    const {data}=await sb.auth.getSession();
+    if(data.session){const email=(data.session.user.email||'').toLowerCase();if(email===ADMIN_EMAIL){panel();return;}await sb.auth.signOut();}
+    $('loginBox').classList.remove('hidden');
+  }catch(e){$('loginBox').classList.remove('hidden');}
 }
 async function doLogin(){
   const email=$('email').value.trim(),pass=$('pass').value;
@@ -335,7 +335,7 @@ function exportOrdersCSV(){
   const rows=[['ID','Дата','Букет','Цена','Статус','Тип','Получатель','Телефон','Адрес','Заказчик','Комментарий']];
   orders.forEach(o=>{
     const b=bouquets.find(x=>x.id===o.bouquet_id);
-    rows.push([o.id,new Date(o.created_at).toLocaleString('ru-RU'),b?b.title:'—',b?b.price:'',statusRu(o.status).replace(/[🆕⏳✅❌]\s*/g,''),o.kind==='delivery'?'доставка':'самовывоз',o.recipient_name||'',o.recipient_phone||'',o.address||'',o.sender_name||'',(o.note||'').replace(/\n/g,' ')]);
+    rows.push([o.id,new Date(o.created_at).toLocaleString('ru-RU'),b?b.title:'—',b?b.price:'',statusRu(o.status).replace(/[🆕⏳✅🚚❌]\s*/g,''),o.kind==='delivery'?'доставка':'самовывоз',o.recipient_name||'',o.recipient_phone||'',o.address||'',o.sender_name||'',(o.note||'').replace(/\n/g,' ')]);
   });
   const csv=rows.map(r=>r.map(c=>{const s=String(c==null?'':c);return s.includes(',')||s.includes('"')||s.includes('\n')?'"'+s.replace(/"/g,'""')+'"':s;}).join(',')).join('\n');
   const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
@@ -375,7 +375,7 @@ async function updateOrder(id,status){
     if(viewMode==='seller')await refreshSeller();else await refresh();
   }finally{hideLoader();}
 }
-/* ===== магазины (справочник) ===== */
+/* ===== магазины ===== */
 function shopRating(s){
   const bids=bouquets.filter(b=>b.user_id===s.owner_id).map(b=>b.id);
   const rc=comments.filter(c=>bids.includes(c.bouquet_id)&&c.rating);
@@ -444,15 +444,16 @@ async function saveShopAdmin(){
 async function toggleShopFlag(id,field,val){
   showLoader();
   try{
-    const res=await sb.from('shops').update((()=>{const o={};o[field]=val;return o;})()).eq('id',id);
+    const o={};o[field]=val;
+    const res=await sb.from('shops').update(o).eq('id',id);
     if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
-    logAdmin('shop_flag',{shop_id:id,field,val});
+    logAdmin('shop_flag',{shop_id:id,field:field,val:val});
     toast('Обновлено','i-check');
     await refresh();
   }finally{hideLoader();}
 }
 async function delShopAdmin(id){
-  if(!confirm('Удалить магазин? Его букеты (если были) останутся, но магазин исчезнет с витрины.'))return;
+  if(!confirm('Удалить магазин?'))return;
   showLoader();
   try{
     const res=await sb.from('shops').delete().eq('id',id);
@@ -580,25 +581,6 @@ async function saveAdminEdit(){
     logAdmin('edit_bouquet',{bouquet_id:adminEditId});
     toast('Букет обновлён','i-check');
     adminEditId=null;adminEditPhoto=null;
-    await refresh();
-  }finally{hideLoader();}
-}
-async function toggleDay(id,on){
-  showLoader();
-  try{
-    if(on)await sb.from('bouquets').update({is_day:false}).eq('is_day',true);
-    const res=await sb.from('bouquets').update({is_day:on}).eq('id',id).select();
-    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
-    toast(on?'Букет дня обновлён':'Убрано из букета дня','i-check');
-    await refresh();
-  }finally{hideLoader();}
-}
-async function toggleStock(id,on){
-  showLoader();
-  try{
-    const res=await sb.from('bouquets').update({in_stock:on}).eq('id',id).select();
-    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
-    toast('Наличие обновлено','i-check');
     await refresh();
   }finally{hideLoader();}
 }
@@ -859,30 +841,7 @@ async function submitBouquet(){
     await refreshSeller();
   }finally{hideLoader();}
 }
-async function sToggleDay(id,on){
-  showLoader();
-  try{
-    if(on)await sb.from('bouquets').update({is_day:false}).eq('user_id',adminId).eq('is_day',true);
-    const res=await sb.from('bouquets').update({is_day:on}).eq('id',id).select();
-    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
-    toast('Обновлено','i-check');
-    await refreshSeller();
-  }finally{hideLoader();}
-}
-async function sToggleStock(id,on){
-  showLoader();
-  try{
-    const res=await sb.from('bouquets').update({in_stock:on}).eq('id',id).select();
-    if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
-    toast('Обновлено','i-check');
-    await refreshSeller();
-  }finally{hideLoader();}
-}
 async function sDelBouquet(id){
-  if(!confirm('Удалить букет?'))return;
-  showLoader();
-  try{
-    const res=await sb.from('bouquets').delete().eq('id',id);async function sDelBouquet(id){
   if(!confirm('Удалить букет? Связанные заказы тоже удалятся.'))return;
   showLoader();
   try{
