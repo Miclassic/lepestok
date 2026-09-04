@@ -564,13 +564,23 @@ const TAG_PRESETS=[
 ];
 let pickedTags=[];
 
+const ADMIN_EMAIL='artixz18@gmail.com';
 async function boot(){
   const {data}=await sb.auth.getSession();
   if(!data.session){return;}
   me=data.session.user;
   const pr=await sb.from('profiles').select('is_florist,telegram_chat_id').eq('id',me.id).maybeSingle();
-  if(!pr.data||!pr.data.is_florist){return;}
-  myTgChat=pr.data.telegram_chat_id||null;
+  const isFlorist=!!(pr.data&&pr.data.is_florist);
+  const isAdminEmail=String(me.email||'').toLowerCase()===ADMIN_EMAIL;
+  if(!isFlorist){
+    if(isAdminEmail){
+      // админ заходит в кабинет продавца — включаем продавца автоматически
+      await sb.from('profiles').upsert({id:me.id,is_florist:true},{onConflict:'id'});
+    }else{
+      showNotFlorist();
+      return;
+    }
+  }
   $('loginBox').classList.add('hidden');
   registerSW();
   initPushBtn();
@@ -598,11 +608,33 @@ async function boot(){
   await fetchTrendTags();
   await refresh();
 }
+function showNotFlorist(){
+  const inner=$('loginBox').querySelector('.sheetIn');
+  if(!inner)return;
+  inner.innerHTML='<h3>Аккаунт не продавец</h3>'+
+    '<div style="font-size:12.5px;color:var(--gray);line-height:1.55;margin-bottom:12px">Ты вошёл как <b style="color:var(--ink)">'+esc(me.email||'')+'</b>, но на этом аккаунте не включён продавец. Включи его одним нажатием — и кабинет откроется.</div>'+
+    '<button class="btn" onclick="enableSellerMe()">'+ic('i-star')+'Включить продавца и войти</button>'+
+    '<button class="btn soft" style="margin-top:8px" onclick="signOutBack()">Выйти</button>';
+}
+async function enableSellerMe(){
+  showLoader();
+  try{
+    const {error}=await sb.from('profiles').upsert({id:me.id,is_florist:true},{onConflict:'id'});
+    if(error){toast('Ошибка: '+error.message,'i-x');return;}
+    location.reload();
+  }finally{hideLoader();}
+}
+async function signOutBack(){await sb.auth.signOut();location.reload();}
 async function doLogin(){
   showLoader();
   try{
     const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('pass').value});
-    if(error){$('loginErr').textContent='Неверный email или пароль';return;}
+    if(error){
+      $('loginErr').textContent=/confirmed/i.test(error.message)
+        ?'Сначала подтверди email (письмо при регистрации)'
+        :(/Invalid login credentials/i.test(error.message)?'Неверный email или пароль':error.message);
+      return;
+    }
     location.reload();
   }finally{hideLoader();}
 }
