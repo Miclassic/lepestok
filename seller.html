@@ -173,6 +173,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 .bulkBar .cancel{background:#FFF1F0;color:var(--red)}
 .tgReasons{font-size:12px;color:var(--gray);line-height:1.6;margin:8px 0;padding-left:18px}
 .tgReasons li{margin-bottom:4px}
+.verTag{font-size:9px;color:var(--gray);font-weight:400;margin-left:6px}
 </style>
 </head>
 <body>
@@ -274,8 +275,8 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
     <div class="oLine">Кнопка «Войти через Telegram» не отрисовалась. Частые причины:</div>
     <ul class="tgReasons">
       <li>сайт открыт по <b>HTTP</b> — виджет работает только по <b>HTTPS</b>;</li>
-      <li>домен сайта не добавлен боту в BotFather (команда <b>/setdomain</b> у @BotFather для @lepestok_notify_bot);</li>
-      <li>нет доступа к telegram.org (сеть/блокировщик).</li>
+      <li>домен сайта не добавлен боту в BotFather (команда <b>/setdomain</b> для @lepestok_notify_bot);</li>
+      <li>нет доступа к telegram.org (сеть/блокировщик) — тогда просто включи VPN один раз.</li>
     </ul>
     <div class="oLine">Можно привязать напрямую: открой бота и напиши ему — уведомления о заказах придут в чат.</div>
     <div class="rowBtns">
@@ -287,7 +288,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 </div>
 <div id="loginBox" class="sheet" style="align-items:center;background:var(--bg)">
   <div class="sheetIn" style="border-radius:24px;max-width:420px;margin:0 16px">
-    <h3>Вход для продавца</h3>
+    <h3>Вход для продавца<span class="verTag">v0409a</span></h3>
     <input id="email" type="email" placeholder="Email">
     <input id="pass" type="password" placeholder="Пароль">
     <button class="btn" onclick="doLogin()">Войти</button>
@@ -300,6 +301,8 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 <script>
 const sb=supabase.createClient('https://dhwkkbtrhexywymegwoo.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRod2trYnRyaGV4eXd5bWVnd29vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMDUxODMsImV4cCI6MjEwMzc4MTE4M30.NAyY4dCeRRC2OznENuNCfvr-mKqACyMU61K-y-PkRIQ');
 const TG_BOT='lepestok_notify_bot';
+const ADMIN_EMAIL='artixz18@gmail.com';
+const APP_VER='v0409a';
 let me=null,shop=null,myBouquets=[],myOrders=[],myReviews=[],myExtras=[],myReplies=[],pickedPhoto=null,pickedLogo=null,myTgChat=null;
 let trendTags=[],categories=[];
 const DEFAULT_CATS=['сборный','розы','тюльпаны','хризантемы','пионы','лилии','композиция'];
@@ -319,11 +322,11 @@ function whenRu(t){try{return new Date(t).toLocaleString('ru-RU',{day:'2-digit',
 function statusRu(s){return({new:'новый',accepted:'принят',ready:'готов',delivered:'доставлен',cancelled:'отменён'})[s]||s;}
 function fmtPrice(p){return String(p||0).replace(/\B(?=(\d{3})+(?!\d))/g,' ')+' ₽';}
 
-/* ---------- TELEGRAM WIDGET: динамическая загрузка + watchdog + fallback ---------- */
+/* ---------- TELEGRAM WIDGET ---------- */
 let tgWatchdog=null;
 function loadTelegramWidget(){
   const box=$('tgBox');if(!box)return;
-  box.innerHTML=''; // убираем прошлые iframe/скрипты
+  box.innerHTML='';
   const s=document.createElement('script');
   s.src='https://telegram.org/js/telegram-widget.js?22';
   s.async=true;
@@ -334,20 +337,14 @@ function loadTelegramWidget(){
   s.setAttribute('data-request-access','write');
   box.appendChild(s);
   clearTimeout(tgWatchdog);
-  tgWatchdog=setTimeout(()=>{
-    if(!box.querySelector('iframe'))tgWidgetFailed();
-  },7000);
+  tgWatchdog=setTimeout(()=>{if(!box.querySelector('iframe'))tgWidgetFailed();},7000);
 }
-function ensureTgWidget(){
-  const box=$('tgBox');
-  if(box&&!box.querySelector('iframe'))loadTelegramWidget();
-}
+function ensureTgWidget(){const box=$('tgBox');if(box&&!box.querySelector('iframe'))loadTelegramWidget();}
 function tgWidgetFailed(){
   const box=$('tgBox');
   if(box&&!box.querySelector('iframe')){
     box.innerHTML='<button type="button" class="btn" style="max-width:250px;margin:0 auto" onclick="window.open(\'https://t.me/'+TG_BOT+'\',\'_blank\')">'+ic('i-send')+'Открыть бота в Telegram</button>';
   }
-  toast('Кнопка Telegram не загрузилась — детали по ссылке ниже','i-bell');
 }
 function retryTgWidget(){closeSheet('tgSheet');loadTelegramWidget();}
 function openTgSheet(){$('tgSheet').classList.remove('hidden');}
@@ -362,10 +359,10 @@ window.onTelegramAuth=function(user){
   showLoader();
   sb.from('profiles').update({telegram_chat_id:String(user.id)}).eq('id',me.id).then(({error})=>{
     hideLoader();
-    if(error){toast('Не удалось привязать Telegram','i-x');return;}
+    if(error){toast('Не удалось привязать Telegram: '+error.message,'i-x');return;}
     myTgChat=String(user.id);
     renderTgStatus();
-    toast('Telegram привязан! Заказы будут приходить тебе 🌸','i-check');
+    toast('Telegram привязан! 🌸','i-check');
   });
 };
 
@@ -556,6 +553,29 @@ function renderRevenue(){
   '</div>';
 }
 
+/* ---------- КАТЕГОРИИ ---------- */
+function catList(){
+  const names=(categories||[]).map(c=>c.name||c);
+  return [...new Set([...DEFAULT_CATS,...names])];
+}
+function catChipsHtml(){
+  return catList().map(c=>'<button type="button" class="chip'+(pickedCat===c?' on':'')+'" data-cat="'+esc(c)+'">'+esc(c)+'</button>').join('');
+}
+function refreshCatRow(){const row=$('fCatRow');if(row)row.innerHTML=catChipsHtml();}
+async function addCategory(){
+  const inp=$('fNewCat');if(!inp)return;
+  const name=inp.value.trim().toLowerCase();
+  if(!name){toast('Введи название категории','i-x');return;}
+  if(catList().includes(name)){pickedCat=name;refreshCatRow();inp.value='';toast('Категория выбрана','i-check');return;}
+  const {error}=await sb.from('categories').insert({name});
+  if(error){toast('Не сохранилось: '+error.message,'i-x');return;}
+  categories.push({name});
+  pickedCat=name;
+  refreshCatRow();
+  inp.value='';
+  toast('Категория «'+name+'» добавлена','i-check');
+}
+
 const TAG_PRESETS=[
   'день рождения','свидание','просто так','8 марта','извинение',
   'выпускной','1 сентября','день учителя','день матери','новый год','14 февраля',
@@ -564,55 +584,17 @@ const TAG_PRESETS=[
 ];
 let pickedTags=[];
 
-const ADMIN_EMAIL='artixz18@gmail.com';
-async function boot(){
-  const {data}=await sb.auth.getSession();
-  if(!data.session){return;}
-  me=data.session.user;
-  const pr=await sb.from('profiles').select('is_florist,telegram_chat_id').eq('id',me.id).maybeSingle();
-  const isFlorist=!!(pr.data&&pr.data.is_florist);
-  const isAdminEmail=String(me.email||'').toLowerCase()===ADMIN_EMAIL;
-  if(!isFlorist){
-    if(isAdminEmail){
-      // админ заходит в кабинет продавца — включаем продавца автоматически
-      await sb.from('profiles').upsert({id:me.id,is_florist:true},{onConflict:'id'});
-    }else{
-      showNotFlorist();
-      return;
-    }
-  }
-  $('loginBox').classList.add('hidden');
-  registerSW();
-  initPushBtn();
-  startOrderRealtime();
-  loadQR();
-  renderTgStatus();
-  // делегирование вешается ОДИН раз (фикс дублирующихся слушателей)
-  $('qrBlock').addEventListener('click',e=>{
-    const rm=e.target.closest('[data-qr]');
-    if(rm){e.stopPropagation();removeQR(+rm.dataset.qr);return;}
-    const chip=e.target.closest('.qrChip');
-    if(chip){insertQR(quickReplies[+chip.dataset.qi]||'');}
-  });
-  $('trendBlock').addEventListener('click',e=>{
-    const chip=e.target.closest('[data-trend]');
-    if(!chip)return;
-    const t=trendTags[+chip.dataset.trend];
-    if(!t)return;
-    if(pickedTags.includes(t.tag)){toast('Тег уже добавлен','i-x');return;}
-    pickedTags.push(t.tag);
-    chip.classList.add('added');
-    renderTagChips();
-    toast('Тег «'+t.tag+'» добавлен','i-check');
-  });
-  await fetchTrendTags();
-  await refresh();
+/* ---------- ЗАПУСК: устойчивый вход ---------- */
+function bootFail(msg){
+  const lb=$('loginBox');if(lb)lb.classList.remove('hidden');
+  const err=$('loginErr');
+  if(err)err.textContent='Ошибка запуска ('+APP_VER+'): '+msg;
 }
-function showNotFlorist(){
+function showNotFlorist(extra){
   const inner=$('loginBox').querySelector('.sheetIn');
   if(!inner)return;
-  inner.innerHTML='<h3>Аккаунт не продавец</h3>'+
-    '<div style="font-size:12.5px;color:var(--gray);line-height:1.55;margin-bottom:12px">Ты вошёл как <b style="color:var(--ink)">'+esc(me.email||'')+'</b>, но на этом аккаунте не включён продавец. Включи его одним нажатием — и кабинет откроется.</div>'+
+  inner.innerHTML='<h3>Аккаунт не продавец<span class="verTag">'+APP_VER+'</span></h3>'+
+    '<div style="font-size:12.5px;color:var(--gray);line-height:1.55;margin-bottom:12px">Ты вошёл как <b style="color:var(--ink)">'+esc(me?me.email||'':'')+'</b>, но на этом аккаунте не включён продавец.'+(extra?'<br><i>'+esc(extra)+'</i>':'')+' Включи одним нажатием — и кабинет откроется.</div>'+
     '<button class="btn" onclick="enableSellerMe()">'+ic('i-star')+'Включить продавца и войти</button>'+
     '<button class="btn soft" style="margin-top:8px" onclick="signOutBack()">Выйти</button>';
 }
@@ -620,11 +602,62 @@ async function enableSellerMe(){
   showLoader();
   try{
     const {error}=await sb.from('profiles').upsert({id:me.id,is_florist:true},{onConflict:'id'});
-    if(error){toast('Ошибка: '+error.message,'i-x');return;}
+    if(error){bootFail(error.message);return;}
     location.reload();
-  }finally{hideLoader();}
+  }catch(e){bootFail(e.message);}
+  finally{hideLoader();}
 }
 async function signOutBack(){await sb.auth.signOut();location.reload();}
+async function boot(){
+  try{
+    const {data}=await sb.auth.getSession();
+    if(!data.session){return;}
+    me=data.session.user;
+    // FIX: читаем профиль с запасным вариантом — если колонки telegram_chat_id нет, запрос без неё
+    let pr=await sb.from('profiles').select('is_florist,telegram_chat_id').eq('id',me.id).maybeSingle();
+    if(pr.error){pr=await sb.from('profiles').select('is_florist').eq('id',me.id).maybeSingle();}
+    const isFlorist=!!(pr.data&&pr.data.is_florist);
+    const isAdminEmail=String(me.email||'').toLowerCase()===ADMIN_EMAIL;
+    myTgChat=(pr.data&&pr.data.telegram_chat_id)||null;
+    if(!isFlorist){
+      if(isAdminEmail){
+        const up=await sb.from('profiles').upsert({id:me.id,is_florist:true},{onConflict:'id'});
+        if(up.error){showNotFlorist(up.error.message);return;}
+      }else{
+        showNotFlorist();
+        return;
+      }
+    }
+    $('loginBox').classList.add('hidden');
+    registerSW();
+    initPushBtn();
+    startOrderRealtime();
+    loadQR();
+    renderTgStatus();
+    // делегирование — один раз
+    $('qrBlock').addEventListener('click',e=>{
+      const rm=e.target.closest('[data-qr]');
+      if(rm){e.stopPropagation();removeQR(+rm.dataset.qr);return;}
+      const chip=e.target.closest('.qrChip');
+      if(chip){insertQR(quickReplies[+chip.dataset.qi]||'');}
+    });
+    $('trendBlock').addEventListener('click',e=>{
+      const chip=e.target.closest('[data-trend]');
+      if(!chip)return;
+      const t=trendTags[+chip.dataset.trend];
+      if(!t)return;
+      if(pickedTags.includes(t.tag)){toast('Тег уже добавлен','i-x');return;}
+      pickedTags.push(t.tag);
+      chip.classList.add('added');
+      renderTagChips();
+      toast('Тег «'+t.tag+'» добавлен','i-check');
+    });
+    await fetchTrendTags();
+    await refresh();
+  }catch(e){
+    bootFail(e&&e.message?e.message:String(e));
+  }
+}
 async function doLogin(){
   showLoader();
   try{
@@ -687,7 +720,7 @@ function showSec(s){
   $('fabBouq').classList.toggle('hidden',s!=='bouquets');
   if(s==='bouquets'){renderTrendBlock();renderRevenue();}
   if(s==='reviews')renderQR();
-  if(s==='shop')ensureTgWidget(); // виджет грузится только в видимой секции
+  if(s==='shop')ensureTgWidget();
 }
 function renderOrders(){
   const box=$('orderList');
@@ -723,7 +756,7 @@ function openOrder(id){
     (o.note?'<div class="oLine">Комментарий: <i>'+esc(o.note)+'</i></div>':'')+
     exHtml+
     '<div class="oLine" style="margin-top:6px">Статус: <span class="stPill s-'+o.status+'">'+statusRu(o.status)+'</span></div>'+
-    (!isShopOpenNow()?'<div class="oLine" style="color:var(--red);margin-top:8px">⚠ Сейчас нерабочее время — клиент увидит это только утром</div>':'')+
+    (!isShopOpenNow()?'<div class="oLine" style="color:var(--red);margin-top:8px">⚠ Сейчас нерабочее время</div>':'')+
     '<div class="rowBtns">'+
       (phone?'<button class="btn" onclick="call(\''+esc(phone)+'\')">'+ic('i-phone')+'Позвонить</button>':'')+
       (o.status==='new'?'<button class="btn green" onclick="setStatus('+o.id+',\'accepted\')">'+ic('i-check')+'Принять заказ</button>':'')+
@@ -819,28 +852,6 @@ function runAutoTag(){
   renderTagChips();
   toast(added?'Добавлено '+added+' тег(ов)':'Все теги уже добавлены','i-wand');
 }
-function openAddBouquet(){/* ---------- КАТЕГОРИИ: общий список из таблицы categories ---------- */
-function catList(){
-  const names=(categories||[]).map(c=>c.name||c);
-  return [...new Set([...DEFAULT_CATS,...names])];
-}
-function catChipsHtml(){
-  return catList().map(c=>'<button type="button" class="chip'+(pickedCat===c?' on':'')+'" data-cat="'+esc(c)+'">'+esc(c)+'</button>').join('');
-}
-function refreshCatRow(){const row=$('fCatRow');if(row)row.innerHTML=catChipsHtml();}
-async function addCategory(){
-  const inp=$('fNewCat');if(!inp)return;
-  const name=inp.value.trim().toLowerCase();
-  if(!name){toast('Введи название категории','i-x');return;}
-  if(catList().includes(name)){pickedCat=name;refreshCatRow();inp.value='';toast('Категория выбрана','i-check');return;}
-  const {error}=await sb.from('categories').insert({name});
-  if(error){toast('Не сохранилось: '+error.message,'i-x');return;}
-  categories.push({name});
-  pickedCat=name;
-  refreshCatRow();
-  inp.value='';
-  toast('Категория «'+name+'» добавлена','i-check');
-}
 function openAddBouquet(){
   pickedPhoto=null;pickedCat='';editingId=null;pickedTags=[];
   $('bouqBody').innerHTML='<h3 id="bouqHead">Новый букет</h3>'+
@@ -900,7 +911,7 @@ function openEditBouquet(id){
   editingId=id;
   $('fTitle').value=b.title;$('fPrice').value=b.price;$('fDesc').value=b.description||'';$('fStock').checked=b.in_stock;
   pickedCat=b.category||'';
-  setTimeout(()=>{document.querySelectorAll('#fCatRow .chip').forEach(x=>x.classList.toggle('on',x.dataset.cat===pickedCat));},0);
+  setTimeout(()=>{refreshCatRow();},0);
   pickedTags=getTags(b);
   renderTagChips();
   if(b.photo_url){$('fPrev').src=b.photo_url;$('fPrevWrap').classList.remove('hidden');}
@@ -1066,8 +1077,10 @@ async function subscribePush(){
 }
 async function isPushSubscribed(){
   if(!('serviceWorker' in navigator))return false;
-  const reg=await navigator.serviceWorker.ready;
-  return !!(await reg.pushManager.getSubscription());
+  try{
+    const reg=await navigator.serviceWorker.ready;
+    return !!(await reg.pushManager.getSubscription());
+  }catch(e){return false;}
 }
 async function togglePush(){
   const sub=await isPushSubscribed();
