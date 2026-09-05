@@ -7,11 +7,11 @@
 <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogItCe0L7QtdGA0LrQvtCy0LjRlyAtINGM0YjRgdGC0LXQudGC0YDQuNC60LjRgSDQuNCx0L7Qt9Cw0YHQviIsCiAgInNob3J0X25hbWUiOiAi0JvQvtC10YDQutC+0LLQuNGlIiwKICAic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNGRkY5RjciLAogICJ0aGVtZV9jb2xvciI6ICIjRkZGNkYzIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sLCUzQ3N2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyNCAyNCclM0UlM0NwYXRoIGZpbGw9JyUyM0ZGNkI2QicgZD0nTTEyIDJsMiAzLjUgNCAuNS0zIDMgLjUgNEwxMiAxMWwtMy41IDIgLjUtNC0zLTMgNC0uNXpNNCAxNGMwIDUgNCA4IDggOHM4LTMgOC04YzAtMi0yLTMtNC0zLTIgMC00IDEtNCAxcy0yLTEtNC0xLTQgMS00IDN6Jy8lM0UlM0Mvc3ZnJTNFIiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
 <meta name="theme-color" content="#FFF6F3">
 <meta name="color-scheme" content="light">
+<meta name="description" content="Лепесток — цветочный поисковик Новороссийска. Расскажи, какой букет нужен, и мы подберём лучшие варианты от проверенных магазинов города.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FF6B6B' d='M12 2l2 3.5 4 .5-3 3 .5 4L12 11l-3.5 2 .5-4-3-3 4-.5zM4 14c0 5 4 8 8 8s8-3 8-8c0-2-2-3-4-3-2 0-4 1-4 1s-2-1-4-1-4 1-4 3z'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
-<!-- Яндекс Карты JS API v3 -->
 <script src="https://api-maps.yandex.ru/v3/?apikey=a399b10b-a54f-46e4-9d1f-d0b578689b05&lang=ru_RU"></script>
 <style>
 :root{color-scheme:light;--bg:#FFF9F7;--card:#FFFFFF;--ink:#1A1A2E;--gray:#64748B;--red:#EF4444;--yel:#F59E0B;--grn:#10B981;--pink:#FF6B9D;--coral:#FF6B6B;--purple:#A855F7;--amber:#D97706;--gradient:linear-gradient(135deg,#FF6B6B 0%,#FF6B9D 50%,#A855F7 100%);--glass:rgba(255,255,255,.86);--shadow:0 8px 28px rgba(233,120,140,.12);--shadow-hover:0 14px 40px rgba(233,120,140,.2)}
@@ -26,6 +26,8 @@ body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle
 .petal{position:absolute;top:-6%;opacity:.35;animation:fall linear infinite}
 .petal svg{width:100%;height:100%}
 @keyframes fall{to{transform:translateY(112vh) rotate(340deg)}}
+
+/* ===== топбар (упрощённый для чата) ===== */
 .topbar{position:fixed;top:0;left:0;right:0;z-index:20;background:var(--glass);backdrop-filter:blur(20px) saturate(1.8);-webkit-backdrop-filter:blur(20px) saturate(1.8);box-shadow:0 4px 24px rgba(120,60,70,.07)}
 .topbarIn{max-width:620px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px 8px}
 .brand{display:flex;align-items:center;gap:7px;user-select:none;cursor:pointer;flex:none}
@@ -39,17 +41,71 @@ body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle
 .miniBtn.cta{background:var(--gradient);color:#fff;font-weight:800;box-shadow:0 6px 22px rgba(255,107,107,.35);display:inline-flex;align-items:center;gap:6px}
 .miniBtn.cta .icn{width:12px;height:12px}
 .avaBtn{width:34px;height:34px;border:none;border-radius:50%;color:#fff;font-weight:800;font-size:14px;box-shadow:0 4px 16px rgba(255,107,107,.3);overflow:hidden;padding:0;cursor:pointer;background:var(--gradient);flex:none}
+
+/* ===== навигация ===== */
 .bnav{position:fixed;bottom:0;left:0;right:0;z-index:25;background:var(--glass);backdrop-filter:blur(20px) saturate(1.8);-webkit-backdrop-filter:blur(20px) saturate(1.8);box-shadow:0 -4px 24px rgba(120,60,70,.08);display:flex;align-items:flex-end;gap:2px;padding:6px 8px calc(8px + env(safe-area-inset-bottom));max-width:620px;margin:0 auto}
 @media(min-width:648px){.bnav{border-radius:20px 20px 0 0}}
 .bn{flex:1;background:none;border:none;border-radius:14px;padding:8px 2px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--gray);font-size:9.5px;font-weight:700;white-space:nowrap;cursor:pointer;position:relative}
 .bn .icn{width:19px;height:19px}
 .bn.on{color:var(--ink)}
 .bn.on::after{content:"";position:absolute;left:26%;right:26%;bottom:4px;height:2px;border-radius:999px;background:var(--gradient);box-shadow:0 0 10px rgba(255,107,107,.5)}
-.bnFab{flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;cursor:pointer;color:var(--gray);font-size:8.5px;font-weight:800;gap:3px;padding:0 2px}
-.bnFab .fabIco{width:52px;height:52px;border-radius:50%;background:var(--gradient);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(255,107,107,.5);margin-top:-26px;border:4px solid var(--bg)}
-.bnFab .fabIco .icn{width:22px;height:22px}
-main{padding:84px 16px calc(110px + env(safe-area-inset-bottom));max-width:620px;width:100%;margin:0 auto;position:relative;z-index:1}
-/* ===== шапка ===== */
+
+main{padding:72px 16px calc(90px + env(safe-area-inset-bottom));max-width:620px;width:100%;margin:0 auto;position:relative;z-index:1}
+
+/* ===== ЧАТ-ИНТЕРФЕЙС ===== */
+.chatWrap{display:flex;flex-direction:column;min-height:calc(100vh - 170px);gap:14px}
+.chatHero{text-align:center;padding:14px 8px 4px;animation:fadeInUp .7s ease}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.chatLogo{width:56px;height:56px;color:var(--coral);filter:drop-shadow(0 6px 18px rgba(255,107,107,.4));margin:0 auto 10px;display:block;animation:pulse 2.4s ease-in-out infinite}
+.chatTitle{font-size:26px;font-weight:800;letter-spacing:.3px;line-height:1.2}
+.chatTitle em{font-style:normal;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.chatSub{font-size:12px;color:var(--gray);margin-top:6px;line-height:1.5}
+
+.chatInput{background:var(--card);border-radius:22px;padding:6px;box-shadow:var(--shadow);display:flex;align-items:flex-end;gap:4px;position:sticky;bottom:calc(80px + env(safe-area-inset-bottom));z-index:10;border:2px solid transparent;transition:border-color .2s}
+.chatInput:focus-within{border-color:rgba(255,107,107,.3)}
+.chatInput textarea{flex:1;border:none;outline:none;background:transparent;font-size:14px;padding:10px 10px;resize:none;min-height:42px;max-height:140px;font-family:inherit;color:var(--ink);line-height:1.45}
+.chatInput textarea::placeholder{color:var(--gray);opacity:.7}
+.chatSend{width:42px;height:42px;border:none;border-radius:50%;background:var(--gradient);color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px rgba(255,107,107,.4);flex:none;transition:transform .15s}
+.chatSend:active{transform:scale(.92)}
+.chatSend:disabled{opacity:.4;cursor:not-allowed}
+.chatSend .icn{width:18px;height:18px}
+
+.chatChips{display:flex;flex-wrap:wrap;gap:6px;padding:4px 2px 8px;justify-content:center}
+.chatChip{background:var(--card);border:1.5px solid rgba(255,107,107,.2);border-radius:999px;padding:7px 13px;font-size:11px;font-weight:700;color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:5px;box-shadow:0 3px 10px rgba(233,120,140,.08);transition:.2s}
+.chatChip:hover{border-color:var(--coral);transform:translateY(-1px)}
+.chatChip .icn{width:12px;height:12px;color:var(--coral)}
+
+.chatMessages{display:flex;flex-direction:column;gap:12px;padding:4px 2px 8px}
+.msg{display:flex;gap:8px;animation:msgIn .4s ease both}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.msg.user{justify-content:flex-end}
+.msg.avt{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;flex:none;font-size:14px;font-weight:800;color:#fff}
+.msg.avt.bot{background:var(--gradient)}
+.msg.avt.usr{background:linear-gradient(135deg,#94A3B8,#64748B)}
+.msgBody{max-width:82%;display:flex;flex-direction:column;gap:6px}
+.msg.user .msgBody{align-items:flex-end}
+.msgBubble{padding:10px 14px;border-radius:18px;font-size:14px;line-height:1.45;max-width:100%}
+.msg.user .msgBubble{background:var(--gradient);color:#fff;border-bottom-right-radius:6px}
+.msg.bot .msgBubble{background:var(--card);box-shadow:var(--shadow);border-bottom-left-radius:6px;color:var(--ink)}
+
+.typing{display:inline-flex;align-items:center;gap:4px;padding:12px 16px;background:var(--card);border-radius:18px;border-bottom-left-radius:6px;box-shadow:var(--shadow)}
+.typing .dot{width:7px;height:7px;border-radius:50%;background:var(--coral);opacity:.4;animation:typing 1.3s infinite}
+.typing .dot:nth-child(2){animation-delay:.18s}
+.typing .dot:nth-child(3){animation-delay:.36s}
+@keyframes typing{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+
+.chatResults{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+@media(max-width:420px){.chatResults{grid-template-columns:1fr}}
+
+.refineRow{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.refineBtn{background:var(--card);border:1.5px solid rgba(168,85,247,.25);border-radius:999px;padding:7px 12px;font-size:11px;font-weight:700;color:var(--purple);cursor:pointer;display:inline-flex;align-items:center;gap:5px;box-shadow:0 3px 10px rgba(168,85,247,.1);transition:.2s}
+.refineBtn:hover{border-color:var(--purple);transform:translateY(-1px)}
+.refineBtn .icn{width:11px;height:11px}
+
+.chatFoot{text-align:center;padding:14px 8px;font-size:11px;color:var(--gray);line-height:1.5;margin-top:8px;border-top:1px dashed rgba(255,107,107,.2)}
+.chatFoot a{color:var(--coral);text-decoration:none;font-weight:700;cursor:pointer}
+
+/* ===== остальные экраны (без изменений) ===== */
 .vkWrap{position:relative;margin:-84px -16px 14px;overflow:hidden}
 .vkFall{position:absolute;inset:0;pointer-events:none;z-index:2;overflow:hidden}
 .vkFall .vp{position:absolute;top:-6%;animation:vkDrop linear infinite}
@@ -75,7 +131,6 @@ main{padding:84px 16px calc(110px + env(safe-area-inset-bottom));max-width:620px
 .vkFeat .fi .icn{width:15px;height:15px}
 .vkFeat h5{font-size:10.5px;font-weight:800;color:var(--ink)}
 .vkFeat p{font-size:8.5px;color:var(--gray);margin-top:1px}
-/* карточка квиза на главной */
 .quizCard{position:relative;z-index:3;margin:-40px 12px 0;background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:18px 16px 16px}
 .quizCard h3{font-size:18px;font-weight:800}
 .quizCard .qcSub{font-size:11px;color:var(--gray);margin:4px 0 14px}
@@ -97,7 +152,6 @@ main{padding:84px 16px calc(110px + env(safe-area-inset-bottom));max-width:620px
 .qcAvas span{width:26px;height:26px;border-radius:50%;background:var(--gradient);border:2px solid var(--card);margin-left:-8px;display:grid;place-items:center;color:#fff;font-size:10px;font-weight:800}
 .qcAvas span:first-child{margin-left:0}
 .qcProof p{font-size:9px;color:var(--gray);max-width:90px;line-height:1.3}
-/* секции главной */
 .secHead{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin:22px 2px 12px}
 .secHead h2{font-size:17px;font-weight:800;display:flex;align-items:center;gap:7px}
 .secHead h2 .icn{width:17px;height:17px;color:var(--coral)}
@@ -141,7 +195,6 @@ main{padding:84px 16px calc(110px + env(safe-area-inset-bottom));max-width:620px
 .whyItem .wiIco .icn{width:16px;height:16px}
 .whyItem h4{font-size:11px;font-weight:800;margin-bottom:4px}
 .whyItem p{font-size:9.5px;color:var(--gray);line-height:1.45}
-/* поиск */
 .searchBox{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:999px;padding:12px 16px;box-shadow:var(--shadow);margin-bottom:12px}
 .searchBox .icn{width:16px;height:16px;color:var(--gray);flex:none}
 .searchBox input{border:none;outline:none;background:transparent;font-size:13px;width:100%;color:var(--ink)}
@@ -176,7 +229,6 @@ main{padding:84px 16px calc(110px + env(safe-area-inset-bottom));max-width:620px
 .pickHead h3{font-size:14px;font-weight:800;color:var(--coral);display:flex;align-items:center;gap:7px}
 .pickHead h3 .icn{width:15px;height:15px}
 .pickHead p{font-size:11px;color:var(--gray);margin-top:4px;line-height:1.5}
-/* магазин страница */
 .spBackRow{display:flex;align-items:center;gap:8px;margin:0 2px 10px}
 .spBackTxt{font-size:12px;font-weight:800;color:var(--gray)}
 .backBtn{width:36px;height:36px;border:none;border-radius:50%;background:var(--card);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow);flex:none}
@@ -203,7 +255,6 @@ main{padding:84px 16px calc(110px + env(safe-area-inset-bottom));max-width:620px
 .spOrderBtns a.telegram{background:linear-gradient(135deg,#2AABEE,#229ED9);color:#fff}
 .spOwnerBox{margin-top:10px;padding:10px 12px;background:var(--bg);border:1.5px dashed rgba(255,107,107,.35);border-radius:14px;text-align:center;font-size:11px;color:var(--gray);line-height:1.45}
 .spOwnerBox b{color:var(--ink)}
-/* карточка букета lead */
 .cardLeadBox{background:linear-gradient(120deg,#FFF3F1,#FFECEF);border-radius:16px;padding:12px;margin-top:10px}
 .cardLeadBox h4{font-size:11px;color:var(--coral);font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:5px}
 .cardLeadBox h4 .icn{width:13px;height:13px}
@@ -225,7 +276,6 @@ main{padding:84px 16px calc(110px + env(safe-area-inset-bottom));max-width:620px
 .tagChips{display:flex;flex-wrap:wrap;gap:6px}
 .tagChip{display:inline-flex;align-items:center;background:rgba(255,107,107,.1);color:var(--coral);border:none;border-radius:999px;padding:6px 11px;font-size:10.5px;font-weight:800}
 .tagChip.more{background:var(--bg);color:var(--gray);cursor:pointer}
-/* магазины список */
 .shopLine{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:18px;padding:12px;box-shadow:var(--shadow);cursor:pointer;margin-bottom:10px}
 .shopLineAva{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#FFE5E5,#F5E6FF);display:flex;align-items:center;justify-content:center;overflow:hidden;flex:none;color:var(--coral)}
 .shopLineAva img{width:100%;height:100%;object-fit:cover}
@@ -263,176 +313,29 @@ main{padding:84px 16px calc(110px + env(safe-area-inset-bottom));max-width:620px
 .ctaGrad .icn{width:13px;height:13px}
 .fpill{flex:1;border:none;background:var(--card);border-radius:999px;padding:11px 4px;font-weight:700;font-size:12px;box-shadow:var(--shadow);white-space:nowrap;justify-content:center;display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--ink)}
 .fpill .icn{width:14px;height:14px;color:var(--gray)}
-
-/* ===== карта магазинов ===== */
-.mapCard{
-  background:var(--card);
-  border-radius:22px;
-  padding:8px;
-  box-shadow:var(--shadow);
-  margin:4px 0 14px;
-  overflow:hidden;
-}
-.mapHead{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  padding:7px 8px 10px;
-}
-.mapHead b{
-  display:block;
-  font-size:13px;
-  font-weight:800;
-}
-.mapHead span{
-  display:block;
-  color:var(--gray);
-  font-size:9.5px;
-  margin-top:2px;
-}
-.mapHead button{
-  width:34px;
-  height:34px;
-  border:0;
-  border-radius:50%;
-  background:var(--bg);
-  color:var(--coral);
-  display:grid;
-  place-items:center;
-  cursor:pointer;
-  box-shadow:0 4px 12px rgba(0,0,0,.06);
-}
-.mapHead button .icn{
-  width:16px;
-  height:16px;
-}
-#shopsMap{
-  width:100%;
-  height:330px;
-  border-radius:17px;
-  overflow:hidden;
-  background:#f4eeee;
-}
-.lepMapMarker{
-  width:42px;
-  height:42px;
-  border-radius:50% 50% 50% 8px;
-  transform:rotate(-45deg);
-  background:linear-gradient(135deg,#FF6B6B,#FF6B9D,#A855F7);
-  border:3px solid #fff;
-  box-shadow:0 7px 18px rgba(120,50,80,.3);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-}
-.lepMapMarkerInner{
-  width:30px;
-  height:30px;
-  border-radius:50%;
-  background:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transform:rotate(45deg);
-  overflow:hidden;
-}
-.lepMapMarkerInner img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-.lepMapMarkerInner .icn{
-  width:16px;
-  height:16px;
-  color:var(--coral);
-}
-.lepMapBubble{
-  position:absolute;
-  left:50%;
-  bottom:54px;
-  transform:translateX(-50%);
-  width:190px;
-  background:rgba(255,255,255,.96);
-  backdrop-filter:blur(14px);
-  border-radius:17px;
-  padding:10px;
-  box-shadow:0 12px 35px rgba(30,20,30,.2);
-  display:none;
-  z-index:20;
-}
-.lepMapMarkerWrap{
-  position:relative;
-}
-.lepMapMarkerWrap.open{
-  z-index:100;
-}
-.lepMapMarkerWrap.open .lepMapBubble{
-  display:block;
-}
-.lepMapBubbleName{
-  font-size:12px;
-  font-weight:800;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.lepMapBubbleMeta{
-  color:var(--gray);
-  font-size:9px;
-  margin-top:3px;
-  line-height:1.4;
-}
-.lepMapBubbleScore{
-  margin-top:7px;
-  display:inline-flex;
-  align-items:center;
-  gap:5px;
-  padding:4px 8px;
-  border-radius:999px;
-  background:rgba(255,107,107,.1);
-  color:var(--coral);
-  font-size:9px;
-  font-weight:800;
-}
-.lepMapBubbleBtn{
-  width:100%;
-  border:0;
-  border-radius:999px;
-  background:var(--gradient);
-  color:#fff;
-  padding:8px;
-  margin-top:8px;
-  font-size:10px;
-  font-weight:800;
-  cursor:pointer;
-}
-.lepScore{
-  display:inline-flex;
-  align-items:center;
-  gap:4px;
-  padding:3px 7px;
-  border-radius:999px;
-  background:linear-gradient(120deg,#FFF3F1,#FFECEF);
-  color:var(--coral);
-  font-size:8.5px;
-  font-weight:800;
-  white-space:nowrap;
-}
-.lepScore .icn{
-  width:10px;
-  height:10px;
-}
-.shopLineScore{
-  margin-top:5px;
-}
-.externalRating{
-  color:var(--yel);
-  font-weight:800;
-}
-
-/* comments */
+.mapCard{background:var(--card);border-radius:22px;padding:8px;box-shadow:var(--shadow);margin:4px 0 14px;overflow:hidden}
+.mapHead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 8px 10px}
+.mapHead b{display:block;font-size:13px;font-weight:800}
+.mapHead span{display:block;color:var(--gray);font-size:9.5px;margin-top:2px}
+.mapHead button{width:34px;height:34px;border:0;border-radius:50%;background:var(--bg);color:var(--coral);display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.mapHead button .icn{width:16px;height:16px}
+#shopsMap{width:100%;height:330px;border-radius:17px;overflow:hidden;background:#f4eeee}
+.lepMapMarker{width:42px;height:42px;border-radius:50% 50% 50% 8px;transform:rotate(-45deg);background:linear-gradient(135deg,#FF6B6B,#FF6B9D,#A855F7);border:3px solid #fff;box-shadow:0 7px 18px rgba(120,50,80,.3);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.lepMapMarkerInner{width:30px;height:30px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;transform:rotate(45deg);overflow:hidden}
+.lepMapMarkerInner img{width:100%;height:100%;object-fit:cover}
+.lepMapMarkerInner .icn{width:16px;height:16px;color:var(--coral)}
+.lepMapBubble{position:absolute;left:50%;bottom:54px;transform:translateX(-50%);width:190px;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-radius:17px;padding:10px;box-shadow:0 12px 35px rgba(30,20,30,.2);display:none;z-index:20}
+.lepMapMarkerWrap{position:relative}
+.lepMapMarkerWrap.open{z-index:100}
+.lepMapMarkerWrap.open .lepMapBubble{display:block}
+.lepMapBubbleName{font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lepMapBubbleMeta{color:var(--gray);font-size:9px;margin-top:3px;line-height:1.4}
+.lepMapBubbleScore{margin-top:7px;display:inline-flex;align-items:center;gap:5px;padding:4px 8px;border-radius:999px;background:rgba(255,107,107,.1);color:var(--coral);font-size:9px;font-weight:800}
+.lepMapBubbleBtn{width:100%;border:0;border-radius:999px;background:var(--gradient);color:#fff;padding:8px;margin-top:8px;font-size:10px;font-weight:800;cursor:pointer}
+.lepScore{display:inline-flex;align-items:center;gap:4px;padding:3px 7px;border-radius:999px;background:linear-gradient(120deg,#FFF3F1,#FFECEF);color:var(--coral);font-size:8.5px;font-weight:800;white-space:nowrap}
+.lepScore .icn{width:10px;height:10px}
+.shopLineScore{margin-top:5px}
+.externalRating{color:var(--yel);font-weight:800}
 .cmt{position:relative;background:var(--card);border-radius:16px;padding:10px 12px;font-size:14px;box-shadow:var(--shadow)}
 .cHead{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:3px;padding-right:24px}
 .cmt .nick{font-weight:800}
@@ -462,7 +365,6 @@ main{padding:84px 16px calc(110px + env(safe-area-inset-bottom));max-width:620px
 .cAva{width:24px;height:24px;border-radius:50%;overflow:hidden;flex:none;font-size:10px;font-weight:800;color:#fff;display:inline-flex;align-items:center;justify-content:center;margin-right:6px;background:var(--gradient)}
 .nickCol{display:inline-flex;flex-direction:column;align-items:stretch;gap:2px;margin-right:6px}
 .laserLine{display:block;width:100%;height:2px;margin:0;border-radius:2px;background:var(--gradient);box-shadow:0 0 8px rgba(255,107,107,.5)}
-/* auth / sheets / profile */
 #auth{position:fixed;inset:0;background:linear-gradient(180deg,#FFFDFA,#FFF4F1);z-index:60;overflow-y:auto}
 .authBox{max-width:420px;margin:0 auto;padding:60px 22px;display:flex;flex-direction:column;gap:10px;align-items:stretch}
 .avaBig{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:800;color:#fff;margin:0 auto;background:var(--gradient);overflow:hidden;box-shadow:0 8px 32px rgba(255,107,107,.4)}
@@ -560,6 +462,9 @@ main{padding:84px 16px calc(110px + env(safe-area-inset-bottom));max-width:620px
 <symbol id="i-giftbox" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 10h16v10H4zM4 7h16v3H4zM12 7v13"/></g></symbol>
 <symbol id="i-cal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4M16 3v4"/></g></symbol>
 <symbol id="i-wallet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></g></symbol>
+<symbol id="i-send" viewBox="0 0 24 24"><path fill="currentColor" d="M2.5 2l19.5 9.5L2.5 21l4-9.5z"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></g></symbol>
+<symbol id="i-rose" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 3 2 5 4 6v5h6v-5c2-1 4-3 4-6a7 7 0 0 0-7-7z"/></symbol>
 </svg>
 
 <div class="petals" id="petals"></div>
@@ -570,16 +475,47 @@ main{padding:84px 16px calc(110px + env(safe-area-inset-bottom));max-width:620px
       <svg class="icn"><use href="#i-flower"/></svg>
       <span class="brandCol"><span class="brandName">лепесток</span><span class="brandSlog">цветочный поисковик</span></span>
     </div>
-    <button class="cityFab" onclick="openCity()"><svg class="icn"><use href="#i-pin"/></svg><span id="cityName" class="cityNm">Новороссийск</span><svg class="icn"><use href="#i-chevD"/></svg></button>
     <div class="tbR">
-      <button class="miniBtn cta" onclick="openQuiz()"><svg class="icn"><use href="#i-wand"/></svg>собери мне</button>
+      <button class="cityFab" onclick="openCity()"><svg class="icn"><use href="#i-pin"/></svg><span id="cityName" class="cityNm">Новороссийск</span><svg class="icn"><use href="#i-chevD"/></svg></button>
       <span id="tbUser"></span>
     </div>
   </div>
 </div>
 
 <main id="mainWrap">
-  <section id="tab-shop">
+  <!-- ========== ЧАТ ========== -->
+  <section id="tab-chat">
+    <div class="chatWrap">
+      <div class="chatHero">
+        <svg class="chatLogo"><use href="#i-flower"/></svg>
+        <div class="chatTitle">какой букет <em>ищем сегодня?</em></div>
+        <div class="chatSub">расскажи своими словами — подберу лучшие варианты <span class="cityEcho">Новороссийска</span></div>
+      </div>
+
+      <div class="chatMessages" id="chatMessages">
+        <!-- сообщения появляются динамически -->
+      </div>
+
+      <div class="chatInput">
+        <textarea id="chatInput" placeholder="Например: нежный букет девушке до 3000 на день рождения" rows="1" oninput="autoResize(this)"></textarea>
+        <button class="chatSend" id="chatSendBtn" onclick="sendChat()"><svg class="icn"><use href="#i-send"/></svg></button>
+      </div>
+
+      <div class="chatChips">
+        <button class="chatChip" onclick="quickChat('🌸 девушке')"><svg class="icn"><use href="#i-heart"/></svg>девушке</button>
+        <button class="chatChip" onclick="quickChat('💐 маме')"><svg class="icn"><use href="#i-gift"/></svg>маме</button>
+        <button class="chatChip" onclick="quickChat('🎂 на день рождения')"><svg class="icn"><use href="#i-cal"/></svg>день рождения</button>
+        <button class="chatChip" onclick="quickChat('🌷 до 3000 ₽')"><svg class="icn"><use href="#i-wallet"/></svg>до 3000 ₽</button>
+      </div>
+
+      <div class="chatFoot">
+        не знаешь что выбрать? <a onclick="showTab('shop')">открыть каталог</a> или <a onclick="openQuiz()">пройти квиз</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== СТАРЫЙ SHOP (теперь второй экран) ========== -->
+  <section id="tab-shop" class="hidden">
     <div class="vkWrap">
       <div class="vkFall" id="vkFall"></div>
       <div class="vkAnnounce">
@@ -687,9 +623,9 @@ main{padding:84px 16px calc(110px + env(safe-area-inset-bottom));max-width:620px
 </main>
 
 <nav class="bnav">
-  <button class="bn on" data-t="shop" onclick="showTab('shop')"><svg class="icn"><use href="#i-home"/></svg>витрина</button>
-  <button class="bn" data-t="search" onclick="showTab('search')"><svg class="icn"><use href="#i-search"/></svg>поиск</button>
-  <button class="bnFab" onclick="openQuiz()"><span class="fabIco"><svg class="icn"><use href="#i-wand"/></svg></span>собери мне</button>
+  <button class="bn on" data-t="chat" onclick="showTab('chat')"><svg class="icn"><use href="#i-spark"/></svg>чат</button>
+  <button class="bn" data-t="shop" onclick="showTab('shop')"><svg class="icn"><use href="#i-home"/></svg>каталог</button>
+  <button class="bn" data-t="shops" onclick="showTab('shops')"><svg class="icn"><use href="#i-shop"/></svg>магазины</button>
   <button class="bn" data-t="fav" onclick="showTab('fav')"><svg class="icn"><use href="#i-heart"/></svg>избранное</button>
   <button class="bn" data-t="profile" onclick="showTab('profile')"><svg class="icn"><use href="#i-user"/></svg>профиль</button>
 </nav>
@@ -740,6 +676,12 @@ let city=localStorage.getItem('lep_city')||DEFAULT_CITY;
 let shopSort=localStorage.getItem('lep_shop_sort')||'rating';
 let device=localStorage.getItem('lep_device');
 if(!device){device='d'+Math.random().toString(36).slice(2)+Date.now();localStorage.setItem('lep_device',device);}
+
+/* ===== чат-состояние ===== */
+let chatHistory=[];
+let chatParams={who:'',occ:'',bud:'',style:'',exclude:[],include:[]};
+let chatBusy=false;
+
 function showLoader(){$('loader').classList.remove('hidden');}
 function hideLoader(){$('loader').classList.add('hidden');}
 function track(name,extra){try{sb.from('events').insert({name,device,user_id:me?me.id:null,metadata:extra||{}}).then(()=>{});}catch(e){}}
@@ -757,7 +699,7 @@ function handleSBError(error,ctx){if(!error)return;let msg=error.message||'Не�
 function closeSheet(id){$(id).classList.add('hidden');}
 function openSheet(id){$(id).classList.remove('hidden');}
 function brandTap(){brandTaps++;clearTimeout(brandTimer);brandTimer=setTimeout(()=>brandTaps=0,1500);if(brandTaps>=5){brandTaps=0;if(isAdmin())location.href='admin.html';else if(myFlorist)location.href='seller.html';else toast('Кабинет продавца доступен только продавцам');}}
-/* ===== город и фильтрация ===== */
+
 function applyCityFilter(){
   vShops=shops.filter(s=>(s.city||DEFAULT_CITY)===city);
   const owners=new Set(vShops.map(s=>s.owner_id));
@@ -774,8 +716,9 @@ function openCity(){
   openSheet('citySheet');
 }
 function pickCity(c,el){city=c;localStorage.setItem('lep_city',c);document.querySelectorAll('#citySheet .opt').forEach(o=>o.classList.remove('on'));el.classList.add('on');closeSheet('citySheet');applyCityFilter();renderShopTab();renderSearch();renderFav();toast('Город: '+c,'i-pin');}
+
 function showTab(t){
-  ['shop','search','fav','profile','shops'].forEach(k=>$('tab-'+k).classList.toggle('hidden',k!==t));
+  ['chat','shop','search','fav','profile','shops'].forEach(k=>$('tab-'+k).classList.toggle('hidden',k!==t));
   $('shopPage').classList.add('hidden');
   document.querySelectorAll('.bnav .bn').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
   if(t==='shop')renderShopTab();
@@ -785,6 +728,7 @@ function showTab(t){
   if(t==='shops')renderShopsTab();
   window.scrollTo(0,0);
 }
+
 async function load(){
   $('popBouquets').innerHTML='<div class="skeleton" style="width:158px;height:200px;flex:none"></div><div class="skeleton" style="width:158px;height:200px;flex:none"></div><div class="skeleton" style="width:158px;height:200px;flex:none"></div>';
   const [bRes,cRes,blRes,clRes,crRes,favRes,shRes,qRes]=await Promise.all([
@@ -805,7 +749,7 @@ async function load(){
   if(quizCount>0)$('qcProofTxt').textContent=quizCount+' чел. уже подобрали букет';
 }
 function refreshShop(){renderShopTab();renderSearch();renderFav();}
-/* ===== главная ===== */
+
 function renderShopTab(){
   renderPopBouquets();renderShopsRow();
 }
@@ -828,51 +772,23 @@ function shopReviewsCount(s){
   return comments.filter(c=>bids.includes(c.bouquet_id)&&!c.parent_id).length;
 }
 function renderShopsRow(){
-  const row=$('shopsRow');
-  if(!row)return;
+  const row=$('shopsRow');if(!row)return;
   const list=[...vShops].sort((a,b)=>getLepestokScore(b)-getLepestokScore(a)).slice(0,6);
-  row.innerHTML=list.length?
-    list.map((s,i)=>{
-      const extRating=getExternalRating(s);
-      const extReviews=getExternalReviews(s);
-      const cnt=shopCount(s);
-      return `
-        <div class="shopMini"
-             style="animation-delay:${i*60}ms"
-             onclick="openShopPage(${s.id})">
-          <div class="ava">
-            ${s.logo_url ? '<img src="'+s.logo_url+'">' : ic('i-shop')}
-          </div>
-          <div class="nm">
-            ${esc(s.name)}
-            ${isVerified(s)?verifiedBadge():''}
-          </div>
-          ${extRating ?
-            '<div class="ct">'+
-            '<b>★ '+extRating.toFixed(1)+'</b>'+
-            ' ('+extReviews+')'+
-            '</div>'
-          :''}
-          <div class="ct">
-            ${ic('i-flower')}
-            ${cnt} ${pluralBouq(cnt)}
-          </div>
-          <div>
-            ${lepestokScoreBadge(s)}
-          </div>
-        </div>
-      `;
-    }).join('')
-    :
-    '<div class="empty" style="width:100%">'+
-    ic('i-shop')+
-    'Магазины '+
-    '<span class="cityEcho">'+
-    esc(city)+
-    '</span> скоро появятся'+
-    '</div>';
+  row.innerHTML=list.length?list.map((s,i)=>{
+    const extRating=getExternalRating(s);
+    const extReviews=getExternalReviews(s);
+    const cnt=shopCount(s);
+    return `
+      <div class="shopMini" style="animation-delay:${i*60}ms" onclick="openShopPage(${s.id})">
+        <div class="ava">${s.logo_url?'<img src="'+s.logo_url+'">':ic('i-shop')}</div>
+        <div class="nm">${esc(s.name)}${isVerified(s)?verifiedBadge():''}</div>
+        ${extRating?'<div class="ct"><b>★ '+extRating.toFixed(1)+'</b> ('+extReviews+')</div>':''}
+        <div class="ct">${ic('i-flower')}${cnt} ${pluralBouq(cnt)}</div>
+        <div>${lepestokScoreBadge(s)}</div>
+      </div>`;
+  }).join(''):'<div class="empty" style="width:100%">'+ic('i-shop')+'Магазины <span class="cityEcho">'+esc(city)+'</span> скоро появятся</div>';
 }
-/* ===== квиз главная ===== */
+
 const MQ_OPTS={
   who:['девушке','маме','подруге','жене','коллеге','учителю','себе','другу'],
   occ:['день рождения','свидание','годовщина','просто так','извиниться','8 марта','поблагодарить','свадьба'],
@@ -899,6 +815,310 @@ function parseBud(t){
   return[0,Infinity];
 }
 function mqGo(){runPick(mq.who,mq.occ,mq.bud,'');}
+
+/* =========================================================
+   ЧАТ-ИНТЕРФЕЙС
+   ========================================================= */
+
+/* Словари для парсера естественного языка */
+const WHO_KEYWORDS={
+  'девушке':'девушке','девушка':'девушке','девушку':'девушке','жене':'жене','маме':'маме','мама':'маме','маму':'маме',
+  'подруге':'подруге','подруга':'подруге','коллеге':'коллеге','учителю':'учителю','учительнице':'учителю',
+  'другу':'другу','себе':'себе','сестре':'сестре','бабушке':'бабушке'
+};
+const OCC_KEYWORDS={
+  'день рождения':'день рождения','др':'день рождения','юбилей':'день рождения',
+  'годовщина':'годовщина','свадьба':'свадьба','8 марта':'8 марта','восьмое марта':'8 марта',
+  'свидание':'свидание','просто так':'просто так','извиниться':'извиниться','поблагодарить':'поблагодарить',
+  'благодарность':'поблагодарить','выписка':'выписка','новый год':'новый год','14 февраля':'14 февраля',
+  'день святого валентина':'14 февраля'
+};
+const STYLE_KEYWORDS={
+  'нежный':'нежный','нежность':'нежный','нежное':'нежный',
+  'пышный':'пышный','пышное':'пышный','большой':'пышный',
+  'яркий':'яркий','яркое':'яркий',
+  'минималистичный':'минималистичный','минимализм':'минималистичный','скромный':'минималистичный',
+  'классический':'классический','классика':'классический',
+  'необычный':'необычный','оригинальный':'необычный','авторский':'необычный'
+};
+const FLOWER_KEYWORDS={
+  'розы':'розы','розу':'розы','роз':'розы','пионы':'пионы','пион':'пионы','пионов':'пионы',
+  'тюльпаны':'тюльпаны','тюльпан':'тюльпаны','хризантемы':'хризантемы','лилии':'лилии','лилия':'лилии',
+  'гортензии':'гортензии','орхидеи':'орхидеи','ромашки':'ромашки'
+};
+
+function parseQuery(text){
+  const t=text.toLowerCase();
+  const params={who:'',occ:'',bud:'',style:'',include:[],exclude:[],priceMin:0,priceMax:Infinity};
+
+  /* получатель */
+  for(const k in WHO_KEYWORDS){
+    if(t.includes(k)){params.who=WHO_KEYWORDS[k];break;}
+  }
+  /* повод */
+  for(const k in OCC_KEYWORDS){
+    if(t.includes(k)){params.occ=OCC_KEYWORDS[k];break;}
+  }
+  /* стиль */
+  for(const k in STYLE_KEYWORDS){
+    if(t.includes(k)){params.style=STYLE_KEYWORDS[k];break;}
+  }
+  /* цветы (для include) */
+  for(const k in FLOWER_KEYWORDS){
+    if(t.includes(k)){params.include.push(FLOWER_KEYWORDS[k]);}
+  }
+  /* исключение: "без роз" */
+  if(/\bбез\b/.test(t)){
+    for(const k in FLOWER_KEYWORDS){
+      if(t.includes('без '+k)){params.exclude.push(FLOWER_KEYWORDS[k]);}
+    }
+  }
+  /* бюджет: "до 3000", "3к", "5 000", "3000-5000" */
+  const doMatch=t.match(/до\s*([\d\s]+)\s*(тыс|к|руб)?/);
+  if(doMatch){
+    let n=+doMatch[1].replace(/\s/g,'');
+    if(doMatch[2]==='тыс'||doMatch[2]==='к')n*=1000;
+    params.priceMax=n;
+    params.bud='до '+n.toLocaleString('ru-RU').replace(/,/g,' ')+' ₽';
+  }
+  const otMatch=t.match(/(?:от|больше|свыше)\s*([\d\s]+)\s*(тыс|к|руб)?/);
+  if(otMatch){
+    let n=+otMatch[1].replace(/\s/g,'');
+    if(otMatch[2]==='тыс'||otMatch[2]==='к')n*=1000;
+    params.priceMin=n;
+    params.bud='от '+n.toLocaleString('ru-RU').replace(/,/g,' ')+' ₽';
+  }
+  const rangeMatch=t.match(/([\d\s]+)\s*[-–]\s*([\d\s]+)\s*(тыс|к|руб)?/);
+  if(rangeMatch && !doMatch && !otMatch){
+    let a=+rangeMatch[1].replace(/\s/g,''),b=+rangeMatch[2].replace(/\s/g,'');
+    if(rangeMatch[3]==='тыс'||rangeMatch[3]==='к'){a*=1000;b*=1000;}
+    params.priceMin=Math.min(a,b);
+    params.priceMax=Math.max(a,b);
+    params.bud=a.toLocaleString('ru-RU').replace(/,/g,' ')+'–'+b.toLocaleString('ru-RU').replace(/,/g,' ')+' ₽';
+  }
+  /* простой fallback для "3к", "5000" */
+  if(!params.bud){
+    const simple=t.match(/\b(\d+)\s*к\b/);
+    if(simple){params.priceMax=+simple[1]*1000;params.bud='до '+simple[1]+' 000 ₽';}
+  }
+  return params;
+}
+
+/* Объединяем старые параметры с новыми (для follow-up) */
+function mergeParams(oldP,newP){
+  return{
+    who:newP.who||oldP.who,
+    occ:newP.occ||oldP.occ,
+    bud:newP.bud||oldP.bud,
+    style:newP.style||oldP.style,
+    include:[...oldP.include,...newP.include].filter((v,i,a)=>a.indexOf(v)===i),
+    exclude:[...oldP.exclude,...newP.exclude].filter((v,i,a)=>a.indexOf(v)===i),
+    priceMin:newP.priceMin||oldP.priceMin,
+    priceMax:newP.priceMax||oldP.priceMax
+  };
+}
+
+/* Обработка follow-up типа "дороже", "нежнее" */
+function handleRefinement(text){
+  const t=text.toLowerCase();
+  const changes={};
+  if(/дороже|подороже|больше бюджет|больше денег|премиум/.test(t)){
+    if(chatParams.priceMax<Infinity){changes.priceMax=chatParams.priceMax*1.5;changes.bud='до '+Math.round(chatParams.priceMax*1.5).toLocaleString('ru-RU').replace(/,/g,' ')+' ₽';}
+    else{changes.priceMin=chatParams.priceMin+2000;changes.bud='от '+Math.round(chatParams.priceMin+2000).toLocaleString('ru-RU').replace(/,/g,' ')+' ₽';}
+  }
+  if(/дешевле|бюджетнее|меньше бюджет/.test(t)){
+    if(chatParams.priceMax<Infinity){changes.priceMax=Math.max(1000,chatParams.priceMax*0.7);changes.bud='до '+Math.round(chatParams.priceMax*0.7).toLocaleString('ru-RU').replace(/,/g,' ')+' ₽';}
+    else{changes.priceMin=Math.max(0,chatParams.priceMin-1500);changes.bud='от '+Math.round(changes.priceMin).toLocaleString('ru-RU').replace(/,/g,' ')+' ₽';}
+  }
+  if(/нежнее|нежный|более нежный/.test(t))changes.style='нежный';
+  if(/пышнее|пышный|пышнее/.test(t))changes.style='пышный';
+  if(/ярче|яркий|ярче/.test(t))changes.style='яркий';
+  if(/минималистичнее|минималистичный/.test(t))changes.style='минималистичный';
+  if(/без роз/.test(t))changes.exclude=['розы'];
+  if(/больше роз|с розами|с роз/.test(t))changes.include=['розы'];
+  if(/с пионами|пионы/.test(t))changes.include=['пионы'];
+  return changes;
+}
+
+/* Основная логика поиска — использует существующий vBouquets */
+function findBouquets(p){
+  let fit=vBouquets.filter(b=>b.photo_url);
+  /* бюджет */
+  if(p.priceMin)fit=fit.filter(b=>b.price>=p.priceMin);
+  if(p.priceMax<Infinity)fit=fit.filter(b=>b.price<=p.priceMax);
+  /* исключения */
+  if(p.exclude.length){
+    fit=fit.filter(b=>{
+      const hay=(b.title+' '+b.category+' '+(b.description||'')+' '+getTags(b).join(' ')).toLowerCase();
+      return !p.exclude.some(ex=>hay.includes(ex));
+    });
+  }
+  /* скорируем по match */
+  const want=[p.who,p.occ,p.style,...p.include].filter(Boolean).map(x=>x.toLowerCase());
+  fit=fit.map(b=>{
+    const tags=[...getTags(b),String(b.category||''),b.title||'',b.description||''].map(x=>String(x).toLowerCase());
+    let score=0;
+    for(const w of want){if(tags.some(t=>t.includes(w)||w.includes(t)))score++;}
+    return{b,score};
+  }).filter(x=>x.score>0 || want.length===0).sort((a,b)=>b.score-a.score).map(x=>x.b);
+  return fit;
+}
+
+/* UI: добавление сообщений в чат */
+function addMessage(role,text,extra=''){
+  const box=$('chatMessages');
+  const avt=role==='user'?'usr':'bot';
+  const avtIcon=role==='user'?((me?.user_metadata?.nick||'Я').slice(0,1).toUpperCase()):(ic('i-flower'));
+  const div=document.createElement('div');
+  div.className='msg '+role;
+  div.innerHTML='<div class="avt '+avt+'">'+avtIcon+'</div><div class="msgBody"><div class="msgBubble">'+esc(text)+'</div>'+extra+'</div>';
+  box.appendChild(div);
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+  return div;
+}
+
+function showTyping(){
+  const box=$('chatMessages');
+  const div=document.createElement('div');
+  div.className='msg bot';
+  div.id='typingMsg';
+  div.innerHTML='<div class="avt bot">'+ic('i-flower')+'</div><div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+  box.appendChild(div);
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+}
+function hideTyping(){const el=$('typingMsg');if(el)el.remove();}
+
+/* Карточка букета в чате (упрощённая версия) */
+function chatCard(b){
+  const shop=shopOf(b);
+  const r=avgRating(b.id);
+  const score=shop?getLepestokScore(shop):0;
+  return '<div class="lpCard" onclick="openCard('+b.id+')" style="cursor:pointer">'+
+    '<div class="lpCover"><img src="'+b.photo_url+'" loading="lazy" decoding="async">'+
+      (shop?'<span class="shopChip" onclick="event.stopPropagation();openShopPage('+shop.id+')">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':ic('i-shop'))+'<span class="nm">'+esc(shop.name)+'</span></span>':'')+
+    '</div>'+
+    '<div class="lpName"><span class="t">'+esc(b.title)+'</span>'+(r?'<span class="lpRate">'+ic('i-star')+r.toFixed(1)+'</span>':'')+'</div>'+
+    '<div class="lpComp">'+esc(b.category||'')+'</div>'+
+    '<div class="lpFoot"><span class="lpPrice">'+fmtPrice(b.price)+'</span><span class="stockPill '+(b.in_stock?'in':'out')+'">'+ic(b.in_stock?'i-check':'i-clock')+(b.in_stock?'в наличии':'под заказ')+'</span></div>'+
+    (shop?'<div style="margin-top:4px">'+lepestokScoreBadge(shop)+'</div>':'')+
+  '</div>';
+}
+
+/* Уточняющие кнопки после выдачи */
+function refineRowHtml(){
+  return '<div class="refineRow">'+
+    '<button class="refineBtn" onclick="refineChat(\'нежнее\')">'+ic('i-heart')+'нежнее</button>'+
+    '<button class="refineBtn" onclick="refineChat(\'дороже\')">'+ic('i-trend')+'дороже</button>'+
+    '<button class="refineBtn" onclick="refineChat(\'дешевле\')">'+ic('i-wallet')+'дешевле</button>'+
+    '<button class="refineBtn" onclick="refineChat(\'без роз\')">'+ic('i-x')+'без роз</button>'+
+    '<button class="refineBtn" onclick="refineChat(\'пышнее\')">'+ic('i-flower')+'пышнее</button>'+
+  '</div>';
+}
+
+/* Главная функция — отправка сообщения */
+async function sendChat(){
+  if(chatBusy)return;
+  const inp=$('chatInput');
+  const text=inp.value.trim();
+  if(!text)return;
+
+  addMessage('user',text);
+  inp.value='';
+  autoResize(inp);
+  chatBusy=true;
+  $('chatSendBtn').disabled=true;
+
+  track('chat_send',{text:text.length>80?text.slice(0,80):text});
+
+  showTyping();
+
+  /* парсим запрос */
+  const newP=parseQuery(text);
+  const isRefinement=/дороже|дешевле|нежнее|пышнее|ярче|без\s|больше\s|с\s|минималистичнее/.test(text.toLowerCase()) && (chatParams.who||chatParams.occ||chatParams.bud);
+  let params;
+  if(isRefinement){
+    const changes=handleRefinement(text);
+    params=mergeParams(chatParams,changes);
+  }else{
+    params=mergeParams(chatParams,newP);
+  }
+  chatParams=params;
+
+  /* имитация "размышления" */
+  await new Promise(r=>setTimeout(r,900+Math.random()*500));
+  hideTyping();
+
+  const results=findBouquets(params);
+
+  /* формируем ответ */
+  const summary=[];
+  if(params.who)summary.push('для '+esc(params.who));
+  if(params.occ)summary.push(esc(params.occ));
+  if(params.bud)summary.push(esc(params.bud));
+  if(params.style)summary.push('в стиле «'+esc(params.style)+'»');
+
+  let replyText;
+  if(results.length===0){
+    replyText='Хм, под эти параметры пока ничего не нашлось 😔';
+  }else if(results.length===1){
+    replyText='Нашёл идеальный вариант'+(summary.length?' ('+summary.join(' · ')+')':'')+'. Вот он:';
+  }else if(results.length<=3){
+    replyText='Нашёл '+results.length+' варианта'+(summary.length?' ('+summary.join(' · ')+')':'')+'. Вот лучшие:';
+  }else{
+    replyText='Нашёл '+results.length+' подходящих букетов'+(summary.length?' ('+summary.join(' · ')+')':'')+'. Покажу топ-4:';
+  }
+
+  const top=results.slice(0,4);
+  const cards=top.map(b=>chatCard(b)).join('');
+  const extra='<div class="chatResults">'+cards+'</div>'+refineRowHtml();
+  addMessage('bot',replyText,extra);
+
+  if(results.length>4){
+    setTimeout(()=>{
+      addMessage('bot','ещё '+(results.length-4)+' вариантов → можно посмотреть в полном каталоге','<div style="margin-top:4px"><button class="refineBtn" onclick="showTab(\'search\')">'+ic('i-search')+'открыть каталог</button></div>');
+    },300);
+  }
+
+  chatBusy=false;
+  $('chatSendBtn').disabled=false;
+  inp.focus();
+}
+
+/* Быстрые чипы */
+function quickChat(text){
+  $('chatInput').value=text;
+  sendChat();
+}
+
+/* Follow-up */
+function refineChat(cmd){
+  $('chatInput').value=cmd;
+  sendChat();
+}
+
+/* Авторесайз textarea */
+function autoResize(el){
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,140)+'px';
+}
+
+/* Enter = отправить, Shift+Enter = новая строка */
+document.addEventListener('DOMContentLoaded',()=>{
+  const inp=$('chatInput');
+  if(inp){
+    inp.addEventListener('keydown',e=>{
+      if(e.key==='Enter' && !e.shiftKey){
+        e.preventDefault();
+        sendChat();
+      }
+    });
+  }
+});
+
+/* =========================================================
+   ОСТАЛЬНОЕ (без изменений)
+   ========================================================= */
+
 function runPick(who,occ,bud,style){
   const [min,max]=parseBud(bud);
   const want=[who,occ,style].filter(Boolean).map(x=>x.toLowerCase());
@@ -915,7 +1135,7 @@ function runPick(who,occ,bud,style){
   renderSearch(true);
   toast(fit.length?'Подобрали '+fit.length+' вариантов':'Пока пусто — попробуй другой бюджет','i-wand');
 }
-/* ===== поиск ===== */
+
 const TODAY_PRESETS=[
   {label:'🌷 букеты до 3 000 ₽',price:'до 3 000 ₽',tag:''},
   {label:'💕 для девушки',price:'',tag:'девушке'},
@@ -970,7 +1190,6 @@ function lpCard(b,i){
     '<button onclick="event.stopPropagation();openComments('+b.id+')">'+ic('i-comment')+'<span>'+cms+'</span></button>'+
     '<button class="ord" onclick="event.stopPropagation();openCard('+b.id+')">в магазин</button></div></div>';
 }
-/* ===== избранное ===== */
 function renderFav(){
   const box=$('favFeed');
   if(!me){box.innerHTML='<div class="emptyCatalog"><svg class="bigIcn"><use href="#i-heart"/></svg><h3>Избранное доступно после входа</h3><p>Сохраняй понравившиеся букеты, чтобы вернуться к ним позже.</p><button class="ctaGrad" onclick="openAuth()">Войти'+ic('i-arrow')+'</button></div>';return;}
@@ -978,7 +1197,6 @@ function renderFav(){
   const list=vBouquets.filter(b=>ids.includes(b.id)&&b.photo_url);
   box.innerHTML=list.length?'<div class="lpGrid">'+list.map((b,i)=>lpCard(b,i)).join('')+'</div>':'<div class="empty">'+ic('i-heart')+'Пока пусто.<br>Нажимай на сердечко, чтобы сохранять букеты</div>';
 }
-/* ===== магазины ===== */
 function avgRating(bid){const rc=comments.filter(c=>c.bouquet_id===bid&&c.rating);if(!rc.length)return 0;return rc.reduce((s,c)=>s+c.rating,0)/rc.length;}
 function shopOf(b){return shops.find(s=>s.owner_id===b.user_id);}
 function getTags(b){return Array.isArray(b.tags)?b.tags:(b.tags?String(b.tags).split(',').filter(Boolean):[]);}
@@ -990,201 +1208,51 @@ function shopRating(s){
   if(!rc.length)return 0;
   return rc.reduce((a,c)=>a+c.rating,0)/rc.length;
 }
+function getExternalRating(s){const r=Number(s.rating_external||0);return r>=0&&r<=5?r:0;}
+function getExternalReviews(s){return Math.max(0,Number(s.reviews_external||0));}
+function getReputationScore(s){const rating=getExternalRating(s);const reviews=getExternalReviews(s);if(!rating||!reviews)return 0;let score=0;if(rating>=4.9)score+=15;else if(rating>=4.7)score+=13;else if(rating>=4.5)score+=10;else if(rating>=4.2)score+=7;else if(rating>=4.0)score+=4;if(reviews>=300)score+=10;else if(reviews>=100)score+=8;else if(reviews>=50)score+=6;else if(reviews>=20)score+=4;else if(reviews>=10)score+=2;else score+=1;return score;}
+function getAssortmentScore(s){const count=shopCount(s);let score=0;if(count>=10)score+=10;else if(count>=5)score+=7;else if(count>=2)score+=4;else if(count===1)score+=2;const items=bouquets.filter(b=>b.user_id===s.owner_id&&b.photo_url);const withPrice=items.filter(b=>Number(b.price)>0).length;const withTags=items.filter(b=>getTags(b).length>0).length;if(withPrice>=Math.min(5,items.length))score+=5;else if(withPrice>0)score+=3;if(withTags>=Math.min(5,items.length))score+=3;else if(withTags>0)score+=1;if(items.some(b=>b.photo_url))score+=2;return Math.min(score,20);}
+function getFreshnessScore(s){let score=0;if(!s.catalog_updated_at)return 0;const updated=new Date(s.catalog_updated_at);if(Number.isNaN(updated.getTime()))return 0;const days=(Date.now()-updated.getTime())/86400000;if(days<=7)score+=10;else if(days<=14)score+=7;else if(days<=30)score+=4;else if(days<=60)score+=2;const items=bouquets.filter(b=>b.user_id===s.owner_id);if(items.some(b=>Number(b.price)>0))score+=5;if(items.some(b=>typeof b.in_stock==='boolean'))score+=5;return Math.min(score,20);}
+function getOrderScore(s){let score=0;if(s.telegram)score+=5;if(s.website)score+=3;if(s.phone)score+=2;if(s.delivery_min)score+=2;return Math.min(score,15);}
+function getPageScore(s){let score=0;if(s.logo_url)score+=2;if(s.address)score+=2;if(s.description)score+=2;if(s.delivery_min)score+=2;if(s.website||s.telegram||s.phone)score+=2;return Math.min(score,10);}
+function getTrustScore(s){let score=0;if(s.verified)score+=5;if(s.verified_at)score+=2;if(s.address)score+=1;if(shopCount(s)>0)score+=2;return Math.min(score,10);}
+function getLepestokScore(s){const total=getReputationScore(s)+getAssortmentScore(s)+getFreshnessScore(s)+getOrderScore(s)+getPageScore(s)+getTrustScore(s);return Math.round(Math.max(0,Math.min(100,total)));}
+function lepestokScoreBadge(s){const score=getLepestokScore(s);if(!score)return '';let label='рекомендуем';if(score>=85)label='отличный выбор';else if(score>=70)label='хороший выбор';else if(score>=50)label='есть на что посмотреть';else label='новый магазин';return '<span class="lepScore">'+ic('i-spark')+'Lepestok '+score+'</span>';}
 
-/* ===== LEPESTOK SCORE ===== */
-function getExternalRating(s){
-  const r=Number(s.rating_external||0);
-  return r>=0&&r<=5?r:0;
-}
-function getExternalReviews(s){
-  return Math.max(0,Number(s.reviews_external||0));
-}
-function getReputationScore(s){
-  const rating=getExternalRating(s);
-  const reviews=getExternalReviews(s);
-  if(!rating || !reviews)return 0;
-  let score=0;
-  if(rating>=4.9)score+=15;
-  else if(rating>=4.7)score+=13;
-  else if(rating>=4.5)score+=10;
-  else if(rating>=4.2)score+=7;
-  else if(rating>=4.0)score+=4;
-  if(reviews>=300)score+=10;
-  else if(reviews>=100)score+=8;
-  else if(reviews>=50)score+=6;
-  else if(reviews>=20)score+=4;
-  else if(reviews>=10)score+=2;
-  else score+=1;
-  return score;
-}
-function getAssortmentScore(s){
-  const count=shopCount(s);
-  let score=0;
-  if(count>=10)score+=10;
-  else if(count>=5)score+=7;
-  else if(count>=2)score+=4;
-  else if(count===1)score+=2;
-  const items=bouquets.filter(b=>b.user_id===s.owner_id && b.photo_url);
-  const withPrice=items.filter(b=>Number(b.price)>0).length;
-  const withTags=items.filter(b=>getTags(b).length>0).length;
-  if(withPrice>=Math.min(5,items.length))score+=5;
-  else if(withPrice>0)score+=3;
-  if(withTags>=Math.min(5,items.length))score+=3;
-  else if(withTags>0)score+=1;
-  if(items.some(b=>b.photo_url))score+=2;
-  return Math.min(score,20);
-}
-function getFreshnessScore(s){
-  let score=0;
-  if(!s.catalog_updated_at)return 0;
-  const updated=new Date(s.catalog_updated_at);
-  if(Number.isNaN(updated.getTime()))return 0;
-  const days=(Date.now()-updated.getTime())/86400000;
-  if(days<=7)score+=10;
-  else if(days<=14)score+=7;
-  else if(days<=30)score+=4;
-  else if(days<=60)score+=2;
-  const items=bouquets.filter(b=>b.user_id===s.owner_id);
-  if(items.some(b=>Number(b.price)>0))score+=5;
-  if(items.some(b=>typeof b.in_stock==='boolean'))score+=5;
-  return Math.min(score,20);
-}
-function getOrderScore(s){
-  let score=0;
-  if(s.telegram)score+=5;
-  if(s.website)score+=3;
-  if(s.phone)score+=2;
-  if(s.delivery_min)score+=2;
-  return Math.min(score,15);
-}
-function getPageScore(s){
-  let score=0;
-  if(s.logo_url)score+=2;
-  if(s.address)score+=2;
-  if(s.description)score+=2;
-  if(s.delivery_min)score+=2;
-  if(s.website||s.telegram||s.phone)score+=2;
-  return Math.min(score,10);
-}
-function getTrustScore(s){
-  let score=0;
-  if(s.verified)score+=5;
-  if(s.verified_at)score+=2;
-  if(s.address)score+=1;
-  if(shopCount(s)>0)score+=2;
-  return Math.min(score,10);
-}
-function getLepestokScore(s){
-  const total=
-    getReputationScore(s)+
-    getAssortmentScore(s)+
-    getFreshnessScore(s)+
-    getOrderScore(s)+
-    getPageScore(s)+
-    getTrustScore(s);
-  return Math.round(Math.max(0,Math.min(100,total)));
-}
-function lepestokScoreBadge(s){
-  const score=getLepestokScore(s);
-  if(!score)return '';
-  return '<span class="lepScore">'+ic('i-spark')+'Lepestok '+score+'</span>';
-}
-
-/* ===== LEPESTOK MAP ===== */
-let shopsMap=null;
-let shopsMapMarkers=[];
-let shopsMapReady=false;
-const NOVOROSSIYSK_CENTER=[37.7680,44.7239];
-
-function validShopCoords(s){
-  const lat=Number(s.latitude);
-  const lon=Number(s.longitude);
-  return Number.isFinite(lat)&&Number.isFinite(lon)&&lat!==0&&lon!==0;
-}
-
+let shopsMap=null;let shopsMapMarkers=[];let shopsMapReady=false;const NOVOROSSIYSK_CENTER=[37.7680,44.7239];
+function validShopCoords(s){const lat=Number(s.latitude);const lon=Number(s.longitude);return Number.isFinite(lat)&&Number.isFinite(lon)&&lat!==0&&lon!==0;}
 async function initShopsMap(){
-  const container=$('shopsMap');
-  if(!container)return;
-  if(!window.ymaps3){
-    container.innerHTML='<div class="empty" style="padding:90px 20px">'+ic('i-pin')+'Карта временно недоступна</div>';
-    return;
-  }
+  const container=$('shopsMap');if(!container)return;
+  if(!window.ymaps3){container.innerHTML='<div class="empty" style="padding:90px 20px">'+ic('i-pin')+'Карта временно недоступна</div>';return;}
   try{
     await ymaps3.ready;
     const {YMap,YMapDefaultSchemeLayer,YMapDefaultFeaturesLayer,YMapMarker}=ymaps3;
     if(shopsMap){try{shopsMap.destroy();}catch(e){}shopsMap=null;shopsMapMarkers=[];}
     const list=vShops.filter(validShopCoords);
-    if(!list.length){
-      container.innerHTML='<div class="empty" style="padding:90px 20px">'+ic('i-pin')+'У магазинов пока нет координат</div>';
-      return;
-    }
+    if(!list.length){container.innerHTML='<div class="empty" style="padding:90px 20px">'+ic('i-pin')+'У магазинов пока нет координат</div>';return;}
     container.innerHTML='';
     const first=list[0];
     shopsMap=new YMap(container,{location:{center:[Number(first.longitude),Number(first.latitude)],zoom:list.length===1?15:12}});
     shopsMap.addChild(new YMapDefaultSchemeLayer());
     shopsMap.addChild(new YMapDefaultFeaturesLayer({zIndex:1800}));
     list.forEach(shop=>{
-      const wrap=document.createElement('div');
-      wrap.className='lepMapMarkerWrap';
-      const marker=document.createElement('div');
-      marker.className='lepMapMarker';
-      const inner=document.createElement('div');
-      inner.className='lepMapMarkerInner';
-      if(shop.logo_url){const img=document.createElement('img');img.src=shop.logo_url;img.alt='';inner.appendChild(img);}
-      else{inner.innerHTML=ic('i-shop');}
+      const wrap=document.createElement('div');wrap.className='lepMapMarkerWrap';
+      const marker=document.createElement('div');marker.className='lepMapMarker';
+      const inner=document.createElement('div');inner.className='lepMapMarkerInner';
+      if(shop.logo_url){const img=document.createElement('img');img.src=shop.logo_url;img.alt='';inner.appendChild(img);}else{inner.innerHTML=ic('i-shop');}
       marker.appendChild(inner);
-      const bubble=document.createElement('div');
-      bubble.className='lepMapBubble';
-      const extRating=getExternalRating(shop);
-      const extReviews=getExternalReviews(shop);
-      const score=getLepestokScore(shop);
-      bubble.innerHTML=
-        '<div class="lepMapBubbleName">'+esc(shop.name)+'</div>'+
-        '<div class="lepMapBubbleMeta">'+(shop.address?esc(shop.address):'Новороссийск')+'</div>'+
-        (extRating?'<div class="lepMapBubbleMeta"><span class="externalRating">★ '+extRating.toFixed(1)+'</span> · '+extReviews+' оценок</div>':'')+
-        (score?'<div class="lepMapBubbleScore">'+ic('i-spark')+'Lepestok Score '+score+'</div>':'')+
-        '<button class="lepMapBubbleBtn" onclick="event.stopPropagation();openShopPage('+shop.id+')">Открыть магазин</button>';
-      wrap.appendChild(marker);
-      wrap.appendChild(bubble);
-      marker.addEventListener('click',e=>{
-        e.stopPropagation();
-        document.querySelectorAll('.lepMapMarkerWrap.open').forEach(x=>x.classList.remove('open'));
-        wrap.classList.add('open');
-        track('map_shop_click',{shop_id:shop.id});
-      });
+      const bubble=document.createElement('div');bubble.className='lepMapBubble';
+      const extRating=getExternalRating(shop);const extReviews=getExternalReviews(shop);const score=getLepestokScore(shop);
+      bubble.innerHTML='<div class="lepMapBubbleName">'+esc(shop.name)+'</div>'+'<div class="lepMapBubbleMeta">'+(shop.address?esc(shop.address):'Новороссийск')+'</div>'+(extRating?'<div class="lepMapBubbleMeta"><span class="externalRating">★ '+extRating.toFixed(1)+'</span> · '+extReviews+' оценок</div>':'')+(score?'<div class="lepMapBubbleScore">'+ic('i-spark')+'Lepestok Score '+score+'</div>':'')+'<button class="lepMapBubbleBtn" onclick="event.stopPropagation();openShopPage('+shop.id+')">Открыть магазин</button>';
+      wrap.appendChild(marker);wrap.appendChild(bubble);
+      marker.addEventListener('click',e=>{e.stopPropagation();document.querySelectorAll('.lepMapMarkerWrap.open').forEach(x=>x.classList.remove('open'));wrap.classList.add('open');track('map_shop_click',{shop_id:shop.id});});
       const ymMarker=new YMapMarker({coordinates:[Number(shop.longitude),Number(shop.latitude)],zIndex:score||1},wrap);
-      shopsMap.addChild(ymMarker);
-      shopsMapMarkers.push(ymMarker);
+      shopsMap.addChild(ymMarker);shopsMapMarkers.push(ymMarker);
     });
     shopsMapReady=true;
-  }catch(e){
-    console.error('Lepestok map error',e);
-    container.innerHTML='<div class="empty" style="padding:90px 20px">'+ic('i-pin')+'Не удалось загрузить карту</div>';
-  }
+  }catch(e){console.error('Lepestok map error',e);container.innerHTML='<div class="empty" style="padding:90px 20px">'+ic('i-pin')+'Не удалось загрузить карту</div>';}
 }
-
-function fitShopsMap(){
-  if(!shopsMap||!shopsMapReady)return;
-  const list=vShops.filter(validShopCoords);
-  if(!list.length)return;
-  if(list.length===1){shopsMap.setLocation({center:[Number(list[0].longitude),Number(list[0].latitude)],zoom:15});return;}
-  const lats=list.map(s=>Number(s.latitude));
-  const lons=list.map(s=>Number(s.longitude));
-  const minLat=Math.min(...lats);
-  const maxLat=Math.max(...lats);
-  const minLon=Math.min(...lons);
-  const maxLon=Math.max(...lons);
-  const center=[(minLon+maxLon)/2,(minLat+maxLat)/2];
-  const maxDiff=Math.max(maxLat-minLat,maxLon-minLon);
-  let zoom=12;
-  if(maxDiff<0.005)zoom=15;
-  else if(maxDiff<0.01)zoom=14;
-  else if(maxDiff<0.03)zoom=13;
-  else if(maxDiff<0.07)zoom=12;
-  else zoom=11;
-  shopsMap.setLocation({center,zoom});
-}
-
+function fitShopsMap(){if(!shopsMap||!shopsMapReady)return;const list=vShops.filter(validShopCoords);if(!list.length)return;if(list.length===1){shopsMap.setLocation({center:[Number(list[0].longitude),Number(list[0].latitude)],zoom:15});return;}const lats=list.map(s=>Number(s.latitude));const lons=list.map(s=>Number(s.longitude));const minLat=Math.min(...lats);const maxLat=Math.max(...lats);const minLon=Math.min(...lons);const maxLon=Math.max(...lons);const center=[(minLon+maxLon)/2,(minLat+maxLat)/2];const maxDiff=Math.max(maxLat-minLat,maxLon-minLon);let zoom=12;if(maxDiff<0.005)zoom=15;else if(maxDiff<0.01)zoom=14;else if(maxDiff<0.03)zoom=13;else if(maxDiff<0.07)zoom=12;else zoom=11;shopsMap.setLocation({center,zoom});}
 function shopCount(s){return bouquets.filter(b=>b.user_id===s.owner_id&&b.photo_url).length;}
 function isVerified(s){return !!(s.verified);}
 function verifiedBadge(){return '<span class="verifiedBadge">'+ic('i-check')+'проверено</span>';}
@@ -1193,202 +1261,63 @@ function setShopSort(s){shopSort=s;localStorage.setItem('lep_shop_sort',s);docum
 function renderShopsTab(){
   const cities=[...new Set(shops.map(s=>(s.city||DEFAULT_CITY).trim()))];
   if(shopCityFilter!=='all'&&!cities.includes(shopCityFilter))shopCityFilter='all';
-  $('shopCities').innerHTML=
-    '<button class="filter'+(shopCityFilter==='all'?' on':'')+'" onclick="setShopCity(\'all\')">'+ic('i-pin')+'Все города</button>'+
-    cities.map(c=>'<button class="filter'+(shopCityFilter===c?' on':'')+'" onclick="setShopCity(\''+esc(c)+'\')">'+esc(c)+'</button>').join('');
+  $('shopCities').innerHTML='<button class="filter'+(shopCityFilter==='all'?' on':'')+'" onclick="setShopCity(\'all\')">'+ic('i-pin')+'Все города</button>'+cities.map(c=>'<button class="filter'+(shopCityFilter===c?' on':'')+'" onclick="setShopCity(\''+esc(c)+'\')">'+esc(c)+'</button>').join('');
   let list=shops.filter(s=>shopCityFilter==='all'||(s.city||DEFAULT_CITY)===shopCityFilter);
-  list=[...list].sort((a,b)=>{
-    if(shopSort==='rating')return getLepestokScore(b)-getLepestokScore(a);
-    if(shopSort==='count')return shopCount(b)-shopCount(a);
-    return String(a.name||'').localeCompare(String(b.name||''),'ru');
-  });
-  $('shopsList').innerHTML=list.length?
-    list.map(s=>{
-      const cnt=shopCount(s);
-      const extRating=getExternalRating(s);
-      const extReviews=getExternalReviews(s);
-      return `
-        <div class="shopLine" onclick="openShopPage(${s.id})">
-          <div class="shopLineAva">
-            ${s.logo_url ? '<img src="'+s.logo_url+'">' : ic('i-shop')}
-          </div>
-          <div class="shopLineBody">
-            <div class="shopLineName">
-              ${esc(s.name)}
-              ${isVerified(s)?verifiedBadge():''}
-            </div>
-            <div class="shopLineMeta">
-              ${ic('i-pin')}
-              ${esc(s.city||DEFAULT_CITY)}
-              ·
-              ${cnt} ${pluralBouq(cnt)}
-              ${extRating ? ' · <span class="externalRating">★ '+extRating.toFixed(1)+' ('+extReviews+')</span>' : ''}
-            </div>
-            <div class="shopLineScore">
-              ${lepestokScoreBadge(s)}
-            </div>
-          </div>
-          <div class="shopLineR">
-            ${ic('i-chevR')}
-          </div>
-        </div>
-      `;
-    }).join('')
-    :
-    '<div class="empty">'+ic('i-shop')+'В этом городе магазинов пока нет.<br>Загляни позже</div>';
+  list=[...list].sort((a,b)=>{if(shopSort==='rating')return getLepestokScore(b)-getLepestokScore(a);if(shopSort==='count')return shopCount(b)-shopCount(a);return String(a.name||'').localeCompare(String(b.name||''),'ru');});
+  $('shopsList').innerHTML=list.length?list.map(s=>{const cnt=shopCount(s);const extRating=getExternalRating(s);const extReviews=getExternalReviews(s);return '<div class="shopLine" onclick="openShopPage('+s.id+')"><div class="shopLineAva">'+(s.logo_url?'<img src="'+s.logo_url+'">':ic('i-shop'))+'</div><div class="shopLineBody"><div class="shopLineName">'+esc(s.name)+(isVerified(s)?verifiedBadge():'')+'</div><div class="shopLineMeta">'+ic('i-pin')+esc(s.city||DEFAULT_CITY)+' · '+cnt+' '+pluralBouq(cnt)+(extRating?' · <span class="externalRating">★ '+extRating.toFixed(1)+' ('+extReviews+')</span>':'')+'</div><div class="shopLineScore">'+lepestokScoreBadge(s)+'</div></div><div class="shopLineR">'+ic('i-chevR')+'</div></div>';}).join(''):'<div class="empty">'+ic('i-shop')+'В этом городе магазинов пока нет.<br>Загляни позже</div>';
   if(shopCityFilter==='all'||shopCityFilter===city){requestAnimationFrame(()=>{initShopsMap();});}
 }
-function shopLeadButtons(s){
-  const btns=[];
-  if(s.phone)btns.push('<a href="tel:'+String(s.phone).replace(/\D/g,'')+'" onclick="trackLead(\'phone\','+s.id+')">'+ic('i-phone')+'Позвонить</a>');
-  if(s.telegram)btns.push('<a class="telegram" href="https://t.me/'+esc(String(s.telegram).replace(/^@/,''))+'" target="_blank" rel="noopener" onclick="trackLead(\'telegram\','+s.id+')">'+ic('i-telegram')+'Telegram</a>');
-  if(s.website)btns.push('<a href="'+esc(s.website)+'" target="_blank" rel="noopener" onclick="trackLead(\'web\','+s.id+')">'+ic('i-globe')+'Сайт</a>');
-  if(s.map_link)btns.push('<a href="'+esc(s.map_link)+'" target="_blank" rel="noopener" onclick="trackLead(\'map\','+s.id+')">'+ic('i-pin')+'На карте</a>');
-  if(!btns.length)return '';
-  return '<div class="spOrderBox"><h4>'+ic('i-arrow')+'Где заказать</h4><div class="spOrderBtns">'+btns.join('')+'</div></div>';
-}
+function shopLeadButtons(s){const btns=[];if(s.phone)btns.push('<a href="tel:'+String(s.phone).replace(/\D/g,'')+'" onclick="trackLead(\'phone\','+s.id+')">'+ic('i-phone')+'Позвонить</a>');if(s.telegram)btns.push('<a class="telegram" href="https://t.me/'+esc(String(s.telegram).replace(/^@/,''))+'" target="_blank" rel="noopener" onclick="trackLead(\'telegram\','+s.id+')">'+ic('i-telegram')+'Telegram</a>');if(s.website)btns.push('<a href="'+esc(s.website)+'" target="_blank" rel="noopener" onclick="trackLead(\'web\','+s.id+')">'+ic('i-globe')+'Сайт</a>');if(s.map_link)btns.push('<a href="'+esc(s.map_link)+'" target="_blank" rel="noopener" onclick="trackLead(\'map\','+s.id+')">'+ic('i-pin')+'На карте</a>');if(!btns.length)return '';return '<div class="spOrderBox"><h4>'+ic('i-arrow')+'Где заказать</h4><div class="spOrderBtns">'+btns.join('')+'</div></div>';}
 function openShopPage(id){
   const s=shops.find(x=>x.id===id);if(!s)return;curShop=s;
   track('shop_view',{shop_id:id});
-  ['shop','search','fav','profile','shops'].forEach(k=>$('tab-'+k).classList.add('hidden'));
+  ['chat','shop','search','fav','profile','shops'].forEach(k=>$('tab-'+k).classList.add('hidden'));
   $('shopPage').classList.remove('hidden');
   document.querySelectorAll('.bnav .bn').forEach(b=>b.classList.remove('on'));
-  
-  const r=shopRating(s);
-  const rc=shopReviewsCount(s);
-  const extRating=getExternalRating(s);
-  const extReviews=getExternalReviews(s);
-  const lepScore=getLepestokScore(s);
-  
-  $('shopPageHead').innerHTML=
-    '<div class="spAva">'+(s.logo_url?'<img src="'+s.logo_url+'">':ic('i-flower'))+'</div>'+
-    '<div class="spName">'+esc(s.name)+(isVerified(s)?verifiedBadge():'')+'</div>'+
-    '<div class="spMeta">'+
-      (extRating
-        ? '<span class="lpRate">'+ic('i-star')+extRating.toFixed(1)+'</span> · '+extReviews+' оценок'+(s.rating_source?' · '+esc(s.rating_source):'')
-        : 'нет внешнего рейтинга'
-      )+
-      (lepScore?' · '+lepestokScoreBadge(s):'')+
-    '</div>'+
-    '<div class="spInfo">'+
-      '<div class="spRow">'+ic('i-pin')+esc(s.city||DEFAULT_CITY)+(s.address?', '+esc(s.address):'')+'</div>'+
-      (s.phone?'<div class="spRow"><a href="tel:'+String(s.phone).replace(/\D/g,'')+'" onclick="trackLead(\'phone\','+s.id+')">'+ic('i-phone')+esc(s.phone)+'</a></div>':'')+
-      (s.telegram?'<div class="spRow"><a href="https://t.me/'+esc(String(s.telegram).replace(/^@/,''))+'" target="_blank" rel="noopener" onclick="trackLead(\'telegram\','+s.id+')">'+ic('i-telegram')+'@'+esc(String(s.telegram).replace(/^@/,''))+'</a></div>':'')+
-      (s.delivery_min?'<div class="spRow">'+ic('i-truck')+'Доставка от '+s.delivery_min+' мин</div>':'')+
-    '</div>'+
-    (s.description?'<div class="spDesc">'+richText(s.description)+'</div>':'')+
-    shopLeadButtons(s)+
-    '<div class="spOwnerBox"><b>Владелец этого магазина?</b><br>Управляйте страницей бесплатно — напишите нам, подтвердим профиль</div>';
+  const r=shopRating(s);const rc=shopReviewsCount(s);const extRating=getExternalRating(s);const extReviews=getExternalReviews(s);const lepScore=getLepestokScore(s);
+  $('shopPageHead').innerHTML='<div class="spAva">'+(s.logo_url?'<img src="'+s.logo_url+'">':ic('i-flower'))+'</div>'+'<div class="spName">'+esc(s.name)+(isVerified(s)?verifiedBadge():'')+'</div>'+'<div class="spMeta">'+(extRating?'<span class="lpRate">'+ic('i-star')+extRating.toFixed(1)+'</span> · '+extReviews+' оценок'+(s.rating_source?' · '+esc(s.rating_source):''):'нет внешнего рейтинга')+(lepScore?' · '+lepestokScoreBadge(s):'')+'</div>'+'<div class="spInfo">'+'<div class="spRow">'+ic('i-pin')+esc(s.city||DEFAULT_CITY)+(s.address?', '+esc(s.address):'')+'</div>'+(s.phone?'<div class="spRow"><a href="tel:'+String(s.phone).replace(/\D/g,'')+'" onclick="trackLead(\'phone\','+s.id+')">'+ic('i-phone')+esc(s.phone)+'</a></div>':'')+(s.telegram?'<div class="spRow"><a href="https://t.me/'+esc(String(s.telegram).replace(/^@/,''))+'" target="_blank" rel="noopener" onclick="trackLead(\'telegram\','+s.id+')">'+ic('i-telegram')+'@'+esc(String(s.telegram).replace(/^@/,''))+'</a></div>':'')+(s.delivery_min?'<div class="spRow">'+ic('i-truck')+'Доставка от '+s.delivery_min+' мин</div>':'')+'</div>'+(s.description?'<div class="spDesc">'+richText(s.description)+'</div>':'')+shopLeadButtons(s)+'<div class="spOwnerBox"><b>Владелец этого магазина?</b><br>Управляйте страницей бесплатно — напишите нам, подтвердим профиль</div>';
   const list=bouquets.filter(b=>b.user_id===s.owner_id&&b.photo_url);
   $('shopPageFeed').innerHTML=list.length?'<div class="lpGrid">'+list.map((b,i)=>lpCard(b,i)).join('')+'</div>':'<div class="empty">'+ic('i-flower')+'Магазин ещё не добавил букеты</div>';
   window.scrollTo(0,0);
 }
 function closeShopPage(){$('shopPage').classList.add('hidden');showTab('shops');}
-/* ===== карточка букета ===== */
-function tagsHtml(b){
-  const t=getTags(b);if(!t.length)return'';
-  const show=t.slice(0,3),rest=t.length-show.length;
-  return '<div class="tagBlock"><div class="tagLbl">'+ic('i-tag')+'Подойдёт для</div><div class="tagChips" id="cardTags">'+show.map(x=>'<span class="tagChip">'+esc(x)+'</span>').join('')+(rest>0?'<button class="tagChip more" onclick="expandCardTags('+b.id+')">ещё +'+rest+'</button>':'')+'</div></div>';
-}
+function tagsHtml(b){const t=getTags(b);if(!t.length)return'';const show=t.slice(0,3),rest=t.length-show.length;return '<div class="tagBlock"><div class="tagLbl">'+ic('i-tag')+'Подойдёт для</div><div class="tagChips" id="cardTags">'+show.map(x=>'<span class="tagChip">'+esc(x)+'</span>').join('')+(rest>0?'<button class="tagChip more" onclick="expandCardTags('+b.id+')">ещё +'+rest+'</button>':'')+'</div></div>';}
 function expandCardTags(id){const b=bouquets.find(x=>x.id===id);const el=$('cardTags');if(!b||!el)return;el.innerHTML=getTags(b).map(x=>'<span class="tagChip">'+esc(x)+'</span>').join('');}
 function openCard(id){
   const b=bouquets.find(x=>x.id===id);if(!b)return;curB=b;
   track('view',{bouquet_id:id,tags:getTags(b),price:b.price,category:b.category});
   const img=b.photo_url?'<div style="position:relative"><img src="'+b.photo_url+'" decoding="async" style="width:100%;max-height:320px;object-fit:cover;border-radius:16px"><div class="priceSpin big"><span class="priceSpinIn">'+fmtPrice(b.price)+'</span></div></div>':'';
-  const r=avgRating(b.id);
-  const shop=shopOf(b);
-  let lead='';
-  if(shop){
-    const btns=[];
-    if(shop.phone)btns.push('<a href="tel:'+String(shop.phone).replace(/\D/g,'')+'" onclick="trackLead(\'phone\','+shop.id+')">'+ic('i-phone')+'Позвонить</a>');
-    if(shop.telegram)btns.push('<a class="telegram" href="https://t.me/'+esc(String(shop.telegram).replace(/^@/,''))+'" target="_blank" rel="noopener" onclick="trackLead(\'telegram\','+shop.id+')">'+ic('i-telegram')+'Telegram</a>');
-    if(shop.website)btns.push('<a href="'+esc(shop.website)+'" target="_blank" rel="noopener" onclick="trackLead(\'web\','+shop.id+')">'+ic('i-globe')+'Сайт</a>');
-    if(shop.map_link)btns.push('<a href="'+esc(shop.map_link)+'" target="_blank" rel="noopener" onclick="trackLead(\'map\','+shop.id+')">'+ic('i-pin')+'Карта</a>');
-    lead='<div class="cardLeadBox"><h4>'+ic('i-arrow')+'Заказать в «'+esc(shop.name)+'»</h4>'+
-      '<div class="shopLine" style="margin:0" onclick="closeSheet(\'cardSheet\');openShopPage('+shop.id+')">'+
-        '<div class="shopLineAva">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':ic('i-shop'))+'</div>'+
-        '<div class="shopLineBody"><div class="shopLineName">'+esc(shop.name)+(isVerified(shop)?verifiedBadge():'')+'</div>'+
-        '<div class="shopLineMeta">'+ic('i-pin')+esc(shop.city||DEFAULT_CITY)+'</div></div>'+ic('i-chevR')+'</div>'+
-      (btns.length?'<div class="cardLeadGrid">'+btns.join('')+'</div>':'')+
-    '</div>';
-  }
-  $('cardBody').innerHTML=img+
-    (shop?'<div class="shopWrap" style="margin-top:10px"><div class="floralHalo"></div><div class="shopRow" onclick="closeSheet(\'cardSheet\');openShopPage('+shop.id+')">'+(shop.logo_url?'<img class="shopLogo" src="'+shop.logo_url+'">':ic('i-shop'))+esc(shop.name)+'</div></div>':'')+
-    '<h3 style="margin-top:6px">'+esc(b.title)+(r?' <span style="color:var(--yel);display:inline-flex;align-items:center;gap:3px">'+ic('i-star')+r.toFixed(1)+'</span>':'')+'</h3>'+
-    '<div class="lpFoot" style="margin-top:6px;justify-content:flex-start;gap:10px">'+(b.photo_url?'':'<span class="lpPrice" style="font-size:18px">'+fmtPrice(b.price)+'</span>')+'<span class="stockPill '+(b.in_stock?'in':'out')+'">'+ic(b.in_stock?'i-check':'i-clock')+(b.in_stock?'В наличии':'Под заказ')+'</span>'+(b.category?'<span class="lpComp">'+esc(b.category)+'</span>':'')+'</div>'+
-    '<div style="margin-top:10px;font-size:14px;line-height:1.5">'+richText(b.description||'')+'</div>'+
-    tagsHtml(b)+lead+
-    '<button class="btn soft" style="border:none;border-radius:999px;padding:13px;font-weight:800;font-size:14px;cursor:pointer;width:100%;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:7px;background:var(--bg);color:var(--ink)" onclick="shareBouquet('+b.id+')">'+ic('i-share')+'Поделиться</button>'+
-    '<button class="btn soft" style="border:none;border-radius:999px;padding:13px;font-weight:800;font-size:14px;cursor:pointer;width:100%;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:7px;background:var(--bg);color:var(--ink)" onclick="closeSheet(\'cardSheet\')">Закрыть</button>';
+  const r=avgRating(b.id);const shop=shopOf(b);let lead='';
+  if(shop){const btns=[];if(shop.phone)btns.push('<a href="tel:'+String(shop.phone).replace(/\D/g,'')+'" onclick="trackLead(\'phone\','+shop.id+')">'+ic('i-phone')+'Позвонить</a>');if(shop.telegram)btns.push('<a class="telegram" href="https://t.me/'+esc(String(shop.telegram).replace(/^@/,''))+'" target="_blank" rel="noopener" onclick="trackLead(\'telegram\','+shop.id+')">'+ic('i-telegram')+'Telegram</a>');if(shop.website)btns.push('<a href="'+esc(shop.website)+'" target="_blank" rel="noopener" onclick="trackLead(\'web\','+shop.id+')">'+ic('i-globe')+'Сайт</a>');if(shop.map_link)btns.push('<a href="'+esc(shop.map_link)+'" target="_blank" rel="noopener" onclick="trackLead(\'map\','+shop.id+')">'+ic('i-pin')+'Карта</a>');lead='<div class="cardLeadBox"><h4>'+ic('i-arrow')+'Заказать в «'+esc(shop.name)+'»</h4>'+'<div class="shopLine" style="margin:0" onclick="closeSheet(\'cardSheet\');openShopPage('+shop.id+')">'+'<div class="shopLineAva">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':ic('i-shop'))+'</div>'+'<div class="shopLineBody"><div class="shopLineName">'+esc(shop.name)+(isVerified(shop)?verifiedBadge():'')+'</div>'+'<div class="shopLineMeta">'+ic('i-pin')+esc(shop.city||DEFAULT_CITY)+'</div></div>'+ic('i-chevR')+'</div>'+(btns.length?'<div class="cardLeadGrid">'+btns.join('')+'</div>':'')+'</div>';}
+  $('cardBody').innerHTML=img+(shop?'<div class="shopWrap" style="margin-top:10px"><div class="floralHalo"></div><div class="shopRow" onclick="closeSheet(\'cardSheet\');openShopPage('+shop.id+')">'+(shop.logo_url?'<img class="shopLogo" src="'+shop.logo_url+'">':ic('i-shop'))+esc(shop.name)+'</div></div>':'')+'<h3 style="margin-top:6px">'+esc(b.title)+(r?' <span style="color:var(--yel);display:inline-flex;align-items:center;gap:3px">'+ic('i-star')+r.toFixed(1)+'</span>':'')+'</h3>'+'<div class="lpFoot" style="margin-top:6px;justify-content:flex-start;gap:10px">'+(b.photo_url?'':'<span class="lpPrice" style="font-size:18px">'+fmtPrice(b.price)+'</span>')+'<span class="stockPill '+(b.in_stock?'in':'out')+'">'+ic(b.in_stock?'i-check':'i-clock')+(b.in_stock?'В наличии':'Под заказ')+'</span>'+(b.category?'<span class="lpComp">'+esc(b.category)+'</span>':'')+'</div>'+'<div style="margin-top:10px;font-size:14px;line-height:1.5">'+richText(b.description||'')+'</div>'+tagsHtml(b)+lead+'<button class="btn soft" style="border:none;border-radius:999px;padding:13px;font-weight:800;font-size:14px;cursor:pointer;width:100%;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:7px;background:var(--bg);color:var(--ink)" onclick="shareBouquet('+b.id+')">'+ic('i-share')+'Поделиться</button>'+'<button class="btn soft" style="border:none;border-radius:999px;padding:13px;font-weight:800;font-size:14px;cursor:pointer;width:100%;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:7px;background:var(--bg);color:var(--ink)" onclick="closeSheet(\'cardSheet\')">Закрыть</button>';
   openSheet('cardSheet');
 }
-/* ===== лайки/избранное ===== */
 let favBusy=false;
 async function toggleFav(id){
-  if(!me){openAuth();return;}
-  if(favBusy)return;
-  favBusy=true;showLoader();
-  try{
-    const cur=favorites.find(f=>f.bouquet_id===id);
-    if(cur){await sb.from('favorites').delete().eq('id',cur.id);favorites=favorites.filter(f=>f.id!==cur.id);}
-    else{const{data,error}=await sb.from('favorites').insert({bouquet_id:id,user_id:me.id}).select();
-      if(error){if(/duplicate|unique/i.test(error.message)){const{data:rows}=await sb.from('favorites').select('*').eq('user_id',me.id);favorites=rows||[];}else{handleSBError(error,'Избранное');return;}}
-      else if(data&&data[0])favorites.push(data[0]);}
-  }finally{hideLoader();favBusy=false;}
+  if(!me){openAuth();return;}if(favBusy)return;favBusy=true;showLoader();
+  try{const cur=favorites.find(f=>f.bouquet_id===id);if(cur){await sb.from('favorites').delete().eq('id',cur.id);favorites=favorites.filter(f=>f.id!==cur.id);}else{const{data,error}=await sb.from('favorites').insert({bouquet_id:id,user_id:me.id}).select();if(error){if(/duplicate|unique/i.test(error.message)){const{data:rows}=await sb.from('favorites').select('*').eq('user_id',me.id);favorites=rows||[];}else{handleSBError(error,'Избранное');return;}}else if(data&&data[0])favorites.push(data[0]);}}finally{hideLoader();favBusy=false;}
   refreshShop();
 }
 let likeBusy=false;
 async function likeBouquet(id){
-  if(!me){openAuth();return;}
-  if(likeBusy)return;
-  likeBusy=true;showLoader();
-  try{
-    const cur=bouquetLikes.find(l=>l.bouquet_id===id&&l.user_id===me.id);
-    if(cur){await sb.from('bouquet_likes').delete().eq('id',cur.id);bouquetLikes=bouquetLikes.filter(l=>l.id!==cur.id);}
-    else{const{data,error}=await sb.from('bouquet_likes').insert({bouquet_id:id,user_id:me.id}).select();
-      if(error){if(/duplicate|unique/i.test(error.message)){const{data:rows}=await sb.from('bouquet_likes').select('*').eq('user_id',me.id);bouquetLikes=rows||[];}else{handleSBError(error,'Лайк');return;}}
-      else if(data&&data[0])bouquetLikes.push(data[0]);}
-  }finally{hideLoader();likeBusy=false;}
+  if(!me){openAuth();return;}if(likeBusy)return;likeBusy=true;showLoader();
+  try{const cur=bouquetLikes.find(l=>l.bouquet_id===id&&l.user_id===me.id);if(cur){await sb.from('bouquet_likes').delete().eq('id',cur.id);bouquetLikes=bouquetLikes.filter(l=>l.id!==cur.id);}else{const{data,error}=await sb.from('bouquet_likes').insert({bouquet_id:id,user_id:me.id}).select();if(error){if(/duplicate|unique/i.test(error.message)){const{data:rows}=await sb.from('bouquet_likes').select('*').eq('user_id',me.id);bouquetLikes=rows||[];}else{handleSBError(error,'Лайк');return;}}else if(data&&data[0])bouquetLikes.push(data[0]);}}finally{hideLoader();likeBusy=false;}
   refreshShop();
 }
-/* ===== полный квиз (sheet) ===== */
 function openQuiz(){
-  const h='<div class="secCard"><h4>Кому</h4><div class="row" id="q2">'+qOpts(['девушке','маме','подруге','жене','коллеге','учителю','себе','другу'])+'</div></div>'+
-  '<div class="secCard"><h4>Повод</h4><div class="row" id="q1">'+qOpts(['день рождения','свидание','годовщина','просто так','извиниться','8 марта','поблагодарить','свадьба'])+'</div></div>'+
-  '<div class="secCard"><h4>Бюджет</h4><div class="row" id="q3">'+qOpts(['до 2 000 ₽','2–3 000 ₽','3–5 000 ₽','5–10 000 ₽','неважно'])+'</div></div>'+
-  '<div class="secCard"><h4>Стиль</h4><div class="row" id="q5">'+qOpts(['нежный','яркий','классический','необычный','минималистичный'])+'</div></div>'+
-  '<button class="btn rose" onclick="quizGo()">'+ic('i-wand')+'Показать букеты</button>';
-  const qb=$('quizBody');if(qb)qb.innerHTML=h;
-  openSheet('quizSheet');
-}
-function openQuizTab(){
-  const h='<div class="secCard"><h4>Кому</h4><div class="row" id="q2">'+qOpts(['девушке','маме','подруге','жене','коллеге','учителю','себе','другу'])+'</div></div>'+
-  '<div class="secCard"><h4>Повод</h4><div class="row" id="q1">'+qOpts(['день рождения','свидание','годовщина','просто так','извиниться','8 марта','поблагодарить','свадьба'])+'</div></div>'+
-  '<div class="secCard"><h4>Бюджет</h4><div class="row" id="q3">'+qOpts(['до 2 000 ₽','2–3 000 ₽','3–5 000 ₽','5–10 000 ₽','неважно'])+'</div></div>'+
-  '<div class="secCard"><h4>Стиль</h4><div class="row" id="q5">'+qOpts(['нежный','яркий','классический','необычный','минималистичный'])+'</div></div>'+
-  '<button class="btn rose" onclick="quizGo()">'+ic('i-wand')+'Показать букеты</button>';
-  $('quizBox').innerHTML=h;
+  const h='<div class="secCard"><h4>Кому</h4><div class="row" id="q2">'+qOpts(['девушке','маме','подруге','жене','коллеге','учителю','себе','другу'])+'</div></div>'+'<div class="secCard"><h4>Повод</h4><div class="row" id="q1">'+qOpts(['день рождения','свидание','годовщина','просто так','извиниться','8 марта','поблагодарить','свадьба'])+'</div></div>'+'<div class="secCard"><h4>Бюджет</h4><div class="row" id="q3">'+qOpts(['до 2 000 ₽','2–3 000 ₽','3–5 000 ₽','5–10 000 ₽','неважно'])+'</div></div>'+'<div class="secCard"><h4>Стиль</h4><div class="row" id="q5">'+qOpts(['нежный','яркий','классический','необычный','минималистичный'])+'</div></div>'+'<button class="btn rose" onclick="quizGo()">'+ic('i-wand')+'Показать букеты</button>';
+  const qb=$('quizBody');if(qb)qb.innerHTML=h;openSheet('quizSheet');
 }
 function qOpts(a){return a.map(o=>'<div class="opt" onclick="qPick(this)">'+o+'</div>').join('');}
 function qPick(el){[...el.parentElement.children].forEach(x=>x.classList.remove('on'));el.classList.add('on');}
-function quizGo(){
-  const k=$('q2').querySelector('.on'),p=$('q1').querySelector('.on'),b=$('q3').querySelector('.on'),st=$('q5').querySelector('.on');
-  closeSheet('quizSheet');
-  runPick(k?k.textContent:'',p?p.textContent:'',b?b.textContent:'',st?st.textContent:'');
-}
-/* ===== комментарии ===== */
+function quizGo(){const k=$('q2').querySelector('.on'),p=$('q1').querySelector('.on'),b=$('q3').querySelector('.on'),st=$('q5').querySelector('.on');closeSheet('quizSheet');runPick(k?k.textContent:'',p?p.textContent:'',b?b.textContent:'',st?st.textContent:'');}
 function openComments(id){
   const b=bouquets.find(x=>x.id===id);if(!b)return;curB=b;
-  $('commentsBody').innerHTML='<h3>'+esc(b.title)+'</h3><div id="cmtList" style="margin-top:10px;display:flex;flex-direction:column;gap:6px"></div>'+
-    (me?commentInput('ci_'+id,'sendComment('+id+')','replyTag'):'<button class="btn soft" onclick="openAuth()">'+ic('i-lock')+'войди, чтобы комментировать</button>')+
-    '<button class="btn soft" style="margin-top:10px" onclick="closeSheet(\'commentsSheet\')">Закрыть</button>';
+  $('commentsBody').innerHTML='<h3>'+esc(b.title)+'</h3><div id="cmtList" style="margin-top:10px;display:flex;flex-direction:column;gap:6px"></div>'+(me?commentInput('ci_'+id,'sendComment('+id+')','replyTag'):'<button class="btn soft" onclick="openAuth()">'+ic('i-lock')+'войди, чтобы комментировать</button>')+'<button class="btn soft" style="margin-top:10px" onclick="closeSheet(\'commentsSheet\')">Закрыть</button>';
   renderCmtList(id);openSheet('commentsSheet');
 }
 function commentInput(inputId,fn,tagId){
-  return '<div class="crow"><input id="'+inputId+'" maxlength="500" placeholder="Твой отзыв..."><button class="camBtn" onclick="document.getElementById(\'cf_'+inputId+'\').click()">'+ic('i-camera')+'</button><input type="file" id="cf_'+inputId+'" accept="image/*" style="display:none" onchange="pickCmtPhoto(this,\''+inputId+'\')"><button onclick="'+fn+'">'+ic('i-arrow')+'</button></div>'+
-    '<div id="cprev_'+inputId+'" class="hidden" style="margin-top:6px"><img id="cprevimg_'+inputId+'" style="width:64px;height:64px;object-fit:cover;border-radius:12px;box-shadow:var(--shadow)"></div>'+
-    '<div style="margin-top:8px"><div style="font-size:11px;color:var(--gray);margin-bottom:4px">Оценка:</div><div class="rating" id="rating_'+inputId+'">'+[1,2,3,4,5].map(n=>'<span class="star" onclick="setRating(\''+inputId+'\','+n+')">★</span>').join('')+'</div></div>'+
-    '<div id="'+tagId+'" class="hidden" style="font-size:11px;color:var(--gray);margin-top:4px"></div>';
+  return '<div class="crow"><input id="'+inputId+'" maxlength="500" placeholder="Твой отзыв..."><button class="camBtn" onclick="document.getElementById(\'cf_'+inputId+'\').click()">'+ic('i-camera')+'</button><input type="file" id="cf_'+inputId+'" accept="image/*" style="display:none" onchange="pickCmtPhoto(this,\''+inputId+'\')"><button onclick="'+fn+'">'+ic('i-arrow')+'</button></div>'+'<div id="cprev_'+inputId+'" class="hidden" style="margin-top:6px"><img id="cprevimg_'+inputId+'" style="width:64px;height:64px;object-fit:cover;border-radius:12px;box-shadow:var(--shadow)"></div>'+'<div style="margin-top:8px"><div style="font-size:11px;color:var(--gray);margin-bottom:4px">Оценка:</div><div class="rating" id="rating_'+inputId+'">'+[1,2,3,4,5].map(n=>'<span class="star" onclick="setRating(\''+inputId+'\','+n+')">★</span>').join('')+'</div></div>'+'<div id="'+tagId+'" class="hidden" style="font-size:11px;color:var(--gray);margin-top:4px"></div>';
 }
 function cmtPhotoHtml(c){return c.photo_url?'<img src="'+c.photo_url+'" loading="lazy" style="width:76px;height:76px;object-fit:cover;border-radius:12px;margin-top:6px;box-shadow:var(--shadow)">':'';}
 function myCmtBtns(c){return(me&&c.user_id===me.id)?'<button onclick="editCmt('+c.id+')">изменить</button><button onclick="delCmt('+c.id+')" style="color:var(--red)">удалить</button>':'';}
@@ -1398,43 +1327,26 @@ function pickCmtPhoto(inp,inputId){const f=inp.files[0];if(!f)return;cmtPhotoFil
 function editCmt(id){const c=comments.find(x=>x.id===id);if(!c)return;editingCmt=id;replyTo=null;const inp=$('ci_'+c.bouquet_id);if(inp){inp.value=c.text;inp.focus();}document.querySelectorAll('[id^=replyTag]').forEach(t=>{t.classList.remove('hidden');t.innerHTML='редактирование · <span style="color:var(--red);cursor:pointer" onclick="cancelEdit()">отмена</span>';});}
 function cancelEdit(){editingCmt=null;document.querySelectorAll('[id^=replyTag]').forEach(t=>t.classList.add('hidden'));}
 async function delCmt(id){
-  if(!confirm('Удалить твой отзыв?'))return;
-  const c=comments.find(x=>x.id===id);if(!c)return;
-  showLoader();
-  try{
-    await sb.from('bouquet_comments').delete().eq('parent_id',id);
-    const{error}=await sb.from('bouquet_comments').delete().eq('id',id).eq('user_id',me.id);
-    if(error){handleSBError(error,'Удаление');return;}
-  }finally{hideLoader();}
+  if(!confirm('Удалить твой отзыв?'))return;const c=comments.find(x=>x.id===id);if(!c)return;showLoader();
+  try{await sb.from('bouquet_comments').delete().eq('parent_id',id);const{error}=await sb.from('bouquet_comments').delete().eq('id',id).eq('user_id',me.id);if(error){handleSBError(error,'Удаление');return;}}finally{hideLoader();}
   await reloadComments(c.bouquet_id);toast('Отзыв удалён','i-check');
 }
-async function reloadComments(bouquetId){
-  const{data}=await sb.from('bouquet_comments').select('*').eq('status','approved');
-  comments=(data||[]).filter(x=>!x.hidden);
-  renderCmtList(bouquetId);
-}
+async function reloadComments(bouquetId){const{data}=await sb.from('bouquet_comments').select('*').eq('status','approved');comments=(data||[]).filter(x=>!x.hidden);renderCmtList(bouquetId);}
 function renderCmtList(bouquetId){
-  const all=comments.filter(c=>c.bouquet_id===bouquetId);
-  const tops=all.filter(c=>!c.parent_id);
+  const all=comments.filter(c=>c.bouquet_id===bouquetId);const tops=all.filter(c=>!c.parent_id);
   const byP={};all.filter(c=>c.parent_id).forEach(c=>{(byP[c.parent_id]=byP[c.parent_id]||[]).push(c);});
   const nicks={};all.forEach(c=>{if(c.user_id&&!nicks[c.user_id])nicks[c.user_id]=c.user_nick||'аноним';});
   const list=$('cmtList');if(!list)return;
   list.innerHTML=tops.length?tops.map(c=>cmtBlock(c,byP[c.id]||[],nicks)).join(''):'<div class="empty">'+ic('i-comment')+'Пока нет отзывов. Будь первым!</div>';
 }
 function cmtBlock(c,reps,nicks){
-  return '<div class="cmt">'+cmtHead(c,nicks[c.user_id])+'<div class="cBody">'+richText(c.text)+cmtPhotoHtml(c)+'</div>'+
-    (c.rating?'<div class="rating">'+[1,2,3,4,5].map(n=>'<span class="star'+(n<=c.rating?' on':'')+'" style="cursor:default">★</span>').join('')+'</div>':'')+
-    '<div class="cActions">'+myCmtBtns(c)+'<button onclick="setReply('+c.id+',\''+esc(nicks[c.user_id]||'')+'\')">↩ ответить</button><button onclick="likeComment('+c.id+')">👏 '+(likesOf(c.id)||'')+'</button>'+
-    (reps.length?'<button onclick="toggleReplies('+c.id+')"><span id="reptxt_'+c.id+'">открыть ответы ('+reps.length+')</span></button>':'')+'</div>'+
-    '<div class="reacts" id="cr_'+c.id+'">'+cReactsHtml(c.id)+'</div>'+
-    '<div class="replies hidden" id="rep_'+c.id+'">'+reps.map(r=>cmtRow(r,nicks)).join('')+'</div></div>';
+  return '<div class="cmt">'+cmtHead(c,nicks[c.user_id])+'<div class="cBody">'+richText(c.text)+cmtPhotoHtml(c)+'</div>'+(c.rating?'<div class="rating">'+[1,2,3,4,5].map(n=>'<span class="star'+(n<=c.rating?' on':'')+'" style="cursor:default">★</span>').join('')+'</div>':'')+'<div class="cActions">'+myCmtBtns(c)+'<button onclick="setReply('+c.id+',\''+esc(nicks[c.user_id]||'')+'\')">↩ ответить</button><button onclick="likeComment('+c.id+')">👏 '+(likesOf(c.id)||'')+'</button>'+(reps.length?'<button onclick="toggleReplies('+c.id+')"><span id="reptxt_'+c.id+'">открыть ответы ('+reps.length+')</span></button>':'')+'</div>'+'<div class="reacts" id="cr_'+c.id+'">'+cReactsHtml(c.id)+'</div>'+'<div class="replies hidden" id="rep_'+c.id+'">'+reps.map(r=>cmtRow(r,nicks)).join('')+'</div></div>';
 }
 function cmtRow(c,nicks){return '<div class="cmt">'+cmtHead(c,nicks[c.user_id])+'<div class="cBody">'+richText(c.text)+cmtPhotoHtml(c)+'</div><div class="cActions"><button onclick="likeComment('+c.id+')">👏 '+(likesOf(c.id)||'')+'</button></div><div class="reacts" id="cr_'+c.id+'">'+cReactsHtml(c.id)+'</div></div>';}
 function cmtHead(c,nick){return '<button class="repAbs" onclick="reportItem('+c.id+')">'+ic('i-flag')+'</button><div class="cHead"><span class="cAva">'+(nick||'?').slice(0,1).toUpperCase()+'</span><span class="nickCol"><span class="nick">'+esc(nick||'аноним')+'</span><span class="laserLine"></span></span></div>';}
 function likesOf(id){return commentLikes.filter(l=>l.comment_id===id).length;}
 async function likeComment(id){
-  if(!me){openAuth();return;}
-  const cur=commentLikes.find(l=>l.comment_id===id&&l.user_id===me.id);
+  if(!me){openAuth();return;}const cur=commentLikes.find(l=>l.comment_id===id&&l.user_id===me.id);
   if(cur){await sb.from('bouquet_comment_likes').delete().eq('id',cur.id);commentLikes=commentLikes.filter(l=>l.id!==cur.id);}
   else{const{data,error}=await sb.from('bouquet_comment_likes').insert({comment_id:id,user_id:me.id}).select();if(error){handleSBError(error,'Лайк');return;}commentLikes.push(data[0]);}
   renderCmtList(curB.id);
@@ -1442,12 +1354,10 @@ async function likeComment(id){
 function myCReact(id,e){return !!(me&&commentReacts.find(r=>r.comment_id===id&&r.user_id===me.id&&r.emoji===e));}
 function cReactsHtml(id){
   const rc=commentReacts.filter(r=>r.comment_id===id);const counts={};rc.forEach(r=>counts[r.emoji]=(counts[r.emoji]||0)+1);
-  return REACTS.slice().sort((a,b)=>(counts[b.e]||0)-(counts[a.e]||0)).map(e=>{const n=counts[e.e]||0;const on=myCReact(id,e.e);
-    return '<button class="rct'+(on?' on':'')+'" onclick="cReactToggle('+id+',\''+e.e+'\')"><span>'+e.e+'</span>'+(n?' '+n:'')+'</button>';}).join('');
+  return REACTS.slice().sort((a,b)=>(counts[b.e]||0)-(counts[a.e]||0)).map(e=>{const n=counts[e.e]||0;const on=myCReact(id,e.e);return '<button class="rct'+(on?' on':'')+'" onclick="cReactToggle('+id+',\''+e.e+'\')"><span>'+e.e+'</span>'+(n?' '+n:'')+'</button>';}).join('');
 }
 async function cReactToggle(id,e){
-  if(!me){openAuth();return;}
-  const cur=commentReacts.find(r=>r.comment_id===id&&r.user_id===me.id&&r.emoji===e);
+  if(!me){openAuth();return;}const cur=commentReacts.find(r=>r.comment_id===id&&r.user_id===me.id&&r.emoji===e);
   if(cur){await sb.from('bouquet_comment_reactions').delete().eq('id',cur.id);commentReacts=commentReacts.filter(r=>r.id!==cur.id);}
   else{const{data,error}=await sb.from('bouquet_comment_reactions').insert({comment_id:id,emoji:e,user_id:me.id}).select();if(error){handleSBError(error,'Реакция');return;}commentReacts.push(data[0]);}
   const el=$('cr_'+id);if(el)el.innerHTML=cReactsHtml(id);
@@ -1456,71 +1366,32 @@ function setReply(id,nick){replyTo={id};document.querySelectorAll('[id^=replyTag
 function clearReply(){replyTo=null;document.querySelectorAll('[id^=replyTag]').forEach(t=>t.classList.add('hidden'));}
 function toggleReplies(id){const el=$('rep_'+id);if(!el)return;const open=!el.classList.toggle('hidden');const b=$('reptxt_'+id);if(b)b.textContent=open?'скрыть ответы ('+el.children.length+')':'открыть ответы ('+el.children.length+')';}
 async function sendComment(bouquetId){
-  if(!me){openAuth();return;}
-  const inp=$('ci_'+bouquetId);const t=inp.value.trim();if(!t)return;
-  const rating=ratings['ci_'+bouquetId]||null;
-  showLoader();
+  if(!me){openAuth();return;}const inp=$('ci_'+bouquetId);const t=inp.value.trim();if(!t)return;
+  const rating=ratings['ci_'+bouquetId]||null;showLoader();
   try{
-    if(editingCmt){
-      const res=await sb.from('bouquet_comments').update({text:t,rating}).eq('id',editingCmt).eq('user_id',me.id);
-      if(res.error){handleSBError(res.error,'Комментарий');return;}
-      editingCmt=null;inp.value='';cancelEdit();
-      await reloadComments(bouquetId);toast('Отзыв обновлён','i-check');return;
-    }
-    let photo_url=null;
-    const pf=cmtPhotoFiles['ci_'+bouquetId];
-    if(pf){
-      const path=me.id+'/cmt_'+Date.now()+'.jpg';
-      const up=await sb.storage.from('bouquets').upload(path,pf,{contentType:pf.type});
-      if(up.error){handleSBError(up.error,'Фото');return;}
-      photo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
-    }
+    if(editingCmt){const res=await sb.from('bouquet_comments').update({text:t,rating}).eq('id',editingCmt).eq('user_id',me.id);if(res.error){handleSBError(res.error,'Комментарий');return;}editingCmt=null;inp.value='';cancelEdit();await reloadComments(bouquetId);toast('Отзыв обновлён','i-check');return;}
+    let photo_url=null;const pf=cmtPhotoFiles['ci_'+bouquetId];
+    if(pf){const path=me.id+'/cmt_'+Date.now()+'.jpg';const up=await sb.storage.from('bouquets').upload(path,pf,{contentType:pf.type});if(up.error){handleSBError(up.error,'Фото');return;}photo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;}
     const{error}=await sb.from('bouquet_comments').insert({bouquet_id:bouquetId,text:t,rating,photo_url,user_id:me.id,user_nick:me.user_metadata?.nick||me.email?.split('@')[0]||'аноним',status:'approved',parent_id:replyTo?replyTo.id:null});
     inp.value='';cmtPhotoFiles['ci_'+bouquetId]=null;const pw=$('cprev_ci_'+bouquetId);if(pw)pw.classList.add('hidden');
     if(error){handleSBError(error,'Комментарий');return;}
-    clearReply();
-    await reloadComments(bouquetId);toast('Комментарий опубликован','i-check');track('comment');
+    clearReply();await reloadComments(bouquetId);toast('Комментарий опубликован','i-check');track('comment');
   }finally{hideLoader();}
 }
-async function reportItem(commentId){
-  if(!me){openAuth();return;}
-  const reason=prompt('Причина жалобы:');if(!reason)return;
-  const{error}=await sb.from('reports').insert({user_id:me.id,item_type:'comment',item_id:commentId,reason});
-  if(error){handleSBError(error,'Жалоба');return;}
-  toast('Жалоба принята','i-flag');track('report');
-}
+async function reportItem(commentId){if(!me){openAuth();return;}const reason=prompt('Причина жалобы:');if(!reason)return;const{error}=await sb.from('reports').insert({user_id:me.id,item_type:'comment',item_id:commentId,reason});if(error){handleSBError(error,'Жалоба');return;}toast('Жалоба принята','i-flag');track('report');}
 async function shareBouquet(id){
-  const b=bouquets.find(x=>x.id===id);if(!b)return;
-  const url=location.origin+location.pathname+'?bouquet='+id;track('share');
+  const b=bouquets.find(x=>x.id===id);if(!b)return;const url=location.origin+location.pathname+'?bouquet='+id;track('share');
   try{await navigator.share({title:'Лепесток: '+b.title,text:b.title+' — '+fmtPrice(b.price),url});}
   catch(e){try{await navigator.clipboard.writeText(url);toast('Ссылка скопирована','i-share');}catch(e2){prompt('Скопируй ссылку:',url);}}
 }
-/* ===== профиль / auth ===== */
 async function showProfile(){
-  if(!me){openAuth();return;}
-  const pr=await sb.from('profiles').select('is_florist').eq('id',me.id).maybeSingle();
-  myFlorist=pr.data?.is_florist||false;
-  $('pBody').innerHTML='<div class="avaBig">'+esc((me.user_metadata?.nick||me.email?.split('@')[0]||'?').slice(0,1).toUpperCase())+'</div>'+
-    '<div class="pNick">'+esc(me.user_metadata?.nick||'аноним')+'</div><div class="pSub">'+esc(me.email||'')+'</div>'+
-    (myFlorist?'<button class="pBtn soft" onclick="location.href=\'seller.html\'">'+ic('i-shop')+'Кабинет продавца</button>':'')+
-    (isAdmin()?'<button class="pBtn soft" onclick="location.href=\'admin.html\'">'+ic('i-gear')+'Админка</button>':'')+
-    '<button class="pBtn soft" onclick="renameMe()">'+ic('i-user')+'Сменить ник</button>'+
-    '<button class="pBtn danger" onclick="logoutMe()">'+ic('i-exit')+'Выйти</button>';
+  if(!me){openAuth();return;}const pr=await sb.from('profiles').select('is_florist').eq('id',me.id).maybeSingle();myFlorist=pr.data?.is_florist||false;
+  $('pBody').innerHTML='<div class="avaBig">'+esc((me.user_metadata?.nick||me.email?.split('@')[0]||'?').slice(0,1).toUpperCase())+'</div>'+'<div class="pNick">'+esc(me.user_metadata?.nick||'аноним')+'</div><div class="pSub">'+esc(me.email||'')+'</div>'+(myFlorist?'<button class="pBtn soft" onclick="location.href=\'seller.html\'">'+ic('i-shop')+'Кабинет продавца</button>':'')+(isAdmin()?'<button class="pBtn soft" onclick="location.href=\'admin.html\'">'+ic('i-gear')+'Админка</button>':'')+'<button class="pBtn soft" onclick="renameMe()">'+ic('i-user')+'Сменить ник</button>'+'<button class="pBtn danger" onclick="logoutMe()">'+ic('i-exit')+'Выйти</button>';
 }
-async function renameMe(){
-  const n=prompt('Новый никнейм:',me.user_metadata?.nick||'');if(!n)return;
-  const nick=n.trim().slice(0,16);if(nick.length<2){toast('Короткий ник');return;}
-  showLoader();
-  try{
-    await sb.from('profiles').update({nick}).eq('id',me.id);
-    await sb.auth.updateUser({data:{nick}});
-    toast('Ник обновлён','i-check');showProfile();
-  }finally{hideLoader();}
-}
-async function logoutMe(){showLoader();await sb.auth.signOut();hideLoader();showTab('shop');await refreshMe();toast('Ты вышел');}
+async function renameMe(){const n=prompt('Новый никнейм:',me.user_metadata?.nick||'');if(!n)return;const nick=n.trim().slice(0,16);if(nick.length<2){toast('Короткий ник');return;}showLoader();try{await sb.from('profiles').update({nick}).eq('id',me.id);await sb.auth.updateUser({data:{nick}});toast('Ник обновлён','i-check');showProfile();}finally{hideLoader();}}
+async function logoutMe(){showLoader();await sb.auth.signOut();hideLoader();showTab('chat');await refreshMe();toast('Ты вышел');}
 async function refreshMe(){
-  const{data}=await sb.auth.getSession();
-  me=data.session?data.session.user:null;
+  const{data}=await sb.auth.getSession();me=data.session?data.session.user:null;
   if(me){const pr=await sb.from('profiles').select('is_florist').eq('id',me.id).maybeSingle();myFlorist=pr.data?.is_florist||false;}else myFlorist=false;
   $('tbUser').innerHTML=me?'<button class="avaBtn" onclick="showTab(\'profile\')">'+((me.user_metadata?.nick||me.email||'?').slice(0,1).toUpperCase())+'</button>':'<button class="miniBtn" onclick="openAuth()">войти</button>';
 }
@@ -1530,84 +1401,35 @@ function toggleAuthMode(){authMode=authMode==='reg'?'login':'reg';syncAuthMode()
 function syncAuthMode(){$('aNick').classList.toggle('hidden',authMode!=='reg');$('aGo').textContent=authMode==='reg'?'Создать аккаунт':'Войти';$('aSwap').textContent=authMode==='reg'?'Уже есть аккаунт? Войти':'Нет аккаунта? Регистрация';}
 async function doAuth(){
   const email=$('aEmail').value.trim(),pass=$('aPass').value;
-  if(!email||pass.length<6){toast('Email и пароль от 6 символов');return;}
-  showLoader();
+  if(!email||pass.length<6){toast('Email и пароль от 6 символов');return;}showLoader();
   try{
-    if(authMode==='reg'){
-      const nick=$('aNick').value.trim();if(nick.length<2){toast('Придумай никнейм (мин. 2 символа)');return;}
-      const r=await sb.auth.signUp({email,password:pass,options:{data:{nick}}});
-      if(r.error){
-        if(/already registered/i.test(r.error.message)){toast('Этот email уже зарегистрирован — входи','i-lock');authMode='login';syncAuthMode();return;}
-        handleSBError(r.error,'Регистрация');return;
-      }
-      if(r.data.session){await sb.from('profiles').insert({id:r.data.session.user.id,nick,is_florist:false}).catch(()=>{});toast('Добро пожаловать, '+nick+'!','i-flower');track('reg');}
-      else{toast('Подтверди письмо на '+email);}
-      closeAuth();await refreshMe();load();
-    }else{
-      const r=await sb.auth.signInWithPassword({email,password:pass});
-      if(r.error){handleSBError(r.error,'Вход');return;}
-      toast('С возвращением!','i-flower');closeAuth();await refreshMe();load();
-    }
+    if(authMode==='reg'){const nick=$('aNick').value.trim();if(nick.length<2){toast('Придумай никнейм (мин. 2 символа)');return;}const r=await sb.auth.signUp({email,password:pass,options:{data:{nick}}});if(r.error){if(/already registered/i.test(r.error.message)){toast('Этот email уже зарегистрирован — входи','i-lock');authMode='login';syncAuthMode();return;}handleSBError(r.error,'Регистрация');return;}if(r.data.session){await sb.from('profiles').insert({id:r.data.session.user.id,nick,is_florist:false}).catch(()=>{});toast('Добро пожаловать, '+nick+'!','i-flower');track('reg');}else{toast('Подтверди письмо на '+email);}closeAuth();await refreshMe();load();}
+    else{const r=await sb.auth.signInWithPassword({email,password:pass});if(r.error){handleSBError(r.error,'Вход');return;}toast('С возвращением!','i-flower');closeAuth();await refreshMe();load();}
   }finally{hideLoader();}
 }
-/* ===== тур ===== */
 const TOUR_STEPS=[
-  {sel:'.quizCard',title:'Собери мне',text:'Главная фишка: ответь на 3 вопроса — подберём букет и покажем, где заказать',pos:'bottom'},
-  {sel:'.bnFab',title:'Собери мне — всегда под рукой',text:'Центральная кнопка открывает подбор с любого экрана',pos:'top'},
-  {sel:'.bn[data-t="search"]',title:'Поиск',text:'Если знаешь, что хочешь — ищи по названию, категориям и бюджету',pos:'top'},
-  {sel:'.bn[data-t="fav"]',title:'Избранное',text:'Сохраняй букеты сердечком, чтобы вернуться позже',pos:'top'}
+  {sel:'#chatInput',title:'Напиши своими словами',text:'Расскажи, какой букет нужен: для кого, повод, бюджет — подберу лучшие варианты',pos:'bottom'},
+  {sel:'.chatChips',title:'Быстрые подсказки',text:'Или тапни по готовым вариантам, если не знаешь, что написать',pos:'top'},
+  {sel:'.bnav',title:'Другие разделы',text:'Каталог, магазины, избранное — всё под рукой внизу',pos:'top'}
 ];
 let tourStep=0;
 function startTour(){
-  if(localStorage.getItem('lep_tour_done'))return;
-  if(!document.querySelector('.quizCard'))return;
-  tourStep=0;
+  if(localStorage.getItem('lep_tour_done'))return;if(!document.querySelector('#chatInput'))return;tourStep=0;
   const veil=document.createElement('div');veil.id='tourVeil';veil.className='tourVeil';
   const spot=document.createElement('div');spot.id='tourSpot';spot.className='tourSpot';
   const tip=document.createElement('div');tip.id='tourTip';tip.className='tourTip';
-  document.body.appendChild(veil);document.body.appendChild(spot);document.body.appendChild(tip);
-  showTourStep();
+  document.body.appendChild(veil);document.body.appendChild(spot);document.body.appendChild(tip);showTourStep();
 }
 function showTourStep(){
-  const st=TOUR_STEPS[tourStep];
-  const el=document.querySelector(st.sel);
-  if(!el){nextTourStep();return;}
+  const st=TOUR_STEPS[tourStep];const el=document.querySelector(st.sel);if(!el){nextTourStep();return;}
   el.scrollIntoView({block:'center',behavior:'smooth'});
-  setTimeout(()=>{
-    const r=el.getBoundingClientRect();
-    const spot=$('tourSpot');if(!spot)return;
-    spot.style.top=(r.top-8)+'px';spot.style.left=(r.left-8)+'px';
-    spot.style.width=(r.width+16)+'px';spot.style.height=(r.height+16)+'px';
-    const tip=$('tourTip');if(!tip)return;
-    const last=tourStep===TOUR_STEPS.length-1;
-    tip.innerHTML='<h4>'+esc(st.title)+'<span>'+(tourStep+1)+'/'+TOUR_STEPS.length+'</span></h4><p>'+esc(st.text)+'</p><div class="tourBtns"><button onclick="endTour()">Пропустить</button><button class="next" onclick="nextTourStep()">'+(last?'Начать!':'Далее')+ic('i-arrow')+'</button></div>';
-    if(st.pos==='top'){tip.style.top='auto';tip.style.bottom=Math.min(window.innerHeight-r.top+14,window.innerHeight-200)+'px';}
-    else{tip.style.bottom='auto';tip.style.top=Math.min(r.bottom+14,window.innerHeight-200)+'px';}
-  },420);
+  setTimeout(()=>{const r=el.getBoundingClientRect();const spot=$('tourSpot');if(!spot)return;spot.style.top=(r.top-8)+'px';spot.style.left=(r.left-8)+'px';spot.style.width=(r.width+16)+'px';spot.style.height=(r.height+16)+'px';const tip=$('tourTip');if(!tip)return;const last=tourStep===TOUR_STEPS.length-1;tip.innerHTML='<h4>'+esc(st.title)+'<span>'+(tourStep+1)+'/'+TOUR_STEPS.length+'</span></h4><p>'+esc(st.text)+'</p><div class="tourBtns"><button onclick="endTour()">Пропустить</button><button class="next" onclick="nextTourStep()">'+(last?'Начать!':'Далее')+ic('i-arrow')+'</button></div>';if(st.pos==='top'){tip.style.top='auto';tip.style.bottom=Math.min(window.innerHeight-r.top+14,window.innerHeight-200)+'px';}else{tip.style.bottom='auto';tip.style.top=Math.min(r.bottom+14,window.innerHeight-200)+'px';}},420);
 }
 function nextTourStep(){if(tourStep<TOUR_STEPS.length-1){tourStep++;showTourStep();}else endTour();}
 function endTour(){localStorage.setItem('lep_tour_done','1');['tourVeil','tourSpot','tourTip'].forEach(id=>{const el=$(id);if(el)el.remove();});}
-/* ===== лепестки ===== */
-function renderPetals(){
-  const p=$('petals');if(!p)return;
-  const cols=['#FFC2D1','#FFD9E0','#FBCFE0','#FFE1E6'];
-  let h='';
-  for(let i=0;i<7;i++){
-    h+='<span class="petal" style="left:'+(5+Math.random()*90)+'%;width:'+(8+Math.round(Math.random()*8))+'px;height:'+(8+Math.round(Math.random()*8))+'px;color:'+cols[i%4]+';animation-duration:'+(16+Math.random()*12).toFixed(1)+'s;animation-delay:-'+(Math.random()*24).toFixed(1)+'s">'+LEAF_SVG+'</span>';
-  }
-  p.innerHTML=h;
-}
-function renderVkPetals(){
-  const box=$('vkFall');if(!box)return;
-  const PETAL='<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c5 5 8 9 8 13a8 8 0 0 1-16 0c0-4 3-8 8-13z"/></svg>';
-  const cols=['#FFC2D1','#FFD9E0','#FBCFE0','#FFE1E6','#FF9EBB'];
-  let h='';
-  for(let i=0;i<10;i++){
-    const sz=8+Math.round(Math.random()*10);
-    h+='<span class="vp" style="left:'+(4+Math.random()*92)+'%;width:'+sz+'px;height:'+sz+'px;color:'+cols[i%5]+';opacity:'+(0.45+Math.random()*0.4).toFixed(2)+';animation-duration:'+(5+Math.random()*6).toFixed(1)+'s;animation-delay:-'+(Math.random()*10).toFixed(1)+'s">'+PETAL+'</span>';
-  }
-  box.innerHTML=h;
-}
+function renderPetals(){const p=$('petals');if(!p)return;const cols=['#FFC2D1','#FFD9E0','#FBCFE0','#FFE1E6'];let h='';for(let i=0;i<7;i++){h+='<span class="petal" style="left:'+(5+Math.random()*90)+'%;width:'+(8+Math.round(Math.random()*8))+'px;height:'+(8+Math.round(Math.random()*8))+'px;color:'+cols[i%4]+';animation-duration:'+(16+Math.random()*12).toFixed(1)+'s;animation-delay:-'+(Math.random()*24).toFixed(1)+'s">'+LEAF_SVG+'</span>';}p.innerHTML=h;}
+function renderVkPetals(){const box=$('vkFall');if(!box)return;const PETAL='<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c5 5 8 9 8 13a8 8 0 0 1-16 0c0-4 3-8 8-13z"/></svg>';const cols=['#FFC2D1','#FFD9E0','#FBCFE0','#FFE1E6','#FF9EBB'];let h='';for(let i=0;i<10;i++){const sz=8+Math.round(Math.random()*10);h+='<span class="vp" style="left:'+(4+Math.random()*92)+'%;width:'+sz+'px;height:'+sz+'px;color:'+cols[i%5]+';opacity:'+(0.45+Math.random()*0.4).toFixed(2)+';animation-duration:'+(5+Math.random()*6).toFixed(1)+'s;animation-delay:-'+(Math.random()*10).toFixed(1)+'s">'+PETAL+'</span>';}box.innerHTML=h;}
+
 sb.auth.onAuthStateChange(()=>refreshMe());
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
 renderPetals();renderVkPetals();refreshMe();load();setTimeout(startTour,900);
