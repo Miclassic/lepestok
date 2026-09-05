@@ -860,7 +860,8 @@ function sRenderBouquets(){
     '<input type="file" id="fPhoto" accept="image/*" style="display:none" onchange="onPhotoPick(this)">'+
     '<span id="fPhotoName" style="font-size:10.5px;color:var(--gray)"></span>'+
     '<label><input type="checkbox" id="fStock" checked> В наличии</label>'+
-    '<button class="btn" style="margin-top:10px" onclick="submitBouquet()">Сохранить букет</button></div>';
+    '<button class="btn" style="margin-top:10px" onclick="submitBouquet()">Сохранить букет</button>'+
+    '<button class="btn" style="margin-top:8px;background:linear-gradient(135deg,#A855F7,#FF6B9D)" onclick="aiFillBouquet()">✨ Описание и теги — AI</button></div>';
   const list=myBouquets.length?myBouquets.map(b=>{
     const tags=getTags(b);
     const tagsHtml=tags.length?'<div class="bTags">'+tags.slice(0,6).map(t=>'<span>'+esc(t)+'</span>').join('')+(tags.length>6?'<span>+'+(tags.length-6)+'</span>':'')+'</div>':'';
@@ -872,6 +873,34 @@ function sRenderBouquets(){
     '</div></div>';
   }).join(''):'<div class="empty">У продавца пока нет букетов 🌷</div>';
   box.innerHTML=addForm+list;
+}
+/* ===== YandexGPT AI ===== */
+const YA_KEY='AQVNxe1oVzRJEVvasMAC7oi8GJI85HIULXB66SpT';
+const YA_MODELS=['yandexgpt-lite','yandexgpt','qwen3-35b','alice-ai-llm'];
+async function yaComplete(prompt){
+  let lastErr='';
+  for(const m of YA_MODELS){
+    try{
+      const res=await fetch('https://ai.api.cloud.yandex.net/v1/chat/completions',{method:'POST',headers:{'Authorization':'Bearer '+YA_KEY,'Content-Type':'application/json'},body:JSON.stringify({model:m,messages:[{role:'user',content:prompt}],temperature:0.4,max_tokens:600})});
+      if(res.ok){const d=await res.json();const c=d.choices&&d.choices[0];const txt=(c&&c.message&&(c.message.content||c.message.text))||'';if(txt)return txt;lastErr='пустой ответ';}
+      else lastErr='HTTP '+res.status;
+    }catch(e){lastErr=e.message;}
+  }
+  throw new Error(lastErr||'AI недоступен');
+}
+async function aiFillBouquet(){
+  const t=$('fTitle').value.trim(),p=+$('fPrice').value;
+  if(!t){toast('Сначала напиши название букета','i-x');return;}
+  showLoader();
+  try{
+    const prompt='Ты флорист-маркетолог цветочного магазина. Для букета «'+t+'»'+(p?' за '+p+' ₽':'')+' верни СТРОГО JSON без пояснений: {"description":"вкусное описание 2-3 предложения: состав, настроение, кому подойдёт","tags":["5-7 тегов: кому, повод, стиль, цветы"],"category":"одно из: сборный, розы, тюльпаны, хризантемы, пионы, лилии, композиция"}';
+    const j=JSON.parse((await yaComplete(prompt)).replace(/```json|```/g,'').trim());
+    if(j.description)$('fDesc').value=j.description;
+    if(Array.isArray(j.tags))$('fTags').value=j.tags.join(', ');
+    if(j.category)$('fCat').value=j.category;
+    toast('AI заполнил карточку ✨','i-wand');
+  }catch(e){toast('AI ошибка: '+e.message,'i-x');}
+  finally{hideLoader();}
 }
 function onPhotoPick(inp){const f=inp.files[0];if(!f)return;pickedPhoto=f;$('fPhotoName').textContent='📷 '+f.name.slice(0,20);}
 async function submitBouquet(){
