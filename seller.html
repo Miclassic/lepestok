@@ -554,19 +554,12 @@ function openEditBouquet(id){
   $('bouqHead').textContent='Редактировать букет';
   $('bouqSaveBtn').textContent='Сохранить изменения';
 }
-/* ===== YandexGPT AI ===== */
-const YA_KEY='AQVNxe1oVzRJEVvasMAC7oi8GJI85HIULXB66SpT';
-const YA_MODELS=['yandexgpt-lite','yandexgpt','qwen3-35b','alice-ai-llm'];
+/* ===== YandexGPT AI (через Supabase-прокси) ===== */
 async function yaComplete(prompt){
-  let lastErr='';
-  for(const m of YA_MODELS){
-    try{
-      const res=await fetch('https://ai.api.cloud.yandex.net/v1/chat/completions',{method:'POST',headers:{'Authorization':'Bearer '+YA_KEY,'Content-Type':'application/json'},body:JSON.stringify({model:m,messages:[{role:'user',content:prompt}],temperature:0.4,max_tokens:600})});
-      if(res.ok){const d=await res.json();const c=d.choices&&d.choices[0];const txt=(c&&c.message&&(c.message.content||c.message.text))||'';if(txt)return txt;lastErr='пустой ответ';}
-      else lastErr='HTTP '+res.status;
-    }catch(e){lastErr=e.message;}
-  }
-  throw new Error(lastErr||'AI недоступен');
+  const {data,error}=await sb.rpc('ai_complete',{prompt:prompt});
+  if(error)throw new Error(error.message);
+  if(!data)throw new Error('пустой ответ от AI');
+  return data;
 }
 async function aiFillBouquet(){
   const t=$('fTitle').value.trim(),p=+$('fPrice').value;
