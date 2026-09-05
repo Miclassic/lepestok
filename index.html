@@ -44,15 +44,26 @@ body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle
 .bn.on::after{content:"";position:absolute;left:26%;right:26%;bottom:4px;height:2px;border-radius:999px;background:var(--gradient);box-shadow:0 0 10px rgba(255,107,107,.5)}
 main{padding:72px 16px calc(120px + env(safe-area-inset-bottom));max-width:620px;width:100%;margin:0 auto;position:relative;z-index:1}
 .chatWrap{display:flex;flex-direction:column;min-height:calc(100vh - 170px);gap:14px}
-.chatHero{text-align:center;padding:14px 8px 4px;animation:fadeInUp .7s ease}
+.chatHero{text-align:center;padding:24px 8px 10px;animation:fadeInUp .7s ease;transition:all .4s ease}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-.chatLogo{width:56px;height:56px;color:var(--coral);filter:drop-shadow(0 6px 18px rgba(255,107,107,.4));margin:0 auto 10px;display:block;animation:pulse 2.4s ease-in-out infinite}
-.chatTitle{font-size:26px;font-weight:800;letter-spacing:.3px;line-height:1.2}
+.chatLogo{width:48px;height:48px;color:var(--coral);filter:drop-shadow(0 6px 18px rgba(255,107,107,.4));margin:0 auto 12px;display:block;animation:pulse 2.4s ease-in-out infinite;transition:all .4s ease}
+.chatTitle{font-size:24px;font-weight:800;letter-spacing:.3px;line-height:1.2;transition:all .4s ease}
 .chatTitle em{font-style:normal;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.chatSub{font-size:12px;color:var(--gray);margin-top:6px;line-height:1.5}
-.chatInput{background:var(--card);border-radius:22px;padding:6px;box-shadow:var(--shadow);display:flex;align-items:flex-end;gap:4px;border:2px solid transparent;transition:border-color .2s}
-.chatInput.docked{position:fixed;left:16px;right:16px;bottom:calc(10px + env(safe-area-inset-bottom));max-width:588px;margin:0 auto;z-index:30}
+.chatSub{font-size:13px;color:var(--gray);margin-top:6px;line-height:1.5;transition:all .4s ease}
+.chatInput{background:var(--card);border-radius:22px;padding:6px;box-shadow:var(--shadow);display:flex;align-items:flex-end;gap:4px;border:2px solid transparent;transition:border-color .2s;margin-top:auto;position:relative}
+.chatInput.docked{position:fixed;left:16px;right:16px;bottom:calc(10px + env(safe-area-inset-bottom));max-width:588px;margin:0 auto;z-index:30;box-shadow:0 10px 32px rgba(233,120,140,.22)}
+.chatInput.docked::before{content:"";position:absolute;left:8px;right:8px;bottom:100%;height:28px;background:linear-gradient(180deg,rgba(255,249,247,0),rgba(255,249,247,.95));pointer-events:none}
+#tab-chat.has-msgs .chatMessages{padding-bottom:12px}
 #tab-chat.has-msgs .chatChips{display:none}
+#tab-chat.has-msgs .liveSearch{display:none}
+.liveSearch{display:flex;align-items:center;justify-content:center;gap:7px;align-self:center;margin-top:auto;max-width:340px;padding:9px 16px;background:rgba(255,255,255,.65);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px dashed rgba(255,107,107,.3);border-radius:999px;color:var(--gray);font-size:10.5px;line-height:1.45;text-align:center;cursor:pointer;animation:fadeInUp .8s ease;transition:border-color .2s}
+.liveSearch:hover{border-color:var(--coral)}
+.liveSearch .lsDot{width:6px;height:6px;border-radius:50%;background:var(--grn);flex:none;animation:pulse 1.6s ease-in-out infinite}
+.liveSearch b{color:var(--ink);font-weight:700;transition:opacity .25s}
+.liveSearch b.fade{opacity:0}
+#tab-chat.has-msgs .chatHero{padding:12px 0 4px}
+#tab-chat.has-msgs .chatLogo,#tab-chat.has-msgs .chatSub{display:none}
+#tab-chat.has-msgs .chatTitle{font-size:16px;font-weight:700}
 .menuFloat{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:31;display:none!important}
 .menuFloat.show{display:grid!important}
 .menuBtn{width:42px;height:42px;border:none;border-radius:50%;background:var(--card);color:var(--coral);display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px rgba(255,107,107,.25);flex:none;border:1.5px solid rgba(255,107,107,.3);transition:transform .15s}
@@ -71,7 +82,8 @@ main{padding:72px 16px calc(120px + env(safe-area-inset-bottom));max-width:620px
 .chatSend:active{transform:scale(.92)}
 .chatSend:disabled{opacity:.4;cursor:not-allowed}
 .chatSend .icn{width:18px;height:18px}
-.chatChips{display:flex;flex-wrap:wrap;gap:6px;padding:4px 2px 8px;justify-content:center}
+.chatChips{display:flex;flex-wrap:wrap;gap:6px;padding:4px 2px 8px;justify-content:center;transition:opacity .25s,transform .25s}
+.chatChips.swap{opacity:0;transform:translateY(4px)}
 .chatChip{background:var(--card);border:1.5px solid rgba(255,107,107,.2);border-radius:999px;padding:7px 13px;font-size:11px;font-weight:700;color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:5px;box-shadow:0 3px 10px rgba(233,120,140,.08);transition:.2s}
 .chatChip:hover{border-color:var(--coral);transform:translateY(-1px)}
 .chatChip .icn{width:12px;height:12px;color:var(--coral)}
@@ -93,14 +105,24 @@ main{padding:72px 16px calc(120px + env(safe-area-inset-bottom));max-width:620px
 .typing .dot:nth-child(2){animation-delay:.18s}
 .typing .dot:nth-child(3){animation-delay:.36s}
 @keyframes typing{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
-.chatResults{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
-@media(max-width:420px){.chatResults{grid-template-columns:1fr}}
-.refineRow{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
-.refineBtn{background:var(--card);border:1.5px solid rgba(168,85,247,.25);border-radius:999px;padding:7px 12px;font-size:11px;font-weight:700;color:var(--purple);cursor:pointer;display:inline-flex;align-items:center;gap:5px;box-shadow:0 3px 10px rgba(168,85,247,.1);transition:.2s}
+.chatResults{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;max-width:300px}
+.chatResults .lpCard{padding:5px;border-radius:16px;gap:4px}
+.chatResults .lpCover{aspect-ratio:4/3;border-radius:12px}
+.chatResults .lpName{font-size:11px;line-height:1.25;margin-top:5px}
+.chatResults .lpRate{font-size:9.5px}
+.chatResults .lpComp{font-size:9px}
+.chatResults .lpFoot{margin-top:2px;gap:4px}
+.chatResults .lpPrice{font-size:11px}
+.chatResults .stockPill,.chatResults .lepScore{display:none}
+.chatResults .shopChip{padding:3px 7px;font-size:7px}
+.chatCta{margin-top:6px;background:var(--gradient);color:#fff;border-radius:999px;padding:7px 8px;font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:5px;box-shadow:0 4px 12px rgba(255,107,107,.3)}
+.chatCta .icn{width:10px;height:10px}
+.chatHint{margin-top:8px;font-size:10.5px;color:var(--gray);line-height:1.4}
+.refineRow{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;padding-top:10px;border-top:1px dashed rgba(255,107,107,.15)}
+.refineLbl{width:100%;font-size:11px;color:var(--gray);margin-bottom:2px;font-weight:700}
+.refineBtn{background:var(--card);border:1.5px solid rgba(168,85,247,.2);border-radius:999px;padding:8px 14px;font-size:12px;font-weight:700;color:var(--purple);cursor:pointer;display:inline-flex;align-items:center;gap:5px;box-shadow:0 2px 8px rgba(168,85,247,.05);transition:.2s}
 .refineBtn:hover{border-color:var(--purple);transform:translateY(-1px)}
 .refineBtn .icn{width:11px;height:11px}
-.chatFoot{text-align:center;padding:14px 8px;font-size:11px;color:var(--gray);line-height:1.5;margin-top:8px;border-top:1px dashed rgba(255,107,107,.2)}
-.chatFoot a{color:var(--coral);text-decoration:none;font-weight:700;cursor:pointer}
 .vkWrap{position:relative;margin:-72px -16px 14px;overflow:hidden}
 .vkFall{position:absolute;inset:0;pointer-events:none;z-index:2;overflow:hidden}
 .vkFall .vp{position:absolute;top:-6%;animation:vkDrop linear infinite}
@@ -472,22 +494,18 @@ main{padding:72px 16px calc(120px + env(safe-area-inset-bottom));max-width:620px
       <div class="chatHero">
         <svg class="chatLogo"><use href="#i-flower"/></svg>
         <div class="chatTitle">какой букет <em>ищем сегодня?</em></div>
-        <div class="chatSub">расскажи своими словами — подберу лучшие варианты <span class="cityEcho">Новороссийска</span></div>
+        <div class="chatSub">расскажи своими словами — я подберу лучшие варианты <span class="cityEcho">Новороссийска</span></div>
       </div>
       <div class="chatMessages" id="chatMessages"></div>
+      <div class="chatChips" id="chatChips"></div>
+      <div class="liveSearch" id="liveSearch" onclick="liveClick()">
+        <span class="lsDot"></span>
+        <span class="lsTxt">сейчас ищут в лепестке: <b id="liveSearchTxt">букет из 51 розы для девушки на свидание</b></span>
+      </div>
       <div class="chatInput" id="chatInputBox">
         <textarea id="chatInput" placeholder="нежный букет девушке до 3000 ₽…" rows="1" oninput="autoResize(this)"></textarea>
         <button class="chatSend" id="chatSendBtn" onclick="sendChat()"><svg class="icn"><use href="#i-send"/></svg></button>
         <button class="menuBtn" onclick="toggleMenu()" aria-label="меню"><svg class="icn"><use href="#i-gear"/></svg></button>
-      </div>
-      <div class="chatChips">
-        <button class="chatChip" onclick="quickChat('девушке')"><svg class="icn"><use href="#i-heart"/></svg>девушке</button>
-        <button class="chatChip" onclick="quickChat('маме')"><svg class="icn"><use href="#i-gift"/></svg>маме</button>
-        <button class="chatChip" onclick="quickChat('на день рождения')"><svg class="icn"><use href="#i-cal"/></svg>день рождения</button>
-        <button class="chatChip" onclick="quickChat('до 3000 ₽')"><svg class="icn"><use href="#i-wallet"/></svg>до 3000 ₽</button>
-      </div>
-      <div class="chatFoot">
-        не знаешь что выбрать? <a onclick="showTab('shop')">открыть каталог</a> · <a onclick="openQuiz()">квиз</a> · <a onclick="clearChat()">новый чат</a>
       </div>
     </div>
   </section>
@@ -822,24 +840,24 @@ const WHO_GENITIVE={
   'девушке':'девушки','маме':'мамы','жене':'жены','подруге':'подруги','коллеге':'коллеги','учителю':'учителя','другу':'друга','себе':'себя','сестре':'сестры','бабушке':'бабушки'
 };
 const OCC_KEYWORDS={
-  'день рождения':'день рождения','др':'день рождения','юбилей':'юбилей',
+  'день рождения':'день рождения','др':'день рождения','рождения':'день рождения','юбилей':'юбилей',
   'годовщина':'годовщина','свадьба':'свадьба','8 марта':'8 марта','восьмое марта':'8 марта',
   'свидание':'свидание','просто так':'просто так','извиниться':'извиниться','поблагодарить':'поблагодарить',
   'благодарность':'поблагодарить','выписка':'выписка','новый год':'новый год','14 февраля':'14 февраля',
   'день святого валентина':'14 февраля'
 };
 const STYLE_KEYWORDS={
-  'нежный':'нежный','нежность':'нежный','нежное':'нежный',
-  'пышный':'пышный','пышное':'пышный','пышно':'пышный','большой':'пышный',
-  'яркий':'яркий','яркое':'яркий',
-  'минималистичный':'минималистичный','минимализм':'минималистичный','скромный':'минималистичный',
-  'классический':'классический','классика':'классический',
-  'необычный':'необычный','оригинальный':'необычный','авторский':'необычный'
+  'нежный':'нежный','нежность':'нежный','нежное':'нежный','нежные':'нежный','нежная':'нежный','нежную':'нежный','нежным':'нежный',
+  'пышный':'пышный','пышное':'пышный','пышно':'пышный','большой':'пышный','пышные':'пышный','пышная':'пышный','пышную':'пышный',
+  'яркий':'яркий','яркое':'яркий','яркие':'яркий','яркая':'яркий',
+  'минималистичный':'минималистичный','минимализм':'минималистичный','скромный':'минималистичный','минималистичные':'минималистичный',
+  'классический':'классический','классика':'классический','классические':'классический','классическая':'классический',
+  'необычный':'необычный','оригинальный':'необычный','авторский':'необычный','необычные':'необычный'
 };
 const FLOWER_KEYWORDS={
-  'розы':'розы','розу':'розы','роз':'розы','пионы':'пионы','пион':'пионы','пионов':'пионы',
-  'тюльпаны':'тюльпаны','тюльпан':'тюльпаны','хризантемы':'хризантемы','лилии':'лилии','лилия':'лилии',
-  'гортензии':'гортензии','орхидеи':'орхидеи','ромашки':'ромашки'
+  'розы':'розы','розу':'розы','роз':'розы','пионы':'пионы','пион':'пионы','пионов':'пионы','пионами':'пионы',
+  'тюльпаны':'тюльпаны','тюльпан':'тюльпаны','тюльпанами':'тюльпаны','хризантемы':'хризантемы','хризантемами':'хризантемы','лилии':'лилии','лилия':'лилии',
+  'гортензии':'гортензии','гортензий':'гортензии','орхидеи':'орхидеи','орхидеями':'орхидеи','ромашки':'ромашки'
 };
 const BASE_WORDS=['букет','букета','букетик','букеты','цветы','цветов','цветочный','композиция','композицию','композиции','хочу','ищу','нужен','нужно','найди','найти','покажи','показать','подбери','подобрать','подарить','подарок','выбрать','ищем','сегодня','какой','что','чем','можно','пожалуйста','недорогой','недорого','руб','рублей','тыс','тыщ','тысяч','до','от','за','около','больше','меньше','без','из','на','для','кому','красивый','красивые','большой','маленький','нежная','нежное'];
 const KNOWN_WORDS=BASE_WORDS.concat(Object.keys(WHO_KEYWORDS),Object.values(WHO_KEYWORDS),Object.keys(OCC_KEYWORDS),Object.values(OCC_KEYWORDS),Object.keys(STYLE_KEYWORDS),Object.values(STYLE_KEYWORDS),Object.keys(FLOWER_KEYWORDS),Object.values(FLOWER_KEYWORDS));
@@ -867,7 +885,7 @@ function parseQuery(text){
   for(const tok of tokens){
     if(KNOWN_SET.has(tok))continue;
     const fix=fuzzyFix(tok);
-    if(fix){if(!params.fixes.some(f=>f.good===fix))params.fixes.push({bad:tok,good:fix});applyKeyword(fix,params);}
+    if(fix){const isStyle=!!(STYLE_KEYWORDS[fix]||STYLE_KEYWORDS[tok]);if(!params.fixes.some(f=>f.good===fix))params.fixes.push({bad:tok,good:fix,style:isStyle});applyKeyword(fix,params);}
     else logUnknown(tok);
   }
   return params;
@@ -942,20 +960,23 @@ function hideTyping(){const el=$('typingMsg');if(el)el.remove();}
 function chatCard(b){
   const shop=shopOf(b);
   const r=avgRating(b.id);
+  const isFav=favorites.some(f=>f.bouquet_id===b.id);
   return '<div class="lpCard" onclick="openCard('+b.id+')" style="cursor:pointer">'+
     '<div class="lpCover"><img src="'+b.photo_url+'" loading="lazy" decoding="async">'+
+      '<button class="favBtn" data-fav="'+b.id+'"'+(isFav?' on':'')+' onclick="event.stopPropagation();toggleFav('+b.id+')">'+ic('i-heart')+'</button>'+
       (shop?'<span class="shopChip" onclick="event.stopPropagation();openShopPage('+shop.id+')">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':ic('i-shop'))+'<span class="nm">'+esc(shop.name)+'</span></span>':'')+
     '</div>'+
     '<div class="lpName"><span class="t">'+esc(b.title)+'</span>'+(r?'<span class="lpRate">'+ic('i-star')+r.toFixed(1)+'</span>':'')+'</div>'+
     '<div class="lpComp">'+esc(b.category||'')+'</div>'+
-    '<div class="lpFoot"><span class="lpPrice">'+fmtPrice(b.price)+'</span><span class="stockPill '+(b.in_stock?'in':'out')+'">'+ic(b.in_stock?'i-check':'i-clock')+(b.in_stock?'в наличии':'под заказ')+'</span></div>'+
-    (shop?'<div style="margin-top:4px">'+lepestokScoreBadge(shop)+'</div>':'')+
+    '<div class="lpFoot"><span class="lpPrice">'+fmtPrice(b.price)+'</span></div>'+
+    '<div class="chatCta">'+ic('i-arrow')+'хочу этот — где заказать?</div>'+
   '</div>';
 }
 function refineRowHtml(){
   return '<div class="refineRow">'+
+    '<div class="refineLbl">Что уточнить?</div>'+
     '<button class="refineBtn" onclick="refineChat(\'нежнее\')">'+ic('i-heart')+'нежнее</button>'+
-    '<button class="refineBtn" onclick="refineChat(\'дороже\')">'+ic('i-trend')+'дороже</button>'+
+    '<button class="refineBtn" onclick="refineChat(\'дороже\')">'+ic('i-trend')+'премиум</button>'+
     '<button class="refineBtn" onclick="refineChat(\'дешевле\')">'+ic('i-wallet')+'дешевле</button>'+
     '<button class="refineBtn" onclick="refineChat(\'без роз\')">'+ic('i-x')+'без роз</button>'+
     '<button class="refineBtn" onclick="refineChat(\'пышнее\')">'+ic('i-flower')+'пышнее</button>'+
@@ -973,7 +994,7 @@ async function sendChat(){
     const haveBouq=vBouquets.filter(b=>b.photo_url);
     if(!haveBouq.length){
       await new Promise(r=>setTimeout(r,700));
-      addMessage('bot','Я пока только учусь 🌱 Магазины подключаются, каталог наполняется — загляни через пару дней. А пока посмотри, какие салоны уже с нами:','<div class="refineRow"><button class="refineBtn" onclick="showTab(\'shops\')">'+ic('i-pin')+'магазины на карте</button><button class="refineBtn" onclick="showTab(\'shop\')">'+ic('i-home')+'каталог</button></div>');
+      addMessage('bot','Я пока только учусь 🌱 Магазины подключаются, каталог наполняется — загляни через пару дней. А пока посмотри, какие салоны уже с нами:','<div class="refineRow"><button class="refineBtn" onclick="showTab(\'shops\')">'+ic('i-pin')+'магазины на карте</button></div>');
       return;
     }
     const newP=parseQuery(text);
@@ -981,7 +1002,7 @@ async function sendChat(){
     const isRefinement=/дороже|дешевле|нежнее|пышнее|ярче|без\s|больше\s|минималистичнее/.test(text.toLowerCase())&&(chatParams.who||chatParams.occ||chatParams.bud||chatParams.style);
     chatParams=isRefinement?mergeParams(chatParams,handleRefinement(text)):mergeParams(chatParams,newP);
     const params=chatParams;
-    await new Promise(r=>setTimeout(r,800+Math.random()*500));
+    await new Promise(r=>setTimeout(r,600+Math.random()*600));
     const results=findBouquets(params);
     const summary=[];
     if(params.who)summary.push('для '+(WHO_GENITIVE[params.who]||params.who));
@@ -989,20 +1010,27 @@ async function sendChat(){
     if(params.bud)summary.push(esc(params.bud));
     if(params.style)summary.push('в стиле «'+esc(params.style)+'»');
     const ctx=summary.length?' ('+summary.join(' · ')+')':'';
-    let replyText,extra='';
-    if(fixes.length)addMessage('bot','Возможно, ты имел в виду: '+fixes.map(f=>'«'+esc(f.good)+'»').join(', ')+'. Учту 🙂');
+    let replyText='',extra='';
+    const realFixes=fixes.filter(f=>!f.style);
+    if(realFixes.length)addMessage('bot','Возможно, ты имел в виду: '+realFixes.map(f=>'«'+esc(f.good)+'»').join(', ')+'. Учту 🙂');
     if(!results.length){
-      replyText='Хм, под такие параметры пока ничего не нашлось 😔 Попробуй изменить запрос или сбрось условия:';
-      extra='<div class="refineRow"><button class="refineBtn" onclick="refineChat(\'дешевле\')">'+ic('i-wallet')+'дешевле</button><button class="refineBtn" onclick="refineChat(\'без роз\')">'+ic('i-x')+'без роз</button><button class="refineBtn" onclick="resetChatParams()">'+ic('i-refresh')+'сбросить запрос</button><button class="refineBtn" onclick="showTab(\'search\')">'+ic('i-search')+'весь каталог</button></div>';
+      replyText='Хм, под такие параметры пока ничего не нашлось 😔 Давай немного изменим запрос?';
+      extra=refineRowHtml()+'<div class="refineRow" style="border:none;padding-top:4px"><button class="refineBtn" onclick="resetChatParams()">'+ic('i-refresh')+'сбросить всё</button></div>';
     }else{
       const n=results.length;
       const parsedAnything=params.who||params.occ||params.bud||params.style||params.include.length;
-      if(!parsedAnything)replyText='Покажу, что уже есть. Напиши, кому и по какому поводу — подберу точнее:';
-      else if(n===1)replyText='Нашёл идеальный вариант'+ctx+'. Вот он:';
-      else if(n<=3)replyText='Нашёл '+n+' варианта'+ctx+'. Вот лучшие:';
-      else replyText='Нашёл '+n+' подходящих букетов'+ctx+'. Покажу топ-4:';
-      extra='<div class="chatResults">'+results.slice(0,4).map(b=>chatCard(b)).join('')+'</div>'+refineRowHtml();
-      if(n>4)extra+='<div class="refineRow" style="margin-top:6px"><button class="refineBtn" onclick="showTab(\'search\')">'+ic('i-search')+'ещё '+(n-4)+' — открыть каталог</button></div>';
+      if(!parsedAnything&&n>5){
+        replyText='Покажу самые популярные варианты. Напиши, кому дарим — подберу точнее 🌸';
+      }else if(n===1){
+        const phrases=['Кажется, это идеальный вариант'+ctx+'. Посмотри, как тебе?','Нашёл один отличный букет'+ctx+'. Подходит?','Вот что мне приглянулось'+ctx+'. Что скажешь?'];
+        replyText=phrases[Math.floor(Math.random()*phrases.length)];
+      }else if(n<=3){
+        replyText='Подобрал '+n+' классных варианта'+ctx+'. Вот они:';
+      }else{
+        replyText='Нашёл много подходящих букетов'+ctx+'. Вот топ-'+Math.min(4,n)+', на мой взгляд:';
+      }
+      extra='<div class="chatResults">'+results.slice(0,4).map(b=>chatCard(b)).join('')+'</div><div class="chatHint">нажми на карточку — открою детали и контакты магазина, где можно заказать 🌷</div>'+refineRowHtml();
+      if(n>4)extra+='<div class="refineRow" style="border:none;padding-top:6px"><button class="refineBtn" onclick="showTab(\'search\')">'+ic('i-search')+'посмотреть все '+n+' вариантов</button></div>';
     }
     addMessage('bot',replyText,extra);
   }catch(e){
@@ -1012,7 +1040,7 @@ async function sendChat(){
     hideTyping();chatBusy=false;$('chatSendBtn').disabled=false;saveChatHistory();
   }
 }
-function resetChatParams(){chatParams={who:'',occ:'',bud:'',style:'',exclude:[],include:[],priceMin:0,priceMax:Infinity};addMessage('bot','Начнём с чистого листа 🌸 Расскажи, какой букет ищем:');}
+function resetChatParams(){chatParams={who:'',occ:'',bud:'',style:'',exclude:[],include:[],priceMin:0,priceMax:Infinity};localStorage.removeItem('lep_chat_html');$('chatMessages').innerHTML='';updateDock();toast('Начнём с чистого листа 🌸');}
 function quickChat(text){$('chatInput').value=text;sendChat();}
 function refineChat(cmd){$('chatInput').value=cmd;sendChat();}
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,140)+'px';}
@@ -1220,6 +1248,8 @@ let favBusy=false;
 async function toggleFav(id){
   if(!me){openAuth();return;}if(favBusy)return;favBusy=true;showLoader();
   try{const cur=favorites.find(f=>f.bouquet_id===id);if(cur){await sb.from('favorites').delete().eq('id',cur.id);favorites=favorites.filter(f=>f.id!==cur.id);}else{const{data,error}=await sb.from('favorites').insert({bouquet_id:id,user_id:me.id}).select();if(error){if(/duplicate|unique/i.test(error.message)){const{data:rows}=await sb.from('favorites').select('*').eq('user_id',me.id);favorites=rows||[];}else{handleSBError(error,'Избранное');return;}}else if(data&&data[0])favorites.push(data[0]);}}finally{hideLoader();favBusy=false;}
+  const on=favorites.some(f=>f.bouquet_id===id);
+  document.querySelectorAll('[data-fav="'+id+'"]').forEach(x=>x.classList.toggle('on',on));
   refreshShop();
 }
 let likeBusy=false;
@@ -1357,7 +1387,48 @@ function renderVkPetals(){const box=$('vkFall');if(!box)return;const PETAL='<svg
 
 sb.auth.onAuthStateChange(()=>refreshMe());
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
-renderPetals();renderVkPetals();refreshMe();load();restoreChatHistory();setTimeout(startTour,900);
+const LIVE_WHO=['девушке','маме','жене','подруге','коллеге','учительнице','бабушке','сестре','себе'];
+const LIVE_OCC=['на день рождения','на свидание','на годовщину','на 8 марта','на свадьбу','на выписку','просто так','извиниться','на юбилей'];
+const LIVE_BOUQ=['букет из 51 розы','нежные пионы','яркий микс полевых цветов','облако гортензий','25 тюльпанов','белые хризантемы','пышный авторский букет','минимализм с орхидеями','букет с гипсофилой','классические розы'];
+const LIVE_BUD=['до 3000 ₽','до 5000 ₽','около 2000 ₽','3–5 тысяч ₽','бюджет не важен'];
+const lPick=a=>a[Math.floor(Math.random()*a.length)];
+function liveQuery(){
+  const w=lPick(LIVE_WHO),o=lPick(LIVE_OCC),b=lPick(LIVE_BOUQ),bud=lPick(LIVE_BUD);
+  return lPick([
+    b+' '+w,
+    b+' '+w+' '+o,
+    o+' — '+b,
+    w+', '+o+', '+bud,
+    b+', '+bud,
+    'что-то нежное '+w,
+    'что-то пышное '+o,
+    w+' '+bud
+  ]);
+}
+let liveTimer=null;
+function startLiveSearch(){
+  const el=$('liveSearchTxt');if(!el)return;
+  el.textContent=liveQuery();
+  clearInterval(liveTimer);
+  liveTimer=setInterval(()=>{el.classList.add('fade');setTimeout(()=>{el.textContent=liveQuery();el.classList.remove('fade');},260);},4200);
+}
+function liveClick(){quickChat($('liveSearchTxt').textContent);}
+const CHIP_GROUPS=[
+  [{t:'девушке',q:'девушке',i:'i-heart'},{t:'маме',q:'маме',i:'i-gift'},{t:'жене',q:'жене',i:'i-heart'},{t:'подруге',q:'подруге',i:'i-heart'},{t:'бабушке',q:'бабушке',i:'i-gift'}],
+  [{t:'день рождения',q:'на день рождения',i:'i-cal'},{t:'свидание',q:'на свидание',i:'i-spark'},{t:'годовщина',q:'на годовщину',i:'i-cal'},{t:'8 марта',q:'на 8 марта',i:'i-cal'},{t:'просто так',q:'просто так',i:'i-gift'}],
+  [{t:'до 2000 ₽',q:'до 2000 ₽',i:'i-wallet'},{t:'до 3000 ₽',q:'до 3000 ₽',i:'i-wallet'},{t:'до 5000 ₽',q:'до 5000 ₽',i:'i-wallet'}],
+  [{t:'нежный',q:'нежный букет',i:'i-heart'},{t:'пышный',q:'пышный букет',i:'i-flower'},{t:'розы',q:'букет роз',i:'i-rose'},{t:'пионы',q:'пионы',i:'i-rose'},{t:'тюльпаны',q:'тюльпаны',i:'i-rose'}]
+];
+let chipTimer=null;
+function renderChips(){
+  const box=$('chatChips');if(!box)return;
+  if($('tab-chat').classList.contains('has-msgs'))return;
+  const set=CHIP_GROUPS.map(g=>lPick(g)).sort(()=>Math.random()-.5);
+  box.classList.add('swap');
+  setTimeout(()=>{box.innerHTML=set.map(c=>'<button class="chatChip" onclick="quickChat(\''+c.q+'\')">'+ic(c.i)+esc(c.t)+'</button>').join('');box.classList.remove('swap');},250);
+}
+function startChipsRotation(){clearInterval(chipTimer);renderChips();chipTimer=setInterval(renderChips,10000);}
+renderPetals();renderVkPetals();refreshMe();load();restoreChatHistory();setTimeout(startTour,900);startLiveSearch();startChipsRotation();
 </script>
 </body>
 </html>

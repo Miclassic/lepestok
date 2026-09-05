@@ -26,7 +26,7 @@ textarea{min-height:70px;resize:vertical}
 .modeBtn.on{background:var(--gradient);color:#fff;box-shadow:0 4px 14px rgba(255,107,107,.35)}
 .tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
 .tabs.three{grid-template-columns:repeat(3,1fr)}
-.tab{background:var(--card);border:none;border-radius:14px;padding:10px 4px;font-weight:700;font-size:10.5px;color:var(--gray);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;box-shadow:var(--shadow);white-space:nowrap;transition:.25s}
+.tab{background:var(--card);border:none;border-radius:14px;padding:10px 2px;font-weight:700;font-size:10px;color:var(--gray);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;box-shadow:var(--shadow);white-space:nowrap;transition:.25s;min-width:0;overflow:hidden}
 .tab .icn{width:14px;height:14px;flex:none}
 .tab.on{background:var(--gradient);color:#fff;box-shadow:0 6px 18px rgba(255,107,107,.35)}
 .badge{min-width:17px;height:17px;padding:0 5px;border-radius:999px;font-size:9.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;background:var(--gradient);color:#fff;flex:none}
@@ -145,6 +145,8 @@ textarea{min-height:70px;resize:vertical}
 <symbol id="i-x" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></symbol>
 <symbol id="i-download" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13M6 10l6 6 6-6M4 20h16"/></g></symbol>
 <symbol id="i-wand" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20l9.5-9.5"/><path fill="currentColor" stroke="none" d="M15.5 3l1.2 3 3 1.2-3 1.2-1.2 3-1.2-3-3-1.2 3-1.2z"/><path fill="currentColor" stroke="none" d="M19.5 12l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></g></symbol>
+<symbol id="i-box-in" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 8h18v12H3zM3 8l3-4h12l3 4M9 12h6"/></g></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></g></symbol>
 </svg>
 <div class="box">
 <div class="head">
@@ -169,12 +171,14 @@ textarea{min-height:70px;resize:vertical}
   <div class="tabs" id="adminTabs">
     <button class="tab on" id="tabShops" onclick="setTab('shops')"><svg class="icn"><use href="#i-shop"/></svg>Магазины</button>
     <button class="tab" id="tabBouquets" onclick="setTab('bouquets')"><svg class="icn"><use href="#i-flower"/></svg>Букеты</button>
+    <button class="tab" id="tabOrders" onclick="setTab('orders')"><svg class="icn"><use href="#i-box-in"/></svg>Заказы</button>
     <button class="tab" id="tabComments" onclick="setTab('comments')"><svg class="icn"><use href="#i-comment"/></svg>Отзывы</button>
     <button class="tab" id="tabStats" onclick="setTab('stats')"><svg class="icn"><use href="#i-chart"/></svg>Метрики</button>
     <button class="tab" id="tabUsers" onclick="setTab('users')"><svg class="icn"><use href="#i-users"/></svg>Клиенты</button>
   </div>
   <div class="tabs three hidden" id="sellerTabs">
     <button class="tab on" id="stabBouquets" onclick="setSTab('bouquets')"><svg class="icn"><use href="#i-flower"/></svg>Букеты</button>
+    <button class="tab" id="stabOrders" onclick="setSTab('orders')"><svg class="icn"><use href="#i-box-in"/></svg>Заказы</button>
     <button class="tab" id="stabReviews" onclick="setSTab('reviews')"><svg class="icn"><use href="#i-comment"/></svg>Отзывы</button>
   </div>
   <div id="list"></div>
@@ -199,16 +203,17 @@ let shopFormOpen=false,shopEditId=null,shopFormPhoto=null;
 function $(id){return document.getElementById(id);}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function ic(n){return '<svg class="icn"><use href="#'+n+'"/></svg>';}
+function fmtPrice(p){return String(p||0).replace(/\B(?=(\d{3})+(?!\d))/g,' ')+' ₽';}
 function toast(m,icon){const t=$('toast');t.innerHTML=(icon?ic(icon):'')+esc(m);t.classList.remove('hidden');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('hidden'),2600);}
 function showLoader(){$('loader').classList.remove('hidden');}
 function hideLoader(){$('loader').classList.add('hidden');}
 function whenRu(t){try{return new Date(t).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
-function statusRu(s){return({new:'🆕 новый',accepted:'⏳ принят',ready:'✅ готов',delivered:'🚚 доставлен',cancelled:'❌ отменён'})[s]||s;}
-function statusCls(s){return 's-'+s;}
+function statusRu(s){return({new:'🆕 новый',accepted:'⏳ принят',ready:'✅ готов',delivered:'🚚 доставлен',cancelled:'❌ отменён'})[s]||s||'—';}
+function statusCls(s){return 's-'+(s||'new');}
 function getTags(b){return Array.isArray(b.tags)?b.tags:(b.tags?String(b.tags).split(',').filter(Boolean):[]);}
-function fmtPrice(p){return String(p||0).replace(/\B(?=(\d{3})+(?!\d))/g,' ')+' ₽';}
 function dayKey(t){return new Date(t).toISOString().slice(0,10);}
 function pluralBouq(n){const m=n%10,h=n%100;if(m===1&&h!==11)return'букет';if(m>=2&&m<=4&&(h<12||h>14))return'букета';return'букетов';}
+function isUuid(s){return typeof s==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s);}
 const adminLog=JSON.parse(localStorage.getItem('lep_admin_log')||'[]');
 function logAdmin(action,details={}){adminLog.unshift({ts:Date.now(),action,details});if(adminLog.length>200)adminLog.length=200;localStorage.setItem('lep_admin_log',JSON.stringify(adminLog));}
 async function boot(){
@@ -258,7 +263,7 @@ async function refresh(){
       if(e.name==='shop_view'&&m.shop_id)shopViewsByShop[m.shop_id]=(shopViewsByShop[m.shop_id]||0)+1;
     });
     metricsCache=null;
-    if(viewMode==='admin')renderList();
+    if(viewMode==='admin')renderList();else renderSList();
   }finally{hideLoader();}
 }
 function setMode(m){
@@ -267,14 +272,15 @@ function setMode(m){
   $('modeSeller').classList.toggle('on',m==='seller');
   $('adminTabs').classList.toggle('hidden',m!=='admin');
   $('sellerTabs').classList.toggle('hidden',m!=='seller');
-  if(m==='seller')refreshSeller();else renderList();
+  if(m==='seller'){selectedOrders.clear();renderSList();}else renderList();
 }
-function setTab(t){tab=t;selectedOrders.clear();['Shops','Bouquets','Comments','Stats','Users'].forEach(k=>{const el=$('tab'+k);if(el)el.classList.toggle('on',t===k.toLowerCase());});renderList();}
+function setTab(t){tab=t;selectedOrders.clear();['Shops','Bouquets','Orders','Comments','Stats','Users'].forEach(k=>{const el=$('tab'+k);if(el)el.classList.toggle('on',t===k.toLowerCase());});renderList();}
 function setUsrRange(r){usrStatsRange=r;renderList();}
 function setOrderFilter(f){orderFilter=f;if(viewMode==='seller')renderSList();else renderList();}
 function renderList(){
   if(tab==='shops')renderShopsAdmin();
   else if(tab==='bouquets')renderBouquets();
+  else if(tab==='orders')renderOrders();
   else if(tab==='comments')renderComments();
   else if(tab==='stats')renderStats();
   else if(tab==='users')renderUsers();
@@ -295,7 +301,7 @@ function orderCard(o,list,admin){
   return '<div class="card"><div style="display:flex;align-items:flex-start">'+chk+
     '<div style="flex:1"><div class="mcat">'+whenRu(o.created_at)+' · <span class="statusPill '+statusCls(o.status)+'">'+statusRu(o.status)+'</span></div>'+
     '<div class="bouquetRow">'+(b&&b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:26px">🌷</div>')+
-    '<div class="bInfo"><div class="title">'+esc(b?b.title:'Букет удалён')+'</div><div class="price">'+(b?b.price+' ₽':'?')+'</div><div class="cat">'+kindRu+'</div>'+tagsHtml+'</div></div>'+
+    '<div class="bInfo"><div class="title">'+esc(b?b.title:'Букет удалён')+'</div><div class="price">'+fmtPrice(b?b.price:0)+'</div><div class="cat">'+kindRu+'</div>'+tagsHtml+'</div></div>'+
     '<div class="orderMeta">'+
       (o.recipient_name?'<div>👤 получатель: <b>'+esc(o.recipient_name)+'</b>'+(o.recipient_phone?' · '+esc(o.recipient_phone):'')+'</div>':'')+
       (o.address?'<div>📍 адрес: <b>'+esc(o.address)+'</b></div>':'')+
@@ -308,7 +314,8 @@ function toggleOrderSel(id,on){if(on)selectedOrders.add(id);else selectedOrders.
 function renderBulkBar(){
   const box=$('bulkBar');if(!box)return;
   if(selectedOrders.size<2){box.innerHTML='';return;}
-  const fresh=[...selectedOrders].filter(id=>orders.find(o=>o.id===id&&o.status==='new')).length;
+  const src=viewMode==='seller'?myOrders:orders;
+  const fresh=[...selectedOrders].filter(id=>src.find(o=>o.id===id&&o.status==='new')).length;
   box.innerHTML='<span class="cnt">'+selectedOrders.size+' выбрано</span>'+
     (fresh>0?'<button class="accept" onclick="bulkStatus(\'accepted\')">✓ Принять '+fresh+'</button>':'')+
     '<button class="cancel" onclick="bulkStatus(\'cancelled\')">✕ Отменить выбранные</button>';
@@ -318,7 +325,14 @@ async function bulkStatus(st){
   if(!confirm('Изменить статус '+ids.length+' заказов?'))return;
   showLoader();
   try{
-    const res=await sb.from('orders').update({status:st}).in('id',ids);
+    let res;
+    if(viewMode==='seller'){
+      const myIds=myBouquets.map(b=>b.id);
+      const targetIds=ids.filter(id=>{const o=orders.find(x=>x.id===id);return o&&myIds.includes(o.bouquet_id);});
+      res=await sb.from('orders').update({status:st}).in('id',targetIds);
+    }else{
+      res=await sb.from('orders').update({status:st}).in('id',ids);
+    }
     if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
     logAdmin('bulk_status',{status:st,count:ids.length});
     toast('Обновлено '+ids.length+' заказов','i-check');
@@ -341,6 +355,7 @@ function exportOrdersCSV(){
   logAdmin('export_csv',{count:orders.length});
   toast('CSV экспортирован','i-download');
 }
+function applySearchFromInput(inp){searchQuery=(inp.value||'').trim().toLowerCase();renderOrders();}
 function renderOrders(){
   const box=$('list');
   const filters=[['new','🆕 новые'],['accepted','⏳ приняты'],['ready','✅ готовы'],['delivered','🚚 доставлены'],['cancelled','❌ отменены']];
@@ -349,12 +364,12 @@ function renderOrders(){
     const q=searchQuery.toLowerCase();
     filtered=filtered.filter(o=>{
       const b=bouquets.find(x=>x.id===o.bouquet_id);
-      return (b&&b.title.toLowerCase().includes(q))||(o.recipient_name&&o.recipient_name.toLowerCase().includes(q))||(o.sender_name&&o.sender_name.toLowerCase().includes(q))||String(o.id).includes(q);
+      return (b&&b.title&&b.title.toLowerCase().includes(q))||(o.recipient_name&&o.recipient_name.toLowerCase().includes(q))||(o.sender_name&&o.sender_name.toLowerCase().includes(q))||String(o.id).includes(q);
     });
   }
   const cards=filtered.length?filtered.map(o=>orderCard(o,bouquets,true)).join(''):'<div class="empty">Нет заказов со статусом «'+statusRu(orderFilter)+'» 🎉</div>';
   box.innerHTML=
-    '<div class="searchRow"><input placeholder="Поиск по названию, имени или ID" value="'+esc(searchQuery)+'" oninput="searchQuery=this.value.toLowerCase();renderOrders()"></div>'+
+    '<div class="searchRow"><input placeholder="Поиск по названию, имени или ID (Enter)" value="'+esc(searchQuery)+'" onkeydown="if(event.key===\'Enter\'){applySearchFromInput(this);event.preventDefault();}"><button class="btn" style="width:auto;padding:9px 16px" onclick="applySearchFromInput(this.parentNode.querySelector(\'input\'))">'+ic('i-search')+'</button></div>'+
     '<div style="margin-bottom:10px"><button class="btn" style="padding:10px;font-size:12px" onclick="exportOrdersCSV()">'+ic('i-download')+' Экспорт CSV</button></div>'+
     '<div id="bulkBar"></div>'+
     '<div class="rangeSel">'+filters.map(f=>'<button class="'+(orderFilter===f[0]?'on':'')+'" onclick="setOrderFilter(\''+f[0]+'\')">'+f[1]+' ('+orders.filter(o=>o.status===f[0]).length+')</button>').join('')+'</div>'+cards;
@@ -364,11 +379,20 @@ function call(p){window.location.href='tel:'+p.replace(/\s+/g,'');}
 async function updateOrder(id,status){
   showLoader();
   try{
-    const res=await sb.from('orders').update({status}).eq('id',id).select();
+    let res;
+    if(viewMode==='seller'){
+      const o=orders.find(x=>x.id===id);
+      if(!o){toast('Заказ не найден','i-x');return;}
+      const myIds=myBouquets.map(b=>b.id);
+      if(!myIds.includes(o.bouquet_id)){toast('Это не ваш заказ','i-x');return;}
+      res=await sb.from('orders').update({status}).eq('id',id).select();
+    }else{
+      res=await sb.from('orders').update({status}).eq('id',id).select();
+    }
     if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
     logAdmin('order_status',{order_id:id,status});
     toast('Статус обновлён','i-check');
-    if(viewMode==='seller')await refreshSeller();else await refresh();
+    await refresh();
   }finally{hideLoader();}
 }
 /* ===== магазины ===== */
@@ -527,7 +551,7 @@ function renderBouquets(){
     const shop=shopsAll.find(s=>s.owner_id===b.user_id);
     return '<div class="card"><div class="bouquetRow">'+(b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:26px;background:linear-gradient(135deg,#FFE5E5,#F5E6FF)">🌷</div>')+
     '<div class="bInfo"><div class="title">'+esc(b.title)+'</div>'+
-    '<div class="price">'+b.price+' ₽</div><div class="cat">'+esc(b.category||'без категории')+' · '+(b.in_stock?'<span style="color:#10B981">в наличии</span>':'<span style="color:#EF4444">под заказ</span>')+(shop?' · '+esc(shop.name):'')+'</div>'+tagsHtml+'</div></div>'+
+    '<div class="price">'+fmtPrice(b.price)+'</div><div class="cat">'+esc(b.category||'без категории')+' · '+(b.in_stock?'<span style="color:#10B981">в наличии</span>':'<span style="color:#EF4444">под заказ</span>')+(shop?' · '+esc(shop.name):'')+'</div>'+tagsHtml+'</div></div>'+
     '<div class="mbtns" style="margin-top:8px">'+
       '<button class="info" onclick="startAdminEdit('+b.id+')">✏️ изменить</button>'+
       '<button class="no" onclick="delBouquet('+b.id+')">🗑 удалить</button>'+
@@ -615,7 +639,7 @@ async function unhide(id){
     if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
     logAdmin('unhide_comment',{comment_id:id});
     toast('Отзыв восстановлен','i-check');
-    if(viewMode==='seller')await refreshSeller();else await refresh();
+    await refresh();
   }finally{hideLoader();}
 }
 async function hideComment(id){
@@ -625,7 +649,7 @@ async function hideComment(id){
     if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
     logAdmin('hide_comment',{comment_id:id});
     toast('Отзыв скрыт','i-check');
-    if(viewMode==='seller')await refreshSeller();else await refresh();
+    await refresh();
   }finally{hideLoader();}
 }
 async function killComment(id){
@@ -636,7 +660,7 @@ async function killComment(id){
     if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
     logAdmin('delete_comment',{comment_id:id});
     toast('Комментарий удалён','i-check');
-    if(viewMode==='seller')await refreshSeller();else await refresh();
+    await refresh();
   }finally{hideLoader();}
 }
 /* ===== метрики ===== */
@@ -737,9 +761,14 @@ async function renderUsers(){
   const days=+usrStatsRange;const m=computeMetrics(days);const box=$('list');
   const devActs={};m.ev.forEach(e=>{const d=e.user_id||e.device||'__anon__';devActs[d]=(devActs[d]||0)+1;});
   const top=Object.entries(devActs).sort((a,b)=>b[1]-a[1]).slice(0,15);
-  const userIds=top.map(t=>t[0]).filter(id=>/^[0-9a-f-]{36}$/i.test(id));
+  const userIds=top.map(t=>t[0]).filter(isUuid);
   const profs={};
-  if(userIds.length){const {data}=await sb.from('profiles').select('id,nick,avatar_url,is_florist').in('id',userIds);(data||[]).forEach(p=>profs[p.id]=p);}
+  if(userIds.length){
+    try{
+      const {data}=await sb.from('profiles').select('id,nick,avatar_url,is_florist').in('id',userIds);
+      (data||[]).forEach(p=>profs[p.id]=p);
+    }catch(e){console.warn('profiles fetch failed',e);}
+  }
   const rows=top.map(([u,n],i)=>{
     const p=profs[u];
     const nm=p?p.nick:(u==='__anon__'?'аноним':u.slice(0,12));
@@ -762,7 +791,7 @@ async function makeFlorist(uid){
   }finally{hideLoader();}
 }
 /* ===== режим продавца ===== */
-function setSTab(t){sTab=t;['Bouquets','Reviews'].forEach(k=>{const el=$('stab'+k);if(el)el.classList.toggle('on',t===k.toLowerCase());});renderSList();}
+function setSTab(t){sTab=t;['Bouquets','Orders','Reviews'].forEach(k=>{const el=$('stab'+k);if(el)el.classList.toggle('on',t===k.toLowerCase());});renderSList();}
 async function refreshSeller(){
   showLoader();
   try{
@@ -791,14 +820,24 @@ async function enableMeFlorist(){
     toast('Готово! Ты теперь продавец','i-check');
   }finally{hideLoader();}
 }
-function renderSList(){if(sTab==='bouquets')sRenderBouquets();else sRenderReviews();}
+function renderSList(){
+  if(!imFlorist){
+    $('list').innerHTML='<div class="card" style="text-align:center"><div style="font-size:12px;color:var(--gray);margin-bottom:8px">На твоём аккаунте не включён продавец</div><button class="btn" onclick="enableMeFlorist()">⭐ Включить мне продавца</button></div>';
+    return;
+  }
+  if(sTab==='bouquets')sRenderBouquets();
+  else if(sTab==='orders')sRenderOrders();
+  else sRenderReviews();
+}
 function sRenderOrders(){
   const box=$('list');
   const filters=[['new','🆕 новые'],['accepted','⏳ приняты'],['ready','✅ готовы'],['delivered','🚚 доставлены'],['cancelled','❌ отменены']];
   const filtered=myOrders.filter(o=>o.status===orderFilter);
   const cards=filtered.length?filtered.map(o=>orderCard(o,myBouquets,false)).join(''):'<div class="empty">У продавца нет заказов со статусом «'+statusRu(orderFilter)+'» 🎉</div>';
-  box.innerHTML=(imFlorist?'':'<div class="card" style="text-align:center"><div style="font-size:12px;color:var(--gray);margin-bottom:8px">На твоём аккаунте не включён продавец</div><button class="btn" onclick="enableMeFlorist()">⭐ Включить мне продавца</button></div>')+
+  box.innerHTML=
+    '<div id="bulkBar"></div>'+
     '<div class="rangeSel">'+filters.map(f=>'<button class="'+(orderFilter===f[0]?'on':'')+'" onclick="setOrderFilter(\''+f[0]+'\')">'+f[1]+' ('+myOrders.filter(o=>o.status===f[0]).length+')</button>').join('')+'</div>'+cards;
+  renderBulkBar();
 }
 function sRenderBouquets(){
   const box=$('list');
@@ -819,7 +858,7 @@ function sRenderBouquets(){
     const tagsHtml=tags.length?'<div class="bTags">'+tags.slice(0,6).map(t=>'<span>'+esc(t)+'</span>').join('')+(tags.length>6?'<span>+'+(tags.length-6)+'</span>':'')+'</div>':'';
     return '<div class="card"><div class="bouquetRow">'+(b.photo_url?'<img class="photo" src="'+b.photo_url+'">':'<div class="photo" style="display:flex;align-items:center;justify-content:center;font-size:26px;background:linear-gradient(135deg,#FFE5E5,#F5E6FF)">🌷</div>')+
     '<div class="bInfo"><div class="title">'+esc(b.title)+'</div>'+
-    '<div class="price">'+b.price+' ₽</div><div class="cat">'+esc(b.category||'без категории')+' · '+(b.in_stock?'<span style="color:#10B981">в наличии</span>':'<span style="color:#EF4444">под заказ</span>')+'</div>'+tagsHtml+'</div></div>'+
+    '<div class="price">'+fmtPrice(b.price)+'</div><div class="cat">'+esc(b.category||'без категории')+' · '+(b.in_stock?'<span style="color:#10B981">в наличии</span>':'<span style="color:#EF4444">под заказ</span>')+'</div>'+tagsHtml+'</div></div>'+
     '<div class="mbtns" style="margin-top:8px">'+
       '<button class="no" onclick="sDelBouquet('+b.id+')">🗑 удалить</button>'+
     '</div></div>';
@@ -845,7 +884,7 @@ async function submitBouquet(){
     if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
     toast('Букет добавлен','i-check');
     pickedPhoto=null;
-    await refreshSeller();
+    await refresh();
   }finally{hideLoader();}
 }
 async function sDelBouquet(id){
@@ -860,7 +899,7 @@ async function sDelBouquet(id){
     const res=await sb.from('bouquets').delete().eq('id',id);
     if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
     toast('Букет удалён','i-check');
-    await refreshSeller();
+    await refresh();
   }finally{hideLoader();}
 }
 function sRenderReviews(){

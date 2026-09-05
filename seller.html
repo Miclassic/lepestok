@@ -69,7 +69,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 .tagInputRow input{margin:0;flex:1}
 .tagInputRow button{width:42px;flex:none;border:none;background:var(--gradient);color:#fff;border-radius:12px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .tagInputRow button .icn{width:16px;height:16px}
-.trendBlock{background:linear-gradient(120deg,#FFF3F1 0%,#FFECEF 100%);border-radius:18px;padding:12px;margin-bottom:10px;box-shadow:var(--shadow);border:1.5px dashed rgba(255,107,107,.35)}
+.trendBlock{background:linear-gradient(120deg,#FFF3F1 0%,#FFECEF 100%);border-radius:18px;padding:12px;margin-bottom:10px;box-shadow:var(--shadow);border:1px dashed rgba(255,107,107,.35)}
 .trendBlock h4{font-size:12.5px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:6px;color:var(--coral)}
 .trendBlock h4 .icn{width:14px;height:14px}
 .trendBlock .trendSub{font-size:10.5px;color:var(--gray);margin-bottom:8px;line-height:1.4}
@@ -77,7 +77,6 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 .trendChip{background:var(--card);border:1.5px solid rgba(255,107,107,.3);color:var(--coral);border-radius:999px;padding:5px 10px;font-size:10.5px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
 .trendChip .cnt{font-size:9px;background:rgba(255,107,107,.14);color:var(--coral);padding:1px 6px;border-radius:999px;font-weight:800}
 .trendChip.added{opacity:.5;cursor:default;border-style:dotted}
-/* статистика */
 .statsGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 .statCard{background:var(--card);border-radius:16px;padding:12px;box-shadow:var(--shadow)}
 .statCard .lbl{font-size:9.5px;color:var(--gray);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
@@ -91,7 +90,6 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 .chRow .chBar{width:70px;height:6px;background:var(--bg);border-radius:3px;overflow:hidden;flex:none}
 .chRow .chBar i{display:block;height:100%;background:var(--gradient);border-radius:3px}
 .chRow .chNum{width:30px;text-align:right;font-weight:800;color:var(--coral);flex:none}
-/* отзывы */
 .revRow{background:var(--card);border-radius:16px;padding:12px;box-shadow:var(--shadow);margin-bottom:8px}
 .revHead{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 .revAva{width:32px;height:32px;border-radius:50%;background:var(--gradient);color:#fff;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none}
@@ -226,16 +224,16 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
 const sb=supabase.createClient('https://dhwkkbtrhexywymegwoo.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRod2trYnRyaGV4eXd5bWVnd29vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMDUxODMsImV4cCI6MjEwMzc4MTE4M30.NAyY4dCeRRC2OznENuNCfvr-mKqACyMU61K-y-PkRIQ');
 const ADMIN_EMAIL='artixz18@gmail.com';
 const DEFAULT_CITY='Новороссийск';
-let me=null,shop=null,myBouquets=[],myReviews=[],myReplies=[],categories=[],trendTags=[],pickedPhoto=null;
+let me=null,shop=null,myBouquets=[],myReviews=[],myReplies=[],categories=[],trendTags=[],pickedPhoto=null,pickedLogo=null,activeReplyInput=null;
 function $(id){return document.getElementById(id);}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function ic(n){return '<svg class="icn"><use href="#'+n+'"/></svg>';}
+function fmtPrice(p){return String(p||0).replace(/\B(?=(\d{3})+(?!\d))/g,' ')+' ₽';}
 function toast(m,icon){const t=$('toast');t.innerHTML=(icon?ic(icon):'')+esc(m);t.classList.remove('hidden');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('hidden'),2600);}
 function showLoader(){$('loader').classList.remove('hidden');}
 function hideLoader(){$('loader').classList.add('hidden');}
 function closeSheet(id){$(id).classList.add('hidden');}
 function whenRu(t){try{return new Date(t).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
-/* ---------- запуск ---------- */
 async function boot(){
   try{
     const {data}=await sb.auth.getSession();
@@ -276,6 +274,7 @@ async function enableSellerMe(){
 }
 async function signOutBack(){await sb.auth.signOut();location.reload();}
 function bindStatic(){
+  document.addEventListener('focusin',e=>{if(e.target.matches&&e.target.matches('.replyInput input'))activeReplyInput=e.target;});
   $('qrBlock').addEventListener('click',e=>{
     const rm=e.target.closest('[data-qr]');
     if(rm){e.stopPropagation();removeQR(+rm.dataset.qr);return;}
@@ -306,7 +305,6 @@ async function doLogin(){
   }finally{hideLoader();}
 }
 async function logout(){showLoader();await sb.auth.signOut();hideLoader();location.reload();}
-/* ---------- данные ---------- */
 async function refresh(){
   showLoader();
   try{
@@ -350,7 +348,6 @@ function showSec(s){
   if(s==='reviews')renderQR();
   if(s==='stats')renderStats();
 }
-/* ---------- статистика (лиды) ---------- */
 async function renderStats(){
   const box=$('statsBox');if(!box)return;
   if(!shop){box.innerHTML='<div class="empty">'+icBig('i-chart')+'Сначала заполни магазин во вкладке «Магазин» —<br>тогда мы начнём считать переходы клиентов</div>';return;}
@@ -380,7 +377,6 @@ async function renderStats(){
     '</div>';
 }
 function icBig(n){return '<svg class="bigIcn"><use href="#'+n+'"/></svg>';}
-/* ---------- тренды и категории ---------- */
 async function fetchTrendTags(){
   try{
     const since=new Date(Date.now()-14*864e5).toISOString();
@@ -421,7 +417,6 @@ async function addCategory(){
   categories.push({name});pickedCat=name;refreshCatRow();inp.value='';
   toast('Категория «'+name+'» добавлена','i-check');
 }
-/* ---------- букеты ---------- */
 const TAG_PRESETS=['день рождения','свидание','просто так','8 марта','извинение','выпускной','1 сентября','день учителя','день матери','новый год','14 февраля','маме','подруге','девушке','жене','коллеге','себе','учителю','бабушке','до 2500','2500-4000','4000+'];
 let pickedTags=[],pickedCat='',editingId=null;
 function getTags(b){return Array.isArray(b.tags)?b.tags:(b.tags?String(b.tags).split(',').filter(Boolean):[]);}
@@ -431,7 +426,7 @@ function renderBouquets(){
     const tags=getTags(b);
     const tagsHtml=tags.length?'<div class="tags">'+tags.slice(0,4).map(t=>'<span>'+esc(t)+'</span>').join('')+(tags.length>4?'<span>+'+(tags.length-4)+'</span>':'')+'</div>':'';
     return '<div class="bqRow"><div class="ph">'+(b.photo_url?'<img src="'+b.photo_url+'">':ic('i-flower'))+'</div>'+
-    '<div class="inf"><div class="tt">'+esc(b.title)+(b.is_day?ic('i-star'):'')+'</div><div class="pp">'+b.price+' ₽ · '+(b.in_stock?'в наличии':'под заказ')+'</div>'+tagsHtml+'</div>'+
+    '<div class="inf"><div class="tt">'+esc(b.title)+(b.is_day?ic('i-star'):'')+'</div><div class="pp">'+fmtPrice(b.price)+' · '+(b.in_stock?'в наличии':'под заказ')+'</div>'+tagsHtml+'</div>'+
     '<button class="delIco" style="background:var(--bg);color:var(--gray)" onclick="openEditBouquet('+b.id+')">'+ic('i-edit')+'</button><button class="delIco" onclick="delBouquet('+b.id+')">'+ic('i-trash')+'</button></div>';
   }).join(''):'<div class="empty">'+icBig('i-flower')+'Пока нет букетов.<br>Нажми ＋ чтобы добавить</div>';
 }
@@ -569,7 +564,6 @@ async function delBouquet(id){
     await refresh();
   }finally{hideLoader();}
 }
-/* ---------- отзывы ---------- */
 let quickReplies=['Спасибо за отзыв!','Будем стараться для вас 🌸','Рады, что вам понравилось','Приходите ещё!','Извините за неудобства, исправимся'];
 function loadQR(){const saved=localStorage.getItem('lep_qr_'+(me?me.id:'x'));if(saved){try{quickReplies=JSON.parse(saved);}catch(e){}}}
 function saveQR(){if(me)localStorage.setItem('lep_qr_'+me.id,JSON.stringify(quickReplies));}
@@ -585,7 +579,7 @@ function addQR(){
   toast('Шаблон добавлен','i-check');
 }
 function removeQR(i){quickReplies.splice(i,1);saveQR();renderQR();}
-function insertQR(txt){const input=document.querySelector('.replyInput input');if(!input)return;input.value=txt;input.focus();}
+function insertQR(txt){const input=activeReplyInput&&document.contains(activeReplyInput)?activeReplyInput:document.querySelector('.replyInput input');if(!input)return;input.value=txt;input.focus();}
 function renderReviews(){
   const box=$('revList');
   const ids=myBouquets.map(b=>b.id);
@@ -616,7 +610,6 @@ async function sendReply(reviewId){
     await refresh();
   }finally{hideLoader();}
 }
-/* ---------- магазин ---------- */
 function pickLogo(inp){const f=inp.files[0];if(!f)return;pickedLogo=f;const r=new FileReader();r.onload=e=>{$('lPrev').src=e.target.result;$('lPrevWrap').classList.remove('hidden');};r.readAsDataURL(f);}
 async function saveShop(){
   const phone=$('shPhone').value.trim();
