@@ -508,6 +508,7 @@ function renderShopsAdmin(){
           '<button class="info" onclick="openShopForm('+s.id+')">✏️ изменить</button>'+
           '<button class="ok" onclick="toggleShopFlag('+s.id+',\'verified\','+(s.verified?'false':'true')+')">'+(s.verified?'снять ✓':'✓ проверен')+'</button>'+
           '<button class="day" onclick="toggleShopFlag('+s.id+',\'promoted\','+(s.promoted?'false':'true')+')">'+(s.promoted?'снять ★':'★ промо')+'</button>'+
+          '<button class="'+(s.owner_id===adminId?'no':'day')+'" onclick="toggleShopFlag('+s.id+',\'owner_id\','+(s.owner_id===adminId?'null':'\''+adminId+'\'')+')">'+(s.owner_id===adminId?'✕ отвязать букеты':'🔗 мои букеты')+'</button>'+
           '<button class="no" onclick="delShopAdmin('+s.id+')">🗑</button>'+
         '</div></div>';
     }).join(''):'<div class="empty">Магазинов пока нет — добавь первый</div>');
