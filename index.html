@@ -25,7 +25,8 @@ body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle
 .petal{position:absolute;top:-6%;opacity:.35;animation:fall linear infinite}
 .petal svg{width:100%;height:100%}
 @keyframes fall{to{transform:translateY(112vh) rotate(340deg)}}
-.topbar{position:fixed;top:0;left:0;right:0;z-index:20;background:linear-gradient(180deg,rgba(255,253,250,.96),rgba(255,253,250,.82));backdrop-filter:blur(16px) saturate(1.6);-webkit-backdrop-filter:blur(16px) saturate(1.6);box-shadow:none}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:20;background:linear-gradient(180deg,rgba(255,253,250,.96),rgba(255,253,250,.72));backdrop-filter:blur(16px) saturate(1.6);-webkit-backdrop-filter:blur(16px) saturate(1.6);box-shadow:none}
+.topbar::after{content:"";position:absolute;top:100%;left:0;right:0;height:30px;background:linear-gradient(180deg,rgba(255,253,250,.7),rgba(255,253,250,0));pointer-events:none}
 .topbarIn{max-width:620px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px 8px}
 .brand{display:flex;align-items:center;gap:7px;user-select:none;cursor:pointer;flex:none}
 .brand .icn{width:22px;height:22px;color:var(--coral);animation:pulse 2s ease-in-out infinite}
@@ -56,11 +57,10 @@ main{padding:72px 16px calc(120px + env(safe-area-inset-bottom));max-width:620px
 #tab-chat.has-msgs .chatMessages{padding-bottom:12px}
 #tab-chat.has-msgs .chatChips{display:none}
 #tab-chat.has-msgs .liveSearch{display:none}
-.liveSearch{display:flex;align-items:center;justify-content:center;gap:7px;align-self:center;margin-top:auto;max-width:340px;padding:9px 16px;background:rgba(255,255,255,.65);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px dashed rgba(255,107,107,.3);border-radius:999px;color:var(--gray);font-size:10.5px;line-height:1.45;text-align:center;cursor:pointer;animation:fadeInUp .8s ease;transition:border-color .2s}
-.liveSearch:hover{border-color:var(--coral)}
-.liveSearch .lsDot{width:6px;height:6px;border-radius:50%;background:var(--grn);flex:none;animation:pulse 1.6s ease-in-out infinite}
-.liveSearch b{color:var(--ink);font-weight:700;transition:opacity .25s}
-.liveSearch b.fade{opacity:0}
+.liveSearch{display:flex;flex-direction:column;align-items:center;gap:5px;align-self:center;margin-top:auto;max-width:380px;padding:4px 12px;background:none;border:none;text-align:center;cursor:pointer;animation:fadeInUp .8s ease}
+.liveSearch .lsLbl{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gray);opacity:.55;font-weight:700}
+.liveSearch .lsTxt{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.4;transition:opacity .3s ease,filter .3s ease}
+.liveSearch .lsTxt.fade{opacity:0;filter:blur(6px)}
 #tab-chat.has-msgs .chatHero{padding:12px 0 4px}
 #tab-chat.has-msgs .chatLogo,#tab-chat.has-msgs .chatSub{display:none}
 #tab-chat.has-msgs .chatTitle{font-size:16px;font-weight:700}
@@ -68,7 +68,8 @@ main{padding:72px 16px calc(120px + env(safe-area-inset-bottom));max-width:620px
 .menuFloat.show{display:grid!important}
 .menuBtn{width:42px;height:42px;border:none;border-radius:50%;background:var(--card);color:var(--coral);display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px rgba(255,107,107,.25);flex:none;border:1.5px solid rgba(255,107,107,.3);transition:transform .15s}
 .menuBtn:active{transform:scale(.92)}
-.menuBtn .icn{width:19px;height:19px}
+.menuBtn .icn{width:19px;height:19px;animation:setHint 3s ease-in-out infinite}
+@keyframes setHint{0%,100%{transform:scale(1);opacity:.65}50%{transform:scale(1.35);opacity:1}}
 #menuPop{position:fixed;left:16px;right:16px;bottom:calc(92px + env(safe-area-inset-bottom));max-width:588px;margin:0 auto;background:var(--card);border-radius:20px;box-shadow:0 18px 50px rgba(120,50,80,.22);padding:8px;z-index:40;animation:rise .25s ease}
 .menuItem{display:flex;align-items:center;gap:12px;width:100%;border:none;background:none;padding:12px 14px;border-radius:14px;font-size:13.5px;font-weight:700;color:var(--ink);cursor:pointer;font-family:inherit}
 .menuItem .icn{width:17px;height:17px;color:var(--coral);flex:none}
@@ -82,8 +83,8 @@ main{padding:72px 16px calc(120px + env(safe-area-inset-bottom));max-width:620px
 .chatSend:active{transform:scale(.92)}
 .chatSend:disabled{opacity:.4;cursor:not-allowed}
 .chatSend .icn{width:18px;height:18px}
-.chatChips{display:flex;flex-wrap:wrap;gap:6px;padding:4px 2px 8px;justify-content:center;transition:opacity .25s,transform .25s}
-.chatChips.swap{opacity:0;transform:translateY(4px)}
+.chatChips{display:flex;flex-wrap:wrap;gap:6px;padding:4px 2px 8px;justify-content:center;transition:opacity .6s ease,filter .6s ease}
+.chatChips.swap{opacity:0;filter:blur(10px)}
 .chatChip{background:var(--card);border:1.5px solid rgba(255,107,107,.2);border-radius:999px;padding:7px 13px;font-size:11px;font-weight:700;color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:5px;box-shadow:0 3px 10px rgba(233,120,140,.08);transition:.2s}
 .chatChip:hover{border-color:var(--coral);transform:translateY(-1px)}
 .chatChip .icn{width:12px;height:12px;color:var(--coral)}
@@ -304,9 +305,9 @@ main{padding:72px 16px calc(120px + env(safe-area-inset-bottom));max-width:620px
 .sortRow{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:0 2px;flex-wrap:wrap}
 .sortRow .sortLbl{font-size:11px;color:var(--gray);font-weight:700;display:inline-flex;align-items:center;gap:5px}
 .sortRow .sortLbl .icn{width:12px;height:12px;color:var(--coral)}
-.sortRow .sortPill{background:var(--card);border:2px solid transparent;border-radius:999px;padding:6px 12px;font-size:10.5px;font-weight:800;color:var(--gray);cursor:pointer;box-shadow:var(--shadow);display:inline-flex;align-items:center;gap:4px}
+.sortRow .sortPill{background:var(--card);border:2px solid transparent;border-radius:999px;padding:6px 12px;font-size:10.5px;font-weight:800;color:var(--gray);cursor:pointer;box-shadow:var(--shadow);display:inline-flex;align-items:center;gap:4px;position:relative;overflow:hidden}
 .sortRow .sortPill .icn{width:11px;height:11px}
-.sortRow .sortPill.on{background:var(--gradient);color:#fff}
+.sortRow .sortPill.on{border-color:rgba(255,107,107,.45);color:var(--coral);background:linear-gradient(120deg,#FFF3F1,#FFECEF)}
 .pageHead{margin:2px 2px 14px}
 .pageHead h1{font-size:24px;font-weight:800;display:flex;align-items:center;gap:8px}
 .pageHead .hIco{width:22px;height:22px;color:var(--pink);flex:none}
@@ -453,7 +454,7 @@ main{padding:72px 16px calc(120px + env(safe-area-inset-bottom));max-width:620px
 <symbol id="i-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10" width="14" height="10" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></g></symbol>
 <symbol id="i-truck" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M2 6h12v10H2z"/><path d="M14 9h4l3 3v4h-7z"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></g></symbol>
 <symbol id="i-home" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M4 11l8-7 8 7v9h-5.5v-6h-5v6H4z"/></symbol>
-<symbol id="i-gear" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.2 5.2l1.7 1.7M17.1 17.1l1.7 1.7M18.8 5.2l-1.7 1.7M6.9 17.1l-1.7 1.7"/></g></symbol>
+<symbol id="i-gear" viewBox="0 0 24 24"><path fill="currentColor" d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></symbol>
 <symbol id="i-x" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></symbol>
 <symbol id="i-exit" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v16h-6"/><path d="M3 12h11"/><path d="M10 8l4 4-4 4"/></g></symbol>
 <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></g></symbol>
@@ -499,8 +500,8 @@ main{padding:72px 16px calc(120px + env(safe-area-inset-bottom));max-width:620px
       <div class="chatMessages" id="chatMessages"></div>
       <div class="chatChips" id="chatChips"></div>
       <div class="liveSearch" id="liveSearch" onclick="liveClick()">
-        <span class="lsDot"></span>
-        <span class="lsTxt">сейчас ищут в лепестке: <b id="liveSearchTxt">букет из 51 розы для девушки на свидание</b></span>
+        <div class="lsLbl">часто ищут</div>
+        <div class="lsTxt" id="liveSearchTxt">букет из 51 розы для девушки на свидание</div>
       </div>
       <div class="chatInput" id="chatInputBox">
         <textarea id="chatInput" placeholder="нежный букет девушке до 3000 ₽…" rows="1" oninput="autoResize(this)"></textarea>
@@ -672,7 +673,7 @@ if(!device){device='d'+Math.random().toString(36).slice(2)+Date.now();localStora
 let chatParams={who:'',occ:'',bud:'',style:'',exclude:[],include:[],priceMin:0,priceMax:Infinity};
 let chatBusy=false;
 let curTab='chat';
-function toggleMenu(){$('menuPop').classList.toggle('hidden');}
+function toggleMenu(){$('menuPop').classList.toggle('hidden');document.querySelectorAll('.menuBtn .icn').forEach(x=>x.style.animation='none');}
 function closeMenu(){$('menuPop').classList.add('hidden');}
 function menuGo(t){closeMenu();showTab(t);}
 function updateDock(){
@@ -831,7 +832,7 @@ const WHO_KEYWORDS={
   'жене':'жене','жена':'жене','жену':'жене','жены':'жене','супруге':'жене','супруги':'жене',
   'подруге':'подруге','подруга':'подруге','подругу':'подруге','подруги':'подруге',
   'коллеге':'коллеге','коллеги':'коллеге','коллегу':'коллеге',
-  'учителю':'учителю','учителя':'учителю','учительнице':'учителю','учительницы':'учителю',
+  'учителю':'учителю','учителя':'учителю','учительнице':'учителю','учительницы':'учителю','воспитателю':'учителю','воспитателя':'учителю',
   'другу':'другу','друга':'другу','себе':'себе','себя':'себе',
   'сестре':'сестре','сестра':'сестре','сестру':'сестре','сестры':'сестре',
   'бабушке':'бабушке','бабушка':'бабушке','бабушку':'бабушке','бабушки':'бабушке'
@@ -840,7 +841,7 @@ const WHO_GENITIVE={
   'девушке':'девушки','маме':'мамы','жене':'жены','подруге':'подруги','коллеге':'коллеги','учителю':'учителя','другу':'друга','себе':'себя','сестре':'сестры','бабушке':'бабушки'
 };
 const OCC_KEYWORDS={
-  'день рождения':'день рождения','др':'день рождения','рождения':'день рождения','юбилей':'юбилей',
+  'день рождения':'день рождения','др':'день рождения','рождения':'день рождения','юбилей':'юбилей','день учителя':'день учителя',
   'годовщина':'годовщина','свадьба':'свадьба','8 марта':'8 марта','восьмое марта':'8 марта',
   'свидание':'свидание','просто так':'просто так','извиниться':'извиниться','поблагодарить':'поблагодарить',
   'благодарность':'поблагодарить','выписка':'выписка','новый год':'новый год','14 февраля':'14 февраля',
@@ -1387,35 +1388,87 @@ function renderVkPetals(){const box=$('vkFall');if(!box)return;const PETAL='<svg
 
 sb.auth.onAuthStateChange(()=>refreshMe());
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
-const LIVE_WHO=['девушке','маме','жене','подруге','коллеге','учительнице','бабушке','сестре','себе'];
-const LIVE_OCC=['на день рождения','на свидание','на годовщину','на 8 марта','на свадьбу','на выписку','просто так','извиниться','на юбилей'];
+const LIVE_WHO=['девушке','маме','жене','подруге','коллеге','учительнице','учителю','бабушке','сестре','себе'];
+const LIVE_OCC=['на день рождения','на свидание','на годовщину','на 8 марта','на свадьбу','на выписку','просто так','извиниться','на юбилей','на день учителя'];
 const LIVE_BOUQ=['букет из 51 розы','нежные пионы','яркий микс полевых цветов','облако гортензий','25 тюльпанов','белые хризантемы','пышный авторский букет','минимализм с орхидеями','букет с гипсофилой','классические розы'];
 const LIVE_BUD=['до 3000 ₽','до 5000 ₽','около 2000 ₽','3–5 тысяч ₽','бюджет не важен'];
 const lPick=a=>a[Math.floor(Math.random()*a.length)];
+function seasonNow(){
+  const now=new Date(),y=now.getFullYear();
+  const today=new Date(y,now.getMonth(),now.getDate());
+  const lastSunNov=yy=>{const d=new Date(yy,10,30);return new Date(yy,10,30-d.getDay());};
+  const mk=(fn,lead,key)=>{let d=fn(y);if(d<today)d=fn(y+1);return{d,lead,key};};
+  const items=[
+    mk(x=>new Date(x,1,14),21,'valentine'),
+    mk(x=>new Date(x,2,8),30,'march8'),
+    mk(x=>new Date(x,4,9),14,'victory'),
+    mk(x=>new Date(x,6,8),14,'family'),
+    mk(x=>new Date(x,8,1),30,'knowledge'),
+    mk(x=>new Date(x,8,27),21,'educator'),
+    mk(x=>new Date(x,9,5),30,'teacher'),
+    mk(lastSunNov,30,'mother'),
+    mk(x=>new Date(x,11,31),21,'newyear')
+  ];
+  let best=null;
+  items.forEach(it=>{const days=Math.round((it.d-today)/864e5);if(days<0||days>it.lead)return;if(!best||days<best.days)best={key:it.key,days};});
+  return best;
+}
+const SEASONS={
+  valentine:{live:['красные розы девушке на 14 февраля','романтичный букет на день влюблённых','25 роз на 14 февраля','нежный букет жене на 14 февраля'],chip:{t:'14 февраля',q:'на 14 февраля',i:'i-heart'}},
+  march8:{live:['тюльпаны маме на 8 марта','букет из 25 тюльпанов на 8 марта','мимоза и тюльпаны на 8 марта','розы коллеге на 8 марта'],chip:{t:'8 марта',q:'на 8 марта',i:'i-cal'}},
+  victory:{live:['гвоздики на 9 мая','красный букет на 9 мая','гвоздики ветерану на 9 мая'],chip:{t:'9 мая',q:'на 9 мая',i:'i-star'}},
+  family:{live:['букет с ромашками на день семьи','нежный букет жене на 8 июля','ромашки любимой на день семьи'],chip:{t:'день семьи',q:'на день семьи',i:'i-heart'}},
+  knowledge:{ban:['учителю'],live:['праздничный букет учителю на 1 сентября','букет классному руководителю до 2500','хризантемы учителю на 1 сентября'],chip:{t:'1 сентября',q:'на 1 сентября',i:'i-cal'}},
+  educator:{ban:['учителю'],live:['небольшой букет воспитателю','букет воспитателю до 1500','ромашки воспитателю на 27 сентября'],chip:{t:'воспитателю',q:'воспитателю',i:'i-star'}},
+  teacher:{ban:['учителю'],live:['букет учителю на день учителя до 2000','компактный букет учителю','хризантемы учителю на день учителя','нежный букет учительнице до 2500'],chip:{t:'день учителя',q:'на день учителя',i:'i-star'}},
+  mother:{ban:['маме'],live:['нежный букет маме на день матери','пышный букет маме','пионы маме на день матери','букет из роз маме до 4000'],chip:{t:'день матери',q:'на день матери',i:'i-heart'}},
+  newyear:{live:['новогодняя композиция с хвоей','букет с еловыми ветками на новый год','композиция с хлопоком на новый год'],chip:{t:'новый год',q:'на новый год',i:'i-gift'}}
+};
+function seasonClient(){const s=seasonNow();return s?SEASONS[s.key]:null;}
+let lastLive='';
 function liveQuery(){
-  const w=lPick(LIVE_WHO),o=lPick(LIVE_OCC),b=lPick(LIVE_BOUQ),bud=lPick(LIVE_BUD);
-  return lPick([
-    b+' '+w,
-    b+' '+w+' '+o,
-    o+' — '+b,
-    w+', '+o+', '+bud,
-    b+', '+bud,
-    'что-то нежное '+w,
-    'что-то пышное '+o,
-    w+' '+bud
-  ]);
+  let out=lastLive,guard=0;
+  while(out===lastLive&&guard<10){
+    guard++;
+    const sc=seasonClient();
+    if(sc&&Math.random()<0.4){
+      out=lPick(sc.live);
+    }else{
+      const w=lPick(LIVE_WHO),o=lPick(LIVE_OCC),b=lPick(LIVE_BOUQ),bud=lPick(LIVE_BUD);
+      out=lPick([
+        b+' '+w,
+        b+' '+w+' '+o,
+        o+' — '+b,
+        w+', '+o+', '+bud,
+        b+', '+bud,
+        'что-то нежное '+w,
+        'что-то пышное '+o,
+        w+' '+bud
+      ]);
+    }
+  }
+  lastLive=out;
+  return out;
 }
 let liveTimer=null;
+function scheduleLive(){
+  clearTimeout(liveTimer);
+  liveTimer=setTimeout(()=>{
+    const el=$('liveSearchTxt');if(!el)return;
+    el.classList.add('fade');
+    setTimeout(()=>{el.textContent=liveQuery();el.classList.remove('fade');},320);
+    scheduleLive();
+  },5000+Math.random()*7000);
+}
 function startLiveSearch(){
   const el=$('liveSearchTxt');if(!el)return;
   el.textContent=liveQuery();
-  clearInterval(liveTimer);
-  liveTimer=setInterval(()=>{el.classList.add('fade');setTimeout(()=>{el.textContent=liveQuery();el.classList.remove('fade');},260);},4200);
+  scheduleLive();
 }
 function liveClick(){quickChat($('liveSearchTxt').textContent);}
 const CHIP_GROUPS=[
-  [{t:'девушке',q:'девушке',i:'i-heart'},{t:'маме',q:'маме',i:'i-gift'},{t:'жене',q:'жене',i:'i-heart'},{t:'подруге',q:'подруге',i:'i-heart'},{t:'бабушке',q:'бабушке',i:'i-gift'}],
-  [{t:'день рождения',q:'на день рождения',i:'i-cal'},{t:'свидание',q:'на свидание',i:'i-spark'},{t:'годовщина',q:'на годовщину',i:'i-cal'},{t:'8 марта',q:'на 8 марта',i:'i-cal'},{t:'просто так',q:'просто так',i:'i-gift'}],
+  [{t:'девушке',q:'девушке',i:'i-heart'},{t:'маме',q:'маме',i:'i-gift'},{t:'жене',q:'жене',i:'i-heart'},{t:'подруге',q:'подруге',i:'i-heart'},{t:'учителю',q:'учителю',i:'i-star'},{t:'бабушке',q:'бабушке',i:'i-gift'}],
+  [{t:'день рождения',q:'на день рождения',i:'i-cal'},{t:'свидание',q:'на свидание',i:'i-spark'},{t:'годовщина',q:'на годовщину',i:'i-cal'},{t:'день учителя',q:'на день учителя',i:'i-star'},{t:'просто так',q:'просто так',i:'i-gift'}],
   [{t:'до 2000 ₽',q:'до 2000 ₽',i:'i-wallet'},{t:'до 3000 ₽',q:'до 3000 ₽',i:'i-wallet'},{t:'до 5000 ₽',q:'до 5000 ₽',i:'i-wallet'}],
   [{t:'нежный',q:'нежный букет',i:'i-heart'},{t:'пышный',q:'пышный букет',i:'i-flower'},{t:'розы',q:'букет роз',i:'i-rose'},{t:'пионы',q:'пионы',i:'i-rose'},{t:'тюльпаны',q:'тюльпаны',i:'i-rose'}]
 ];
@@ -1423,9 +1476,18 @@ let chipTimer=null;
 function renderChips(){
   const box=$('chatChips');if(!box)return;
   if($('tab-chat').classList.contains('has-msgs'))return;
-  const set=CHIP_GROUPS.map(g=>lPick(g)).sort(()=>Math.random()-.5);
+  const sc=seasonClient();
+  const used=new Set(sc?[sc.chip.t,...(sc.ban||[])]:[]);
+  const set=sc?[sc.chip]:[];
+  CHIP_GROUPS.forEach(g=>{
+    const pool=g.filter(c=>!used.has(c.t));
+    if(!pool.length)return;
+    const c=lPick(pool);
+    used.add(c.t);set.push(c);
+  });
+  set.sort(()=>Math.random()-.5);
   box.classList.add('swap');
-  setTimeout(()=>{box.innerHTML=set.map(c=>'<button class="chatChip" onclick="quickChat(\''+c.q+'\')">'+ic(c.i)+esc(c.t)+'</button>').join('');box.classList.remove('swap');},250);
+  setTimeout(()=>{box.innerHTML=set.map(c=>'<button class="chatChip" onclick="quickChat(\''+c.q+'\')">'+ic(c.i)+esc(c.t)+'</button>').join('');box.classList.remove('swap');},620);
 }
 function startChipsRotation(){clearInterval(chipTimer);renderChips();chipTimer=setInterval(renderChips,10000);}
 renderPetals();renderVkPetals();refreshMe();load();restoreChatHistory();setTimeout(startTour,900);startLiveSearch();startChipsRotation();

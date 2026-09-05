@@ -390,13 +390,42 @@ async function fetchTrendTags(){
   }catch(e){trendTags=[];}
   renderTrendBlock();
 }
+function seasonHint(){
+  const now=new Date(),y=now.getFullYear();
+  const today=new Date(y,now.getMonth(),now.getDate());
+  const MONTHS=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+  const lastSunNov=yy=>{const d=new Date(yy,10,30);return new Date(yy,10,30-d.getDay());};
+  const mk=(fn,lead,name,tip)=>{let d=fn(y);if(d<today)d=fn(y+1);return{d,lead,name,tip};};
+  const items=[
+    mk(x=>new Date(x,1,14),21,'день всех влюблённых — {d}','Романтика: розы, красные и бордовые акценты. Чек 2 000–5 000 ₽, теги «свидание», «девушке».'),
+    mk(x=>new Date(x,2,8),30,'8 марта — главный пик весны','Тюльпаны, мимоза и розы во всех ценах. Готовь витрину заранее, тег «8 марта».'),
+    mk(x=>new Date(x,4,9),14,'День Победы — {d}','Гвоздики и красные композиции, тег «9 мая».'),
+    mk(x=>new Date(x,6,8),14,'день семьи, любви и верности — {d}','Ромашки и светлые лёгкие букеты, теги «нежный», «просто так».'),
+    mk(x=>new Date(x,8,1),30,'1 сентября — День знаний','Большой пик: праздничные букеты учителю, 1 500–3 500 ₽, теги «учителю», «1 сентября».'),
+    mk(x=>new Date(x,8,27),21,'день воспитателя — {d}','Компактные букеты 800–1 500 ₽ для детсадов, теги «учителю», «день учителя».'),
+    mk(x=>new Date(x,9,5),30,'день учителя — {d}','Родительские комитеты заказывают за неделю. Компактные букеты 1 000–2 500 ₽, тег «день учителя».'),
+    mk(lastSunNov,30,'день матери — {d}','Главный осенний пик: нежные и пышные букеты во всех ценах, теги «маме», «нежный».'),
+    mk(x=>new Date(x,11,31),21,'Новый год — {d}','Композиции, пуансеттия и хвоя вместо букетов, тег «новый год».')
+  ];
+  let best=null;
+  items.forEach(it=>{
+    const days=Math.round((it.d-today)/864e5);
+    if(days<0||days>it.lead)return;
+    if(!best||days<best.days)best={name:it.name,tip:it.tip,days,d:it.d};
+  });
+  if(!best)return '';
+  const when=best.days===0?'уже сегодня!':(best.days===1?'завтра':'через '+best.days+' дн.');
+  const name=best.name.replace('{d}',best.d.getDate()+' '+MONTHS[best.d.getMonth()]);
+  return '<div class="trendBlock"><h4>'+ic('i-cal')+'Скоро: '+name+' ('+when+')</h4><div class="trendSub">'+best.tip+'</div></div>';
+}
 function renderTrendBlock(){
   const box=$('trendBlock');if(!box)return;
+  const hint=seasonHint();
   if(!trendTags.length){
-    box.innerHTML='<div class="trendBlock"><h4>'+ic('i-trend')+'Популярные теги</h4><div class="trendSub">Пока мало данных. Когда люди начнут искать букеты — здесь появятся самые востребованные теги для «Собери мне».</div></div>';
+    box.innerHTML=hint+'<div class="trendBlock"><h4>'+ic('i-trend')+'Популярные теги</h4><div class="trendSub">Пока мало данных. Когда люди начнут искать букеты — здесь появятся самые востребованные теги для «Собери мне».</div></div>';
     return;
   }
-  box.innerHTML='<div class="trendBlock"><h4>'+ic('i-trend')+'🔥 Что ищут сейчас</h4><div class="trendSub">Самые частые теги за 14 дней. Нажми — добавится к букету.</div><div class="trendChips">'+trendTags.map((t,i)=>'<span class="trendChip" data-trend="'+i+'">'+esc(t.tag)+'<span class="cnt">'+t.count+'</span></span>').join('')+'</div></div>';
+  box.innerHTML=hint+'<div class="trendBlock"><h4>'+ic('i-trend')+'🔥 Что ищут сейчас</h4><div class="trendSub">Самые частые теги за 14 дней. Нажми — добавится к букету.</div><div class="trendChips">'+trendTags.map((t,i)=>'<span class="trendChip" data-trend="'+i+'">'+esc(t.tag)+'<span class="cnt">'+t.count+'</span></span>').join('')+'</div></div>';
 }
 function catList(){
   const names=(categories||[]).map(c=>c.name||c);
