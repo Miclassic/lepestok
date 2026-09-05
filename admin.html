@@ -874,18 +874,18 @@ function sRenderBouquets(){
   }).join(''):'<div class="empty">У продавца пока нет букетов 🌷</div>';
   box.innerHTML=addForm+list;
 }
-/* ===== YandexGPT AI (старт + опрос + modelUri) ===== */
+/* ===== YandexGPT AI (два эндпоинта + перебор моделей) ===== */
 const YA_FOLDER='b1gg2keram6ur6r9774q';
-const YA_NAMES=['yandexgpt-lite','yandexgpt-5.1-lite','yandexgpt-5.1-pro','qwen3-35b','qwen3.6-35b','alice-ai-llm'];
+const YA_NAMES=['yandexgpt-5-lite','yandexgpt-5.1-pro','yandexgpt-4-lite','alice-ai-llm-flash','alice-ai-llm','qwen3.6-35b','qwen3-6-35b','deepseek-4-flash'];
 async function yaComplete(prompt){
-  const models=[];
-  if(YA_FOLDER&&YA_FOLDER!=='ВСТАВЬ_FOLDER_ID')YA_NAMES.forEach(n=>models.push('gpt://'+YA_FOLDER+'/'+n));
-  YA_NAMES.forEach(n=>models.push(n));
+  const attempts=[];
+  YA_NAMES.forEach(n=>{const u='gpt://'+YA_FOLDER+'/'+n;attempts.push(['ai_start',{prompt:prompt,model:u}]);attempts.push(['ai_legacy',{prompt:prompt,uri:u}]);});
+  YA_NAMES.forEach(n=>attempts.push(['ai_start',{prompt:prompt,model:n}]));
   let lastErr='';
-  for(const m of models){
-    const {data:rid,error:e1}=await sb.rpc('ai_start',{prompt:prompt,model:m});
+  for(const a of attempts){
+    const {data:rid,error:e1}=await sb.rpc(a[0],a[1]);
     if(e1){lastErr=e1.message;continue;}
-    for(let i=0;i<20;i++){
+    for(let i=0;i<15;i++){
       await new Promise(r=>setTimeout(r,1000));
       const {data,error}=await sb.rpc('ai_result',{req_id:rid});
       if(error){lastErr=error.message;break;}
