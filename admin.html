@@ -415,13 +415,17 @@ function shopFormHtml(){
     '<input id="saAddr" placeholder="Адрес" value="'+esc(s?s.address:'')+'">'+
     '<textarea id="saDesc" placeholder="Описание">'+esc(s?s.description:'')+'</textarea>'+
     '<input id="saTg" placeholder="Telegram @username" value="'+esc(s?s.telegram:'')+'">'+
+    '<input id="saVk" placeholder="VK (https://vk.com/…)" value="'+esc(s?s.vk:'')+'">'+
+    '<input id="saWa" placeholder="WhatsApp (79181234567)" value="'+esc(s?s.whatsapp:'')+'">'+
     '<input id="saWeb" placeholder="Сайт https://…" value="'+esc(s?s.website:'')+'">'+
     '<input id="saMap" placeholder="Ссылка на карту (Яндекс / 2ГИС)" value="'+esc(s?s.map_link:'')+'">'+
     '<input id="saDel" type="number" placeholder="Доставка от, минут" value="'+(s&&s.delivery_min?s.delivery_min:'')+'">'+
     '<select id="saKind"><option value="directory" '+((!s||s.kind==='directory')?'selected':'')+'>directory — справочник, лиды наружу</option><option value="partner" '+((s&&s.kind==='partner')?'selected':'')+'>partner — заказы внутри Лепестка</option></select>'+
     '<label><input type="checkbox" id="saVer" '+((s&&s.verified)?'checked':'')+'> verified — «проверенный»</label>'+
     '<label><input type="checkbox" id="saProm" '+((s&&s.promoted)?'checked':'')+'> promoted — продвижение</label>'+
-    '<button class="btn" style="background:var(--bg);color:var(--ink)" onclick="document.getElementById(\'saPhoto\').click()">📷 Логотип</button>'+
+    (s&&s.logo_url?'<div style="margin:6px 0"><img src="'+esc(s.logo_url)+'" style="width:56px;height:56px;border-radius:50%;object-fit:cover;box-shadow:var(--shadow)"></div>':'')+
+    '<input id="saLogoUrl" placeholder="Логотип: ссылка на картинку (https://…)" value="'+esc(s&&s.logo_url?s.logo_url:'')+'">'+
+    '<button class="btn" style="background:var(--bg);color:var(--ink)" onclick="document.getElementById(\'saPhoto\').click()">📷 Загрузить логотип</button>'+
     '<input type="file" id="saPhoto" accept="image/*" style="display:none" onchange="onShopPhoto(this)">'+
     '<span id="saPhotoName" style="font-size:10.5px;color:var(--gray)"></span>'+
     '<div class="mbtns" style="margin-top:8px"><button class="ok" onclick="saveShopAdmin()">💾 Сохранить</button><button class="no" onclick="cancelShopForm()">Отмена</button></div></div>';
@@ -436,6 +440,8 @@ async function saveShopAdmin(){
     address:$('saAddr').value.trim(),
     description:$('saDesc').value.trim(),
     telegram:$('saTg').value.trim(),
+    vk:$('saVk').value.trim(),
+    whatsapp:$('saWa').value.trim(),
     website:$('saWeb').value.trim(),
     map_link:$('saMap').value.trim(),
     delivery_min:+$('saDel').value||null,
@@ -450,6 +456,8 @@ async function saveShopAdmin(){
       const up=await sb.storage.from('bouquets').upload(path,shopFormPhoto,{contentType:shopFormPhoto.type});
       if(up.error){toast('Лого: '+up.error.message,'i-x');return;}
       data.logo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
+    }else if($('saLogoUrl').value.trim()){
+      data.logo_url=$('saLogoUrl').value.trim();
     }
     let res;
     if(shopEditId){res=await sb.from('shops').update(data).eq('id',shopEditId);}

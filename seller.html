@@ -189,9 +189,12 @@ input:focus,textarea:focus{outline:none;border-color:var(--coral)}
       <textarea id="shDesc" placeholder="Описание (чем сильны, что специализируетесь)"></textarea>
       <div class="fieldLbl"><svg class="icn"><use href="#i-arrow"/></svg>Куда вести клиентов (кнопки «Где заказать»)</div>
       <input id="shTg" placeholder="Telegram (@username)">
+      <input id="shVk" placeholder="VK (https://vk.com/…)">
+      <input id="shWa" placeholder="WhatsApp (79181234567)">
       <input id="shWeb" placeholder="Сайт (https://…)">
       <input id="shMap" placeholder="Ссылка на карту (Яндекс / 2ГИС)">
       <input id="shDel" type="number" placeholder="Доставка от, минут (например: 30)">
+      <input id="shLogoUrl" placeholder="Логотип: ссылка на картинку (https://…)">
       <button class="btn soft" onclick="document.getElementById('shLogo').click()"><svg class="icn"><use href="#i-camera"/></svg>Логотип</button>
       <input type="file" id="shLogo" accept="image/*" style="display:none" onchange="pickLogo(this)">
       <div id="lPrevWrap" class="hidden" style="margin:8px 0"><img id="lPrev" style="width:64px;height:64px;object-fit:cover;border-radius:50%;box-shadow:var(--shadow)"></div>
@@ -319,7 +322,7 @@ async function refresh(){
       $('shopName').textContent=shop.name;
       if(shop.logo_url)$('shopAva').innerHTML='<img src="'+shop.logo_url+'">';
       $('shName').value=shop.name||'';$('shCity').value=shop.city||DEFAULT_CITY;$('shPhone').value=shop.phone||'';$('shAddr').value=shop.address||'';$('shDesc').value=shop.description||'';
-      $('shTg').value=shop.telegram||'';$('shWeb').value=shop.website||'';$('shMap').value=shop.map_link||'';$('shDel').value=shop.delivery_min||'';
+      $('shTg').value=shop.telegram||'';$('shVk').value=shop.vk||'';$('shWa').value=shop.whatsapp||'';$('shWeb').value=shop.website||'';$('shMap').value=shop.map_link||'';$('shDel').value=shop.delivery_min||'';$('shLogoUrl').value=shop.logo_url||'';
       const st=$('shopStatus');st.classList.remove('warn');st.textContent='кабинет продавца';
     }else{
       const nick=(me.user_metadata&&me.user_metadata.nick)||((me.email||'').split('@')[0])||'Мой магазин';
@@ -650,6 +653,8 @@ async function saveShop(){
     address:$('shAddr').value.trim(),
     description:$('shDesc').value.trim(),
     telegram:$('shTg').value.trim(),
+    vk:$('shVk').value.trim(),
+    whatsapp:$('shWa').value.trim(),
     website:$('shWeb').value.trim(),
     map_link:$('shMap').value.trim(),
     delivery_min:+$('shDel').value||null,
@@ -660,7 +665,8 @@ async function saveShop(){
     const up=await sb.storage.from('bouquets').upload(path,pickedLogo,{contentType:pickedLogo.type});
     if(up.error){toast('Лого: '+up.error.message,'i-x');return;}
     data.logo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
-  }else if(shop){data.logo_url=shop.logo_url;}
+  }else if($('shLogoUrl').value.trim()){data.logo_url=$('shLogoUrl').value.trim();}
+  else if(shop){data.logo_url=shop.logo_url;}
   showLoader();
   try{
     let res;

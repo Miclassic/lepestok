@@ -340,6 +340,7 @@ main{padding:72px 16px calc(120px + env(safe-area-inset-bottom));max-width:620px
 .lepMapMarkerInner .icn{width:16px;height:16px;color:var(--coral)}
 .lepMapBubble{position:absolute;left:50%;bottom:54px;transform:translateX(-50%);width:190px;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-radius:17px;padding:10px;box-shadow:0 12px 35px rgba(30,20,30,.2);display:none;z-index:20}
 .lepMapMarkerWrap{position:relative}
+.lepMapLabel{position:absolute;top:46px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.94);backdrop-filter:blur(6px);border-radius:999px;padding:3px 8px;font-size:9px;font-weight:800;color:var(--ink);white-space:nowrap;max-width:130px;overflow:hidden;text-overflow:ellipsis;box-shadow:0 3px 10px rgba(0,0,0,.18);pointer-events:none}
 .lepMapMarkerWrap.open{z-index:100}
 .lepMapMarkerWrap.open .lepMapBubble{display:block}
 .lepMapBubbleName{font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1193,7 +1194,8 @@ async function initShopsMap(){
       const bubble=document.createElement('div');bubble.className='lepMapBubble';
       const extRating=getExternalRating(shop);const extReviews=getExternalReviews(shop);const score=getLepestokScore(shop);
       bubble.innerHTML='<div class="lepMapBubbleName">'+esc(shop.name)+'</div><div class="lepMapBubbleMeta">'+(shop.address?esc(shop.address):'Новороссийск')+'</div>'+(extRating?'<div class="lepMapBubbleMeta"><span class="externalRating">★ '+extRating.toFixed(1)+'</span> · '+extReviews+' оценок</div>':'')+(score?'<div class="lepMapBubbleScore">'+ic('i-spark')+'Lepestok Score '+score+'</div>':'')+'<button class="lepMapBubbleBtn" onclick="event.stopPropagation();openShopPage('+shop.id+')">Открыть магазин</button>';
-      wrap.appendChild(marker);wrap.appendChild(bubble);
+      const label=document.createElement('div');label.className='lepMapLabel';label.textContent=shop.name+(extRating?' · ★'+extRating.toFixed(1):'');
+      wrap.appendChild(marker);wrap.appendChild(label);wrap.appendChild(bubble);
       marker.addEventListener('click',e=>{e.stopPropagation();document.querySelectorAll('.lepMapMarkerWrap.open').forEach(x=>x.classList.remove('open'));wrap.classList.add('open');track('map_shop_click',{shop_id:shop.id});});
       const ymMarker=new YMapMarker({coordinates:[Number(shop.longitude),Number(shop.latitude)],zIndex:score||1},wrap);
       shopsMap.addChild(ymMarker);shopsMapMarkers.push(ymMarker);
