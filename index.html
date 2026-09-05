@@ -64,7 +64,7 @@ main{padding:72px 16px calc(90px + env(safe-area-inset-bottom));max-width:620px;
 .chatInput{background:var(--card);border-radius:22px;padding:6px;box-shadow:var(--shadow);display:flex;align-items:flex-end;gap:4px;position:sticky;bottom:calc(80px + env(safe-area-inset-bottom));z-index:10;border:2px solid transparent;transition:border-color .2s}
 .chatInput:focus-within{border-color:rgba(255,107,107,.3)}
 .chatInput textarea{flex:1;border:none;outline:none;background:transparent;font-size:14px;padding:10px 10px;resize:none;min-height:42px;max-height:140px;font-family:inherit;color:var(--ink);line-height:1.45}
-.chatInput textarea::placeholder{color:var(--gray);opacity:.7}
+.chatInput textarea::placeholder{color:var(--gray);opacity:.75;font-size:11.5px;letter-spacing:.2px}
 .chatSend{width:42px;height:42px;border:none;border-radius:50%;background:var(--gradient);color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px rgba(255,107,107,.4);flex:none;transition:transform .15s}
 .chatSend:active{transform:scale(.92)}
 .chatSend:disabled{opacity:.4;cursor:not-allowed}
@@ -497,7 +497,7 @@ main{padding:72px 16px calc(90px + env(safe-area-inset-bottom));max-width:620px;
       </div>
 
       <div class="chatInput">
-        <textarea id="chatInput" placeholder="Например: нежный букет девушке до 3000 на день рождения" rows="1" oninput="autoResize(this)"></textarea>
+        <textarea id="chatInput" placeholder="нежный букет девушке до 3000 ₽…" rows="1" oninput="autoResize(this)"></textarea>
         <button class="chatSend" id="chatSendBtn" onclick="sendChat()"><svg class="icn"><use href="#i-send"/></svg></button>
       </div>
 
@@ -509,7 +509,7 @@ main{padding:72px 16px calc(90px + env(safe-area-inset-bottom));max-width:620px;
       </div>
 
       <div class="chatFoot">
-        не знаешь что выбрать? <a onclick="showTab('shop')">открыть каталог</a> или <a onclick="openQuiz()">пройти квиз</a>
+        не знаешь что выбрать? <a onclick="showTab('shop')">открыть каталог</a> · <a onclick="openQuiz()">квиз</a> · <a onclick="clearChat()">новый чат</a>
       </div>
     </div>
   </section>
@@ -821,10 +821,18 @@ function mqGo(){runPick(mq.who,mq.occ,mq.bud,'');}
    ========================================================= */
 
 /* Словари для парсера естественного языка */
-const WHO_KEYWORDS={
-  'девушке':'девушке','девушка':'девушке','девушку':'девушке','жене':'жене','маме':'маме','мама':'маме','маму':'маме',
-  'подруге':'подруге','подруга':'подруге','коллеге':'коллеге','учителю':'учителю','учительнице':'учителю',
-  'другу':'другу','себе':'себе','сестре':'сестре','бабушке':'бабушке'
+const WHO_KEYWORDS={const WHO_KEYWORDS={
+ 'девушке':'девушке','девушка':'девушке','девушку':'девушке','девушки':'девушке',
+ 'маме':'маме','мама':'маме','маму':'маме','мамы':'маме','матери':'маме',
+ 'жене':'жене','жена':'жене','жену':'жене','жены':'жене','супруге':'жене','супруги':'жене',
+ 'подруге':'подруге','подруга':'подруге','подругу':'подруге','подруги':'подруге',
+ 'коллеге':'коллеге','коллеги':'коллеге','коллегу':'коллеге',
+ 'учителю':'учителю','учителя':'учителю','учительнице':'учителю','учительницы':'учителю',
+ 'другу':'другу','друга':'другу','себе':'себе','себя':'себе',
+ 'сестре':'сестре','сестра':'сестре','сестру':'сестре','сестры':'сестре',
+ 'бабушке':'бабушке','бабушка':'бабушке','бабушку':'бабушке','бабушки':'бабушке'
+};
+const WHO_GENITIVE={'девушке':'девушки','маме':'мамы','жене':'жены','подруге':'подруги','коллеге':'коллеги','учителю':'учителя','другу':'друга','себе':'себя','сестре':'сестры','бабушке':'бабушки'
 };
 const OCC_KEYWORDS={
   'день рождения':'день рождения','др':'день рождения','юбилей':'день рождения',
@@ -846,7 +854,13 @@ const FLOWER_KEYWORDS={
   'тюльпаны':'тюльпаны','тюльпан':'тюльпаны','хризантемы':'хризантемы','лилии':'лилии','лилия':'лилии',
   'гортензии':'гортензии','орхидеи':'орхидеи','ромашки':'ромашки'
 };
-
+const BASE_WORDS=['букет','букета','букетик','букеты','цветы','цветов','цветочный','композиция','композицию','композиции','хочу','ищу','нужен','нужно','найди','найти','покажи','показать','подбери','подобрать','подарить','подарок','выбрать','ищем','сегодня','какой','что','чем','можно','пожалуйста','недорогой','недорого','руб','рублей','тыс','тыщ','тысяч','до','от','за','около','больше','меньше','без','из','на','для','кому','красивый','большой','маленький','нежная','нежное'];
+const KNOWN_WORDS=BASE_WORDS.concat(Object.keys(WHO_KEYWORDS),Object.values(WHO_KEYWORDS),Object.keys(OCC_KEYWORDS),Object.values(OCC_KEYWORDS),Object.keys(STYLE_KEYWORDS),Object.values(STYLE_KEYWORDS),Object.keys(FLOWER_KEYWORDS),Object.values(FLOWER_KEYWORDS));
+const KNOWN_SET=new Set(KNOWN_WORDS);
+function levDist(a,b){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;const d=[];for(let i=0;i<=m;i++){d[i]=[i];for(let j=1;j<=n;j++)d[i][j]=0;}for(let j=0;j<=n;j++)d[0][j]=j;for(let i=1;i<=m;i++)for(let j=1;j<=n;j++){const c=a[i-1]===b[j-1]?0:1;d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+c);}return d[m][n];}
+function fuzzyFix(tok){const maxD=tok.length>6?2:1;let best=null,bd=maxD+1;for(const w of KNOWN_WORDS){if(Math.abs(w.length-tok.length)>maxD)continue;const d=levDist(tok,w);if(d<bd){bd=d;best=w;}}return best;}
+function logUnknown(w){try{const k='lep_unknown_words';const m=JSON.parse(localStorage.getItem(k)||'{}');m[w]=(m[w]||0)+1;localStorage.setItem(k,JSON.stringify(m));}catch(e){}track('unknown_word',{w:w});}
+function applyKeyword(w,p){if(WHO_KEYWORDS[w]&&!p.who)p.who=WHO_KEYWORDS[w];else if(OCC_KEYWORDS[w]&&!p.occ)p.occ=OCC_KEYWORDS[w];else if(STYLE_KEYWORDS[w]&&!p.style)p.style=STYLE_KEYWORDS[w];else if(FLOWER_KEYWORDS[w]&&!p.include.includes(FLOWER_KEYWORDS[w]))p.include.push(FLOWER_KEYWORDS[w]);}
 function parseQuery(text){
   const t=text.toLowerCase();
   const params={who:'',occ:'',bud:'',style:'',include:[],exclude:[],priceMin:0,priceMax:Infinity};
@@ -873,33 +887,23 @@ function parseQuery(text){
       if(t.includes('без '+k)){params.exclude.push(FLOWER_KEYWORDS[k]);}
     }
   }
-  /* бюджет: "до 3000", "3к", "5 000", "3000-5000" */
-  const doMatch=t.match(/до\s*([\d\s]+)\s*(тыс|к|руб)?/);
-  if(doMatch){
-    let n=+doMatch[1].replace(/\s/g,'');
-    if(doMatch[2]==='тыс'||doMatch[2]==='к')n*=1000;
-    params.priceMax=n;
-    params.bud='до '+n.toLocaleString('ru-RU').replace(/,/g,' ')+' ₽';
-  }
-  const otMatch=t.match(/(?:от|больше|свыше)\s*([\d\s]+)\s*(тыс|к|руб)?/);
-  if(otMatch){
-    let n=+otMatch[1].replace(/\s/g,'');
-    if(otMatch[2]==='тыс'||otMatch[2]==='к')n*=1000;
-    params.priceMin=n;
-    params.bud='от '+n.toLocaleString('ru-RU').replace(/,/g,' ')+' ₽';
-  }
-  const rangeMatch=t.match(/([\d\s]+)\s*[-–]\s*([\d\s]+)\s*(тыс|к|руб)?/);
-  if(rangeMatch && !doMatch && !otMatch){
-    let a=+rangeMatch[1].replace(/\s/g,''),b=+rangeMatch[2].replace(/\s/g,'');
-    if(rangeMatch[3]==='тыс'||rangeMatch[3]==='к'){a*=1000;b*=1000;}
-    params.priceMin=Math.min(a,b);
-    params.priceMax=Math.max(a,b);
-    params.bud=a.toLocaleString('ru-RU').replace(/,/g,' ')+'–'+b.toLocaleString('ru-RU').replace(/,/g,' ')+' ₽';
-  }
-  /* простой fallback для "3к", "5000" */
-  if(!params.bud){
-    const simple=t.match(/\b(\d+)\s*к\b/);
-    if(simple){params.priceMax=+simple[1]*1000;params.bud='до '+simple[1]+' 000 ₽';}
+  /* бюджет: «до 3000», «за 3 тыщи», «от 2000», «3к», «2000–5000» */
+  const mul=s=>(s==='тыс'||s==='тыщ'||s==='к'||s==='тысяч')?1000:1;
+  const bm=t.match(/(?:до|за)\s*([\d\s]+)\s*(тыс|тыщ|к|тысяч)?/);
+  if(bm){const n=+bm[1].replace(/\s/g,'')*mul(bm[2]);params.priceMax=n;params.bud='до '+n.toLocaleString('ru-RU')+' ₽';}
+  const om=t.match(/(?:от|больше|свыше)\s*([\d\s]+)\s*(тыс|тыщ|к|тысяч)?/);
+  if(om){const n=+om[1].replace(/\s/g,'')*mul(om[2]);params.priceMin=n;params.bud='от '+n.toLocaleString('ru-RU')+' ₽';}
+  const rm=t.match(/([\d\s]+)\s*[-–]\s*([\d\s]+)\s*(тыс|тыщ|к|тысяч)?/);
+  if(rm&&!bm&&!om){const a=+rm[1].replace(/\s/g,'')*mul(rm[3]),b=+rm[2].replace(/\s/g,'')*mul(rm[3]);params.priceMin=Math.min(a,b);params.priceMax=Math.max(a,b);params.bud=Math.min(a,b).toLocaleString('ru-RU')+'–'+Math.max(a,b).toLocaleString('ru-RU')+' ₽';}
+
+  /* опечатки: «кампзицию» → «композицию»; неизвестные слова копим в базу */
+  params.fixes=[];
+  const tokens=t.replace(/[^а-яё\s-]/g,'').split(/\s+/).filter(w=>w.length>=4);
+  for(const tok of tokens){
+    if(KNOWN_SET.has(tok))continue;
+    const fix=fuzzyFix(tok);
+    if(fix){if(!params.fixes.some(f=>f.good===fix))params.fixes.push({bad:tok,good:fix});applyKeyword(fix,params);}
+    else logUnknown(tok);
   }
   return params;
 }
@@ -1018,71 +1022,56 @@ function refineRowHtml(){
 /* Главная функция — отправка сообщения */
 async function sendChat(){
   if(chatBusy)return;
-  const inp=$('chatInput');
-  const text=inp.value.trim();
-  if(!text)return;
-
-  addMessage('user',text);
-  inp.value='';
-  autoResize(inp);
-  chatBusy=true;
-  $('chatSendBtn').disabled=true;
-
+  const inp=$('chatInput');const text=inp.value.trim();if(!text)return;
+  addMessage('user',text);inp.value='';autoResize(inp);
+  chatBusy=true;$('chatSendBtn').disabled=true;
   track('chat_send',{text:text.length>80?text.slice(0,80):text});
-
   showTyping();
-
-  /* парсим запрос */
-  const newP=parseQuery(text);
-  const isRefinement=/дороже|дешевле|нежнее|пышнее|ярче|без\s|больше\s|с\s|минималистичнее/.test(text.toLowerCase()) && (chatParams.who||chatParams.occ||chatParams.bud);
-  let params;
-  if(isRefinement){
-    const changes=handleRefinement(text);
-    params=mergeParams(chatParams,changes);
-  }else{
-    params=mergeParams(chatParams,newP);
+  try{
+    const haveBouq=vBouquets.filter(b=>b.photo_url);
+    if(!haveBouq.length){
+      await new Promise(r=>setTimeout(r,700));
+      addMessage('bot','Я пока только учусь 🌱 Магазины подключаются, каталог наполняется — загляни через пару дней. А пока посмотри, какие салоны уже с нами:',
+        '<div class="refineRow"><button class="refineBtn" onclick="showTab(\'shops\')">'+ic('i-pin')+'магазины на карте</button><button class="refineBtn" onclick="showTab(\'shop\')">'+ic('i-home')+'каталог</button></div>');
+      return;
+    }
+    const newP=parseQuery(text);
+    const fixes=newP.fixes||[];
+    const isRefinement=/дороже|дешевле|нежнее|пышнее|ярче|без\s|больше\s|минималистичнее/.test(text.toLowerCase())&&(chatParams.who||chatParams.occ||chatParams.bud||chatParams.style);
+    chatParams=isRefinement?mergeParams(chatParams,handleRefinement(text)):mergeParams(chatParams,newP);
+    const params=chatParams;
+    await new Promise(r=>setTimeout(r,800+Math.random()*500));
+    const results=findBouquets(params);
+    const summary=[];
+    if(params.who)summary.push('для '+(WHO_GENITIVE[params.who]||params.who));
+    if(params.occ)summary.push(esc(params.occ));
+    if(params.bud)summary.push(esc(params.bud));
+    if(params.style)summary.push('в стиле «'+esc(params.style)+'»');
+    const ctx=summary.length?' ('+summary.join(' · ')+')':'';
+    let replyText,extra='';
+    if(fixes.length)addMessage('bot','Возможно, ты имел в виду: '+fixes.map(f=>'«'+esc(f.good)+'»').join(', ')+'. Учту 🙂');
+    if(!results.length){
+      replyText='Хм, под такие параметры пока ничего не нашлось 😔 Попробуй изменить запрос или сбрось условия:';
+      extra='<div class="refineRow"><button class="refineBtn" onclick="refineChat(\'дешевле\')">'+ic('i-wallet')+'дешевле</button><button class="refineBtn" onclick="refineChat(\'без роз\')">'+ic('i-x')+'без роз</button><button class="refineBtn" onclick="resetChatParams()">'+ic('i-refresh')+'сбросить запрос</button><button class="refineBtn" onclick="showTab(\'search\')">'+ic('i-search')+'весь каталог</button></div>';
+    }else{
+      const n=results.length;
+      const parsedAnything=params.who||params.occ||params.bud||params.style||params.include.length;
+      if(!parsedAnything)replyText='Покажу, что уже есть. Напиши, кому и по какому поводу — подберу точнее:';
+      else if(n===1)replyText='Нашёл идеальный вариант'+ctx+'. Вот он:';
+      else if(n<=3)replyText='Нашёл '+n+' варианта'+ctx+'. Вот лучшие:';
+      else replyText='Нашёл '+n+' подходящих букетов'+ctx+'. Покажу топ-4:';
+      extra='<div class="chatResults">'+results.slice(0,4).map(b=>chatCard(b)).join('')+'</div>'+refineRowHtml();
+      if(n>4)extra+='<div class="refineRow" style="margin-top:6px"><button class="refineBtn" onclick="showTab(\'search\')">'+ic('i-search')+'ещё '+(n-4)+' — открыть каталог</button></div>';
+    }
+    addMessage('bot',replyText,extra);
+  }catch(e){
+    console.error('chat error',e);
+    addMessage('bot','Ой, что-то я запутался 😅 Попробуй проще, например: «нежный букет маме до 3000».');
+  }finally{
+    hideTyping();chatBusy=false;$('chatSendBtn').disabled=false;saveChatHistory();
   }
-  chatParams=params;
-
-  /* имитация "размышления" */
-  await new Promise(r=>setTimeout(r,900+Math.random()*500));
-  hideTyping();
-
-  const results=findBouquets(params);
-
-  /* формируем ответ */
-  const summary=[];
-  if(params.who)summary.push('для '+esc(params.who));
-  if(params.occ)summary.push(esc(params.occ));
-  if(params.bud)summary.push(esc(params.bud));
-  if(params.style)summary.push('в стиле «'+esc(params.style)+'»');
-
-  let replyText;
-  if(results.length===0){
-    replyText='Хм, под эти параметры пока ничего не нашлось 😔';
-  }else if(results.length===1){
-    replyText='Нашёл идеальный вариант'+(summary.length?' ('+summary.join(' · ')+')':'')+'. Вот он:';
-  }else if(results.length<=3){
-    replyText='Нашёл '+results.length+' варианта'+(summary.length?' ('+summary.join(' · ')+')':'')+'. Вот лучшие:';
-  }else{
-    replyText='Нашёл '+results.length+' подходящих букетов'+(summary.length?' ('+summary.join(' · ')+')':'')+'. Покажу топ-4:';
-  }
-
-  const top=results.slice(0,4);
-  const cards=top.map(b=>chatCard(b)).join('');
-  const extra='<div class="chatResults">'+cards+'</div>'+refineRowHtml();
-  addMessage('bot',replyText,extra);
-
-  if(results.length>4){
-    setTimeout(()=>{
-      addMessage('bot','ещё '+(results.length-4)+' вариантов → можно посмотреть в полном каталоге','<div style="margin-top:4px"><button class="refineBtn" onclick="showTab(\'search\')">'+ic('i-search')+'открыть каталог</button></div>');
-    },300);
-  }
-
-  chatBusy=false;
-  $('chatSendBtn').disabled=false;
-  inp.focus();
 }
+function resetChatParams(){chatParams={who:'',occ:'',bud:'',style:'',exclude:[],include:[],priceMin:0,priceMax:Infinity};addMessage('bot','Начнём с чистого листа 🌸 Расскажи, какой букет ищем:');}
 
 /* Быстрые чипы */
 function quickChat(text){
@@ -1101,7 +1090,9 @@ function autoResize(el){
   el.style.height='auto';
   el.style.height=Math.min(el.scrollHeight,140)+'px';
 }
-
+function saveChatHistory(){try{const box=$('chatMessages');const clone=box.cloneNode(true);const tp=clone.querySelector('#typingMsg');if(tp)tp.remove();let nodes=[...clone.children];if(nodes.length>60)nodes.slice(0,nodes.length-60).forEach(n=>n.remove());localStorage.setItem('lep_chat_html',clone.innerHTML);}catch(e){}}
+function restoreChatHistory(){try{const h=localStorage.getItem('lep_chat_html');if(h&&h.trim())$('chatMessages').innerHTML=h;}catch(e){}}
+function clearChat(){localStorage.removeItem('lep_chat_html');$('chatMessages').innerHTML='';chatParams={who:'',occ:'',bud:'',style:'',exclude:[],include:[],priceMin:0,priceMax:Infinity};toast('Чат очищен','i-check');}
 /* Enter = отправить, Shift+Enter = новая строка */
 document.addEventListener('DOMContentLoaded',()=>{
   const inp=$('chatInput');
@@ -1221,9 +1212,28 @@ function lepestokScoreBadge(s){const score=getLepestokScore(s);if(!score)return 
 
 let shopsMap=null;let shopsMapMarkers=[];let shopsMapReady=false;const NOVOROSSIYSK_CENTER=[37.7680,44.7239];
 function validShopCoords(s){const lat=Number(s.latitude);const lon=Number(s.longitude);return Number.isFinite(lat)&&Number.isFinite(lon)&&lat!==0&&lon!==0;}
+function loadYmapsScript(){
+  return new Promise(res=>{
+    if(window.ymaps3)return res(true);
+    const ex=document.querySelector('script[src*="api-maps.yandex.ru"]');
+    const src=ex?ex.src:'https://api-maps.yandex.ru/v3/?lang=ru_RU';
+    const s=document.createElement('script');s.src=src;
+    s.onload=()=>res(!!window.ymaps3);
+    s.onerror=()=>res(false);
+    document.head.appendChild(s);
+    setTimeout(()=>res(!!window.ymaps3),8000);
+  });
+}
 async function initShopsMap(){
   const container=$('shopsMap');if(!container)return;
-  if(!window.ymaps3){container.innerHTML='<div class="empty" style="padding:90px 20px">'+ic('i-pin')+'Карта временно недоступна</div>';return;}
+  if(!window.ymaps3){
+    container.innerHTML='<div class="empty" style="padding:90px 20px">'+ic('i-clock')+'загружаю карту…</div>';
+    const ok=await loadYmapsScript();
+    if(!ok){
+      container.innerHTML='<div class="empty" style="padding:40px 18px">'+ic('i-pin')+'Карта не загрузилась<br><span style="font-size:11px;line-height:1.5">Яндекс не пустил ключ. В кабинете разработчика в поле «Ограничение по HTTP Referer» должны быть ровно две строки:<br><b>miclassic.github.io</b><br><b>localhost</b><br>Без https://, без портов и путей. И важно: из локального «предпросмотра» файла карта работать НЕ будет — проверяй вкладку «магазины» на GitHub Pages.</span></div>';
+      return;
+    }
+  }
   try{
     await ymaps3.ready;
     const {YMap,YMapDefaultSchemeLayer,YMapDefaultFeaturesLayer,YMapMarker}=ymaps3;
@@ -1432,7 +1442,7 @@ function renderVkPetals(){const box=$('vkFall');if(!box)return;const PETAL='<svg
 
 sb.auth.onAuthStateChange(()=>refreshMe());
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
-renderPetals();renderVkPetals();refreshMe();load();setTimeout(startTour,900);
+renderPetals();renderVkPetals();refreshMe();load();restoreChatHistory();setTimeout(startTour,900);
 </script>
 </body>
 </html>
