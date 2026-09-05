@@ -554,42 +554,51 @@ function openEditBouquet(id){
   $('bouqHead').textContent='Редактировать букет';
   $('bouqSaveBtn').textContent='Сохранить изменения';
 }
-/* ===== YandexGPT AI (диагностика + перебор) ===== */
+/* ===== AI: нейронка с автофолбэком ===== */
 const YA_FOLDER='b1gg2keram6ur6r9774q';
-const YA_NAMES=['yandexgpt-5-lite','alice-ai-llm','yandexgpt-5.1-pro'];
 async function yaComplete(prompt){
-  const log=[];
-  const attempts=[];
-  YA_NAMES.forEach(n=>{attempts.push(['ai_start',{prompt:prompt,model:n}]);const u='gpt://'+YA_FOLDER+'/'+n;attempts.push(['ai_start',{prompt:prompt,model:u}]);attempts.push(['ai_legacy',{prompt:prompt,uri:u}]);});
-  for(const a of attempts){
-    const lbl=(a[1].model||a[1].uri)+'@'+a[0];
-    const {data:rid,error:e1}=await sb.rpc(a[0],a[1]);
-    if(e1){log.push(lbl+': '+e1.message);continue;}
-    let done=false;
-    for(let i=0;i<12;i++){
-      await new Promise(r=>setTimeout(r,1000));
-      const {data,error}=await sb.rpc('ai_result',{req_id:rid});
-      if(error){log.push(lbl+': '+error.message);done=true;break;}
-      if(data)return data;
-    }
-    if(!done)log.push(lbl+': таймаут');
+  const {data:rid,error:e1}=await sb.rpc('ai_start',{prompt:prompt,model:'gpt://'+YA_FOLDER+'/yandexgpt-5-lite'});
+  if(e1)throw new Error(e1.message);
+  for(let i=0;i<10;i++){
+    await new Promise(r=>setTimeout(r,1000));
+    const {data,error}=await sb.rpc('ai_result',{req_id:rid});
+    if(error)throw new Error(error.message);
+    if(data)return data;
   }
-  alert('AI диагностика:\n'+log.join('\n'));
-  throw new Error('см. лог выше');
+  throw new Error('таймаут');
+}
+function localGen(t,p){
+  const low=String(t).toLowerCase();
+  const FL=[['роз','розы'],['пион','пионы'],['тюльпан','тюльпаны'],['хризантем','хризантемы'],['гортенз','гортензии'],['лили','лилии'],['георгин','георгины'],['ромаш','ромашки']];
+  const fl=FL.filter(x=>low.includes(x[0])).map(x=>x[1]);
+  const style=/нежн|бел|лаванд|пастель|облак|зефир/.test(low)?'нежный':/ярк|микс|сочн|красн/.test(low)?'яркий':'классический';
+  const who=[];
+  if(/маме|бабушк|жене/.test(low))who.push('маме');
+  if(/девушк|невест|любим/.test(low))who.push('девушке');
+  if(/подруг|коллеге|учител|воспитат/.test(low))who.push('коллеге');
+  if(!who.length)who.push('девушке','маме');
+  const cnt=(low.match(/(\d+)\s*(шт|роз|тюльпан|хризантем|пион|георгин)/)||[])[1];
+  const desc='«'+t+'» — '+style+' букет'+(cnt?' из '+cnt+' шт.':'')+' (состав: '+(fl.length?fl.join(', '):'сезонные цветы и зелень')+'). Собираем из свежей поставки, упаковываем в дизайнерскую плёнку и ленту. Отлично подойдёт: '+who.join(', ')+'. Стоит 7–10 дней при уходе.';
+  const tags=[...new Set([...who,style,...fl,p&&p<=2500?'до 2500':(p&&p<=4000?'2500-4000':'4000+'),'день рождения','просто так'])];
+  const category=low.includes('роз')?'розы':low.includes('тюльпан')?'тюльпаны':low.includes('хризантем')?'хризантемы':low.includes('пион')?'пионы':low.includes('лили')?'лилии':'сборный';
+  return {description:desc,tags:tags,category:category,fromLocal:true};
 }
 async function aiFillBouquet(){
   const t=$('fTitle').value.trim(),p=+$('fPrice').value;
   if(!t){toast('Сначала напиши название букета','i-x');return;}
   showLoader();
+  let j=null;
   try{
     const prompt='Ты флорист-маркетолог цветочного магазина. Для букета «'+t+'»'+(p?' за '+p+' ₽':'')+' верни СТРОГО JSON без пояснений: {"description":"вкусное описание 2-3 предложения: состав, настроение, кому подойдёт","tags":["5-7 тегов: кому, повод, стиль, цветы"],"category":"одно из: сборный, розы, тюльпаны, хризантемы, пионы, лилии, композиция"}';
-    const j=JSON.parse((await yaComplete(prompt)).replace(/```json|```/g,'').trim());
-    if(j.description)$('fDesc').value=j.description;
-    if(Array.isArray(j.tags)){j.tags.forEach(x=>{x=String(x).trim().toLowerCase();if(x&&!pickedTags.includes(x))pickedTags.push(x);});renderTagChips();}
-    if(j.category){pickedCat=String(j.category).trim().toLowerCase();refreshCatRow();}
-    toast('AI заполнил карточку ✨','i-wand');
-  }catch(e){toast('AI ошибка: '+e.message,'i-x');}
-  finally{hideLoader();}
+    j=JSON.parse((await yaComplete(prompt)).replace(/```json|```/g,'').trim());
+  }catch(e){}
+  if(!j||!j.description)j=localGen(t,p);
+  $('fDesc').value=j.description||'';
+  (j.tags||[]).forEach(x=>{x=String(x).trim().toLowerCase();if(x&&!pickedTags.includes(x))pickedTags.push(x);});
+  renderTagChips();
+  if(j.category){pickedCat=String(j.category).trim().toLowerCase();refreshCatRow();}
+  hideLoader();
+  toast(j.fromLocal?'✨ Заполнено автогенератором':'AI заполнил карточку ✨','i-wand');
 }
 function pickPhoto(inp){const f=inp.files[0];if(!f)return;pickedPhoto=f;const r=new FileReader();r.onload=e=>{$('fPrev').src=e.target.result;$('fPrevWrap').classList.remove('hidden');};r.readAsDataURL(f);}
 async function submitBouquet(){
