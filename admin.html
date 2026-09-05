@@ -874,12 +874,17 @@ function sRenderBouquets(){
   }).join(''):'<div class="empty">У продавца пока нет букетов 🌷</div>';
   box.innerHTML=addForm+list;
 }
-/* ===== YandexGPT AI (через Supabase-прокси) ===== */
+/* ===== YandexGPT AI (старт + опрос) ===== */
 async function yaComplete(prompt){
-  const {data,error}=await sb.rpc('ai_complete',{prompt:prompt});
-  if(error)throw new Error(error.message);
-  if(!data)throw new Error('пустой ответ от AI');
-  return data;
+  const {data:rid,error:e1}=await sb.rpc('ai_start',{prompt:prompt});
+  if(e1)throw new Error(e1.message);
+  for(let i=0;i<30;i++){
+    await new Promise(r=>setTimeout(r,1000));
+    const {data,error}=await sb.rpc('ai_result',{req_id:rid});
+    if(error)throw new Error(error.message);
+    if(data)return data;
+  }
+  throw new Error('AI думает слишком долго');
 }
 async function aiFillBouquet(){
   const t=$('fTitle').value.trim(),p=+$('fPrice').value;
