@@ -11,6 +11,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+<!-- Яндекс Карты JS API v3 -->
+<script src="https://api-maps.yandex.ru/v3/?apikey=a399b10b-a54f-46e4-9d1f-d0b578689b05&lang=ru_RU"></script>
 <style>
 :root{color-scheme:light;--bg:#FFF9F7;--card:#FFFFFF;--ink:#1A1A2E;--gray:#64748B;--red:#EF4444;--yel:#F59E0B;--grn:#10B981;--pink:#FF6B9D;--coral:#FF6B6B;--purple:#A855F7;--amber:#D97706;--gradient:linear-gradient(135deg,#FF6B6B 0%,#FF6B9D 50%,#A855F7 100%);--glass:rgba(255,255,255,.86);--shadow:0 8px 28px rgba(233,120,140,.12);--shadow-hover:0 14px 40px rgba(233,120,140,.2)}
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Playfair Display',system-ui,-apple-system,'Segoe UI',Roboto,serif;-webkit-tap-highlight-color:transparent}
@@ -261,6 +263,175 @@ main{padding:84px 16px calc(110px + env(safe-area-inset-bottom));max-width:620px
 .ctaGrad .icn{width:13px;height:13px}
 .fpill{flex:1;border:none;background:var(--card);border-radius:999px;padding:11px 4px;font-weight:700;font-size:12px;box-shadow:var(--shadow);white-space:nowrap;justify-content:center;display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--ink)}
 .fpill .icn{width:14px;height:14px;color:var(--gray)}
+
+/* ===== карта магазинов ===== */
+.mapCard{
+  background:var(--card);
+  border-radius:22px;
+  padding:8px;
+  box-shadow:var(--shadow);
+  margin:4px 0 14px;
+  overflow:hidden;
+}
+.mapHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:7px 8px 10px;
+}
+.mapHead b{
+  display:block;
+  font-size:13px;
+  font-weight:800;
+}
+.mapHead span{
+  display:block;
+  color:var(--gray);
+  font-size:9.5px;
+  margin-top:2px;
+}
+.mapHead button{
+  width:34px;
+  height:34px;
+  border:0;
+  border-radius:50%;
+  background:var(--bg);
+  color:var(--coral);
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,.06);
+}
+.mapHead button .icn{
+  width:16px;
+  height:16px;
+}
+#shopsMap{
+  width:100%;
+  height:330px;
+  border-radius:17px;
+  overflow:hidden;
+  background:#f4eeee;
+}
+.lepMapMarker{
+  width:42px;
+  height:42px;
+  border-radius:50% 50% 50% 8px;
+  transform:rotate(-45deg);
+  background:linear-gradient(135deg,#FF6B6B,#FF6B9D,#A855F7);
+  border:3px solid #fff;
+  box-shadow:0 7px 18px rgba(120,50,80,.3);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+.lepMapMarkerInner{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transform:rotate(45deg);
+  overflow:hidden;
+}
+.lepMapMarkerInner img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.lepMapMarkerInner .icn{
+  width:16px;
+  height:16px;
+  color:var(--coral);
+}
+.lepMapBubble{
+  position:absolute;
+  left:50%;
+  bottom:54px;
+  transform:translateX(-50%);
+  width:190px;
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(14px);
+  border-radius:17px;
+  padding:10px;
+  box-shadow:0 12px 35px rgba(30,20,30,.2);
+  display:none;
+  z-index:20;
+}
+.lepMapMarkerWrap{
+  position:relative;
+}
+.lepMapMarkerWrap.open{
+  z-index:100;
+}
+.lepMapMarkerWrap.open .lepMapBubble{
+  display:block;
+}
+.lepMapBubbleName{
+  font-size:12px;
+  font-weight:800;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.lepMapBubbleMeta{
+  color:var(--gray);
+  font-size:9px;
+  margin-top:3px;
+  line-height:1.4;
+}
+.lepMapBubbleScore{
+  margin-top:7px;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:4px 8px;
+  border-radius:999px;
+  background:rgba(255,107,107,.1);
+  color:var(--coral);
+  font-size:9px;
+  font-weight:800;
+}
+.lepMapBubbleBtn{
+  width:100%;
+  border:0;
+  border-radius:999px;
+  background:var(--gradient);
+  color:#fff;
+  padding:8px;
+  margin-top:8px;
+  font-size:10px;
+  font-weight:800;
+  cursor:pointer;
+}
+.lepScore{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:3px 7px;
+  border-radius:999px;
+  background:linear-gradient(120deg,#FFF3F1,#FFECEF);
+  color:var(--coral);
+  font-size:8.5px;
+  font-weight:800;
+  white-space:nowrap;
+}
+.lepScore .icn{
+  width:10px;
+  height:10px;
+}
+.shopLineScore{
+  margin-top:5px;
+}
+.externalRating{
+  color:var(--yel);
+  font-weight:800;
+}
+
 /* comments */
 .cmt{position:relative;background:var(--card);border-radius:16px;padding:10px 12px;font-size:14px;box-shadow:var(--shadow)}
 .cHead{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:3px;padding-right:24px}
@@ -483,9 +654,21 @@ main{padding:84px 16px calc(110px + env(safe-area-inset-bottom));max-width:620px
     <div class="filters" id="shopCities"></div>
     <div class="sortRow">
       <span class="sortLbl"><svg class="icn"><use href="#i-sort"/></svg>сортировать:</span>
-      <button class="sortPill on" data-sort="rating" onclick="setShopSort('rating')"><svg class="icn"><use href="#i-trend"/></svg>по рейтингу</button>
-      <button class="sortPill" data-sort="count" onclick="setShopSort('count')"><svg class="icn"><use href="#i-flower"/></svg>по количеству</button>
+      <button class="sortPill on" data-sort="rating" onclick="setShopSort('rating')"><svg class="icn"><use href="#i-spark"/></svg>по рекомендации</button>
+      <button class="sortPill" data-sort="count" onclick="setShopSort('count')"><svg class="icn"><use href="#i-flower"/></svg>по ассортименту</button>
       <button class="sortPill" data-sort="name" onclick="setShopSort('name')"><svg class="icn"><use href="#i-spark"/></svg>по алфавиту</button>
+    </div>
+    <div class="mapCard">
+      <div class="mapHead">
+        <div>
+          <b>Магазины на карте</b>
+          <span>выберите салон рядом с вами</span>
+        </div>
+        <button onclick="fitShopsMap()" title="Показать все">
+          <svg class="icn"><use href="#i-pin"></use></svg>
+        </button>
+      </div>
+      <div id="shopsMap"></div>
     </div>
     <div id="shopsList"></div>
   </section>
@@ -645,16 +828,49 @@ function shopReviewsCount(s){
   return comments.filter(c=>bids.includes(c.bouquet_id)&&!c.parent_id).length;
 }
 function renderShopsRow(){
-  const row=$('shopsRow');if(!row)return;
-  row.innerHTML=vShops.length?vShops.map((s,i)=>{
-    const r=shopRating(s),rc=shopReviewsCount(s),cnt=shopCount(s);
-    return '<div class="shopMini" style="animation-delay:'+(i*60)+'ms" onclick="openShopPage('+s.id+')">'+
-      '<div class="ava">'+(s.logo_url?'<img src="'+s.logo_url+'">':ic('i-shop'))+'</div>'+
-      '<div class="nm">'+esc(s.name)+(isVerified(s)?verifiedBadge():'')+'</div>'+
-      (r?'<div class="ct"><b>★ '+r.toFixed(1)+'</b> ('+rc+' отзывов)</div>':'')+
-      (s.delivery_min?'<div class="ct">'+ic('i-truck')+'доставка от '+s.delivery_min+' мин</div>':'')+
-      '<div class="ct">'+ic('i-flower')+cnt+' '+pluralBouq(cnt)+'</div></div>';
-  }).join(''):'<div class="empty" style="width:100%">'+ic('i-shop')+'Магазины <span class="cityEcho">'+esc(city)+'</span> скоро появятся</div>';
+  const row=$('shopsRow');
+  if(!row)return;
+  const list=[...vShops].sort((a,b)=>getLepestokScore(b)-getLepestokScore(a)).slice(0,6);
+  row.innerHTML=list.length?
+    list.map((s,i)=>{
+      const extRating=getExternalRating(s);
+      const extReviews=getExternalReviews(s);
+      const cnt=shopCount(s);
+      return `
+        <div class="shopMini"
+             style="animation-delay:${i*60}ms"
+             onclick="openShopPage(${s.id})">
+          <div class="ava">
+            ${s.logo_url ? '<img src="'+s.logo_url+'">' : ic('i-shop')}
+          </div>
+          <div class="nm">
+            ${esc(s.name)}
+            ${isVerified(s)?verifiedBadge():''}
+          </div>
+          ${extRating ?
+            '<div class="ct">'+
+            '<b>★ '+extRating.toFixed(1)+'</b>'+
+            ' ('+extReviews+')'+
+            '</div>'
+          :''}
+          <div class="ct">
+            ${ic('i-flower')}
+            ${cnt} ${pluralBouq(cnt)}
+          </div>
+          <div>
+            ${lepestokScoreBadge(s)}
+          </div>
+        </div>
+      `;
+    }).join('')
+    :
+    '<div class="empty" style="width:100%">'+
+    ic('i-shop')+
+    'Магазины '+
+    '<span class="cityEcho">'+
+    esc(city)+
+    '</span> скоро появятся'+
+    '</div>';
 }
 /* ===== квиз главная ===== */
 const MQ_OPTS={
@@ -774,6 +990,201 @@ function shopRating(s){
   if(!rc.length)return 0;
   return rc.reduce((a,c)=>a+c.rating,0)/rc.length;
 }
+
+/* ===== LEPESTOK SCORE ===== */
+function getExternalRating(s){
+  const r=Number(s.rating_external||0);
+  return r>=0&&r<=5?r:0;
+}
+function getExternalReviews(s){
+  return Math.max(0,Number(s.reviews_external||0));
+}
+function getReputationScore(s){
+  const rating=getExternalRating(s);
+  const reviews=getExternalReviews(s);
+  if(!rating || !reviews)return 0;
+  let score=0;
+  if(rating>=4.9)score+=15;
+  else if(rating>=4.7)score+=13;
+  else if(rating>=4.5)score+=10;
+  else if(rating>=4.2)score+=7;
+  else if(rating>=4.0)score+=4;
+  if(reviews>=300)score+=10;
+  else if(reviews>=100)score+=8;
+  else if(reviews>=50)score+=6;
+  else if(reviews>=20)score+=4;
+  else if(reviews>=10)score+=2;
+  else score+=1;
+  return score;
+}
+function getAssortmentScore(s){
+  const count=shopCount(s);
+  let score=0;
+  if(count>=10)score+=10;
+  else if(count>=5)score+=7;
+  else if(count>=2)score+=4;
+  else if(count===1)score+=2;
+  const items=bouquets.filter(b=>b.user_id===s.owner_id && b.photo_url);
+  const withPrice=items.filter(b=>Number(b.price)>0).length;
+  const withTags=items.filter(b=>getTags(b).length>0).length;
+  if(withPrice>=Math.min(5,items.length))score+=5;
+  else if(withPrice>0)score+=3;
+  if(withTags>=Math.min(5,items.length))score+=3;
+  else if(withTags>0)score+=1;
+  if(items.some(b=>b.photo_url))score+=2;
+  return Math.min(score,20);
+}
+function getFreshnessScore(s){
+  let score=0;
+  if(!s.catalog_updated_at)return 0;
+  const updated=new Date(s.catalog_updated_at);
+  if(Number.isNaN(updated.getTime()))return 0;
+  const days=(Date.now()-updated.getTime())/86400000;
+  if(days<=7)score+=10;
+  else if(days<=14)score+=7;
+  else if(days<=30)score+=4;
+  else if(days<=60)score+=2;
+  const items=bouquets.filter(b=>b.user_id===s.owner_id);
+  if(items.some(b=>Number(b.price)>0))score+=5;
+  if(items.some(b=>typeof b.in_stock==='boolean'))score+=5;
+  return Math.min(score,20);
+}
+function getOrderScore(s){
+  let score=0;
+  if(s.telegram)score+=5;
+  if(s.website)score+=3;
+  if(s.phone)score+=2;
+  if(s.delivery_min)score+=2;
+  return Math.min(score,15);
+}
+function getPageScore(s){
+  let score=0;
+  if(s.logo_url)score+=2;
+  if(s.address)score+=2;
+  if(s.description)score+=2;
+  if(s.delivery_min)score+=2;
+  if(s.website||s.telegram||s.phone)score+=2;
+  return Math.min(score,10);
+}
+function getTrustScore(s){
+  let score=0;
+  if(s.verified)score+=5;
+  if(s.verified_at)score+=2;
+  if(s.address)score+=1;
+  if(shopCount(s)>0)score+=2;
+  return Math.min(score,10);
+}
+function getLepestokScore(s){
+  const total=
+    getReputationScore(s)+
+    getAssortmentScore(s)+
+    getFreshnessScore(s)+
+    getOrderScore(s)+
+    getPageScore(s)+
+    getTrustScore(s);
+  return Math.round(Math.max(0,Math.min(100,total)));
+}
+function lepestokScoreBadge(s){
+  const score=getLepestokScore(s);
+  if(!score)return '';
+  return '<span class="lepScore">'+ic('i-spark')+'Lepestok '+score+'</span>';
+}
+
+/* ===== LEPESTOK MAP ===== */
+let shopsMap=null;
+let shopsMapMarkers=[];
+let shopsMapReady=false;
+const NOVOROSSIYSK_CENTER=[37.7680,44.7239];
+
+function validShopCoords(s){
+  const lat=Number(s.latitude);
+  const lon=Number(s.longitude);
+  return Number.isFinite(lat)&&Number.isFinite(lon)&&lat!==0&&lon!==0;
+}
+
+async function initShopsMap(){
+  const container=$('shopsMap');
+  if(!container)return;
+  if(!window.ymaps3){
+    container.innerHTML='<div class="empty" style="padding:90px 20px">'+ic('i-pin')+'Карта временно недоступна</div>';
+    return;
+  }
+  try{
+    await ymaps3.ready;
+    const {YMap,YMapDefaultSchemeLayer,YMapDefaultFeaturesLayer,YMapMarker}=ymaps3;
+    if(shopsMap){try{shopsMap.destroy();}catch(e){}shopsMap=null;shopsMapMarkers=[];}
+    const list=vShops.filter(validShopCoords);
+    if(!list.length){
+      container.innerHTML='<div class="empty" style="padding:90px 20px">'+ic('i-pin')+'У магазинов пока нет координат</div>';
+      return;
+    }
+    container.innerHTML='';
+    const first=list[0];
+    shopsMap=new YMap(container,{location:{center:[Number(first.longitude),Number(first.latitude)],zoom:list.length===1?15:12}});
+    shopsMap.addChild(new YMapDefaultSchemeLayer());
+    shopsMap.addChild(new YMapDefaultFeaturesLayer({zIndex:1800}));
+    list.forEach(shop=>{
+      const wrap=document.createElement('div');
+      wrap.className='lepMapMarkerWrap';
+      const marker=document.createElement('div');
+      marker.className='lepMapMarker';
+      const inner=document.createElement('div');
+      inner.className='lepMapMarkerInner';
+      if(shop.logo_url){const img=document.createElement('img');img.src=shop.logo_url;img.alt='';inner.appendChild(img);}
+      else{inner.innerHTML=ic('i-shop');}
+      marker.appendChild(inner);
+      const bubble=document.createElement('div');
+      bubble.className='lepMapBubble';
+      const extRating=getExternalRating(shop);
+      const extReviews=getExternalReviews(shop);
+      const score=getLepestokScore(shop);
+      bubble.innerHTML=
+        '<div class="lepMapBubbleName">'+esc(shop.name)+'</div>'+
+        '<div class="lepMapBubbleMeta">'+(shop.address?esc(shop.address):'Новороссийск')+'</div>'+
+        (extRating?'<div class="lepMapBubbleMeta"><span class="externalRating">★ '+extRating.toFixed(1)+'</span> · '+extReviews+' оценок</div>':'')+
+        (score?'<div class="lepMapBubbleScore">'+ic('i-spark')+'Lepestok Score '+score+'</div>':'')+
+        '<button class="lepMapBubbleBtn" onclick="event.stopPropagation();openShopPage('+shop.id+')">Открыть магазин</button>';
+      wrap.appendChild(marker);
+      wrap.appendChild(bubble);
+      marker.addEventListener('click',e=>{
+        e.stopPropagation();
+        document.querySelectorAll('.lepMapMarkerWrap.open').forEach(x=>x.classList.remove('open'));
+        wrap.classList.add('open');
+        track('map_shop_click',{shop_id:shop.id});
+      });
+      const ymMarker=new YMapMarker({coordinates:[Number(shop.longitude),Number(shop.latitude)],zIndex:score||1},wrap);
+      shopsMap.addChild(ymMarker);
+      shopsMapMarkers.push(ymMarker);
+    });
+    shopsMapReady=true;
+  }catch(e){
+    console.error('Lepestok map error',e);
+    container.innerHTML='<div class="empty" style="padding:90px 20px">'+ic('i-pin')+'Не удалось загрузить карту</div>';
+  }
+}
+
+function fitShopsMap(){
+  if(!shopsMap||!shopsMapReady)return;
+  const list=vShops.filter(validShopCoords);
+  if(!list.length)return;
+  if(list.length===1){shopsMap.setLocation({center:[Number(list[0].longitude),Number(list[0].latitude)],zoom:15});return;}
+  const lats=list.map(s=>Number(s.latitude));
+  const lons=list.map(s=>Number(s.longitude));
+  const minLat=Math.min(...lats);
+  const maxLat=Math.max(...lats);
+  const minLon=Math.min(...lons);
+  const maxLon=Math.max(...lons);
+  const center=[(minLon+maxLon)/2,(minLat+maxLat)/2];
+  const maxDiff=Math.max(maxLat-minLat,maxLon-minLon);
+  let zoom=12;
+  if(maxDiff<0.005)zoom=15;
+  else if(maxDiff<0.01)zoom=14;
+  else if(maxDiff<0.03)zoom=13;
+  else if(maxDiff<0.07)zoom=12;
+  else zoom=11;
+  shopsMap.setLocation({center,zoom});
+}
+
 function shopCount(s){return bouquets.filter(b=>b.user_id===s.owner_id&&b.photo_url).length;}
 function isVerified(s){return !!(s.verified);}
 function verifiedBadge(){return '<span class="verifiedBadge">'+ic('i-check')+'проверено</span>';}
@@ -782,21 +1193,50 @@ function setShopSort(s){shopSort=s;localStorage.setItem('lep_shop_sort',s);docum
 function renderShopsTab(){
   const cities=[...new Set(shops.map(s=>(s.city||DEFAULT_CITY).trim()))];
   if(shopCityFilter!=='all'&&!cities.includes(shopCityFilter))shopCityFilter='all';
-  $('shopCities').innerHTML='<button class="filter'+(shopCityFilter==='all'?' on':'')+'" onclick="setShopCity(\'all\')">'+ic('i-pin')+'Все города</button>'+cities.map(c=>'<button class="filter'+(shopCityFilter===c?' on':'')+'" onclick="setShopCity(\''+esc(c)+'\')">'+esc(c)+'</button>').join('');
+  $('shopCities').innerHTML=
+    '<button class="filter'+(shopCityFilter==='all'?' on':'')+'" onclick="setShopCity(\'all\')">'+ic('i-pin')+'Все города</button>'+
+    cities.map(c=>'<button class="filter'+(shopCityFilter===c?' on':'')+'" onclick="setShopCity(\''+esc(c)+'\')">'+esc(c)+'</button>').join('');
   let list=shops.filter(s=>shopCityFilter==='all'||(s.city||DEFAULT_CITY)===shopCityFilter);
   list=[...list].sort((a,b)=>{
-    if(shopSort==='rating')return shopRating(b)-shopRating(a);
+    if(shopSort==='rating')return getLepestokScore(b)-getLepestokScore(a);
     if(shopSort==='count')return shopCount(b)-shopCount(a);
     return String(a.name||'').localeCompare(String(b.name||''),'ru');
   });
-  $('shopsList').innerHTML=list.length?list.map(s=>{
-    const r=shopRating(s),cnt=shopCount(s),rc=shopReviewsCount(s);
-    return '<div class="shopLine" onclick="openShopPage('+s.id+')">'+
-      '<div class="shopLineAva">'+(s.logo_url?'<img src="'+s.logo_url+'">':ic('i-shop'))+'</div>'+
-      '<div class="shopLineBody"><div class="shopLineName">'+esc(s.name)+(isVerified(s)?verifiedBadge():'')+'</div>'+
-      '<div class="shopLineMeta">'+ic('i-pin')+esc(s.city||DEFAULT_CITY)+' · '+cnt+' '+pluralBouq(cnt)+(r?' · ★ '+r.toFixed(1)+' ('+rc+')':'')+'</div></div>'+
-      '<div class="shopLineR">'+ic('i-chevR')+'</div></div>';
-  }).join(''):'<div class="empty">'+ic('i-shop')+'В этом городе магазинов пока нет.<br>Загляни позже</div>';
+  $('shopsList').innerHTML=list.length?
+    list.map(s=>{
+      const cnt=shopCount(s);
+      const extRating=getExternalRating(s);
+      const extReviews=getExternalReviews(s);
+      return `
+        <div class="shopLine" onclick="openShopPage(${s.id})">
+          <div class="shopLineAva">
+            ${s.logo_url ? '<img src="'+s.logo_url+'">' : ic('i-shop')}
+          </div>
+          <div class="shopLineBody">
+            <div class="shopLineName">
+              ${esc(s.name)}
+              ${isVerified(s)?verifiedBadge():''}
+            </div>
+            <div class="shopLineMeta">
+              ${ic('i-pin')}
+              ${esc(s.city||DEFAULT_CITY)}
+              ·
+              ${cnt} ${pluralBouq(cnt)}
+              ${extRating ? ' · <span class="externalRating">★ '+extRating.toFixed(1)+' ('+extReviews+')</span>' : ''}
+            </div>
+            <div class="shopLineScore">
+              ${lepestokScoreBadge(s)}
+            </div>
+          </div>
+          <div class="shopLineR">
+            ${ic('i-chevR')}
+          </div>
+        </div>
+      `;
+    }).join('')
+    :
+    '<div class="empty">'+ic('i-shop')+'В этом городе магазинов пока нет.<br>Загляни позже</div>';
+  if(shopCityFilter==='all'||shopCityFilter===city){requestAnimationFrame(()=>{initShopsMap();});}
 }
 function shopLeadButtons(s){
   const btns=[];
@@ -813,11 +1253,23 @@ function openShopPage(id){
   ['shop','search','fav','profile','shops'].forEach(k=>$('tab-'+k).classList.add('hidden'));
   $('shopPage').classList.remove('hidden');
   document.querySelectorAll('.bnav .bn').forEach(b=>b.classList.remove('on'));
-  const r=shopRating(s),rc=shopReviewsCount(s);
+  
+  const r=shopRating(s);
+  const rc=shopReviewsCount(s);
+  const extRating=getExternalRating(s);
+  const extReviews=getExternalReviews(s);
+  const lepScore=getLepestokScore(s);
+  
   $('shopPageHead').innerHTML=
     '<div class="spAva">'+(s.logo_url?'<img src="'+s.logo_url+'">':ic('i-flower'))+'</div>'+
     '<div class="spName">'+esc(s.name)+(isVerified(s)?verifiedBadge():'')+'</div>'+
-    '<div class="spMeta">'+(r?'<span class="lpRate">'+ic('i-star')+r.toFixed(1)+'</span> · ':'')+'<span>'+rc+' отзывов</span></div>'+
+    '<div class="spMeta">'+
+      (extRating
+        ? '<span class="lpRate">'+ic('i-star')+extRating.toFixed(1)+'</span> · '+extReviews+' оценок'+(s.rating_source?' · '+esc(s.rating_source):'')
+        : 'нет внешнего рейтинга'
+      )+
+      (lepScore?' · '+lepestokScoreBadge(s):'')+
+    '</div>'+
     '<div class="spInfo">'+
       '<div class="spRow">'+ic('i-pin')+esc(s.city||DEFAULT_CITY)+(s.address?', '+esc(s.address):'')+'</div>'+
       (s.phone?'<div class="spRow"><a href="tel:'+String(s.phone).replace(/\D/g,'')+'" onclick="trackLead(\'phone\','+s.id+')">'+ic('i-phone')+esc(s.phone)+'</a></div>':'')+
