@@ -699,7 +699,7 @@ function richText(t){return String(t||'').split(/\n+/).map(p=>esc(p)).join('<br>
 function fmtPrice(p){return String(p).replace(/\B(?=(\d{3})+(?!\d))/g,' ')+' ₽';}
 function toast(m,icon){const t=$('toast');t.innerHTML=(icon?ic(icon):'')+esc(m);t.classList.remove('hidden');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('hidden'),2600);}
 function handleSBError(error,ctx){if(!error)return;let msg=error.message||'Неизвестная ошибка';if(/row-level security/i.test(msg))msg='Нет доступа';toast((ctx?ctx+': ':'')+msg);}
-function closeSheet(id){$(id).classList.add('hidden');}
+function closeSheet(id){$(id).classList.add('hidden');if(id==='cardSheet')history.replaceState(null,'','#'+curTab);}
 function openSheet(id){$(id).classList.remove('hidden');}
 function brandTap(){brandTaps++;clearTimeout(brandTimer);brandTimer=setTimeout(()=>brandTaps=0,1500);if(brandTaps>=5){brandTaps=0;if(isAdmin())location.href='admin.html';else if(myFlorist)location.href='seller.html';else toast('Кабинет продавца доступен только продавцам');}}
 
@@ -722,6 +722,7 @@ function pickCity(c,el){city=c;localStorage.setItem('lep_city',c);document.query
 
 function showTab(t){
   try{
+    history.replaceState(null,'','#'+t);
     ['chat','shop','search','fav','profile','shops'].forEach(k=>{const el=$('tab-'+k);if(el)el.classList.toggle('hidden',k!==t);});
     const sp=$('shopPage');if(sp)sp.classList.add('hidden');
     curTab=t;
@@ -1240,6 +1241,7 @@ function tagsHtml(b){const t=getTags(b);if(!t.length)return'';const show=t.slice
 function expandCardTags(id){const b=bouquets.find(x=>x.id===id);const el=$('cardTags');if(!b||!el)return;el.innerHTML=getTags(b).map(x=>'<span class="tagChip">'+esc(x)+'</span>').join('');}
 function openCard(id){
   const b=bouquets.find(x=>x.id===id);if(!b)return;curB=b;
+  history.replaceState(null,'','#bouquet/'+id);
   track('view',{bouquet_id:id,tags:getTags(b),price:b.price,category:b.category});
   const img=b.photo_url?'<div style="position:relative"><img src="'+b.photo_url+'" decoding="async" style="width:100%;max-height:320px;object-fit:cover;border-radius:16px"><div class="priceSpin big"><span class="priceSpinIn">'+fmtPrice(b.price)+'</span></div></div>':'';
   const r=avgRating(b.id);const shop=shopOf(b);let lead='';
@@ -1492,7 +1494,19 @@ function renderChips(){
   setTimeout(()=>{box.innerHTML=set.map(c=>'<button class="chatChip" onclick="quickChat(\''+c.q+'\')">'+ic(c.i)+esc(c.t)+'</button>').join('');box.classList.remove('swap');},620);
 }
 function startChipsRotation(){clearInterval(chipTimer);renderChips();chipTimer=setInterval(renderChips,10000);}
-renderPetals();renderVkPetals();refreshMe();load();restoreChatHistory();setTimeout(startTour,900);startLiveSearch();startChipsRotation();
+function handleHash(){
+  const h=location.hash.replace('#','');
+  if(!h||h==='chat'){showTab('chat');return;}
+  if(h.startsWith('bouquet/')){
+    const id=+h.split('/')[1];
+    if(id&&bouquets.find(b=>b.id===id)){showTab('chat');setTimeout(()=>openCard(id),100);}
+    return;
+  }
+  if(['chat','shop','search','fav','profile','shops'].includes(h)){showTab(h);return;}
+  showTab('chat');
+}
+window.addEventListener('hashchange',handleHash);
+renderPetals();renderVkPetals();refreshMe();load();restoreChatHistory();setTimeout(()=>{startTour();handleHash();},900);startLiveSearch();startChipsRotation();
 </script>
 </body>
 </html>
