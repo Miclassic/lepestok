@@ -25,7 +25,7 @@ body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle
 .petal{position:absolute;top:-6%;opacity:.35;animation:fall linear infinite}
 .petal svg{width:100%;height:100%}
 @keyframes fall{to{transform:translateY(112vh) rotate(340deg)}}
-.topbar{position:fixed;top:0;left:0;right:0;z-index:20;background:var(--glass);backdrop-filter:blur(20px) saturate(1.8);-webkit-backdrop-filter:blur(20px) saturate(1.8);box-shadow:0 4px 24px rgba(120,60,70,.07)}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:20;background:linear-gradient(180deg,rgba(255,253,250,.96),rgba(255,253,250,.82));backdrop-filter:blur(16px) saturate(1.6);-webkit-backdrop-filter:blur(16px) saturate(1.6);box-shadow:none}
 .topbarIn{max-width:620px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px 8px}
 .brand{display:flex;align-items:center;gap:7px;user-select:none;cursor:pointer;flex:none}
 .brand .icn{width:22px;height:22px;color:var(--coral);animation:pulse 2s ease-in-out infinite}
@@ -42,7 +42,7 @@ body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle
 .bn .icn{width:19px;height:19px}
 .bn.on{color:var(--ink)}
 .bn.on::after{content:"";position:absolute;left:26%;right:26%;bottom:4px;height:2px;border-radius:999px;background:var(--gradient);box-shadow:0 0 10px rgba(255,107,107,.5)}
-main{padding:72px 16px calc(90px + env(safe-area-inset-bottom));max-width:620px;width:100%;margin:0 auto;position:relative;z-index:1}
+main{padding:72px 16px calc(120px + env(safe-area-inset-bottom));max-width:620px;width:100%;margin:0 auto;position:relative;z-index:1}
 .chatWrap{display:flex;flex-direction:column;min-height:calc(100vh - 170px);gap:14px}
 .chatHero{text-align:center;padding:14px 8px 4px;animation:fadeInUp .7s ease}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
@@ -50,10 +50,23 @@ main{padding:72px 16px calc(90px + env(safe-area-inset-bottom));max-width:620px;
 .chatTitle{font-size:26px;font-weight:800;letter-spacing:.3px;line-height:1.2}
 .chatTitle em{font-style:normal;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .chatSub{font-size:12px;color:var(--gray);margin-top:6px;line-height:1.5}
-.chatInput{background:var(--card);border-radius:22px;padding:6px;box-shadow:var(--shadow);display:flex;align-items:flex-end;gap:4px;position:sticky;bottom:calc(80px + env(safe-area-inset-bottom));z-index:10;border:2px solid transparent;transition:border-color .2s}
+.chatInput{background:var(--card);border-radius:22px;padding:6px;box-shadow:var(--shadow);display:flex;align-items:flex-end;gap:4px;border:2px solid transparent;transition:border-color .2s}
+.chatInput.docked{position:fixed;left:16px;right:16px;bottom:calc(10px + env(safe-area-inset-bottom));max-width:588px;margin:0 auto;z-index:30}
+#tab-chat.has-msgs .chatChips{display:none}
+.menuFloat{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:31;display:none!important}
+.menuFloat.show{display:grid!important}
+.menuBtn{width:42px;height:42px;border:none;border-radius:50%;background:var(--card);color:var(--coral);display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px rgba(255,107,107,.25);flex:none;border:1.5px solid rgba(255,107,107,.3);transition:transform .15s}
+.menuBtn:active{transform:scale(.92)}
+.menuBtn .icn{width:19px;height:19px}
+#menuPop{position:fixed;left:16px;right:16px;bottom:calc(92px + env(safe-area-inset-bottom));max-width:588px;margin:0 auto;background:var(--card);border-radius:20px;box-shadow:0 18px 50px rgba(120,50,80,.22);padding:8px;z-index:40;animation:rise .25s ease}
+.menuItem{display:flex;align-items:center;gap:12px;width:100%;border:none;background:none;padding:12px 14px;border-radius:14px;font-size:13.5px;font-weight:700;color:var(--ink);cursor:pointer;font-family:inherit}
+.menuItem .icn{width:17px;height:17px;color:var(--coral);flex:none}
+.menuItem.on{background:linear-gradient(120deg,#FFF3F1,#FFECEF)}
+.menuItem.on .icn{color:var(--purple)}
 .chatInput:focus-within{border-color:rgba(255,107,107,.3)}
 .chatInput textarea{flex:1;border:none;outline:none;background:transparent;font-size:14px;padding:10px 10px;resize:none;min-height:42px;max-height:140px;font-family:inherit;color:var(--ink);line-height:1.45}
 .chatInput textarea::placeholder{color:var(--gray);opacity:.75;font-size:11.5px;letter-spacing:.2px}
+.chatInput textarea:placeholder-shown{text-align:center}
 .chatSend{width:42px;height:42px;border:none;border-radius:50%;background:var(--gradient);color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px rgba(255,107,107,.4);flex:none;transition:transform .15s}
 .chatSend:active{transform:scale(.92)}
 .chatSend:disabled{opacity:.4;cursor:not-allowed}
@@ -274,6 +287,9 @@ main{padding:72px 16px calc(90px + env(safe-area-inset-bottom));max-width:620px;
 .sortRow .sortPill.on{background:var(--gradient);color:#fff}
 .pageHead{margin:2px 2px 14px}
 .pageHead h1{font-size:24px;font-weight:800;display:flex;align-items:center;gap:8px}
+.pageHead .hIco{width:22px;height:22px;color:var(--pink);flex:none}
+.pageHead.center h1{justify-content:center}
+.pageHead.center p{text-align:center}
 .pageHead p{color:var(--gray);font-size:12.5px;line-height:1.5;margin-top:5px}
 .filters{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding:2px 24px 6px 0;scrollbar-width:none}
 .filters::-webkit-scrollbar{display:none}
@@ -459,9 +475,10 @@ main{padding:72px 16px calc(90px + env(safe-area-inset-bottom));max-width:620px;
         <div class="chatSub">расскажи своими словами — подберу лучшие варианты <span class="cityEcho">Новороссийска</span></div>
       </div>
       <div class="chatMessages" id="chatMessages"></div>
-      <div class="chatInput">
+      <div class="chatInput" id="chatInputBox">
         <textarea id="chatInput" placeholder="нежный букет девушке до 3000 ₽…" rows="1" oninput="autoResize(this)"></textarea>
         <button class="chatSend" id="chatSendBtn" onclick="sendChat()"><svg class="icn"><use href="#i-send"/></svg></button>
+        <button class="menuBtn" onclick="toggleMenu()" aria-label="меню"><svg class="icn"><use href="#i-gear"/></svg></button>
       </div>
       <div class="chatChips">
         <button class="chatChip" onclick="quickChat('девушке')"><svg class="icn"><use href="#i-heart"/></svg>девушке</button>
@@ -577,13 +594,16 @@ main{padding:72px 16px calc(90px + env(safe-area-inset-bottom));max-width:620px;
   </section>
 </main>
 
-<nav class="bnav">
-  <button class="bn on" data-t="chat" onclick="showTab('chat')"><svg class="icn"><use href="#i-spark"/></svg>чат</button>
-  <button class="bn" data-t="shop" onclick="showTab('shop')"><svg class="icn"><use href="#i-home"/></svg>каталог</button>
-  <button class="bn" data-t="shops" onclick="showTab('shops')"><svg class="icn"><use href="#i-shop"/></svg>магазины</button>
-  <button class="bn" data-t="fav" onclick="showTab('fav')"><svg class="icn"><use href="#i-heart"/></svg>избранное</button>
-  <button class="bn" data-t="profile" onclick="showTab('profile')"><svg class="icn"><use href="#i-user"/></svg>профиль</button>
-</nav>
+<button class="menuBtn menuFloat" id="menuFloatBtn" onclick="toggleMenu()" aria-label="меню"><svg class="icn"><use href="#i-gear"/></svg></button>
+<div id="menuPop" class="hidden">
+  <button class="menuItem" data-t="chat" onclick="menuGo('chat')"><svg class="icn"><use href="#i-spark"/></svg>чат</button>
+  <button class="menuItem" data-t="shop" onclick="menuGo('shop')"><svg class="icn"><use href="#i-home"/></svg>каталог</button>
+  <button class="menuItem" data-t="shops" onclick="menuGo('shops')"><svg class="icn"><use href="#i-shop"/></svg>магазины</button>
+  <button class="menuItem" data-t="fav" onclick="menuGo('fav')"><svg class="icn"><use href="#i-heart"/></svg>избранное</button>
+  <button class="menuItem" data-t="profile" onclick="menuGo('profile')"><svg class="icn"><use href="#i-user"/></svg>профиль</button>
+  <div style="height:1px;background:rgba(255,107,107,.15);margin:6px 10px"></div>
+  <button class="menuItem" onclick="closeMenu();clearChat();showTab('chat')"><svg class="icn"><use href="#i-refresh"/></svg>новый чат</button>
+</div>
 
 <div id="auth" class="hidden">
   <div class="authBox">
@@ -633,6 +653,17 @@ let device=localStorage.getItem('lep_device');
 if(!device){device='d'+Math.random().toString(36).slice(2)+Date.now();localStorage.setItem('lep_device',device);}
 let chatParams={who:'',occ:'',bud:'',style:'',exclude:[],include:[],priceMin:0,priceMax:Infinity};
 let chatBusy=false;
+let curTab='chat';
+function toggleMenu(){$('menuPop').classList.toggle('hidden');}
+function closeMenu(){$('menuPop').classList.add('hidden');}
+function menuGo(t){closeMenu();showTab(t);}
+function updateDock(){
+  const box=$('chatInputBox');if(!box)return;
+  const hasMsgs=$('chatMessages').children.length>0;
+  box.classList.toggle('docked',hasMsgs);
+  $('tab-chat').classList.toggle('has-msgs',hasMsgs);
+}
+document.addEventListener('click',e=>{const p=$('menuPop');if(p&&!p.classList.contains('hidden')&&!e.target.closest('#menuPop')&&!e.target.closest('.menuBtn'))closeMenu();});
 
 function showLoader(){$('loader').classList.remove('hidden');}
 function hideLoader(){$('loader').classList.add('hidden');}
@@ -673,7 +704,10 @@ function showTab(t){
   try{
     ['chat','shop','search','fav','profile','shops'].forEach(k=>{const el=$('tab-'+k);if(el)el.classList.toggle('hidden',k!==t);});
     const sp=$('shopPage');if(sp)sp.classList.add('hidden');
-    document.querySelectorAll('.bnav .bn').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+    curTab=t;
+    updateDock();
+    const mf=$('menuFloatBtn');if(mf)mf.classList.toggle('show',t!=='chat');
+    document.querySelectorAll('#menuPop .menuItem').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
     if(t==='shop')renderShopTab();
     if(t==='search')renderSearch();
     if(t==='fav')renderFav();
@@ -892,6 +926,7 @@ function addMessage(role,text,extra=''){
   div.innerHTML='<div class="avt '+(role==='user'?'usr':'bot')+'">'+avtIcon+'</div><div class="msgBody"><div class="msgBubble">'+esc(text)+'</div>'+extra+'</div>';
   box.appendChild(div);
   window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+  updateDock();
   return div;
 }
 function showTyping(){
@@ -929,6 +964,7 @@ function refineRowHtml(){
 async function sendChat(){
   if(chatBusy)return;
   const inp=$('chatInput');const text=inp.value.trim();if(!text)return;
+  if(curTab!=='chat')showTab('chat');
   addMessage('user',text);inp.value='';autoResize(inp);
   chatBusy=true;$('chatSendBtn').disabled=true;
   track('chat_send',{text:text.length>80?text.slice(0,80):text});
@@ -981,8 +1017,8 @@ function quickChat(text){$('chatInput').value=text;sendChat();}
 function refineChat(cmd){$('chatInput').value=cmd;sendChat();}
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,140)+'px';}
 function saveChatHistory(){try{const box=$('chatMessages');const clone=box.cloneNode(true);const tp=clone.querySelector('#typingMsg');if(tp)tp.remove();let nodes=[...clone.children];if(nodes.length>60)nodes.slice(0,nodes.length-60).forEach(n=>n.remove());localStorage.setItem('lep_chat_html',clone.innerHTML);}catch(e){}}
-function restoreChatHistory(){try{const h=localStorage.getItem('lep_chat_html');if(h&&h.trim())$('chatMessages').innerHTML=h;}catch(e){}}
-function clearChat(){localStorage.removeItem('lep_chat_html');$('chatMessages').innerHTML='';chatParams={who:'',occ:'',bud:'',style:'',exclude:[],include:[],priceMin:0,priceMax:Infinity};toast('Чат очищен','i-check');}
+function restoreChatHistory(){try{const h=localStorage.getItem('lep_chat_html');if(h&&h.trim())$('chatMessages').innerHTML=h;updateDock();}catch(e){}}
+function clearChat(){localStorage.removeItem('lep_chat_html');$('chatMessages').innerHTML='';updateDock();chatParams={who:'',occ:'',bud:'',style:'',exclude:[],include:[],priceMin:0,priceMax:Infinity};toast('Чат очищен','i-check');}
 document.addEventListener('DOMContentLoaded',()=>{const inp=$('chatInput');if(inp){inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}});}});
 
 function runPick(who,occ,bud,style){
@@ -1159,7 +1195,9 @@ function openShopPage(id){
   track('shop_view',{shop_id:id});
   ['chat','shop','search','fav','profile','shops'].forEach(k=>{const el=$('tab-'+k);if(el)el.classList.add('hidden');});
   $('shopPage').classList.remove('hidden');
-  document.querySelectorAll('.bnav .bn').forEach(b=>b.classList.remove('on'));
+  curTab='shopPage';
+  const mf=$('menuFloatBtn');if(mf)mf.classList.add('show');
+  document.querySelectorAll('#menuPop .menuItem').forEach(b=>b.classList.remove('on'));
   const extRating=getExternalRating(s);const extReviews=getExternalReviews(s);const lepScore=getLepestokScore(s);
   $('shopPageHead').innerHTML='<div class="spAva">'+(s.logo_url?'<img src="'+s.logo_url+'">':ic('i-flower'))+'</div><div class="spName">'+esc(s.name)+(isVerified(s)?verifiedBadge():'')+'</div><div class="spMeta">'+(extRating?'<span class="lpRate">'+ic('i-star')+extRating.toFixed(1)+'</span> · '+extReviews+' оценок'+(s.rating_source?' · '+esc(s.rating_source):''):'нет внешнего рейтинга')+(lepScore?' · '+lepestokScoreBadge(s):'')+'</div><div class="spInfo"><div class="spRow">'+ic('i-pin')+esc(s.city||DEFAULT_CITY)+(s.address?', '+esc(s.address):'')+'</div>'+(s.phone?'<div class="spRow"><a href="tel:'+String(s.phone).replace(/\D/g,'')+'" onclick="trackLead(\'phone\','+s.id+')">'+ic('i-phone')+esc(s.phone)+'</a></div>':'')+(s.telegram?'<div class="spRow"><a href="https://t.me/'+esc(String(s.telegram).replace(/^@/,''))+'" target="_blank" rel="noopener" onclick="trackLead(\'telegram\','+s.id+')">'+ic('i-telegram')+'@'+esc(String(s.telegram).replace(/^@/,''))+'</a></div>':'')+(s.delivery_min?'<div class="spRow">'+ic('i-truck')+'Доставка от '+s.delivery_min+' мин</div>':'')+'</div>'+(s.description?'<div class="spDesc">'+richText(s.description)+'</div>':'')+shopLeadButtons(s)+'<div class="spOwnerBox"><b>Владелец этого магазина?</b><br>Управляйте страницей бесплатно — напишите нам, подтвердим профиль</div>';
   const list=bouquets.filter(b=>b.user_id===s.owner_id&&b.photo_url);
@@ -1259,7 +1297,7 @@ async function sendComment(bouquetId){
     let photo_url=null;const pf=cmtPhotoFiles['ci_'+bouquetId];
     if(pf){const path=me.id+'/cmt_'+Date.now()+'.jpg';const up=await sb.storage.from('bouquets').upload(path,pf,{contentType:pf.type});if(up.error){handleSBError(up.error,'Фото');return;}photo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;}
     const{error}=await sb.from('bouquet_comments').insert({bouquet_id:bouquetId,text:t,rating,photo_url,user_id:me.id,user_nick:me.user_metadata?.nick||me.email?.split('@')[0]||'аноним',status:'approved',parent_id:replyTo?replyTo.id:null});
-    inp.value='';cmtPhotoFiles['ci_'+bouquetId']=null;const pw=$('cprev_ci_'+bouquetId);if(pw)pw.classList.add('hidden');
+    inp.value='';cmtPhotoFiles['ci_'+bouquetId]=null;const pw=$('cprev_ci_'+bouquetId);if(pw)pw.classList.add('hidden');
     if(error){handleSBError(error,'Комментарий');return;}
     clearReply();await reloadComments(bouquetId);toast('Комментарий опубликован','i-check');track('comment');
   }finally{hideLoader();}
@@ -1297,7 +1335,7 @@ async function doAuth(){
 const TOUR_STEPS=[
   {sel:'#chatInput',title:'Напиши своими словами',text:'Расскажи, какой букет нужен: для кого, повод, бюджет — подберу лучшие варианты',pos:'bottom'},
   {sel:'.chatChips',title:'Быстрые подсказки',text:'Или тапни по готовым вариантам, если не знаешь, что написать',pos:'top'},
-  {sel:'.bnav',title:'Другие разделы',text:'Каталог, магазины, избранное — всё под рукой внизу',pos:'top'}
+  {sel:'.menuBtn',title:'Меню разделов',text:'Каталог, магазины, избранное и профиль — в фирменной кнопке рядом с отправкой',pos:'top'}
 ];
 let tourStep=0;
 function startTour(){
