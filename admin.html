@@ -874,25 +874,28 @@ function sRenderBouquets(){
   }).join(''):'<div class="empty">У продавца пока нет букетов 🌷</div>';
   box.innerHTML=addForm+list;
 }
-/* ===== YandexGPT AI (два эндпоинта + перебор моделей) ===== */
+/* ===== YandexGPT AI (диагностика + перебор) ===== */
 const YA_FOLDER='b1gg2keram6ur6r9774q';
-const YA_NAMES=['yandexgpt-5-lite','yandexgpt-5.1-pro','yandexgpt-4-lite','alice-ai-llm-flash','alice-ai-llm','qwen3.6-35b','qwen3-6-35b','deepseek-4-flash'];
+const YA_NAMES=['yandexgpt-5-lite','alice-ai-llm','yandexgpt-5.1-pro'];
 async function yaComplete(prompt){
+  const log=[];
   const attempts=[];
-  YA_NAMES.forEach(n=>{const u='gpt://'+YA_FOLDER+'/'+n;attempts.push(['ai_start',{prompt:prompt,model:u}]);attempts.push(['ai_legacy',{prompt:prompt,uri:u}]);});
-  YA_NAMES.forEach(n=>attempts.push(['ai_start',{prompt:prompt,model:n}]));
-  let lastErr='';
+  YA_NAMES.forEach(n=>{attempts.push(['ai_start',{prompt:prompt,model:n}]);const u='gpt://'+YA_FOLDER+'/'+n;attempts.push(['ai_start',{prompt:prompt,model:u}]);attempts.push(['ai_legacy',{prompt:prompt,uri:u}]);});
   for(const a of attempts){
+    const lbl=(a[1].model||a[1].uri)+'@'+a[0];
     const {data:rid,error:e1}=await sb.rpc(a[0],a[1]);
-    if(e1){lastErr=e1.message;continue;}
-    for(let i=0;i<15;i++){
+    if(e1){log.push(lbl+': '+e1.message);continue;}
+    let done=false;
+    for(let i=0;i<12;i++){
       await new Promise(r=>setTimeout(r,1000));
       const {data,error}=await sb.rpc('ai_result',{req_id:rid});
-      if(error){lastErr=error.message;break;}
+      if(error){log.push(lbl+': '+error.message);done=true;break;}
       if(data)return data;
     }
+    if(!done)log.push(lbl+': таймаут');
   }
-  throw new Error(lastErr||'AI недоступен');
+  alert('AI диагностика:\n'+log.join('\n'));
+  throw new Error('см. лог выше');
 }
 async function aiFillBouquet(){
   const t=$('fTitle').value.trim(),p=+$('fPrice').value;
