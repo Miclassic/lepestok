@@ -874,17 +874,24 @@ function sRenderBouquets(){
   }).join(''):'<div class="empty">У продавца пока нет букетов 🌷</div>';
   box.innerHTML=addForm+list;
 }
-/* ===== YandexGPT AI (старт + опрос) ===== */
+/* ===== YandexGPT AI (старт + опрос + автоподбор модели) ===== */
+const YA_FALLBACK=['yandexgpt-lite','yandexgpt-5.1-lite','yandexgpt-5.1-pro','qwen3-35b','qwen3.6-35b','alice-ai-llm'];
 async function yaComplete(prompt){
-  const {data:rid,error:e1}=await sb.rpc('ai_start',{prompt:prompt});
-  if(e1)throw new Error(e1.message);
-  for(let i=0;i<30;i++){
-    await new Promise(r=>setTimeout(r,1000));
-    const {data,error}=await sb.rpc('ai_result',{req_id:rid});
-    if(error)throw new Error(error.message);
-    if(data)return data;
+  let models=[];
+  try{const {data}=await sb.rpc('ai_models');if(data){const j=JSON.parse(data);models=(j.data||[]).map(x=>x.id).filter(Boolean);}}catch(e){}
+  if(!models.length)models=YA_FALLBACK;
+  let lastErr='';
+  for(const m of models){
+    const {data:rid,error:e1}=await sb.rpc('ai_start',{prompt:prompt,model:m});
+    if(e1){lastErr=e1.message;continue;}
+    for(let i=0;i<20;i++){
+      await new Promise(r=>setTimeout(r,1000));
+      const {data,error}=await sb.rpc('ai_result',{req_id:rid});
+      if(error){lastErr=error.message;break;}
+      if(data)return data;
+    }
   }
-  throw new Error('AI думает слишком долго');
+  throw new Error(lastErr||'AI недоступен');
 }
 async function aiFillBouquet(){
   const t=$('fTitle').value.trim(),p=+$('fPrice').value;
