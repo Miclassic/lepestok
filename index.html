@@ -890,7 +890,6 @@ async function llmParse(text){
   return JSON.parse((await yaComplete(prompt)).replace(/```json|```/g,'').trim());
 }
 function parseQuery(text){
-function parseQuery(text){
   const t=text.toLowerCase();
   const params={who:'',occ:'',bud:'',style:'',include:[],exclude:[],priceMin:0,priceMax:Infinity,fixes:[]};
   for(const k in WHO_KEYWORDS){if(t.includes(k)){params.who=WHO_KEYWORDS[k];break;}}
