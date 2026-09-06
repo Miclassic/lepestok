@@ -869,6 +869,10 @@ const FLOWER_KEYWORDS={
 };
 const NEG_WORDS=['без','кроме','исключая'];
 const flowerStem=x=>x.replace(/(ями|ами|ы|и)$/,'');
+const COUNT_WORDS={роз:'розы',тюльпан:'тюльпаны',пион:'пионы',хризантем:'хризантемы',лилий:'лилии',гортензий:'гортензии',орхидей:'орхидеи',ромашек:'ромашки',цвет:'цветы',стеб:'цветы'};
+const COUNT_RE=/(\d+)\s*(роз[аыуоюйе]?|тюльпан[аовые]?|пион[аовые]?|хризантем[аыуе]?|лилий|лилии|гортензий|гортензии|орхидей|орхидеи|ромашек|ромашки|цвет(?:ок|ка|ков)|стеб(?:ель|ля|лей))/;
+function pluralN(n,f){const m=n%10,h=n%100;if(m===1&&h!==11)return f[0];if(m>=2&&m<=4&&(h<12||h>14))return f[1];return f[2];}
+function bouquetCount(b){const hay=(b.title+' '+(b.description||'')+' '+getTags(b).join(' ')).toLowerCase();const m=hay.match(COUNT_RE);return m?+m[1]:0;}
 const BASE_WORDS=['букет','букета','букетик','букеты','цветы','цветов','цветочный','композиция','композицию','композиции','хочу','ищу','нужен','нужно','найди','найти','покажи','показать','подбери','подобрать','подарить','подарок','выбрать','ищем','сегодня','какой','что','чем','можно','пожалуйста','недорогой','недорого','руб','рублей','тыс','тыщ','тысяч','до','от','за','около','больше','меньше','без','из','на','для','кому','красивый','красивые','большой','маленький','нежная','нежное'];
 const KNOWN_WORDS=BASE_WORDS.concat(Object.keys(WHO_KEYWORDS),Object.values(WHO_KEYWORDS),Object.keys(OCC_KEYWORDS),Object.values(OCC_KEYWORDS),Object.keys(STYLE_KEYWORDS),Object.values(STYLE_KEYWORDS),Object.keys(FLOWER_KEYWORDS),Object.values(FLOWER_KEYWORDS));
 const KNOWN_SET=new Set(KNOWN_WORDS);
@@ -893,12 +897,14 @@ async function llmParse(text){
 }
 function parseQuery(text){
   const t=text.toLowerCase();
-  const params={who:'',occ:'',bud:'',style:'',include:[],exclude:[],priceMin:0,priceMax:Infinity,fixes:[]};
+  const params={who:'',occ:'',bud:'',style:'',include:[],exclude:[],priceMin:0,priceMax:Infinity,fixes:[],count:0,countRaw:'',countFlower:''};
   for(const k in WHO_KEYWORDS){if(t.includes(k)){params.who=WHO_KEYWORDS[k];break;}}
   for(const k in OCC_KEYWORDS){if(t.includes(k)){params.occ=OCC_KEYWORDS[k];break;}}
   for(const k in STYLE_KEYWORDS){if(t.includes(k)){params.style=STYLE_KEYWORDS[k];break;}}
   for(const k in FLOWER_KEYWORDS){if(t.includes(k))params.include.push(FLOWER_KEYWORDS[k]);}
   for(const k in FLOWER_KEYWORDS){const st=flowerStem(k);if(NEG_WORDS.some(w=>t.includes(w+' '+st)))params.exclude.push(FLOWER_KEYWORDS[k]);}
+  const cm=t.match(COUNT_RE);
+  if(cm){params.count=+cm[1];params.countRaw=cm[0].trim();for(const cw in COUNT_WORDS){if(cm[2].startsWith(cw)){params.countFlower=COUNT_WORDS[cw];break;}}}
   const mul=s=>(s==='тыс'||s==='тыщ'||s==='к'||s==='тысяч')?1000:1;
   const bm=t.match(/(?:до|за)\s*([\d\s]+)\s*(тыс|тыщ|к|тысяч)?/);
   if(bm){const n=+bm[1].replace(/\s/g,'')*mul(bm[2]);params.priceMax=n;params.bud='до '+n.toLocaleString('ru-RU')+' ₽';}
@@ -928,6 +934,9 @@ function mergeParams(oldP,newP){
     occ:newP.occ||oldP.occ,
     bud:newP.bud||oldP.bud,
     style:newP.style||oldP.style,
+    count:newP.count||oldP.count,
+    countRaw:newP.countRaw||oldP.countRaw,
+    countFlower:newP.countFlower||oldP.countFlower,
     include:[...oldP.include,...(newP.include||[])].filter((v,i,a)=>a.indexOf(v)===i),
     exclude:[...oldP.exclude,...(newP.exclude||[])].filter((v,i,a)=>a.indexOf(v)===i).filter(v=>!(newP.dropExclude||[]).includes(v)),
     priceMin:newP.priceMin||oldP.priceMin,
@@ -967,6 +976,7 @@ function findBouquets(p){
     for(const w of want){if(tags.some(t=>t.includes(w)||w.includes(t)))score++;}
     return{b,score};
   }).filter(x=>x.score>0||want.length===0).sort((a,b)=>b.score-a.score).map(x=>x.b);
+  if(p.count){fit=fit.sort((a,b)=>{const ca=bouquetCount(a),cb=bouquetCount(b);const da=ca?Math.abs(ca-p.count):1e9;const db=cb?Math.abs(cb-p.count):1e9;return da-db;});}
   return fit;
 }
 function addMessage(role,text,extra=''){
@@ -1000,7 +1010,7 @@ function chatCard(b){
       (shop?'<span class="shopChip" onclick="event.stopPropagation();openShopPage('+shop.id+')">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':ic('i-shop'))+'<span class="nm">'+esc(shop.name)+'</span></span>':'')+
     '</div>'+
     '<div class="lpName"><span class="t">'+esc(b.title)+'</span>'+(r?'<span class="lpRate">'+ic('i-star')+r.toFixed(1)+'</span>':'')+'</div>'+
-    '<div class="lpComp">'+esc(b.category||'')+'</div>'+
+    '<div class="lpComp">'+(bouquetCount(b)?bouquetCount(b)+' '+pluralN(bouquetCount(b),['стебель','стебля','стеблей'])+' · ':'')+esc(b.category||'')+'</div>'+
     '<div class="lpFoot"><span class="lpPrice">'+fmtPrice(b.price)+'</span></div>'+
     '<div class="chatCta">'+ic('i-arrow')+'хочу этот — где заказать?</div>'+
   '</div>';
@@ -1070,6 +1080,7 @@ async function sendChat(){
     if(params.occ)summary.push('**'+esc(params.occ)+'**');
     if(params.bud)summary.push('**'+esc(params.bud)+'**');
     if(params.style)summary.push('в стиле «**'+esc(params.style)+'**»');
+    if(params.count)summary.push('из **'+esc(params.countRaw)+'**');
     const ctx=summary.length?' ('+summary.join(' · ')+')':'';
     let replyText='',extra='';
     const realFixes=fixes.filter(f=>!f.style);
@@ -1089,6 +1100,11 @@ async function sendChat(){
         replyText='Подобрал **'+n+'** классных варианта'+ctx+'. Вот они:';
       }else{
         replyText='Нашёл много подходящих букетов'+ctx+'. Вот **топ-'+Math.min(4,n)+'**, на мой взгляд:';
+      }
+      if(params.count){
+        const exact=results.filter(b=>bouquetCount(b)===params.count);
+        if(exact.length){replyText='Нашёл букеты ровно из **'+esc(params.countRaw)+'**'+ctx+'. Вот они:';}
+        else replyText+=' Только букетов ровно из **'+esc(params.countRaw)+'** в каталоге сейчас нет — показал ближайшие по составу и бюджету: флорист соберёт нужное количество под заказ, контакты — в карточке.';
       }
       extra='<div class="chatResults">'+results.slice(0,4).map(b=>chatCard(b)).join('')+'</div><div class="chatHint">нажми на карточку — открою детали и контакты магазина, где можно заказать 🌷</div>'+refineRowHtml(results);
       if(n>4)extra+='<div class="refineRow" style="border:none;padding-top:6px"><button class="refineBtn" onclick="showTab(\'search\')">'+ic('i-search')+'посмотреть все '+n+' вариантов</button></div>';
@@ -1177,7 +1193,7 @@ function lpCard(b,i){
       (shop?'<span class="shopChip" onclick="event.stopPropagation();openShopPage('+shop.id+')">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':ic('i-shop'))+'<span class="nm">'+esc(shop.name)+'</span></span>':'')+
     '</div>'+
     '<div class="lpName"><span class="t">'+esc(b.title)+'</span>'+(r?'<span class="lpRate">'+ic('i-star')+r.toFixed(1)+'</span>':'')+'</div>'+
-    (b.category?'<div class="lpComp">'+esc(b.category)+'</div>':'')+
+    ((b.category||bouquetCount(b))?'<div class="lpComp">'+(bouquetCount(b)?bouquetCount(b)+' '+pluralN(bouquetCount(b),['стебель','стебля','стеблей'])+' · ':'')+esc(b.category||'')+'</div>':'')+
     '<div class="lpFoot"><span class="lpPrice">'+fmtPrice(b.price)+'</span><span class="stockPill '+(b.in_stock?'in':'out')+'">'+ic(b.in_stock?'i-check':'i-clock')+(b.in_stock?'в наличии':'под заказ')+'</span></div>'+
     '<div class="lpActs"><button onclick="event.stopPropagation();likeBouquet('+b.id+')">'+ic('i-heart')+'<span>'+likes+'</span></button>'+
     '<button onclick="event.stopPropagation();openComments('+b.id+')">'+ic('i-comment')+'<span>'+cms+'</span></button>'+
@@ -1304,7 +1320,7 @@ function openCard(id){
   const img=b.photo_url?'<div style="position:relative"><img src="'+b.photo_url+'" decoding="async" style="width:100%;max-height:320px;object-fit:cover;border-radius:16px"><div class="priceSpin big"><span class="priceSpinIn">'+fmtPrice(b.price)+'</span></div></div>':'';
   const r=avgRating(b.id);const shop=shopOf(b);let lead='';
   if(shop){const btns=[];if(shop.phone)btns.push('<a href="tel:'+String(shop.phone).replace(/\D/g,'')+'" onclick="trackLead(\'phone\','+shop.id+')">'+ic('i-phone')+'Позвонить</a>');if(shop.telegram)btns.push('<a class="telegram" href="https://t.me/'+esc(String(shop.telegram).replace(/^@/,''))+'" target="_blank" rel="noopener" onclick="trackLead(\'telegram\','+shop.id+')">'+ic('i-telegram')+'Telegram</a>');if(shop.website)btns.push('<a href="'+esc(shop.website)+'" target="_blank" rel="noopener" onclick="trackLead(\'web\','+shop.id+')">'+ic('i-globe')+'Сайт</a>');if(shop.map_link)btns.push('<a href="'+esc(shop.map_link)+'" target="_blank" rel="noopener" onclick="trackLead(\'map\','+shop.id+')">'+ic('i-pin')+'Карта</a>');lead='<div class="cardLeadBox"><h4>'+ic('i-arrow')+'Заказать в «'+esc(shop.name)+'»</h4><div class="shopLine" style="margin:0" onclick="closeSheet(\'cardSheet\');openShopPage('+shop.id+')"><div class="shopLineAva">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':ic('i-shop'))+'</div><div class="shopLineBody"><div class="shopLineName">'+esc(shop.name)+(isVerified(shop)?verifiedBadge():'')+'</div><div class="shopLineMeta">'+ic('i-pin')+esc(shop.city||DEFAULT_CITY)+'</div></div>'+ic('i-chevR')+'</div>'+(btns.length?'<div class="cardLeadGrid">'+btns.join('')+'</div>':'')+'</div>';}
-  $('cardBody').innerHTML=img+(shop?'<div class="shopWrap" style="margin-top:10px"><div class="floralHalo"></div><div class="shopRow" onclick="closeSheet(\'cardSheet\');openShopPage('+shop.id+')">'+(shop.logo_url?'<img class="shopLogo" src="'+shop.logo_url+'">':ic('i-shop'))+esc(shop.name)+'</div></div>':'')+'<h3 style="margin-top:6px">'+esc(b.title)+(r?' <span style="color:var(--yel);display:inline-flex;align-items:center;gap:3px">'+ic('i-star')+r.toFixed(1)+'</span>':'')+'</h3><div class="lpFoot" style="margin-top:6px;justify-content:flex-start;gap:10px">'+(b.photo_url?'':'<span class="lpPrice" style="font-size:18px">'+fmtPrice(b.price)+'</span>')+'<span class="stockPill '+(b.in_stock?'in':'out')+'">'+ic(b.in_stock?'i-check':'i-clock')+(b.in_stock?'В наличии':'Под заказ')+'</span>'+(b.category?'<span class="lpComp">'+esc(b.category)+'</span>':'')+'</div><div style="margin-top:10px;font-size:14px;line-height:1.5">'+richText(b.description||'')+'</div>'+tagsHtml(b)+lead+'<button class="sheetIn .btn soft" style="border:none;border-radius:999px;padding:13px;font-weight:800;font-size:14px;cursor:pointer;width:100%;margin-top:10px;background:var(--bg);color:var(--ink)" onclick="shareBouquet('+b.id+')">'+ic('i-share')+'Поделиться</button><button style="border:none;border-radius:999px;padding:13px;font-weight:800;font-size:14px;cursor:pointer;width:100%;margin-top:10px;background:var(--bg);color:var(--ink)" onclick="closeSheet(\'cardSheet\')">Закрыть</button>';
+  $('cardBody').innerHTML=img+(shop?'<div class="shopWrap" style="margin-top:10px"><div class="floralHalo"></div><div class="shopRow" onclick="closeSheet(\'cardSheet\');openShopPage('+shop.id+')">'+(shop.logo_url?'<img class="shopLogo" src="'+shop.logo_url+'">':ic('i-shop'))+esc(shop.name)+'</div></div>':'')+'<h3 style="margin-top:6px">'+esc(b.title)+(r?' <span style="color:var(--yel);display:inline-flex;align-items:center;gap:3px">'+ic('i-star')+r.toFixed(1)+'</span>':'')+'</h3><div class="lpFoot" style="margin-top:6px;justify-content:flex-start;gap:10px">'+(b.photo_url?'':'<span class="lpPrice" style="font-size:18px">'+fmtPrice(b.price)+'</span>')+'<span class="stockPill '+(b.in_stock?'in':'out')+'">'+ic(b.in_stock?'i-check':'i-clock')+(b.in_stock?'В наличии':'Под заказ')+'</span>'+(bouquetCount(b)?'<span class="stockPill in">'+ic('i-flower')+bouquetCount(b)+' '+pluralN(bouquetCount(b),['стебель','стебля','стеблей'])+'</span>':'')+(b.category?'<span class="lpComp">'+esc(b.category)+'</span>':'')+'</div><div style="margin-top:10px;font-size:14px;line-height:1.5">'+richText(b.description||'')+'</div>'+tagsHtml(b)+lead+'<button class="sheetIn .btn soft" style="border:none;border-radius:999px;padding:13px;font-weight:800;font-size:14px;cursor:pointer;width:100%;margin-top:10px;background:var(--bg);color:var(--ink)" onclick="shareBouquet('+b.id+')">'+ic('i-share')+'Поделиться</button><button style="border:none;border-radius:999px;padding:13px;font-weight:800;font-size:14px;cursor:pointer;width:100%;margin-top:10px;background:var(--bg);color:var(--ink)" onclick="closeSheet(\'cardSheet\')">Закрыть</button>';
   openSheet('cardSheet');
 }
 let favBusy=false;
