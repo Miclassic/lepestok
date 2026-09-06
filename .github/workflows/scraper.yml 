@@ -1,0 +1,22 @@
+name: scraper
+on:
+  schedule:
+    - cron: '17 * * * *'   # каждый час; скрипт сам решит, кого пора проверять
+  workflow_dispatch:        # кнопка "Run workflow" с телефона
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: scraper
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm i --no-audit --no-fund
+      - name: scrape
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scraper.mjs
