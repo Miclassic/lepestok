@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лепесток · сборщик</title>
+<link href="https://fonts.cdnfonts.com/css/opposans" rel="stylesheet">
+<style>
+:root{--bg:#FFF7F5;--card:#fff;--ink:#1A1A2E;--gray:#94A3B8;--red:#EF4444;--grn:#10B981;--yel:#F59E0B;--coral:#FF6B6B;--gradient:linear-gradient(135deg,#FF6B6B,#FF6B9D 50%,#A855F7 100%);--shadow:0 6px 20px rgba(120,60,10,.08)}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'OPPO Sans',system-ui,sans-serif}
+body{background:linear-gradient(160deg,#FFF7F5,#FFEDEB 45%,#F6ECFF);color:var(--ink);min-height:100vh;padding:16px 14px 40px}
+.box{max-width:620px;margin:0 auto}
+h1{font-size:17px;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
+.sub{font-size:11px;color:var(--gray);margin-bottom:12px}
+.card{background:var(--card);border-radius:18px;padding:12px;box-shadow:var(--shadow);margin-bottom:10px}
+input,select{width:100%;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:11px;font-size:14px;margin-bottom:8px;font-family:inherit}
+.btn{width:100%;background:var(--gradient);color:#fff;border:none;border-radius:999px;padding:12px;font-weight:800;font-size:13px;cursor:pointer}
+.btn.soft{background:var(--bg);color:var(--ink)}
+.row{display:flex;gap:6px;flex-wrap:wrap}
+.row button{flex:1;border:none;border-radius:999px;padding:9px 6px;font-weight:700;font-size:11px;cursor:pointer;white-space:nowrap}
+.ok{background:rgba(16,185,129,.14);color:#059669}.no{background:#FFF1F0;color:var(--red)}.day{background:var(--gradient);color:#fff}.info{background:rgba(245,158,11,.16);color:#D97706}
+.srcHead{display:flex;align-items:center;gap:8px;font-weight:800;font-size:13px}
+.dot{width:9px;height:9px;border-radius:50%;flex:none}
+.meta{font-size:10.5px;color:var(--gray);margin-top:3px;line-height:1.5}
+.meta b{color:var(--coral)}
+.err{color:var(--red);font-size:10.5px;margin-top:3px}
+.secT{font-size:13px;font-weight:800;margin:14px 2px 8px;display:flex;align-items:center;gap:6px}
+.chRow{display:flex;gap:8px;font-size:11.5px;padding:6px 0;border-bottom:1px dashed rgba(255,107,107,.12);line-height:1.4}
+.chRow .ic{flex:none}
+.hidden{display:none!important}
+#toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(30,41,59,.95);color:#F1F5F9;border:2px solid rgba(255,107,107,.4);border-radius:16px;padding:12px 20px;font-weight:700;font-size:13px;max-width:82vw;z-index:99;text-align:center}
+.loader{position:fixed;inset:0;z-index:200;background:rgba(255,255,255,.7);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center}
+.spin{width:42px;height:42px;border:3px solid rgba(255,107,107,.2);border-top-color:var(--coral);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>ЛЕПЕСТОК · СБОРЩИК</h1>
+<div class="sub" id="who"></div>
+<div id="loginBox" class="card hidden">
+  <input id="email" type="email" placeholder="Email админа">
+  <input id="pass" type="password" placeholder="Пароль">
+  <button class="btn" onclick="doLogin()">Войти</button>
+  <div id="loginErr" style="color:var(--red);font-size:12px;margin-top:6px"></div>
+</div>
+<div id="panel" class="hidden">
+  <div class="card">
+    <div style="font-weight:800;font-size:12px;margin-bottom:8px">➕ Добавить магазин-источник</div>
+    <input id="srcUrl" placeholder="https://сайт-магазина.ru/">
+    <select id="srcShop"></select>
+    <input id="srcNewShop" placeholder="…или имя нового магазина" class="hidden">
+    <div class="row"><button class="day" onclick="addSource()">Начать сбор</button></div>
+  </div>
+  <div class="secT">🟢 Источники</div>
+  <div id="srcList"></div>
+  <div class="secT">⚠ Требует внимания</div>
+  <div id="issueList"></div>
+  <div class="secT">🔄 Последние изменения</div>
+  <div class="card" id="chList"></div>
+  <button class="btn soft" style="margin-top:10px" onclick="logout()">Выйти</button>
+</div>
+</div>
+<div id="toast" class="hidden"></div>
+<div id="loader" class="loader hidden"><div class="spin"></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const sb=supabase.createClient('https://dhwkkbtrhexywymegwoo.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRod2trYnRyaGV4eXd5bWVnd29vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMDUxODMsImV4cCI6MjEwMzc4MTE4M30.NAyY4dCeRRC2OznENuNCfvr-mKqACyMU61K-y-PkRIQ');
+const ADMIN_EMAIL='artixz18@gmail.com';
+const DEFAULT_CITY='Новороссийск';
+let sources=[],shops=[],changes=[],jobs=[];
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('hidden'),2600);}
+function showLoader(){$('loader').classList.remove('hidden');}
+function hideLoader(){$('loader').classList.add('hidden');}
+function ago(t){if(!t)return 'никогда';const m=Math.round((Date.now()-new Date(t))/60000);if(m<1)return 'только что';if(m<60)return m+' мин назад';const h=Math.round(m/60);if(h<48)return h+' ч назад';return Math.round(h/24)+' дн назад';}
+async function boot(){
+  const {data}=await sb.auth.getSession();
+  if(data.session&&String(data.session.user.email||'').toLowerCase()===ADMIN_EMAIL){$('who').textContent='админ: '+data.session.user.email;$('loginBox').classList.add('hidden');$('panel').classList.remove('hidden');await refresh();setInterval(refresh,60000);return;}
+  $('loginBox').classList.remove('hidden');
+}
+async function doLogin(){
+  showLoader();
+  const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('pass').value});
+  hideLoader();
+  if(error){$('loginErr').textContent='Неверный email или пароль';return;}
+  location.reload();
+}
+async function logout(){await sb.auth.signOut();location.reload();}
+async function refresh(){
+  const [s,sh,ch,j]=await Promise.all([
+    sb.from('scraper_sources').select('*').order('id'),
+    sb.from('shops').select('id,name,owner_id').order('id'),
+    sb.from('scraper_changes').select('*').order('created_at',{ascending:false}).limit(30),
+    sb.from('scraper_jobs').select('*').order('created_at',{ascending:false}).limit(60)
+  ]);
+  sources=s.data||[];shops=sh.data||[];changes=ch.data||[];jobs=j.data||[];
+  render();
+}
+function render(){
+  $('srcShop').innerHTML='<option value="-1">— создать новый магазин —</option>'+shops.map(s=>'<option value="'+s.id+'">'+esc(s.name)+'</option>').join('');
+  $('srcShop').onchange=e=>$('srcNewShop').classList.toggle('hidden',e.target.value!=='-1');
+  $('srcList').innerHTML=sources.length?sources.map(srcCard).join(''):'<div class="card" style="text-align:center;color:var(--gray);font-size:12px">Источников пока нет — добавь первый сайт сверху</div>';
+  const issues=sources.filter(s=>s.status==='error'||s.status==='warn'||(s.last_success_at&&Date.now()-new Date(s.last_success_at)>(s.scrape_interval_hours||12)*2.5*3600e3));
+  $('issueList').innerHTML=issues.length?issues.map(s=>'<div class="card"><div class="srcHead"><span class="dot" style="background:'+(s.status==='error'?'var(--red)':'var(--yel)')+'"></span>'+esc(shopName(s))+'</div><div class="err">'+esc(s.error_message||( 'давно не обновлялся: '+ago(s.last_success_at)))+'</div></div>').join(''):'<div class="card" style="text-align:center;color:var(--grn);font-size:12px">Всё зелёное 🌿 проблем нет</div>';
+  $('chList').innerHTML=changes.length?changes.map(c=>{
+    const ic=c.change_type==='new_product'?'🆕':c.change_type==='price_change'?'💰':'🙈';
+    const nv=c.new_value||{},ov=c.old_value||{};
+    const txt=c.change_type==='price_change'?(ov.price||'?')+' ₽ → <b>'+(nv.price||'?')+' ₽</b>':esc(nv.title||ov.title||'');
+    return '<div class="chRow"><span class="ic">'+ic+'</span><span>'+txt+'<br><span style="color:var(--gray);font-size:10px">'+ago(c.created_at)+'</span></span></div>';
+  }).join(''):'<div style="text-align:center;color:var(--gray);font-size:12px;padding:8px">Изменений пока нет</div>';
+}
+function shopName(s){const sh=shops.find(x=>x.id===s.shop_id);return sh?sh.name:new URL(s.source_url).hostname.replace(/^www\./,'');}
+function srcCard(s){
+  const dot=s.status==='error'?'var(--red)':s.status==='warn'?'var(--yel)':s.status==='paused'?'var(--gray)':'var(--grn)';
+  const lastJob=jobs.find(j=>j.source_id===s.id);
+  return '<div class="card"><div class="srcHead"><span class="dot" style="background:'+dot+'"></span>'+esc(shopName(s))+'<a href="'+esc(s.source_url)+'" target="_blank" rel="noopener" style="margin-left:auto;font-size:10px;color:var(--gray)">открыть сайт ↗</a></div>'+
+  '<div class="meta"><b>'+s.total_products+'</b> товаров · обновлено '+ago(s.last_success_at)+' · интервал '+s.scrape_interval_hours+'ч'+(lastJob?'<br>последний прогон: '+lastJob.status+' · найдено '+lastJob.products_found+' · новых '+lastJob.products_new+' · цен изменено '+lastJob.products_updated:'')+'</div>'+
+  (s.error_message?'<div class="err">'+esc(s.error_message)+'</div>':'')+
+  '<div class="row" style="margin-top:8px">'+
+    '<button class="day" onclick="runNow()">⚡ собрать сейчас</button>'+
+    '<button class="info" onclick="togglePause('+s.id+')">'+(s.status==='paused'?'▶ возобновить':'⏸ пауза')+'</button>'+
+    '<button class="no" onclick="delSource('+s.id+')">🗑</button>'+
+  '</div></div>';
+}
+async function addSource(){
+  let url=$('srcUrl').value.trim();if(!/^https?:\/\//i.test(url))url='https://'+url;
+  try{new URL(url);}catch(e){toast('Кривой URL');return;}
+  let shopId=+$('srcShop').value;
+  if(shopId===-1){
+    const name=$('srcNewShop').value.trim()||new URL(url).hostname.replace(/^www\./,'').split('.')[0];
+    const {data,err}=await sb.from('shops').insert({name:name,city:DEFAULT_CITY,kind:'directory'}).select();
+    if(err||!data||!data[0]){toast('Магазин не создался: '+(err?err.message:'?'));return;}
+    shopId=data[0].id;
+  }
+  showLoader();
+  const {error}=await sb.from('scraper_sources').insert({shop_id:shopId,source_url:url});
+  hideLoader();
+  if(error){toast(error.message);return;}
+  $('srcUrl').value='';
+  toast('Источник добавлен — запусти сбор');
+  await refresh();
+}
+async function togglePause(id){
+  const s=sources.find(x=>x.id===id);if(!s)return;
+  await sb.from('scraper_sources').update({status:s.status==='paused'?'active':'paused'}).eq('id',id);
+  await refresh();
+}
+async function delSource(id){
+  if(!confirm('Удалить источник? Букеты останутся в каталоге.'))return;
+  await sb.from('scraper_sources').delete().eq('id',id);
+  await refresh();
+}
+async function runNow(){
+  const repo=localStorage.getItem('gh_repo')||'miclassic/lepestok';
+  let pat=localStorage.getItem('gh_pat');
+  if(!pat){pat=prompt('Токен GitHub (repo→Settings→Developer settings→PAT, права actions:write). Сохранится в этом браузере.\n\nИли запусти вручную: github.com/'+repo+'/actions → scraper → Run workflow');if(!pat)return;localStorage.setItem('gh_pat',pat);const r2=prompt('Repo (owner/name):',repo);if(r2)localStorage.setItem('gh_repo',r2);}
+  const rr=localStorage.getItem('gh_repo')||repo;
+  showLoader();
+  const r=await fetch('https://api.github.com/repos/'+rr+'/actions/workflows/scraper.yml/dispatches',{method:'POST',headers:{Authorization:'Bearer '+pat,Accept:'application/vnd.github+json'},body:JSON.stringify({ref:'main'})});
+  hideLoader();
+  toast(r.status<209?'Сбор запущен! Результаты через 1–3 мин':'GitHub ответил '+r.status+(r.status===404?' — проверь repo и токен':''));
+  setTimeout(refresh,90000);
+}
+boot();
+</script>
+</body>
+</html>
