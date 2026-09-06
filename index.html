@@ -874,6 +874,22 @@ function levDist(a,b){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;
 function fuzzyFix(tok){const maxD=tok.length>6?2:1;let best=null,bd=maxD+1;for(const w of KNOWN_WORDS){if(Math.abs(w.length-tok.length)>maxD)continue;const d=levDist(tok,w);if(d<bd){bd=d;best=w;}}return best;}
 function logUnknown(w){try{const k='lep_unknown_words';const m=JSON.parse(localStorage.getItem(k)||'{}');m[w]=(m[w]||0)+1;localStorage.setItem(k,JSON.stringify(m));}catch(e){}track('unknown_word',{w:w});}
 function applyKeyword(w,p){if(WHO_KEYWORDS[w]&&!p.who)p.who=WHO_KEYWORDS[w];else if(OCC_KEYWORDS[w]&&!p.occ)p.occ=OCC_KEYWORDS[w];else if(STYLE_KEYWORDS[w]&&!p.style)p.style=STYLE_KEYWORDS[w];else if(FLOWER_KEYWORDS[w]&&!p.include.includes(FLOWER_KEYWORDS[w]))p.include.push(FLOWER_KEYWORDS[w]);}
+async function yaComplete(prompt){
+  const {data:rid,error:e1}=await sb.rpc('ai_start',{prompt:prompt,model:'gpt://b1gg2keram6ur6r9774q/yandexgpt-5-lite'});
+  if(e1)throw new Error(e1.message);
+  for(let i=0;i<10;i++){
+    await new Promise(r=>setTimeout(r,1000));
+    const {data,error}=await sb.rpc('ai_result',{req_id:rid});
+    if(error)throw new Error(error.message);
+    if(data)return data;
+  }
+  throw new Error('таймаут');
+}
+async function llmParse(text){
+  const prompt='Разбери запрос покупателя цветов. Верни СТРОГО JSON без пояснений: {"who":"кому: девушке/маме/жене/подруге/коллеге/учителю/бабушке/сестре/другу/себе или null","occ":"повод: день рождения/юбилей/свадьба/годовщина/свидание/8 марта/день учителя/выписка/просто так/извиниться или null","style":"нежный/пышный/яркий/классический/минималистичный/необычный или null","include":["цветы, которые просит: розы/пионы/тюльпаны/хризантемы/лилии/гортензии"],"exclude":["цветы, которые исключить"],"priceMax":число или null,"priceMin":число или null}. Запрос: «'+text+'»';
+  return JSON.parse((await yaComplete(prompt)).replace(/```json|```/g,'').trim());
+}
+function parseQuery(text){
 function parseQuery(text){
   const t=text.toLowerCase();
   const params={who:'',occ:'',bud:'',style:'',include:[],exclude:[],priceMin:0,priceMax:Infinity,fixes:[]};
@@ -1016,7 +1032,21 @@ async function sendChat(){
     }
     const newP=parseQuery(text);
     const fixes=newP.fixes||[];
-    const isRefinement=/дороже|дешевле|нежнее|пышнее|ярче|без\s|больше\s|минималистичнее/.test(text.toLowerCase())&&(chatParams.who||chatParams.occ||chatParams.bud||chatParams.style);
+    const isRefinement=/дороже|дешевле|нежнее|пышнее|ярче|без\s|больше\s|минималистичнее|вернуть розы/.test(text.toLowerCase())&&(chatParams.who||chatParams.occ||chatParams.bud||chatParams.style);
+    if(!isRefinement){
+      try{
+        const lj=await llmParse(text);
+        if(lj&&typeof lj==='object'){
+          if(lj.who)newP.who=String(lj.who);
+          if(lj.occ)newP.occ=String(lj.occ);
+          if(lj.style)newP.style=String(lj.style);
+          (Array.isArray(lj.include)?lj.include:[]).forEach(f=>{f=String(f).toLowerCase().trim();if(f&&!newP.include.includes(f))newP.include.push(f);});
+          (Array.isArray(lj.exclude)?lj.exclude:[]).forEach(f=>{f=String(f).toLowerCase().trim();if(f&&!newP.exclude.includes(f))newP.exclude.push(f);});
+          if(typeof lj.priceMax==='number'&&lj.priceMax>0)newP.priceMax=lj.priceMax;
+          if(typeof lj.priceMin==='number'&&lj.priceMin>0)newP.priceMin=lj.priceMin;
+        }
+      }catch(e){console.warn('llmParse:',e&&e.message);}
+    }
     chatParams=isRefinement?mergeParams(chatParams,handleRefinement(text)):mergeParams(chatParams,newP);
     const params=chatParams;
     await new Promise(r=>setTimeout(r,600+Math.random()*600));
