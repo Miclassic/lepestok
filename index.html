@@ -1086,8 +1086,25 @@ async function sendChat(){
     const realFixes=fixes.filter(f=>!f.style);
     if(realFixes.length)addMessage('bot','Возможно, ты имел в виду: '+realFixes.map(f=>'**«'+esc(f.good)+'»**').join(', ')+'. Учту 🙂');
     if(!results.length){
-      replyText='Хм, под такие параметры пока ничего не нашлось 😔 Давай немного изменим запрос?';
-      extra=refineRowHtml([])+'<div class="refineRow" style="border:none;padding-top:4px"><button class="refineBtn" onclick="resetChatParams()">'+ic('i-refresh')+'сбросить всё</button></div>';
+      const relax=[
+        {key:'exclude',p:Object.assign({},params,{exclude:[]}),say:'Понимаю тебя насчёт «без определённых цветов» 🌸 Но с этими запретами на такой повод у нас ничего не остаётся. Посмотри, что флористы вообще готовят к этому случаю — вдруг какой-то состав зацепит сердце.'},
+        {key:'count',p:Object.assign({},params,{count:0}),say:'Ровно такого количества стеблей готовым букетом у нас нет. Но вот ближайшие по составу — а до нужного числа магазин легко доберёт под заказ.'},
+        {key:'price',p:Object.assign({},params,{priceMin:0,priceMax:Infinity}),say:'Кажется, всё испортил бюджет — с ним ничего не сходится. Вот что есть на такой повод без ограничения по сумме: иногда флористы могут собрать аналог дешевле под заказ.'},
+        {key:'include',p:Object.assign({},params,{include:[]}),say:'Таких цветов в каталоге сейчас не нашлось. Но посмотри, что есть на этот повод — возможно, среди них есть тот самый.'},
+        {key:'occ',p:Object.assign({},params,{who:'',occ:'',style:''}),say:'Под этот повод отдельной подборки у нас пока нет. Зато вот что выбирают чаще всего прямо сейчас — а любой букет я помогу адаптировать под твой случай.'}
+      ];
+      let alt=null;for(const r of relax){const list=findBouquets(r.p);if(list.length){alt={key:r.key,say:r.say,list};break;}}
+      if(!alt)alt={key:'all',say:'Каталог в твоём городе ещё растёт 🌱 А пока — вот что выбирают чаще всего прямо сейчас. Расскажи, что приглянулось, и я помогу с выбором.',list:findBouquets({who:'',occ:'',style:'',include:[],exclude:[],priceMin:0,priceMax:Infinity})};
+      track('chat_empty',{relax:alt.key});
+      replyText=alt.say+(params.occ?' Кстати, про «'+esc(params.occ)+'»: напиши бюджет — подскажу, в какую сумму получится лучше всего.':'');
+      extra='<div class="chatResults">'+alt.list.slice(0,4).map(b=>chatCard(b)).join('')+'</div><div class="chatHint">это ближайшее к твоему запросу. нажми на карточку — открою детали и контакты магазина 🌷</div>'+
+        '<div class="refineRow"><div class="refineLbl">Что сделаем?</div>'+
+        (alt.key==='exclude'?'<button class="refineBtn" onclick="tweakClear(\'exclude\')">'+ic('i-refresh')+'убрать запреты и найти снова</button>':'')+
+        (alt.key==='count'?'<button class="refineBtn" onclick="tweakClear(\'count\')">'+ic('i-flower')+'искать без ограничения по количеству</button>':'')+
+        (alt.key==='price'?'<button class="refineBtn" onclick="tweakClear(\'price\')">'+ic('i-wallet')+'искать без ограничения бюджета</button>':'')+
+        (alt.key==='include'?'<button class="refineBtn" onclick="tweakClear(\'include\')">'+ic('i-refresh')+'искать без конкретных цветов</button>':'')+
+        '<button class="refineBtn" onclick="showTab(\'search\')">'+ic('i-search')+'выберу сам</button>'+
+        '<button class="refineBtn" onclick="resetChatParams()">'+ic('i-refresh')+'сбросить всё</button></div>';
     }else{
       const n=results.length;
       const parsedAnything=params.who||params.occ||params.bud||params.style||params.include.length;
@@ -1118,6 +1135,17 @@ async function sendChat(){
   }
 }
 function resetChatParams(){chatParams={who:'',occ:'',bud:'',style:'',exclude:[],include:[],priceMin:0,priceMax:Infinity};localStorage.removeItem('lep_chat_html');$('chatMessages').innerHTML='';updateDock();toast('Начнём с чистого листа 🌸');}
+function tweakClear(what){
+  if(what==='exclude')chatParams.exclude=[];
+  if(what==='price'){chatParams.priceMin=0;chatParams.priceMax=Infinity;chatParams.bud='';}
+  if(what==='include')chatParams.include=[];
+  if(what==='count'){chatParams.count=0;chatParams.countRaw='';}
+  const results=findBouquets(chatParams);
+  if(!results.length){toast('Всё ещё пусто — попробуй сбросить всё','i-refresh');return;}
+  const notes={exclude:'Убрал запреты — вот что получилось 🌸',price:'Расширил бюджет — смотри, что есть 🌸',include:'Убрал конкретные цветы — вот подборка 🌸',count:'Убрал ограничение по количеству — вот что нашлось 🌸'};
+  addMessage('bot',notes[what]||'Вот что получилось 🌸','<div class="chatResults">'+results.slice(0,4).map(b=>chatCard(b)).join('')+'</div><div class="chatHint">нажми на карточку — открою детали и контакты магазина 🌷</div>'+refineRowHtml(results));
+  saveChatHistory();
+}
 function quickChat(text){$('chatInput').value=text;sendChat();}
 function refineChat(cmd){$('chatInput').value=cmd;sendChat();}
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,140)+'px';}
