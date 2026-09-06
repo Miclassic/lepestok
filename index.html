@@ -904,7 +904,7 @@ function mergeParams(oldP,newP){
     bud:newP.bud||oldP.bud,
     style:newP.style||oldP.style,
     include:[...oldP.include,...(newP.include||[])].filter((v,i,a)=>a.indexOf(v)===i),
-    exclude:[...oldP.exclude,...(newP.exclude||[])].filter((v,i,a)=>a.indexOf(v)===i),
+    exclude:[...oldP.exclude,...(newP.exclude||[])].filter((v,i,a)=>a.indexOf(v)===i).filter(v=>!(newP.dropExclude||[]).includes(v)),
     priceMin:newP.priceMin||oldP.priceMin,
     priceMax:newP.priceMax<Infinity?newP.priceMax:oldP.priceMax
   };
@@ -924,8 +924,8 @@ function handleRefinement(text){
   if(/пышнее|пышный/.test(t))changes.style='пышный';
   if(/ярче|яркий/.test(t))changes.style='яркий';
   if(/минималистичнее|минималистичный/.test(t))changes.style='минималистичный';
-  if(/без роз/.test(t))changes.exclude=['розы'];
-  if(/больше роз|с розами|с роз/.test(t))changes.include=['розы'];
+  for(const k in FLOWER_KEYWORDS){if(t.includes('без '+k)){changes.exclude=[FLOWER_KEYWORDS[k]];break;}}
+  if(/вернуть розы|больше роз|с розами|с роз/.test(t)){changes.include=['розы'];changes.dropExclude=['розы'];}
   if(/с пионами|пионы/.test(t))changes.include=['пионы'];
   return changes;
 }
@@ -979,14 +979,22 @@ function chatCard(b){
     '<div class="chatCta">'+ic('i-arrow')+'хочу этот — где заказать?</div>'+
   '</div>';
 }
-function refineRowHtml(){
+function refineRowHtml(results){
+  const p=chatParams;
+  const btns=[];
+  const has=f=>(results||[]).some(b=>((b.title||'')+' '+(b.description||'')+' '+(b.category||'')+' '+getTags(b).join(' ')).toLowerCase().includes(f.replace(/(ы|и)$/,'')));
+  if(p.exclude.includes('розы'))btns.push(['вернуть розы','i-rose']);
+  else if(has('розы'))btns.push(['без роз','i-x']);
+  if(has('хризантемы')&&!p.exclude.includes('хризантемы'))btns.push(['без хризантем','i-x']);
+  if(has('пионы')&&!p.exclude.includes('пионы'))btns.push(['без пионов','i-x']);
+  if(has('тюльпаны')&&!p.exclude.includes('тюльпаны'))btns.push(['без тюльпанов','i-x']);
+  if(p.style!=='нежный')btns.push(['нежнее','i-heart']);
+  if(p.style!=='пышный')btns.push(['пышнее','i-flower']);
+  btns.push(['дешевле','i-wallet']);
+  btns.push(['премиум','i-trend']);
   return '<div class="refineRow">'+
     '<div class="refineLbl">Что уточнить?</div>'+
-    '<button class="refineBtn" onclick="refineChat(\'нежнее\')">'+ic('i-heart')+'нежнее</button>'+
-    '<button class="refineBtn" onclick="refineChat(\'дороже\')">'+ic('i-trend')+'премиум</button>'+
-    '<button class="refineBtn" onclick="refineChat(\'дешевле\')">'+ic('i-wallet')+'дешевле</button>'+
-    '<button class="refineBtn" onclick="refineChat(\'без роз\')">'+ic('i-x')+'без роз</button>'+
-    '<button class="refineBtn" onclick="refineChat(\'пышнее\')">'+ic('i-flower')+'пышнее</button>'+
+    btns.slice(0,5).map(b=>'<button class="refineBtn" onclick="refineChat(\''+b[0]+'\')">'+ic(b[1])+b[0]+'</button>').join('')+
   '</div>';
 }
 async function sendChat(){
@@ -1022,7 +1030,7 @@ async function sendChat(){
     if(realFixes.length)addMessage('bot','Возможно, ты имел в виду: '+realFixes.map(f=>'«'+esc(f.good)+'»').join(', ')+'. Учту 🙂');
     if(!results.length){
       replyText='Хм, под такие параметры пока ничего не нашлось 😔 Давай немного изменим запрос?';
-      extra=refineRowHtml()+'<div class="refineRow" style="border:none;padding-top:4px"><button class="refineBtn" onclick="resetChatParams()">'+ic('i-refresh')+'сбросить всё</button></div>';
+      extra=refineRowHtml([])+'<div class="refineRow" style="border:none;padding-top:4px"><button class="refineBtn" onclick="resetChatParams()">'+ic('i-refresh')+'сбросить всё</button></div>';
     }else{
       const n=results.length;
       const parsedAnything=params.who||params.occ||params.bud||params.style||params.include.length;
@@ -1036,7 +1044,7 @@ async function sendChat(){
       }else{
         replyText='Нашёл много подходящих букетов'+ctx+'. Вот топ-'+Math.min(4,n)+', на мой взгляд:';
       }
-      extra='<div class="chatResults">'+results.slice(0,4).map(b=>chatCard(b)).join('')+'</div><div class="chatHint">нажми на карточку — открою детали и контакты магазина, где можно заказать 🌷</div>'+refineRowHtml();
+      extra='<div class="chatResults">'+results.slice(0,4).map(b=>chatCard(b)).join('')+'</div><div class="chatHint">нажми на карточку — открою детали и контакты магазина, где можно заказать 🌷</div>'+refineRowHtml(results);
       if(n>4)extra+='<div class="refineRow" style="border:none;padding-top:6px"><button class="refineBtn" onclick="showTab(\'search\')">'+ic('i-search')+'посмотреть все '+n+' вариантов</button></div>';
     }
     addMessage('bot',replyText,extra);
