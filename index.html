@@ -906,12 +906,13 @@ function parseQuery(text){
   const cm=t.match(COUNT_RE);
   if(cm){params.count=+cm[1];params.countRaw=cm[0].trim();for(const cw in COUNT_WORDS){if(cm[2].startsWith(cw)){params.countFlower=COUNT_WORDS[cw];break;}}}
   const mul=s=>(s==='тыс'||s==='тыщ'||s==='к'||s==='тысяч')?1000:1;
+  const sane=n=>n>500000?Math.round(n/1000):n;
   const bm=t.match(/(?:до|за)\s*([\d\s]+)\s*(тыс|тыщ|к|тысяч)?/);
-  if(bm){const n=+bm[1].replace(/\s/g,'')*mul(bm[2]);params.priceMax=n;params.bud='до '+n.toLocaleString('ru-RU')+' ₽';}
+  if(bm){const n=sane(+bm[1].replace(/\s/g,'')*mul(bm[2]));params.priceMax=n;params.bud='до '+n.toLocaleString('ru-RU')+' ₽';}
   const om=t.match(/(?:от|больше|свыше)\s*([\d\s]+)\s*(тыс|тыщ|к|тысяч)?/);
-  if(om){const n=+om[1].replace(/\s/g,'')*mul(om[2]);params.priceMin=n;params.bud='от '+n.toLocaleString('ru-RU')+' ₽';}
+  if(om){const n=sane(+om[1].replace(/\s/g,'')*mul(om[2]));params.priceMin=n;params.bud='от '+n.toLocaleString('ru-RU')+' ₽';}
   const rm=t.match(/([\d\s]+)\s*[-–]\s*([\d\s]+)\s*(тыс|тыщ|к|тысяч)?/);
-  if(rm&&!bm&&!om){const a=+rm[1].replace(/\s/g,'')*mul(rm[3]),b=+rm[2].replace(/\s/g,'')*mul(rm[3]);params.priceMin=Math.min(a,b);params.priceMax=Math.max(a,b);params.bud=Math.min(a,b).toLocaleString('ru-RU')+'–'+Math.max(a,b).toLocaleString('ru-RU')+' ₽';}
+  if(rm&&!bm&&!om){const a=sane(+rm[1].replace(/\s/g,'')*mul(rm[3])),b=sane(+rm[2].replace(/\s/g,'')*mul(rm[3]));params.priceMin=Math.min(a,b);params.priceMax=Math.max(a,b);params.bud=Math.min(a,b).toLocaleString('ru-RU')+'–'+Math.max(a,b).toLocaleString('ru-RU')+' ₽';}
   const tokens=t.replace(/[^а-яё\s-]/g,'').split(/\s+/).filter(Boolean);
   for(let i=0;i<tokens.length;i++){
     const tok=tokens[i],neg=NEG_WORDS.includes(tokens[i-1]||'');
@@ -968,16 +969,22 @@ function findBouquets(p){
   if(p.priceMin)fit=fit.filter(b=>b.price>=p.priceMin);
   if(p.priceMax<Infinity)fit=fit.filter(b=>b.price<=p.priceMax);
   if(p.exclude.length){fit=fit.filter(b=>{const hay=(b.title+' '+(b.category||'')+' '+(b.description||'')+' '+getTags(b).join(' ')).toLowerCase();return !p.exclude.some(ex=>hay.includes(ex.replace(/(ы|и)$/,'')));});}
-  if(p.include.length){fit=fit.filter(b=>{const hay=(b.title+' '+(b.category||'')+' '+(b.description||'')+' '+getTags(b).join(' ')).toLowerCase();return p.include.every(f=>hay.includes(f.replace(/(ы|и)$/,'')));});}
+  if(p.include.length){
+    const hayOf=b=>(b.title+' '+(b.category||'')+' '+(b.description||'')+' '+getTags(b).join(' ')).toLowerCase();
+    const every=fit.filter(b=>p.include.every(f=>hayOf(b).includes(f.replace(/(ы|и)$/,''))));
+    fit=every.length?every:fit.filter(b=>p.include.some(f=>hayOf(b).includes(f.replace(/(ы|и)$/,''))));
+  }
   const want=[p.who,p.occ,p.style,...p.include].filter(Boolean).map(x=>x.toLowerCase());
-  fit=fit.map(b=>{
+  const scored=fit.map(b=>{
     const tags=[...getTags(b),String(b.category||''),b.title||'',b.description||''].map(x=>String(x).toLowerCase());
     let score=0;
     for(const w of want){if(tags.some(t=>t.includes(w)||w.includes(t)))score++;}
     return{b,score};
-  }).filter(x=>x.score>0||want.length===0).sort((a,b)=>b.score-a.score).map(x=>x.b);
+  });
+  const matched=scored.some(x=>x.score>0);
+  fit=scored.filter(x=>!want.length||!matched||x.score>0).sort((a,b)=>b.score-a.score).map(x=>x.b);
   if(p.count){fit=fit.sort((a,b)=>{const ca=bouquetCount(a),cb=bouquetCount(b);const da=ca?Math.abs(ca-p.count):1e9;const db=cb?Math.abs(cb-p.count):1e9;return da-db;});}
-  return fit;
+  return{list:fit,matched};
 }
 function addMessage(role,text,extra=''){
   const box=$('chatMessages');
@@ -1074,7 +1081,7 @@ async function sendChat(){
     }
     const params=chatParams;
     await new Promise(r=>setTimeout(r,600+Math.random()*600));
-    const results=findBouquets(params);
+    const fr=findBouquets(params);const results=fr.list;
     const summary=[];
     if(params.who)summary.push('для **'+(WHO_GENITIVE[params.who]||params.who)+'**');
     if(params.occ)summary.push('**'+esc(params.occ)+'**');
@@ -1093,8 +1100,12 @@ async function sendChat(){
         {key:'include',p:Object.assign({},params,{include:[]}),say:'Таких цветов в каталоге сейчас не нашлось. Но посмотри, что есть на этот повод — возможно, среди них есть тот самый.'},
         {key:'occ',p:Object.assign({},params,{who:'',occ:'',style:''}),say:'Под этот повод отдельной подборки у нас пока нет. Зато вот что выбирают чаще всего прямо сейчас — а любой букет я помогу адаптировать под твой случай.'}
       ];
-      let alt=null;for(const r of relax){const list=findBouquets(r.p);if(list.length){alt={key:r.key,say:r.say,list};break;}}
-      if(!alt)alt={key:'all',say:'Каталог в твоём городе ещё растёт 🌱 А пока — вот что выбирают чаще всего прямо сейчас. Расскажи, что приглянулось, и я помогу с выбором.',list:findBouquets({who:'',occ:'',style:'',include:[],exclude:[],priceMin:0,priceMax:Infinity})};
+      let alt=null;for(const r of relax){const list=findBouquets(r.p).list;if(list.length){alt={key:r.key,say:r.say,list};break;}}
+      if(!alt){
+        const keep=findBouquets(Object.assign({},params,{who:'',occ:'',style:'',include:[]})).list;
+        if(keep.length)alt={key:'all',say:'Каталог в твоём городе ещё растёт 🌱 А пока — вот что выбирают чаще всего прямо сейчас. Расскажи, что приглянулось, и я помогу с выбором.',list:keep};
+        else alt={key:'all',say:'В твой бюджет сейчас ничего не попало 😔 Вот ближайшие по цене варианты — иногда флористы могут собрать версию дешевле под заказ.',list:findBouquets({who:'',occ:'',style:'',include:[],exclude:[],priceMin:0,priceMax:Infinity}).list.sort((a,b)=>a.price-b.price)};
+      }
       track('chat_empty',{relax:alt.key});
       replyText=alt.say+(params.occ?' Кстати, про «'+esc(params.occ)+'»: напиши бюджет — подскажу, в какую сумму получится лучше всего.':'');
       extra='<div class="chatResults">'+alt.list.slice(0,4).map(b=>chatCard(b)).join('')+'</div><div class="chatHint">это ближайшее к твоему запросу. нажми на карточку — открою детали и контакты магазина 🌷</div>'+
@@ -1118,6 +1129,10 @@ async function sendChat(){
       }else{
         replyText='Нашёл много подходящих букетов'+ctx+'. Вот **топ-'+Math.min(4,n)+'**, на мой взгляд:';
       }
+      if(!fr.matched&&(params.who||params.occ||params.style)){
+        const label=[params.style,params.occ,params.who].filter(Boolean).join(' · ');
+        replyText='Под «'+esc(label)+'» прямых совпадений в каталоге пока нет 🌱 Поэтому показал ближайшие варианты по составу и цене — а любой букет флористы доработают под твой повод.';
+      }
       if(params.count){
         const exact=results.filter(b=>bouquetCount(b)===params.count);
         if(exact.length){replyText='Нашёл букеты ровно из **'+esc(params.countRaw)+'**'+ctx+'. Вот они:';}
@@ -1140,7 +1155,7 @@ function tweakClear(what){
   if(what==='price'){chatParams.priceMin=0;chatParams.priceMax=Infinity;chatParams.bud='';}
   if(what==='include')chatParams.include=[];
   if(what==='count'){chatParams.count=0;chatParams.countRaw='';}
-  const results=findBouquets(chatParams);
+  const results=findBouquets(chatParams).list;
   if(!results.length){toast('Всё ещё пусто — попробуй сбросить всё','i-refresh');return;}
   const notes={exclude:'Убрал запреты — вот что получилось 🌸',price:'Расширил бюджет — смотри, что есть 🌸',include:'Убрал конкретные цветы — вот подборка 🌸',count:'Убрал ограничение по количеству — вот что нашлось 🌸'};
   addMessage('bot',notes[what]||'Вот что получилось 🌸','<div class="chatResults">'+results.slice(0,4).map(b=>chatCard(b)).join('')+'</div><div class="chatHint">нажми на карточку — открою детали и контакты магазина 🌷</div>'+refineRowHtml(results));
