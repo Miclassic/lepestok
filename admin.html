@@ -570,6 +570,8 @@ function renderBouquets(){
 }
 function adminEditFormHtml(){
   return '<div class="addForm"><h3>✏️ Редактирование букета #'+adminEditId+'</h3>'+
+    '<div class="mcat" style="font-weight:700;color:#1A1A2E">🏪 Магазин</div>'+
+    '<select id="aeShop">'+shopsAll.map(s=>'<option value="'+s.id+'">'+esc(s.name)+'</option>').join('')+'</select>'+
     '<input id="aeTitle" placeholder="Название">'+
     '<input id="aePrice" type="number" placeholder="Цена">'+
     '<textarea id="aeDesc" placeholder="Описание"></textarea>'+
@@ -584,6 +586,8 @@ function adminEditFormHtml(){
 function startAdminEdit(id){adminEditId=id;adminEditPhoto=null;renderBouquets();window.scrollTo({top:0,behavior:'smooth'});}
 function fillAdminEdit(){
   const b=bouquets.find(x=>x.id===adminEditId);if(!b)return;
+  const cur=shopsAll.find(s=>s.owner_id===b.user_id);
+  if($('aeShop')&&cur)$('aeShop').value=cur.id;
   $('aeTitle').value=b.title||'';$('aePrice').value=b.price||'';$('aeDesc').value=b.description||'';
   adminEditCat=b.category||'';
   const cr=$('aeCatRow');if(cr)cr.innerHTML=adminCatChipsHtml();
@@ -605,7 +609,10 @@ async function saveAdminEdit(){
     }
     const tagsRaw=$('aeTags').value.trim();
     const tags=tagsRaw?tagsRaw.split(',').map(x=>x.trim()).filter(Boolean):[];
-    const res=await sb.from('bouquets').update({title:$('aeTitle').value.trim(),price:+$('aePrice').value,description:$('aeDesc').value.trim(),category:adminEditCat,tags:tags,in_stock:$('aeStock').checked,photo_url:photo_url}).eq('id',adminEditId);
+    let uid=b.user_id;
+    const sh=shopsAll.find(x=>x.id==+($('aeShop')?$('aeShop').value:0));
+    if(sh){uid=await ensureShopOwner(sh);if(!uid)return;}
+    const res=await sb.from('bouquets').update({title:$('aeTitle').value.trim(),price:+$('aePrice').value,description:$('aeDesc').value.trim(),category:adminEditCat,tags:tags,in_stock:$('aeStock').checked,photo_url:photo_url,user_id:uid}).eq('id',adminEditId);
     if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
     logAdmin('edit_bouquet',{bouquet_id:adminEditId});
     toast('Букет обновлён','i-check');
@@ -851,6 +858,8 @@ function sRenderOrders(){
 function sRenderBouquets(){
   const box=$('list');
   const addForm='<div class="addForm"><h3>➕ Добавить новый букет (от продавца)</h3>'+
+    '<div class="mcat" style="font-weight:700;color:#1A1A2E">🏪 Какому магазину</div>'+
+    '<select id="fShop">'+shopsAll.map(s=>'<option value="'+s.id+'"'+(s.owner_id===adminId?' selected':'')+'>'+esc(s.name)+'</option>').join('')+'</select>'+
     '<input id="fTitle" placeholder="Название (например: Нежный пион)">'+
     '<input id="fPrice" type="number" placeholder="Цена в рублях">'+
     '<textarea id="fDesc" placeholder="Описание — что входит в букет"></textarea>'+
@@ -921,6 +930,17 @@ async function aiFillBouquet(){
   toast(j.fromLocal?'✨ Заполнено автогенератором':'AI заполнил карточку ✨','i-wand');
 }
 function onPhotoPick(inp){const f=inp.files[0];if(!f)return;pickedPhoto=f;$('fPhotoName').textContent='📷 '+f.name.slice(0,20);}
+function genUUID(){return (crypto&&crypto.randomUUID)?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,function(c){const r=Math.random()*16|0;const v=c==='x'?r:(r&0x3|0x8);return v.toString(16);});}
+async function ensureShopOwner(sh){
+  if(sh.owner_id)return sh.owner_id;
+  const uid=genUUID();
+  const pr=await sb.from('profiles').insert({id:uid,nick:sh.name+' · каталог',is_florist:true});
+  if(pr.error)console.warn('virtual profile:',pr.error.message);
+  const up=await sb.from('shops').update({owner_id:uid}).eq('id',sh.id);
+  if(up.error){toast('Привязка: '+up.error.message,'i-x');return null;}
+  sh.owner_id=uid;
+  return uid;
+}
 async function submitBouquet(){
   const t=$('fTitle').value.trim(),p=+$('fPrice').value,d=$('fDesc').value.trim(),c=$('fCat').value.trim();
   const tagsRaw=$('fTags').value.trim();
@@ -935,7 +955,10 @@ async function submitBouquet(){
       if(up.error){toast('Фото: '+up.error.message,'i-x');return;}
       photo_url=sb.storage.from('bouquets').getPublicUrl(path).data.publicUrl;
     }
-    const res=await sb.from('bouquets').insert({title:t,price:p,description:d,category:c,tags,photo_url,in_stock:$('fStock').checked,user_id:adminId});
+    let uid=adminId;
+    const sh=shopsAll.find(x=>x.id==+($('fShop')?$('fShop').value:0));
+    if(sh){uid=await ensureShopOwner(sh);if(!uid)return;}
+    const res=await sb.from('bouquets').insert({title:t,price:p,description:d,category:c,tags,photo_url,in_stock:$('fStock').checked,user_id:uid});
     if(res.error){toast('Ошибка: '+res.error.message,'i-x');return;}
     toast('Букет добавлен','i-check');
     pickedPhoto=null;
