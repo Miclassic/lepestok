@@ -867,6 +867,8 @@ const FLOWER_KEYWORDS={
   'тюльпаны':'тюльпаны','тюльпан':'тюльпаны','тюльпанами':'тюльпаны','хризантемы':'хризантемы','хризантемами':'хризантемы','лилии':'лилии','лилия':'лилии',
   'гортензии':'гортензии','гортензий':'гортензии','орхидеи':'орхидеи','орхидеями':'орхидеи','ромашки':'ромашки'
 };
+const NEG_WORDS=['без','кроме','исключая'];
+const flowerStem=x=>x.replace(/(ями|ами|ы|и)$/,'');
 const BASE_WORDS=['букет','букета','букетик','букеты','цветы','цветов','цветочный','композиция','композицию','композиции','хочу','ищу','нужен','нужно','найди','найти','покажи','показать','подбери','подобрать','подарить','подарок','выбрать','ищем','сегодня','какой','что','чем','можно','пожалуйста','недорогой','недорого','руб','рублей','тыс','тыщ','тысяч','до','от','за','около','больше','меньше','без','из','на','для','кому','красивый','красивые','большой','маленький','нежная','нежное'];
 const KNOWN_WORDS=BASE_WORDS.concat(Object.keys(WHO_KEYWORDS),Object.values(WHO_KEYWORDS),Object.keys(OCC_KEYWORDS),Object.values(OCC_KEYWORDS),Object.keys(STYLE_KEYWORDS),Object.values(STYLE_KEYWORDS),Object.keys(FLOWER_KEYWORDS),Object.values(FLOWER_KEYWORDS));
 const KNOWN_SET=new Set(KNOWN_WORDS);
@@ -896,7 +898,7 @@ function parseQuery(text){
   for(const k in OCC_KEYWORDS){if(t.includes(k)){params.occ=OCC_KEYWORDS[k];break;}}
   for(const k in STYLE_KEYWORDS){if(t.includes(k)){params.style=STYLE_KEYWORDS[k];break;}}
   for(const k in FLOWER_KEYWORDS){if(t.includes(k))params.include.push(FLOWER_KEYWORDS[k]);}
-  if(/\bбез\b/.test(t)){for(const k in FLOWER_KEYWORDS){if(t.includes('без '+k))params.exclude.push(FLOWER_KEYWORDS[k]);}}
+  for(const k in FLOWER_KEYWORDS){const st=flowerStem(k);if(NEG_WORDS.some(w=>t.includes(w+' '+st)))params.exclude.push(FLOWER_KEYWORDS[k]);}
   const mul=s=>(s==='тыс'||s==='тыщ'||s==='к'||s==='тысяч')?1000:1;
   const bm=t.match(/(?:до|за)\s*([\d\s]+)\s*(тыс|тыщ|к|тысяч)?/);
   if(bm){const n=+bm[1].replace(/\s/g,'')*mul(bm[2]);params.priceMax=n;params.bud='до '+n.toLocaleString('ru-RU')+' ₽';}
@@ -904,13 +906,20 @@ function parseQuery(text){
   if(om){const n=+om[1].replace(/\s/g,'')*mul(om[2]);params.priceMin=n;params.bud='от '+n.toLocaleString('ru-RU')+' ₽';}
   const rm=t.match(/([\d\s]+)\s*[-–]\s*([\d\s]+)\s*(тыс|тыщ|к|тысяч)?/);
   if(rm&&!bm&&!om){const a=+rm[1].replace(/\s/g,'')*mul(rm[3]),b=+rm[2].replace(/\s/g,'')*mul(rm[3]);params.priceMin=Math.min(a,b);params.priceMax=Math.max(a,b);params.bud=Math.min(a,b).toLocaleString('ru-RU')+'–'+Math.max(a,b).toLocaleString('ru-RU')+' ₽';}
-  const tokens=t.replace(/[^а-яё\s-]/g,'').split(/\s+/).filter(w=>w.length>=4);
-  for(const tok of tokens){
-    if(KNOWN_SET.has(tok))continue;
+  const tokens=t.replace(/[^а-яё\s-]/g,'').split(/\s+/).filter(Boolean);
+  for(let i=0;i<tokens.length;i++){
+    const tok=tokens[i],neg=NEG_WORDS.includes(tokens[i-1]||'');
+    if(tok.length<4)continue;
+    if(KNOWN_SET.has(tok)){if(neg&&FLOWER_KEYWORDS[tok])params.exclude.push(FLOWER_KEYWORDS[tok]);continue;}
     const fix=fuzzyFix(tok);
-    if(fix){const st=x=>x.replace(/(у|а|и|ы|е|ё|о|м|й|я)$/,'');const sameWord=st(tok)===st(fix);const isStyle=!!(STYLE_KEYWORDS[fix]||STYLE_KEYWORDS[tok]);if(!sameWord&&!params.fixes.some(f=>f.good===fix))params.fixes.push({bad:tok,good:fix,style:isStyle});applyKeyword(fix,params);}
+    if(fix){
+      if(neg&&FLOWER_KEYWORDS[fix]){params.exclude.push(FLOWER_KEYWORDS[fix]);continue;}
+      const st=x=>x.replace(/(у|а|и|ы|е|ё|о|м|й|я)$/,'');const sameWord=st(tok)===st(fix);const isStyle=!!(STYLE_KEYWORDS[fix]||STYLE_KEYWORDS[tok]);if(!sameWord&&!params.fixes.some(f=>f.good===fix))params.fixes.push({bad:tok,good:fix,style:isStyle});applyKeyword(fix,params);
+    }
     else logUnknown(tok);
   }
+  params.exclude=[...new Set(params.exclude)];
+  params.include=[...new Set(params.include)].filter(f=>!params.exclude.includes(f));
   return params;
 }
 function mergeParams(oldP,newP){
@@ -940,7 +949,7 @@ function handleRefinement(text){
   if(/пышнее|пышный/.test(t))changes.style='пышный';
   if(/ярче|яркий/.test(t))changes.style='яркий';
   if(/минималистичнее|минималистичный/.test(t))changes.style='минималистичный';
-  for(const k in FLOWER_KEYWORDS){if(t.includes('без '+k)){changes.exclude=[FLOWER_KEYWORDS[k]];break;}}
+  for(const k in FLOWER_KEYWORDS){const st=flowerStem(k);if(NEG_WORDS.some(w=>t.includes(w+' '+st))){changes.exclude=[FLOWER_KEYWORDS[k]];break;}}
   if(/вернуть розы|больше роз|с розами|с роз/.test(t)){changes.include=['розы'];changes.dropExclude=['розы'];}
   if(/с пионами|пионы/.test(t))changes.include=['пионы'];
   return changes;
@@ -1032,7 +1041,8 @@ async function sendChat(){
     const newP=parseQuery(text);
     const fixes=newP.fixes||[];
     const isRefinement=/дороже|дешевле|нежнее|пышнее|ярче|без\s|больше\s|минималистичнее|вернуть розы/.test(text.toLowerCase())&&(chatParams.who||chatParams.occ||chatParams.bud||chatParams.style);
-    if(!isRefinement){
+    const hasFlowerSignal=newP.exclude.length>0||NEG_WORDS.some(w=>text.toLowerCase().includes(w+' '));
+    if(!isRefinement||hasFlowerSignal){
       try{
         const lj=await llmParse(text);
         if(lj&&typeof lj==='object'){
@@ -1046,7 +1056,12 @@ async function sendChat(){
         }
       }catch(e){console.warn('llmParse:',e&&e.message);}
     }
-    chatParams=isRefinement?mergeParams(chatParams,handleRefinement(text)):mergeParams(chatParams,newP);
+    if(isRefinement){
+      const ref=handleRefinement(text);
+      chatParams=mergeParams(chatParams,{who:newP.who,occ:newP.occ,style:ref.style||newP.style,bud:ref.bud||newP.bud,include:[...newP.include,...(ref.include||[])],exclude:[...newP.exclude,...(ref.exclude||[])],dropExclude:ref.dropExclude||[],priceMin:ref.priceMin||newP.priceMin,priceMax:ref.priceMax<Infinity?ref.priceMax:newP.priceMax});
+    }else{
+      chatParams=mergeParams(chatParams,newP);
+    }
     const params=chatParams;
     await new Promise(r=>setTimeout(r,600+Math.random()*600));
     const results=findBouquets(params);
