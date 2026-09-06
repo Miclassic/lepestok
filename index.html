@@ -105,6 +105,7 @@ main{padding:80px 16px 120px;min-height:0}
 .msgBubble{padding:10px 14px;border-radius:18px;font-size:14px;line-height:1.45;max-width:100%}
 .msg.user .msgBubble{background:var(--gradient);color:#fff;border-bottom-right-radius:6px}
 .msg.bot .msgBubble{background:var(--card);box-shadow:var(--shadow);border-bottom-left-radius:6px;color:var(--ink)}
+.msg.bot .msgBubble b{font-weight:800}
 .typing{display:inline-flex;align-items:center;gap:4px;padding:12px 16px;background:var(--card);border-radius:18px;border-bottom-left-radius:6px;box-shadow:var(--shadow)}
 .typing .dot{width:7px;height:7px;border-radius:50%;background:var(--coral);opacity:.4;animation:typing 1.3s infinite}
 .typing .dot:nth-child(2){animation-delay:.18s}
@@ -892,7 +893,7 @@ function parseQuery(text){
   for(const tok of tokens){
     if(KNOWN_SET.has(tok))continue;
     const fix=fuzzyFix(tok);
-    if(fix){const isStyle=!!(STYLE_KEYWORDS[fix]||STYLE_KEYWORDS[tok]);if(!params.fixes.some(f=>f.good===fix))params.fixes.push({bad:tok,good:fix,style:isStyle});applyKeyword(fix,params);}
+    if(fix){const st=x=>x.replace(/(у|а|и|ы|е|ё|о|м|й|я)$/,'');const sameWord=st(tok)===st(fix);const isStyle=!!(STYLE_KEYWORDS[fix]||STYLE_KEYWORDS[tok]);if(!sameWord&&!params.fixes.some(f=>f.good===fix))params.fixes.push({bad:tok,good:fix,style:isStyle});applyKeyword(fix,params);}
     else logUnknown(tok);
   }
   return params;
@@ -948,7 +949,7 @@ function addMessage(role,text,extra=''){
   const avtIcon=role==='user'?((me?.user_metadata?.nick||'Я').slice(0,1).toUpperCase()):ic('i-flower');
   const div=document.createElement('div');
   div.className='msg '+role;
-  div.innerHTML='<div class="avt '+(role==='user'?'usr':'bot')+'">'+avtIcon+'</div><div class="msgBody"><div class="msgBubble">'+esc(text)+'</div>'+extra+'</div>';
+  div.innerHTML='<div class="avt '+(role==='user'?'usr':'bot')+'">'+avtIcon+'</div><div class="msgBody"><div class="msgBubble">'+esc(text).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')+'</div>'+extra+'</div>';
   box.appendChild(div);
   window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
   updateDock();
@@ -1020,14 +1021,14 @@ async function sendChat(){
     await new Promise(r=>setTimeout(r,600+Math.random()*600));
     const results=findBouquets(params);
     const summary=[];
-    if(params.who)summary.push('для '+(WHO_GENITIVE[params.who]||params.who));
-    if(params.occ)summary.push(esc(params.occ));
-    if(params.bud)summary.push(esc(params.bud));
-    if(params.style)summary.push('в стиле «'+esc(params.style)+'»');
+    if(params.who)summary.push('для **'+(WHO_GENITIVE[params.who]||params.who)+'**');
+    if(params.occ)summary.push('**'+esc(params.occ)+'**');
+    if(params.bud)summary.push('**'+esc(params.bud)+'**');
+    if(params.style)summary.push('в стиле «**'+esc(params.style)+'**»');
     const ctx=summary.length?' ('+summary.join(' · ')+')':'';
     let replyText='',extra='';
     const realFixes=fixes.filter(f=>!f.style);
-    if(realFixes.length)addMessage('bot','Возможно, ты имел в виду: '+realFixes.map(f=>'«'+esc(f.good)+'»').join(', ')+'. Учту 🙂');
+    if(realFixes.length)addMessage('bot','Возможно, ты имел в виду: '+realFixes.map(f=>'**«'+esc(f.good)+'»**').join(', ')+'. Учту 🙂');
     if(!results.length){
       replyText='Хм, под такие параметры пока ничего не нашлось 😔 Давай немного изменим запрос?';
       extra=refineRowHtml([])+'<div class="refineRow" style="border:none;padding-top:4px"><button class="refineBtn" onclick="resetChatParams()">'+ic('i-refresh')+'сбросить всё</button></div>';
@@ -1040,9 +1041,9 @@ async function sendChat(){
         const phrases=['Кажется, это идеальный вариант'+ctx+'. Посмотри, как тебе?','Нашёл один отличный букет'+ctx+'. Подходит?','Вот что мне приглянулось'+ctx+'. Что скажешь?'];
         replyText=phrases[Math.floor(Math.random()*phrases.length)];
       }else if(n<=3){
-        replyText='Подобрал '+n+' классных варианта'+ctx+'. Вот они:';
+        replyText='Подобрал **'+n+'** классных варианта'+ctx+'. Вот они:';
       }else{
-        replyText='Нашёл много подходящих букетов'+ctx+'. Вот топ-'+Math.min(4,n)+', на мой взгляд:';
+        replyText='Нашёл много подходящих букетов'+ctx+'. Вот **топ-'+Math.min(4,n)+'**, на мой взгляд:';
       }
       extra='<div class="chatResults">'+results.slice(0,4).map(b=>chatCard(b)).join('')+'</div><div class="chatHint">нажми на карточку — открою детали и контакты магазина, где можно заказать 🌷</div>'+refineRowHtml(results);
       if(n>4)extra+='<div class="refineRow" style="border:none;padding-top:6px"><button class="refineBtn" onclick="showTab(\'search\')">'+ic('i-search')+'посмотреть все '+n+' вариантов</button></div>';
