@@ -57,7 +57,9 @@ main{padding:72px 16px calc(120px + env(safe-area-inset-bottom));max-width:620px
 #tab-chat.has-msgs .chatMessages{padding-bottom:12px}
 #tab-chat.has-msgs .chatChips{display:none}
 #tab-chat.has-msgs .liveSearch{display:none}
-.liveSearch{display:flex;flex-direction:column;align-items:center;gap:5px;align-self:center;margin-top:auto;max-width:380px;padding:4px 12px;background:none;border:none;text-align:center;cursor:pointer;animation:fadeInUp .8s ease}
+.liveSearch{display:flex;flex-direction:column;align-items:center;gap:5px;align-self:center;margin-top:16px;max-width:380px;padding:4px 12px;background:none;border:none;text-align:center;cursor:pointer;animation:fadeInUp .8s ease}
+main{padding:80px 16px 110px}
+@media(min-width:768px){main{padding:76px 24px 100px}}
 .liveSearch .lsLbl{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gray);opacity:.55;font-weight:700}
 .liveSearch .lsTxt{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.4;transition:opacity .3s ease,filter .3s ease}
 .liveSearch .lsTxt.fade{opacity:0;filter:blur(6px)}
