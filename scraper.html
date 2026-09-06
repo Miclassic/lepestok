@@ -153,15 +153,17 @@ async function delSource(id){
   await refresh();
 }
 async function runNow(){
-  const repo=localStorage.getItem('gh_repo')||'miclassic/lepestok';
-  let pat=localStorage.getItem('gh_pat');
-  if(!pat){pat=prompt('Токен GitHub (repo→Settings→Developer settings→PAT, права actions:write). Сохранится в этом браузере.\n\nИли запусти вручную: github.com/'+repo+'/actions → scraper → Run workflow');if(!pat)return;localStorage.setItem('gh_pat',pat);const r2=prompt('Repo (owner/name):',repo);if(r2)localStorage.setItem('gh_repo',r2);}
-  const rr=localStorage.getItem('gh_repo')||repo;
   showLoader();
-  const r=await fetch('https://api.github.com/repos/'+rr+'/actions/workflows/scraper.yml/dispatches',{method:'POST',headers:{Authorization:'Bearer '+pat,Accept:'application/vnd.github+json'},body:JSON.stringify({ref:'main'})});
-  hideLoader();
-  toast(r.status<209?'Сбор запущен! Результаты через 1–3 мин':'GitHub ответил '+r.status+(r.status===404?' — проверь repo и токен':''));
-  setTimeout(refresh,90000);
+  try{
+    const {data}=await sb.auth.getSession();
+    const tok=data&&data.session?data.session.access_token:'';
+    const r=await fetch('https://dhwkkbtrhexywymegwoo.supabase.co/functions/v1/scraper-run',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tok},body:JSON.stringify({force:true})});
+    const j=await r.json().catch(()=>({}));
+    if(r.status===403){toast('Нет доступа — перезайди');return;}
+    if(j.report)toast('Готово: источников '+j.report.length+(j.report.filter(x=>x.error).length?', есть ошибки — смотри список':''));
+    else toast('Ответ функции: '+r.status);
+    await refresh();
+  }catch(e){toast('Ошибка: '+e.message);}finally{hideLoader();}
 }
 boot();
 </script>
