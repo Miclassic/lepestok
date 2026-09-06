@@ -935,6 +935,7 @@ function findBouquets(p){
   if(p.priceMin)fit=fit.filter(b=>b.price>=p.priceMin);
   if(p.priceMax<Infinity)fit=fit.filter(b=>b.price<=p.priceMax);
   if(p.exclude.length){fit=fit.filter(b=>{const hay=(b.title+' '+(b.category||'')+' '+(b.description||'')+' '+getTags(b).join(' ')).toLowerCase();return !p.exclude.some(ex=>hay.includes(ex.replace(/(ы|и)$/,'')));});}
+  if(p.include.length){fit=fit.filter(b=>{const hay=(b.title+' '+(b.category||'')+' '+(b.description||'')+' '+getTags(b).join(' ')).toLowerCase();return p.include.every(f=>hay.includes(f.replace(/(ы|и)$/,'')));});}
   const want=[p.who,p.occ,p.style,...p.include].filter(Boolean).map(x=>x.toLowerCase());
   fit=fit.map(b=>{
     const tags=[...getTags(b),String(b.category||''),b.title||'',b.description||''].map(x=>String(x).toLowerCase());
