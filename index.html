@@ -774,7 +774,7 @@ async function load(){
     bouquets=bRes.data||[];comments=(cRes.data||[]).filter(x=>!x.hidden);bouquetLikes=blRes.data||[];commentLikes=clRes.data||[];commentReacts=crRes.data||[];favorites=favRes.data||[];shops=shRes.data||[];
     quizCount=qRes.count||0;
     applyCityFilter();
-    renderShopTab();renderSearch();renderFav();
+    renderShopTab();renderSearch();renderFav();renderChips();
     if(quizCount>0){const el=$('qcProofTxt');if(el)el.textContent=quizCount+' чел. уже подобрали букет';}
   }catch(e){console.error('load error',e);}
 }
@@ -1660,28 +1660,65 @@ function startLiveSearch(){
   scheduleLive();
 }
 function liveClick(){quickChat($('liveSearchTxt').textContent);}
-const CHIP_GROUPS=[
-  [{t:'девушке',q:'девушке',i:'i-heart'},{t:'маме',q:'маме',i:'i-gift'},{t:'жене',q:'жене',i:'i-heart'},{t:'подруге',q:'подруге',i:'i-heart'},{t:'учителю',q:'учителю',i:'i-star'},{t:'бабушке',q:'бабушке',i:'i-gift'}],
-  [{t:'день рождения',q:'на день рождения',i:'i-cal'},{t:'свидание',q:'на свидание',i:'i-spark'},{t:'годовщина',q:'на годовщину',i:'i-cal'},{t:'день учителя',q:'на день учителя',i:'i-star'},{t:'просто так',q:'просто так',i:'i-gift'}],
-  [{t:'до 2000 ₽',q:'до 2000 ₽',i:'i-wallet'},{t:'до 3000 ₽',q:'до 3000 ₽',i:'i-wallet'},{t:'до 5000 ₽',q:'до 5000 ₽',i:'i-wallet'}],
-  [{t:'нежный',q:'нежный букет',i:'i-heart'},{t:'пышный',q:'пышный букет',i:'i-flower'},{t:'розы',q:'букет роз',i:'i-rose'},{t:'пионы',q:'пионы',i:'i-rose'},{t:'тюльпаны',q:'тюльпаны',i:'i-rose'}]
-];
+const CHIP_WHO=new Set(['девушке','маме','жене','подруге','учителю','бабушке','коллеге','руководителю','мужчине','невесте','ребёнку']);
+const CHIP_OCC=new Set(['день рождения','свидание','годовщина','свадьба','день учителя','8 марта','1 сентября','юбилей','просто так','извинение','выписка','комплимент','новый год','рождение ребёнка']);
+const CHIP_STYLE=new Set(['нежный','яркий','классический','пышный','монобукет','современный']);
+const CHIP_COLOR=new Set(['белый','розовый','красный','жёлтый','фиолетовый','зелёный','бежевый']);
+const CHIP_SKIP=/недорогой|средний бюджет|премиум|сборный|до 2500|2500-4000|4000\+/;
+const PRICE_CHIPS=[{t:'до 2000 ₽',q:'до 2000 ₽',i:'i-wallet'},{t:'до 3000 ₽',q:'до 3000 ₽',i:'i-wallet'},{t:'до 5000 ₽',q:'до 5000 ₽',i:'i-wallet'},{t:'3–5 000 ₽',q:'3–5 000 ₽',i:'i-wallet'}];
+function catalogTagPool(){
+  const cnt={};
+  (vBouquets||[]).forEach(b=>{if(!b.photo_url)return;getTags(b).forEach(x=>{const t=String(x).toLowerCase().trim();if(!t||t.length<4)return;cnt[t]=(cnt[t]||0)+1;});});
+  const g={who:[],occ:[],style:[],color:[],flower:[]};
+  Object.keys(cnt).forEach(t=>{
+    const n=cnt[t];
+    if(CHIP_WHO.has(t))g.who.push([t,n]);
+    else if(CHIP_OCC.has(t))g.occ.push([t,n]);
+    else if(CHIP_STYLE.has(t))g.style.push([t,n]);
+    else if(CHIP_COLOR.has(t))g.color.push([t,n]);
+    else if(!CHIP_SKIP.test(t))g.flower.push([t,n]);
+  });
+  Object.keys(g).forEach(k=>g[k].sort((a,b)=>b[1]-a[1]));
+  return g;
+}
+function topRnd(arr,win){if(!arr||!arr.length)return null;const p=arr.slice(0,Math.max(3,Math.min(win||6,arr.length)));return lPick(p);}
 let chipTimer=null;
 function renderChips(){
   const box=$('chatChips');if(!box)return;
   if($('tab-chat').classList.contains('has-msgs'))return;
   const sc=seasonClient();
   const used=new Set(sc?[sc.chip.t,...(sc.ban||[])]:[]);
-  const set=sc?[sc.chip]:[];
-  CHIP_GROUPS.forEach(g=>{
-    const pool=g.filter(c=>!used.has(c.t));
-    if(!pool.length)return;
-    const c=lPick(pool);
-    used.add(c.t);set.push(c);
-  });
+  const set=sc?[{t:sc.chip.t,q:sc.chip.q,i:sc.chip.i,fn:'quickChat'}]:[];
+  const g=catalogTagPool();
+  const add=(p,cat,i)=>{if(p&&!used.has(p[0])){used.add(p[0]);set.push({t:p[0],q:p[0],i:i,fn:'chipTag',cat:cat});}};
+  add(topRnd(g.who,6),'who','i-gift');
+  add(topRnd(g.occ,6),'occ','i-cal');
+  add(topRnd(g.flower,8),'flower','i-rose');
+  const s=topRnd(g.style.concat(g.color),6);
+  if(s&&!used.has(s[0])){used.add(s[0]);set.push({t:s[0],q:s[0],i:CHIP_STYLE.has(s[0])?'i-flower':'i-spark',fn:'chipTag',cat:'style'});}
+  const pc=lPick(PRICE_CHIPS.filter(p=>!used.has(p.t)));
+  if(pc)set.push({t:pc.t,q:pc.q,i:pc.i,fn:'quickChat'});
   set.sort(()=>Math.random()-.5);
   box.classList.add('swap');
-  setTimeout(()=>{box.innerHTML=set.map(c=>'<button class="chatChip" onclick="quickChat(\''+c.q+'\')">'+ic(c.i)+esc(c.t)+'</button>').join('');box.classList.remove('swap');},620);
+  setTimeout(()=>{box.innerHTML=set.map(c=>'<button class="chatChip" data-q="'+esc(c.q)+'" data-fn="'+c.fn+'" onclick="chipClick(this)">'+ic(c.i)+esc(c.t)+'</button>').join('');box.classList.remove('swap');},620);
+}
+function chipClick(el){const q=el.dataset.q||'';if(el.dataset.fn==='chipTag')chipTag(q);else quickChat(q);}
+function chipTag(t){
+  const tl=String(t).toLowerCase().trim();
+  chatParams={who:'',occ:'',bud:'',style:'',exclude:[],include:[],priceMin:0,priceMax:Infinity};
+  if(CHIP_WHO.has(tl))chatParams.who=tl;
+  else if(CHIP_OCC.has(tl))chatParams.occ=tl;
+  else if(CHIP_STYLE.has(tl))chatParams.style=tl;
+  else chatParams.include=[tl];
+  if(curTab!=='chat')showTab('chat');
+  addMessage('user',t);
+  const list=findBouquets(chatParams).list;
+  const shown=list.slice(0,4);
+  const fall=vBouquets.filter(b=>b.photo_url).slice(0,4);
+  const txt=shown.length?lPick(['Смотри, что у нас есть по тегу «'+t+'»','Вот свежая подборка по тегу «'+t+'»','«'+t+'» — отличная идея, держи варианты']):'Под тег «'+t+'» сейчас ничего нет — вот что выбирают чаще всего:';
+  addMessage('bot',txt,'<div class="chatResults">'+(shown.length?shown:fall).map(b=>chatCard(b)).join('')+'</div><div class="chatHint">нажми на карточку — открою детали и контакты магазина 🌷</div>'+refineRowHtml(shown.length?shown:list));
+  saveChatHistory();
+  track('chip_tag',{tag:tl});
 }
 function startChipsRotation(){clearInterval(chipTimer);renderChips();chipTimer=setInterval(renderChips,10000);}
 function handleHash(){
