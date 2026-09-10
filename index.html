@@ -1426,7 +1426,7 @@ function openShopPage(id){
   window.scrollTo(0,0);
 }
 function closeShopPage(){$('shopPage').classList.add('hidden');showTab('shops');}
-function tagBtn(x){return '<button class="tagChip" style="cursor:pointer;font-family:inherit" onclick="searchByTag(\''+esc(x).replace(/'/g,'\\'')+'\')">'+esc(x)+'</button>';}
+function tagBtn(x){return '<button class="tagChip" style="cursor:pointer;font-family:inherit" data-t="'+esc(x)+'" onclick="searchByTag(this.dataset.t)">'+esc(x)+'</button>';}
 function tagsHtml(b){const t=getTags(b);if(!t.length)return'';const show=t.slice(0,3),rest=t.length-show.length;return '<div class="tagBlock"><div class="tagLbl">'+ic('i-tag')+'Подойдёт для</div><div class="tagChips" id="cardTags">'+show.map(tagBtn).join('')+(rest>0?'<button class="tagChip more" onclick="expandCardTags('+b.id+')">ещё +'+rest+'</button>':'')+'</div></div>';}
 function expandCardTags(id){const b=bouquets.find(x=>x.id===id);const el=$('cardTags');if(!b||!el)return;el.innerHTML=getTags(b).map(tagBtn).join('');}
 function openCard(id){
