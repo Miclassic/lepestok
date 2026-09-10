@@ -123,6 +123,10 @@ main{padding:80px 16px 120px;min-height:0}
 .chatResults .shopChip{padding:3px 7px;font-size:7px}
 .chatCta{margin-top:6px;background:var(--gradient);color:#fff;border-radius:999px;padding:7px 8px;font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:5px;box-shadow:0 4px 12px rgba(255,107,107,.3)}
 .chatCta .icn{width:10px;height:10px}
+.chatNote{font-size:9.5px;color:var(--gray);line-height:1.35;display:flex;gap:4px;align-items:flex-start}
+.chatNote .icn{width:10px;height:10px;color:var(--coral);flex:none;margin-top:1px}
+.chatNote.score{color:#047857;font-weight:700}
+.chatNote.score .icn{color:#10B981}
 .chatHint{margin-top:8px;font-size:10.5px;color:var(--gray);line-height:1.4}
 .refineRow{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;padding-top:10px;border-top:1px dashed rgba(255,107,107,.15)}
 .refineLbl{width:100%;font-size:11px;color:var(--gray);margin-bottom:2px;font-weight:700}
@@ -786,7 +790,7 @@ function renderPopBouquets(){
 function popCard(b){
   const isFav=favorites.some(f=>f.bouquet_id===b.id);
   const ps=shopOf(b);return '<div class="popCard'+((ps&&getLepestokScore(ps)>=90)?' premiumEdge':'')+'" onclick="openCard('+b.id+')">'+
-    '<div class="popCover"><img src="'+b.photo_url+'" loading="lazy">'+
+    '<div class="popCover"><img src="'+b.photo_url+'" loading="lazy" onerror="var c=this.closest(\'.lpCard,.popCard\');if(c)c.remove();">'+
       '<button class="favBtn'+(isFav?' on':'')+'" onclick="event.stopPropagation();toggleFav('+b.id+')">'+ic('i-heart')+'</button>'+
     '</div>'+
     '<div class="popName">'+esc(b.title)+'</div>'+
@@ -884,16 +888,30 @@ function humanReply(p,n,top,mem){
   else if(n<=4)s+=' '+fill(pick(R_CNTM),d)+'.';
   else s+=' '+fill(pick(R_CNTBIG),d)+'.';
   if(d.prev&&Math.random()<0.35)s+=' '+fill(pick(R_MEM),d);
-  const nick=me&&me.user_metadata&&me.user_metadata.nick?me.user_metadata.nick:'';
-  if(nick&&Math.random()<0.3)s=nick+', '+s.charAt(0).toLowerCase()+s.slice(1);
   return s;
 }
 async function llmFlavor(p,n){
   try{
-    const prompt='Ты дружелюбный флорист-консультант витрины цветов. Одной живой разговорной фразой (до 12 слов, без кавычек и списков) прокомментируй подборку: кому='+(p.who||'не указано')+', повод='+(p.occ||'—')+', стиль='+(p.style||'—')+', нашлось='+n+'. По-человечески, с лёгкой эмоцией. Только текст.';
+    const prompt='Ты дружелюбный флорист-консультант витрины цветов. Одной живой разговорной фразой (до 12 слов, без кавычек и списков) прокомментируй подборку: кому='+(p.who||'не указано')+', повод='+(p.occ||'—')+', стиль='+(p.style||'—')+', нашлось='+n+'. По-человечески, с лёгкой эмоцией. Никогда не обращайся к клиенту по имени, нику или должности. Только текст.';
     const t=await Promise.race([yaComplete(prompt),new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),2600))]);
     return t&&t.length<120?String(t).trim():null;
   }catch(e){return null;}
+}
+/* ===== живые комментарии флориста к карточкам ===== */
+function parseArr(t){try{const m=String(t).match(/\[[\s\S]*\]/);if(!m)return [];const a=JSON.parse(m[0]);return Array.isArray(a)?a.map(x=>String(x)):[];}catch(e){return [];}}
+const NOTE_POOL=['Держит форму и красиво смотрится даже без вазы','Свежая поставка — простоит дольше обычного','Контраст оттенков сыграет на любом фоне','Нежный силуэт — идеально для фото','Флористы собирают его в день доставки','Выглядит дороже своей цены','Хорошо держит температуру и дорогу'];
+function localNote(b){const t=getTags(b);const fl=t.find(x=>/розы|пионы|тюльпаны|хризантемы|гортензии|лилии|эустома/.test(x));return (fl?'Ставка на '+fl.replace(/ы$/,'')+': ':'')+NOTE_POOL[b.id%NOTE_POOL.length];}
+async function floristNotes(list,params){
+  if(!list.length)return [];
+  const lines=list.map((b,i)=>(i+1)+'. «'+b.title+'»'+(getTags(b).length?' ('+getTags(b).slice(0,4).join(', ')+')':'')+(b.description?' — '+String(b.description).slice(0,90):'')).join('\n');
+  const prompt='Ты профессиональный флорист с 10-летним стажем, переписываешься с клиентом в мессенджере. Для каждой позиции списка напиши ОДНУ живую вкусную рекомендацию до 12 слов: почему букет хорош, кому и к какому поводу подойдёт. Без канцелярита, без кавычек, не начинай фразы одинаково. Повод клиента: '+(params&&params.occ?params.occ:'не указан')+', кому: '+(params&&params.who?params.who:'не указано')+'. Верни СТРОГО JSON-массив строк по числу позиций.\n'+lines;
+  try{
+    const t=await Promise.race([yaComplete(prompt),new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),3500))]);
+    const arr=parseArr(t);
+    if(arr.length>=list.length)return arr.slice(0,list.length);
+    if(arr.length)return list.map((b,i)=>arr[i]||localNote(b));
+  }catch(e){}
+  return list.map(b=>localNote(b));
 }
 const OCC_KEYWORDS={
   'день рождения':'день рождения','др':'день рождения','рождения':'день рождения','юбилей':'юбилей','день учителя':'день учителя',
@@ -1055,18 +1073,20 @@ function showTyping(){
   window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
 }
 function hideTyping(){const el=$('typingMsg');if(el)el.remove();}
-function chatCard(b){
+function chatCard(b,note){
   const shop=shopOf(b);
   const r=avgRating(b.id);
   const isFav=favorites.some(f=>f.bouquet_id===b.id);
   return '<div class="lpCard'+((shop&&getLepestokScore(shop)>=90)?' premiumEdge':'')+'" onclick="openCard('+b.id+')" style="cursor:pointer">'+
-    '<div class="lpCover"><img src="'+b.photo_url+'" loading="lazy" decoding="async">'+
+    '<div class="lpCover"><img src="'+b.photo_url+'" loading="lazy" decoding="async" onerror="var c=this.closest(\'.lpCard,.popCard\');if(c)c.remove();">'+
       '<button class="favBtn" data-fav="'+b.id+'"'+(isFav?' on':'')+' onclick="event.stopPropagation();toggleFav('+b.id+')">'+ic('i-heart')+'</button>'+
       (shop?'<span class="shopChip" onclick="event.stopPropagation();openShopPage('+shop.id+')">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':ic('i-shop'))+'<span class="nm">'+esc(shop.name)+'</span></span>':'')+
     '</div>'+
     '<div class="lpName"><span class="t">'+esc(b.title)+'</span>'+(r?'<span class="lpRate">'+ic('i-star')+r.toFixed(1)+'</span>':'')+'</div>'+
     '<div class="lpComp">'+(bouquetCount(b)?bouquetCount(b)+' '+pluralN(bouquetCount(b),['стебель','стебля','стеблей'])+' · ':'')+esc(b.category||'')+'</div>'+
     '<div class="lpFoot"><span class="lpPrice">'+fmtPrice(b.price)+'</span></div>'+
+    (note?'<div class="chatNote">'+ic('i-spark')+esc(note)+'</div>':'')+
+    (shop?'<div class="chatNote score">'+ic('i-shield')+'«'+esc(shop.name)+'» — Lepestok '+getLepestokScore(shop)+' из 100</div>':'')+
     '<div class="chatCta">'+ic('i-arrow')+'хочу этот — где заказать?</div>'+
   '</div>';
 }
@@ -1185,7 +1205,9 @@ async function sendChat(){
         if(exact.length){replyText='Нашёл букеты ровно из **'+esc(params.countRaw)+'**'+ctx+'. Вот они:';}
         else replyText+=' Только букетов ровно из **'+esc(params.countRaw)+'** в каталоге сейчас нет — показал ближайшие по составу и бюджету: флорист соберёт нужное количество под заказ, контакты — в карточке.';
       }
-      extra='<div class="chatResults">'+results.slice(0,4).map(b=>chatCard(b)).join('')+'</div><div class="chatHint">нажми на карточку — открою детали и контакты магазина, где можно заказать 🌷</div>'+refineRowHtml(results);
+      const shown=results.slice(0,4);
+      const notes=await floristNotes(shown,params);
+      extra='<div class="chatResults">'+shown.map((b,i)=>chatCard(b,notes[i])).join('')+'</div><div class="chatHint">нажми на карточку — открою детали и контакты магазина, где можно заказать 🌷</div>'+refineRowHtml(shown);
       if(n>4)extra+='<div class="refineRow" style="border:none;padding-top:6px"><button class="refineBtn" onclick="showTab(\'search\')">'+ic('i-search')+'посмотреть все '+n+' вариантов</button></div>';
     }
     addMessage('bot',replyText,extra);
@@ -1205,7 +1227,8 @@ function tweakClear(what){
   const results=findBouquets(chatParams).list;
   if(!results.length){toast('Всё ещё пусто — попробуй сбросить всё','i-refresh');return;}
   const notes={exclude:'Убрал запреты — вот что получилось 🌸',price:'Расширил бюджет — смотри, что есть 🌸',include:'Убрал конкретные цветы — вот подборка 🌸',count:'Убрал ограничение по количеству — вот что нашлось 🌸'};
-  addMessage('bot',notes[what]||'Вот что получилось 🌸','<div class="chatResults">'+results.slice(0,4).map(b=>chatCard(b)).join('')+'</div><div class="chatHint">нажми на карточку — открою детали и контакты магазина 🌷</div>'+refineRowHtml(results));
+  const shown2=results.slice(0,4);
+  addMessage('bot',notes[what]||'Вот что получилось 🌸','<div class="chatResults">'+shown2.map(b=>chatCard(b)).join('')+'</div><div class="chatHint">нажми на карточку — открою детали и контакты магазина 🌷</div>'+refineRowHtml(shown2));
   saveChatHistory();
 }
 function quickChat(text){$('chatInput').value=text;sendChat();}
@@ -1254,7 +1277,7 @@ function renderSearch(fromPick){
       $('searchFeed').innerHTML=lastPick.list.length?'<div class="lpGrid">'+lastPick.list.slice(0,6).map((b,i)=>lpCard(b,i)).join('')+'</div>':'<div class="emptyCatalog"><svg class="bigIcn"><use href="#i-flower"/></svg><h3>Пока пусто</h3><p>Под эти параметры букеты ещё не добавлены.</p></div>';
       return;
     }
-    $('pickHeadBox').innerHTML='';
+    $('pickHeadBox').innerHTML=activeTag?'<div class="pickHead"><h3>'+ic('i-tag')+'подборка по тегу «'+esc(activeTag)+'»</h3><p>собрали всё, что подходит под этот тег — листай и выбирай</p></div>':'';
     let list=vBouquets.filter(b=>b.photo_url);
     if(activeCat!=='all')list=list.filter(b=>(b.category||'').toLowerCase()===activeCat);
     if(activeTag)list=list.filter(b=>[...getTags(b),b.category||''].join(' ').toLowerCase().includes(activeTag));
@@ -1269,6 +1292,7 @@ function renderSearch(fromPick){
 }
 function applyPreset(i){const p=TODAY_PRESETS[i];activeTag=p.tag;activePrice=p.price;lastPick=null;renderSearch();}
 function setCat(c){activeCat=c;lastPick=null;renderSearch();}
+function searchByTag(t){closeSheet('cardSheet');activeTag=String(t).toLowerCase().trim();activeCat='all';activePrice='';searchQuery='';const si=$('searchInput');if(si)si.value='';lastPick=null;showTab('search');renderSearch();track('tag_jump',{tag:activeTag});}
 function setPrice(p){activePrice=p;lastPick=null;renderSearch();}
 function resetSearch(){searchQuery='';activeCat='all';activePrice='';activeTag='';$('searchInput').value='';lastPick=null;renderSearch();}
 function lpCard(b,i){
@@ -1278,7 +1302,7 @@ function lpCard(b,i){
   const isFav=favorites.some(f=>f.bouquet_id===b.id);
   const r=avgRating(b.id);
   return '<div class="lpCard'+((shop&&getLepestokScore(shop)>=90)?' premiumEdge':'')+'" style="animation-delay:'+((i||0)*50)+'ms" onclick="openCard('+b.id+')">'+
-    '<div class="lpCover"><img src="'+b.photo_url+'" loading="lazy" decoding="async">'+
+    '<div class="lpCover"><img src="'+b.photo_url+'" loading="lazy" decoding="async" onerror="var c=this.closest(\'.lpCard,.popCard\');if(c)c.remove();">'+
       '<button class="favBtn'+(isFav?' on':'')+'" onclick="event.stopPropagation();toggleFav('+b.id+')">'+ic('i-heart')+'</button>'+
       (shop?'<span class="shopChip" onclick="event.stopPropagation();openShopPage('+shop.id+')">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':ic('i-shop'))+'<span class="nm">'+esc(shop.name)+'</span></span>':'')+
     '</div>'+
@@ -1402,8 +1426,9 @@ function openShopPage(id){
   window.scrollTo(0,0);
 }
 function closeShopPage(){$('shopPage').classList.add('hidden');showTab('shops');}
-function tagsHtml(b){const t=getTags(b);if(!t.length)return'';const show=t.slice(0,3),rest=t.length-show.length;return '<div class="tagBlock"><div class="tagLbl">'+ic('i-tag')+'Подойдёт для</div><div class="tagChips" id="cardTags">'+show.map(x=>'<span class="tagChip">'+esc(x)+'</span>').join('')+(rest>0?'<button class="tagChip more" onclick="expandCardTags('+b.id+')">ещё +'+rest+'</button>':'')+'</div></div>';}
-function expandCardTags(id){const b=bouquets.find(x=>x.id===id);const el=$('cardTags');if(!b||!el)return;el.innerHTML=getTags(b).map(x=>'<span class="tagChip">'+esc(x)+'</span>').join('');}
+function tagBtn(x){return '<button class="tagChip" style="cursor:pointer;font-family:inherit" onclick="searchByTag(\''+esc(x).replace(/'/g,'\\'')+'\')">'+esc(x)+'</button>';}
+function tagsHtml(b){const t=getTags(b);if(!t.length)return'';const show=t.slice(0,3),rest=t.length-show.length;return '<div class="tagBlock"><div class="tagLbl">'+ic('i-tag')+'Подойдёт для</div><div class="tagChips" id="cardTags">'+show.map(tagBtn).join('')+(rest>0?'<button class="tagChip more" onclick="expandCardTags('+b.id+')">ещё +'+rest+'</button>':'')+'</div></div>';}
+function expandCardTags(id){const b=bouquets.find(x=>x.id===id);const el=$('cardTags');if(!b||!el)return;el.innerHTML=getTags(b).map(tagBtn).join('');}
 function openCard(id){
   const b=bouquets.find(x=>x.id===id);if(!b)return;curB=b;
   history.replaceState(null,'','#bouquet/'+id);
