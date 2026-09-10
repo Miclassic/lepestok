@@ -362,7 +362,7 @@ main{padding:80px 16px 120px;min-height:0}
 .lepMapBubbleScore.s90{background:linear-gradient(120deg,#059669,#34D399);color:#fff}
 @property --ang{syntax:'<angle>';initial-value:0deg;inherits:false}
 .premiumEdge{position:relative}
-.premiumEdge::before{content:"";position:absolute;inset:-2px;border-radius:inherit;padding:2px;background:conic-gradient(from var(--ang,0deg),#10B981,#A7F3D0,#059669,#6EE7B7,#10B981);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:edgeSpin 4s linear infinite;pointer-events:none}
+.premiumEdge::before{content:"";position:absolute;inset:0;z-index:6;border-radius:inherit;padding:2.5px;background:conic-gradient(from var(--ang,0deg),#10B981,#A7F3D0,#059669,#6EE7B7,#10B981);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:edgeSpin 4s linear infinite;pointer-events:none}
 @keyframes edgeSpin{to{--ang:360deg}}
 .shopLineScore{margin-top:5px}
 .externalRating{color:var(--yel);font-weight:800}
@@ -1059,7 +1059,7 @@ function chatCard(b){
   const shop=shopOf(b);
   const r=avgRating(b.id);
   const isFav=favorites.some(f=>f.bouquet_id===b.id);
-  return '<div class="lpCard" onclick="openCard('+b.id+')" style="cursor:pointer">'+
+  return '<div class="lpCard'+((shop&&getLepestokScore(shop)>=90)?' premiumEdge':'')+'" onclick="openCard('+b.id+')" style="cursor:pointer">'+
     '<div class="lpCover"><img src="'+b.photo_url+'" loading="lazy" decoding="async">'+
       '<button class="favBtn" data-fav="'+b.id+'"'+(isFav?' on':'')+' onclick="event.stopPropagation();toggleFav('+b.id+')">'+ic('i-heart')+'</button>'+
       (shop?'<span class="shopChip" onclick="event.stopPropagation();openShopPage('+shop.id+')">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':ic('i-shop'))+'<span class="nm">'+esc(shop.name)+'</span></span>':'')+
