@@ -111,7 +111,7 @@ main{padding:80px 16px 120px;min-height:0}
 .typing .dot:nth-child(2){animation-delay:.18s}
 .typing .dot:nth-child(3){animation-delay:.36s}
 @keyframes typing{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
-.chatResults{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;max-width:300px}
+.chatResults{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px;max-width:300px}
 .chatResults .lpCard{padding:5px;border-radius:16px;gap:4px}
 .chatResults .lpCover{aspect-ratio:4/3;border-radius:12px}
 .chatResults .lpName{font-size:11px;line-height:1.25;margin-top:5px}
@@ -187,7 +187,7 @@ main{padding:80px 16px 120px;min-height:0}
 .seeAll .icn{width:13px;height:13px}
 .popRow{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 8px;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 94%,transparent);mask-image:linear-gradient(90deg,#000 94%,transparent)}
 .popRow::-webkit-scrollbar{display:none}
-.popCard{flex:0 0 158px;scroll-snap-align:start;background:var(--card);border-radius:18px;padding:8px;box-shadow:var(--shadow);cursor:pointer;animation:cardIn .5s ease both;position:relative}
+.popCard{flex:0 0 158px;width:158px;min-width:0;max-width:158px;scroll-snap-align:start;background:var(--card);border-radius:18px;padding:8px;box-shadow:var(--shadow);cursor:pointer;animation:cardIn .5s ease both;position:relative}
 @keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
 .popCover{position:relative;aspect-ratio:1;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,#FFE5E5,#F5E6FF)}
 .popCover img{width:100%;height:100%;object-fit:cover}
@@ -202,7 +202,7 @@ main{padding:80px 16px 120px;min-height:0}
 .popComp{color:var(--gray);font-size:10px;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .popFoot2{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap}
 .popPrice{color:var(--coral);font-weight:800;font-size:12.5px;white-space:nowrap}
-.shopMini{flex:0 0 168px;scroll-snap-align:start;background:var(--card);border-radius:18px;padding:12px;box-shadow:var(--shadow);cursor:pointer;display:flex;flex-direction:column;gap:6px;align-items:flex-start;animation:cardIn .5s ease both}
+.shopMini{flex:0 0 168px;width:168px;min-width:0;max-width:168px;scroll-snap-align:start;background:var(--card);border-radius:18px;padding:12px;box-shadow:var(--shadow);cursor:pointer;display:flex;flex-direction:column;gap:6px;align-items:flex-start;animation:cardIn .5s ease both}
 .shopMini .ava{width:46px;height:46px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#FFE5E5,#F5E6FF);display:flex;align-items:center;justify-content:center;color:var(--coral)}
 .shopMini .ava img{width:100%;height:100%;object-fit:cover}
 .shopMini .ava .icn{width:20px;height:20px}
@@ -230,8 +230,8 @@ main{padding:80px 16px 120px;min-height:0}
 .chip.on{background:var(--gradient);color:#fff}
 .chipsLbl{font-size:10px;font-weight:800;color:var(--gray);letter-spacing:.1em;text-transform:uppercase;margin:10px 2px 6px;display:flex;align-items:center;gap:5px}
 .chipsLbl .icn{width:12px;height:12px;color:var(--coral)}
-.lpGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media (min-width:700px){.lpGrid{grid-template-columns:repeat(3,1fr)}}
+.lpGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (min-width:700px){.lpGrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .lpCard{border-radius:22px;padding:10px;background:var(--card);display:flex;flex-direction:column;gap:7px;cursor:pointer;box-shadow:var(--shadow);transition:all .35s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;animation:cardIn .5s ease both}
 .lpCover{position:relative;aspect-ratio:4/5;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,#FFE5E5,#F5E6FF)}
 .lpCover img{width:100%;height:100%;object-fit:cover}
@@ -1307,7 +1307,7 @@ function lpCard(b,i){
       (shop?'<span class="shopChip" onclick="event.stopPropagation();openShopPage('+shop.id+')">'+(shop.logo_url?'<img src="'+shop.logo_url+'">':ic('i-shop'))+'<span class="nm">'+esc(shop.name)+'</span></span>':'')+
     '</div>'+
     '<div class="lpName"><span class="t">'+esc(b.title)+'</span>'+(r?'<span class="lpRate">'+ic('i-star')+r.toFixed(1)+'</span>':'')+'</div>'+
-    ((b.category||bouquetCount(b))?'<div class="lpComp">'+(bouquetCount(b)?bouquetCount(b)+' '+pluralN(bouquetCount(b),['стебель','стебля','стеблей'])+' · ':'')+esc(b.category||'')+'</div>':'')+
+    '<div class="lpComp">'+(((bouquetCount(b)?bouquetCount(b)+' '+pluralN(bouquetCount(b),['стебель','стебля','стеблей'])+' · ':'')+esc(b.category||''))||'&nbsp;')+'</div>'+
     '<div class="lpFoot"><span class="lpPrice">'+fmtPrice(b.price)+'</span><span class="stockPill '+(b.in_stock?'in':'out')+'">'+ic(b.in_stock?'i-check':'i-clock')+(b.in_stock?'в наличии':'под заказ')+'</span></div>'+
     '<div class="lpActs"><button onclick="event.stopPropagation();likeBouquet('+b.id+')">'+ic('i-heart')+'<span>'+likes+'</span></button>'+
     '<button onclick="event.stopPropagation();openComments('+b.id+')">'+ic('i-comment')+'<span>'+cms+'</span></button>'+
